@@ -3,6 +3,9 @@ import logo from "../assets/Schoolarcy (2).webp";
 import { Badge, BadgeCheck, Eye, EyeOff, KeyRound, User } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import Slider from "@/components/fragments/Login/Slider";
+import { toast } from "sonner";
+import axios from "axios";
+import { HOST } from "@/util/constant";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ ni: "", password: "" });
@@ -33,6 +36,23 @@ const LoginPage = () => {
       localStorage.removeItem("remember");
     }
   }, [remember, formData]);
+
+  const handleLogin = async () => {
+    try {
+      const res = await axios.post(HOST + "/api/auth/login", formData, {
+        withCredentials: true,
+      });
+
+      console.log(res);
+      if (!res.status === 200) {
+        throw new Error(res.data.errors);
+      } else {
+        console.log(true);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <div className="w-screen bg-white h-screen overflow-x-hidden">
@@ -155,6 +175,7 @@ const LoginPage = () => {
           <button
             type="submit"
             aria-label="submit"
+            onClick={handleLogin}
             className="rounded-xl bg-neutral w-full font-medium text-white text-sm h-12 mt-4"
           >
             Masuk
