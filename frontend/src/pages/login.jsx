@@ -35,12 +35,12 @@ const LoginPage = () => {
   }, [remember, formData]);
 
   return (
-    <div className="w-screen bg-white h-screen">
-      <div className="w-full  h-full grid grid-cols-2 max-w-[1280px] mx-auto">
-        <div className="w-full h-full flex justify-center items-center px-24 bg-">
+    <div className="w-screen bg-white h-screen overflow-x-hidden">
+      <div className="w-full  h-full grid sm:grid-cols-2 max-w-[1280px] mx-auto">
+        <div className="w-full h-full my-10 sm:my-0  flex justify-center order-2 sm:order-1 items-center lg:px-24 ">
           <Slider />
         </div>
-        <div className="bg-background w-full h-full flex justify-center flex-col px-20 bg items-center">
+        <div className="bg-background py-24 sm:py-0 w-full h-full sm:order-2 flex justify-center flex-col px-14 lg:px-20 bg items-center">
           <figure>
             <img
               src={logo}
