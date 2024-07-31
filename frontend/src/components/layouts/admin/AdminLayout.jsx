@@ -1,11 +1,13 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import AsideLayout from "./AsideLayout";
 
 const AdminLayout = () => {
   return (
-    <div>
+    <main className="flex">
+      <AsideLayout />
       <Outlet />
-    </div>
+    </main>
   );
 };
 
