@@ -39,8 +39,6 @@ export const loginUser = async (req, res, next) => {
   try {
     const { ni, password } = req.body;
 
-    console.log(req.body);
-
     let user = await Admin.findOne({ username: ni });
 
     if (!user) {

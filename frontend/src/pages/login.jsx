@@ -1,19 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import logo from "../assets/Schoolarcy (2).webp";
 import { Badge, BadgeCheck, Eye, EyeOff, KeyRound, User } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import Slider from "@/components/fragments/Login/Slider";
-import { toast } from "sonner";
 import axios from "axios";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { userData } from "@/store/slices/auth-slice";
+import { setUserData } from "@/store/slices/auth-slice";
+import { ClipLoader } from "react-spinners";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const timeoutRef = useRef(null);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ ni: "", password: "" });
   const [success, setSuccess] = useState(false);
   const [isText, setIsText] = useState(false);
@@ -43,7 +45,17 @@ const LoginPage = () => {
     }
   }, [remember, formData]);
 
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   const handleLogin = async () => {
+    setLoading(true);
+
     try {
       const res = await axios.post(HOST + "/api/auth/login", formData, {
         withCredentials: true,
@@ -51,14 +63,16 @@ const LoginPage = () => {
 
       if (res.status === 200) {
         setSuccess(true);
-        dispatch(userData(res.data.data));
+        dispatch(setUserData(res.data.data));
 
-        res.data.data.role === "admin" && navigate("/admin-dashboard");
+        timeoutRef.current = setTimeout(() => {
+          res.data.data.role === "admin" && navigate("/admin");
+        }, 500);
       }
     } catch (error) {
       responseError(error);
     } finally {
-      setSuccess(false);
+      setLoading(false);
     }
   };
 
@@ -184,9 +198,15 @@ const LoginPage = () => {
             type="submit"
             aria-label="submit"
             onClick={handleLogin}
-            className="rounded-xl bg-neutral w-full font-medium text-white text-sm h-12 mt-4"
+            className="rounded-xl bg-neutral w-full  font-medium text-white text-sm h-12 mt-4"
           >
-            Masuk
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <ClipLoader size={20} color="#ffffff" /> Loading
+              </span>
+            ) : (
+              "Masuk"
+            )}
           </button>
         </div>
       </div>
