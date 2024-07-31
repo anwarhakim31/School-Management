@@ -63,7 +63,10 @@ export const loginUser = async (req, res, next) => {
     //      data = await Siswa.findOne({ username: ni }).select("-password");
     //    }
 
-    res.cookie("Schoolarcy", createToken(ni, user.id), {
+    const accessToken = createToken(ni, user.id);
+    const refreshToken = createToken(ni, user.id);
+
+    res.cookie("Schoolarcy", accessToken, {
       maxAge,
       httpOnly: true,
       secure: true,
@@ -77,9 +80,38 @@ export const loginUser = async (req, res, next) => {
   }
 };
 
+// export const refreshToken = async (req, res) => {
+//   const { Schoolarcy } = req.cookies;
+
+//   console.log(Schoolarcy);
+
+//   console.log(req.body);
+//   if (!Schoolarcy)
+//     throw new ResponseError(
+//       401,
+//       "Sesi Login Telah habis, jika ingin melanjutkan silakan login kembali"
+//     );
+
+//   try {
+//     const userData = jwt.verify(Schoolarcy, process.env.JWT_SECRET_KEY);
+//     const newAccessToken = createToken(userData.data, userData.id);
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Refresh token Baru",
+//       refreshToken: newAccessToken,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
 export const getAuth = async (req, res, next) => {
   try {
     const userId = req.userId;
+    const refreshToken = req.cookies.Schoolarcy;
+
+    console.log(refreshToken);
 
     let user = await Admin.findOne({ _id: userId }).select("-password");
 
@@ -93,9 +125,11 @@ export const getAuth = async (req, res, next) => {
     //      data = await Siswa.findOne({ username: ni }).select("-password");
     //    }
 
-    res
-      .status(200)
-      .json({ success: true, message: "Berhasil Mendapatkan Data", user });
+    res.status(200).json({
+      success: true,
+      message: "Berhasil Mendapatkan Data",
+      user,
+    });
   } catch (error) {
     console.log(error);
     next(error);

@@ -10,6 +10,7 @@ const authRouter = express.Router();
 
 authRouter.post("/create-admin", createAdmin);
 authRouter.post("/login", loginUser);
+// authRouter.post("/refresh-token", verifyToken, refreshToken);
 authRouter.get("/get-auth", verifyToken, getAuth);
 
 export default authRouter;

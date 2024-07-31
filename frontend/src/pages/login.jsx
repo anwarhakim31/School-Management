@@ -8,7 +8,7 @@ import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setUserData } from "@/store/slices/auth-slice";
+import { setAccessToken, setUserData } from "@/store/slices/auth-slice";
 import { ClipLoader } from "react-spinners";
 
 const LoginPage = () => {
@@ -62,7 +62,9 @@ const LoginPage = () => {
       });
 
       if (res.status === 200) {
+        console.log(res.data);
         setSuccess(true);
+        dispatch(setAccessToken(res.data.refreshToken));
         dispatch(setUserData(res.data.data));
 
         timeoutRef.current = setTimeout(() => {
