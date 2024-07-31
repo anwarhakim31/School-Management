@@ -6,8 +6,14 @@ import Slider from "@/components/fragments/Login/Slider";
 import { toast } from "sonner";
 import axios from "axios";
 import { HOST } from "@/util/constant";
+import responseError from "@/util/services";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { userData } from "@/store/slices/auth-slice";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({ ni: "", password: "" });
   const [success, setSuccess] = useState(false);
   const [isText, setIsText] = useState(false);
@@ -43,14 +49,16 @@ const LoginPage = () => {
         withCredentials: true,
       });
 
-      console.log(res);
-      if (!res.status === 200) {
-        throw new Error(res.data.errors);
-      } else {
-        console.log(true);
+      if (res.status === 200) {
+        setSuccess(true);
+        dispatch(userData(res.data.data));
+
+        res.data.data.role === "admin" && navigate("/admin-dashboard");
       }
     } catch (error) {
-      toast.error(error.message);
+      responseError(error);
+    } finally {
+      setSuccess(false);
     }
   };
 
