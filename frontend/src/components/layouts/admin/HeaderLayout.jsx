@@ -23,7 +23,7 @@ const HeaderLayout = () => {
               {data.role}
             </span>
           </div>
-          <caption className="w-10 h-10 bg-backup flex items-center justify-center rounded-full overflow-hidden">
+          <div className="w-10 h-10 bg-backup flex items-center justify-center rounded-full overflow-hidden">
             {data.photo ? (
               <img src={data.photo} alt="foto" />
             ) : (
@@ -34,7 +34,7 @@ const HeaderLayout = () => {
                 className="mt-4 fill-white"
               />
             )}
-          </caption>
+          </div>
         </div>
         <div className="relative">
           <button
