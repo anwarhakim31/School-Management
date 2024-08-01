@@ -8,7 +8,7 @@ const AdminLayout = () => {
   const [isEdit, setIsEdit] = useState(false);
 
   return (
-    <main className="flex">
+    <main className="w-full flex">
       <AsideLayout />
       <div className="w-full">
         <HeaderLayout />

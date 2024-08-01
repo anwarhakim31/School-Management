@@ -8,7 +8,7 @@ import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setAccessToken, setUserData } from "@/store/slices/auth-slice";
+import { setUserData } from "@/store/slices/auth-slice";
 import { ClipLoader } from "react-spinners";
 
 const LoginPage = () => {

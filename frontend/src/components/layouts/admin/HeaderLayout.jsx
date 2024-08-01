@@ -24,8 +24,8 @@ const HeaderLayout = () => {
             </span>
           </div>
           <div className="w-10 h-10 bg-backup flex items-center justify-center rounded-full overflow-hidden">
-            {data.photo ? (
-              <img src={data.photo} alt="foto" />
+            {data.foto ? (
+              <img src={data.foto} alt="foto" />
             ) : (
               <User
                 color="white"

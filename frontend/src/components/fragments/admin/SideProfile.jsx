@@ -1,11 +1,13 @@
-import { selectedUserData } from "@/store/slices/auth-slice";
-import { Edit2, Plus, User } from "lucide-react";
+import { selectedUserData, setUserData } from "@/store/slices/auth-slice";
+import { Edit2, Plus, Trash, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import responseError from "@/util/services";
+import axios from "axios";
+import { HOST } from "@/util/constant";
 
 // Definisikan schema validasi dengan Zod
 const schema = z.object({
@@ -29,8 +31,9 @@ const schema = z.object({
 });
 
 const SideProfile = () => {
-  const data = useSelector(selectedUserData);
   const uploadRef = useRef();
+  const dispatch = useDispatch();
+  const data = useSelector(selectedUserData);
   const [isHover, setIsHover] = useState(false);
   const {
     control,
@@ -50,18 +53,28 @@ const SideProfile = () => {
     uploadRef.current.click();
   };
 
-  const handleDeleteImage = () => {};
+  const handleDeleteImage = () => {
+    dispatch(setUserData({ ...data, foto: "" }));
+  };
 
   const hangleChangeImage = async (e) => {
     const file = e.target.files[0];
 
     if (file) {
-      const form = new FormData();
+      const formData = new FormData();
 
-      form.append("image", file);
+      formData.append("image", file);
 
       try {
-        console.log(form);
+        const res = await axios.post(
+          HOST + "/api/auth/add-profile-image",
+          formData,
+          { withCredentials: true }
+        );
+
+        if (res.status === 200) {
+          dispatch(setUserData({ ...data, foto: res.data.foto }));
+        }
       } catch (error) {
         responseError(error);
       }
@@ -88,8 +101,14 @@ const SideProfile = () => {
           onMouseLeave={() => setIsHover(false)}
           className="relative cursor-pointer w-16 h-16 mx-auto bg-backup flex items-center justify-center rounded-full overflow-hidden"
         >
-          {data.photo ? (
-            <img src={data.photo} alt="foto" />
+          {data.foto ? (
+            <img
+              src={data.foto}
+              alt="foto"
+              loading="lazy"
+              width={64}
+              height={64}
+            />
           ) : (
             <User
               color="white"
@@ -101,12 +120,12 @@ const SideProfile = () => {
           {isHover && (
             <div
               className="absolute inset-0 bg-black/30 w-full h-full flex-center"
-              onClick={data.image ? handleDeleteImage : handleClickImage}
+              onClick={data.foto ? handleDeleteImage : handleClickImage}
             >
-              {data.image ? (
-                <Plus color="white" width={20} height={20} />
+              {data.foto ? (
+                <Trash color="white" width={20} height={20} />
               ) : (
-                <Edit2 color="white" width={20} height={20} />
+                <Plus color="white" width={20} height={20} />
               )}
             </div>
           )}

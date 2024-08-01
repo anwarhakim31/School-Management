@@ -19,7 +19,7 @@ const adminSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  photo: {
+  foto: {
     type: String,
     required: false,
   },

@@ -8,11 +8,7 @@ import { AuthRoute } from "./routes/AuthRoute";
 import axios from "axios";
 import { HOST } from "./util/constant";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectedUserData,
-  setAccessToken,
-  setUserData,
-} from "./store/slices/auth-slice";
+import { selectedUserData, setUserData } from "./store/slices/auth-slice";
 import DataAcaraPage from "./pages/admin/data-acara";
 import DataJadwalPage from "./pages/admin/data-jadwal";
 import DataPelajaranPage from "./pages/admin/data-pelajaran";
@@ -35,7 +31,6 @@ function App() {
 
         if (res.status === 200) {
           dispatch(setUserData(res.data.user));
-          dispatch(setAccessToken(res.data.refreshToken));
         }
       } catch (error) {
         dispatch(setUserData(undefined));

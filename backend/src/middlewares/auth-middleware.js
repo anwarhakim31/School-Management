@@ -21,6 +21,8 @@ const verifyToken = (req, res, next) => {
     }
 
     req.userId = payload.id;
+    req.role = payload.role;
+
     next();
   });
 };
