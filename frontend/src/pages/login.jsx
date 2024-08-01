@@ -9,7 +9,7 @@ import responseError from "@/util/services";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserData } from "@/store/slices/auth-slice";
-import { ClipLoader } from "react-spinners";
+import LoaderButton from "@/components/elements/LoaderButton";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -77,8 +77,10 @@ const LoginPage = () => {
     }
   };
 
-  const handleInputClick = () => {
-    handleLogin();
+  const handleInputClick = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
   };
 
   return (
@@ -140,7 +142,7 @@ const LoginPage = () => {
               id="nip/nis"
               value={formData.ni}
               name="ni"
-              onClick={handleInputClick}
+              onKeyDown={handleInputClick}
               onChange={handleInputChange}
               placeholder="Masukkan NIP / NIS"
               className="py-1.5 h-10 bg-white text-sm border text-gray-500 border-gray-700 w-full rounded-xl outline-neutral outline-offset-1 pl-10"
@@ -160,7 +162,7 @@ const LoginPage = () => {
               value={formData.password}
               name="password"
               onChange={handleInputChange}
-              onClick={handleInputClick}
+              onKeyDown={handleInputClick}
               placeholder="Masukkan Password"
               className="py-1.5 h-10 bg-white border text-gray-500 text-sm border-gray-700 w-full rounded-xl outline-neutral outline-offset-1 pl-10"
             />
@@ -207,13 +209,7 @@ const LoginPage = () => {
             onClick={handleLogin}
             className="rounded-xl bg-neutral w-full  font-medium text-white text-sm h-12 mt-4"
           >
-            {loading ? (
-              <span className="flex items-center justify-center gap-2">
-                <ClipLoader size={20} color="#ffffff" /> Loading
-              </span>
-            ) : (
-              "Masuk"
-            )}
+            {loading ? <LoaderButton /> : "Masuk"}
           </button>
         </div>
       </div>

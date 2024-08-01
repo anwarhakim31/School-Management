@@ -3,12 +3,12 @@ import { selectedUserData, setUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { Edit2Icon, LogOut, Settings, User } from "lucide-react";
+import { Edit2Icon, Flag, LogOut, Settings, User } from "lucide-react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const HeaderLayout = () => {
+const HeaderLayout = ({ handleOpenEdit, setIsEdit }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isSetting, setIsSetting] = useState(false);
@@ -27,6 +27,11 @@ const HeaderLayout = () => {
     } catch (error) {
       responseError(error);
     }
+  };
+
+  const handleEdit = () => {
+    setIsSetting(false);
+    setIsEdit(true);
   };
 
   return (
@@ -68,17 +73,23 @@ const HeaderLayout = () => {
           {isSetting && (
             <div
               role="menu"
-              className="absolute rounded-md top-14 right-2.5 w-[170px] rounded-tr-none  before:absolute before:w-2.5 before:h-2.5 before:-top-1.5 before:right-0.5  bg-white shadow-lg border border-gray-300 before:bg-backup  before:bg-white before:border-gray-300  before:border-t  before:border-r before:-rotate-45 "
+              className="absolute rounded-md top-14 right-2.5 w-[170px] rounded-tr-none  before:absolute before:w-2.5 before:h-2.5 before:-top-1.5 before:right-0.5  bg-white shadow-lg border border-gray-300 before:bg-backup   before:border-gray-300  before:border-t  before:border-r before:-rotate-45 "
             >
               <ul>
-                <li className="flex gap-2 justify-between items-center cursor-pointer p-3 group rounded-lg hover:bg-gray-100">
+                <li
+                  className="flex gap-2 justify-between items-center cursor-pointer p-3 group rounded-lg hover:bg-gray-100"
+                  onClick={handleEdit}
+                >
                   <Edit2Icon className="bg-neutral1 text-white w-7 h-7  rounded-sm p-2" />
                   <p className="text-sm font-medium group-hover:text-neutral">
                     Edit profile
                   </p>
                 </li>
                 <li className="w-full h-[0.25px] bg-backup "></li>
-                <li className="flex gap-2 justify-between items-center cursor-pointer p-3 group hover:bg-gray-100">
+                <li
+                  className="flex gap-2 justify-between items-center cursor-pointer p-3 group hover:bg-gray-100"
+                  onClick={handleLogout}
+                >
                   <LogOut className="bg-neutral2 text-white w-7 h-7  rounded-sm p-2" />
                   <p className="text-sm font-medium group-hover:text-neutral">
                     Logout

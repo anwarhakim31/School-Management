@@ -45,7 +45,7 @@ function App() {
   }, []);
 
   if (loading) {
-    return null;
+    return <div className="bg-background fixed inset-0 "></div>;
   }
 
   return (

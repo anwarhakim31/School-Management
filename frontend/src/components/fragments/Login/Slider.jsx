@@ -86,8 +86,8 @@ const Slider = () => {
                 setIsTransitioning(true);
               }}
               className={`${
-                currentIndex % slides.length === i ? "bg-purple-500" : ""
-              } w-5 h-5 rounded-full border-2 cursor-pointer hover:bg-purple-500 border-purple-300`}
+                currentIndex % slides.length === i ? "bg-indigo-500" : ""
+              } w-5 h-5 rounded-full border-2 cursor-pointer hover:bg-indigo-500 border-indigo-300`}
             ></div>
           ))}
         </div>

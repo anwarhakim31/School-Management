@@ -1,6 +1,6 @@
 import { selectedUserData, setUserData } from "@/store/slices/auth-slice";
-import { Plus, Trash, User } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Plus, Trash, User, X } from "lucide-react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm, Controller } from "react-hook-form";
 
@@ -8,12 +8,15 @@ import responseError from "@/util/services";
 import axios from "axios";
 import { HOST } from "@/util/constant";
 import { toast } from "sonner";
+import LoaderButton from "@/components/elements/LoaderButton";
 
-const SideProfile = () => {
+const SideProfile = forwardRef(({ handleClose }, ref) => {
   const uploadRef = useRef();
   const dispatch = useDispatch();
   const data = useSelector(selectedUserData);
   const [isHover, setIsHover] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [show, setShow] = useState(false);
   const {
     control,
     handleSubmit,
@@ -43,7 +46,7 @@ const SideProfile = () => {
       const formData = new FormData();
 
       formData.append("image", file);
-
+      setLoading(true);
       try {
         const res = await axios.post(
           HOST + "/api/auth/add-profile-image",
@@ -57,13 +60,15 @@ const SideProfile = () => {
         e.target.value = null;
       } catch (error) {
         responseError(error);
+      } finally {
+        setLoading(false);
       }
     }
   };
 
   const onSubmit = async (data) => {
     const newData = { ...data, foto: data.foto };
-
+    setLoading(true);
     try {
       const res = await axios.put(HOST + "/api/auth/update-profile", newData, {
         withCredentials: true,
@@ -75,6 +80,8 @@ const SideProfile = () => {
       }
     } catch (error) {
       responseError(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -86,9 +93,34 @@ const SideProfile = () => {
     }
   }, [data, setValue]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setShow(true);
+    }, 30);
+  }, []);
+
   return (
-    <div className="fixed p-4 rounded-md shadow-xl top-1/2 -translate-y-1/2 right-0 w-[300px] flex-center  h-[60vh] max-h-[800px] bg-white">
+    <div
+      ref={ref}
+      role="options"
+      className={`${
+        show ? "right-0" : "-right-[400px]"
+      } fixed p-4 rounded-md shadow-xl top-1/2 -translate-y-1/2  w-[300px] flex-center  h-[60vh] max-h-[800px] bg-white duration-300 ease-in transition-all`}
+    >
       <div className="">
+        <div>
+          <button
+            aria-label="close edit profile sidebar"
+            onClick={() => handleClose(false)}
+            className="absolute h-6 w-6 rounded-full -top-2 -left-2  group bg-backup flex-center duration-300 transition-all"
+          >
+            <X
+              height={15}
+              width={15}
+              className="text-neutral group-hover:text-white "
+            />
+          </button>
+        </div>
         <div
           onMouseEnter={() => setIsHover(true)}
           onMouseLeave={() => setIsHover(false)}
@@ -152,6 +184,7 @@ const SideProfile = () => {
               }}
               render={({ field }) => (
                 <input
+                  placeholder="Schoolarcy"
                   className="w-full border my-1 px-2.5 py-1.5 text-sm rounded-full border-gray-500 outline-neutral"
                   {...field}
                 />
@@ -181,6 +214,7 @@ const SideProfile = () => {
               render={({ field }) => (
                 <input
                   type="password"
+                  placeholder="**************"
                   className="w-full border my-1 px-2.5 py-1.5  text-sm rounded-full border-gray-500 outline-neutral"
                   {...field}
                 />
@@ -213,6 +247,7 @@ const SideProfile = () => {
               control={control}
               render={({ field }) => (
                 <input
+                  placeholder="Schoolarcy"
                   className="w-full border my-1 px-2.5 py-1.5  text-sm rounded-full border-gray-500 outline-neutral"
                   {...field}
                 />
@@ -230,12 +265,14 @@ const SideProfile = () => {
             type="submit"
             className="w-full py-2.5 mt-4 text-white bg-neutral hover:bg-indigo-600 text-sm rounded-full"
           >
-            Submit
+            {loading ? <LoaderButton /> : "Submit"}
           </button>
         </form>
       </div>
     </div>
   );
-};
+});
+
+SideProfile.displayName = "SideProfile";
 
 export default SideProfile;
