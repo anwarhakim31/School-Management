@@ -105,7 +105,7 @@ const SideProfile = forwardRef(({ handleClose }, ref) => {
       role="options"
       className={`${
         show ? "right-0" : "-right-[400px]"
-      } fixed p-4 rounded-md shadow-xl top-1/2 -translate-y-1/2  w-[300px] flex-center  h-[60vh] max-h-[800px] bg-white duration-300 ease-in transition-all`}
+      } fixed p-4 rounded-md shadow-xl top-1/2 -translate-y-1/2  w-[300px] flex-center  h-[70vh] max-h-[800px] bg-white duration-300 ease-in transition-all`}
     >
       <div className="">
         <div>
