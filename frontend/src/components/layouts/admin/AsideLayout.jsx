@@ -3,14 +3,14 @@ import ListSidebar from "@/components/fragments/admin/ListSidebar";
 
 const AsideLayout = () => {
   return (
-    <aside className="bg-neutral  py-6 overflow-hidden w-[225px] h-screen">
-      <div className="w-[150px] h-[50px]  mb-4 mx-auto block">
-        <img src={logo} alt="logo" className="object-contain" />
+    <>
+      <div className="max-w-[150px] h-[50px]  mb-2 mx-auto block">
+        <img src={logo} alt="logo" className="object-contain mt-1" />
       </div>
-      <div>
+      <div className="">
         <ListSidebar />
       </div>
-    </aside>
+    </>
   );
 };
 

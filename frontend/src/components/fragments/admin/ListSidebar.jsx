@@ -109,15 +109,15 @@ const Navlist = [
 
 const ListSidebar = () => {
   return (
-    <ul className="w-full ml-6 h-[80vh] overflow-auto">
+    <ul className="w-full ml-6 md:ml-4 lg:ml-6 py-2 h-[80vh] overflow-auto">
       {Navlist.map((list) => (
-        <li key={list.id}>
+        <li key={list.id} className="outline-none">
           <Link
             to={list.path}
-            className="flex justify-start pl-4 items-center py-3  gap-3 group hover:bg-background cursor-pointer rounded-tl-full rounded-bl-full "
+            className="flex justify-start outline-white z-10 pl-4 items-center py-3  gap-3 group hover:bg-background cursor-pointer rounded-tl-full rounded-bl-full "
           >
             {list.icon}
-            <span className="text-white  mt-0.5 text-sm font-light group-hover:text-neutral group-hover:font-medium ">
+            <span className="text-white   mt-0.5 text-sm font-light group-hover:text-neutral group-hover:font-medium ">
               {list.nama}
             </span>
           </Link>

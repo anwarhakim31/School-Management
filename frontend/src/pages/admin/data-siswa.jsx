@@ -1,7 +1,50 @@
+import { ArrowDown01, Plus, Search } from "lucide-react";
 import React from "react";
 
 const DataSiswaPage = () => {
-  return <div>DataSiswaPage</div>;
+  return (
+    <section className="px-6 py-4 w-full  h-[calc(100vh-150px)]">
+      <div className="w-full flex-between flex-wrap gap-6">
+        <div className="relative flex w-full  md:max-w-[240px]">
+          <input
+            type="search"
+            placeholder="Cari Siswa"
+            className="w-full rounded-full py-2 pr-2 pl-8 text-sm border border-gray-400 outline-offset-1 outline-1 outline-gray-700"
+          />
+          <button className="absolute left-2 top-1/2 -translate-y-1/2">
+            <Search height={20} width={20} className="text-gray-400" />
+          </button>
+        </div>
+        <div className="flex gap-2  mr-auto  lg:ml-10">
+          <button className="border border-gray-800 bg-white text-gray-500  hover:bg-gray-700 hover:border-gray-400 border-dashed  py-2.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-full flex-between gap-3">
+            <ArrowDown01
+              width={15}
+              height={15}
+              className="rounded-full bg-white text-neutral"
+            />
+            Tingkat
+          </button>
+          <button className="border border-gray-800 bg-white text-gray-500  hover:bg-gray-700 hover:border-gray-400 border-dashed  py-2.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-full flex-between gap-3">
+            <ArrowDown01
+              width={15}
+              height={15}
+              className="rounded-full bg-white text-neutral"
+            />
+            Nama
+          </button>
+        </div>
+        <button className="bg-gray-700 hover:bg-neutral transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-full flex-between gap-3">
+          <Plus
+            width={15}
+            height={15}
+            className="rounded-full bg-white text-neutral"
+          />{" "}
+          Tambah Siswa
+        </button>
+      </div>
+      <div className="bg-white w-full h-full mt-12 border "></div>
+    </section>
+  );
 };
 
 export default DataSiswaPage;

@@ -6,9 +6,14 @@ import SideProfile from "@/components/fragments/admin/SideProfile";
 
 const AdminLayout = () => {
   const [isEdit, setIsEdit] = useState(false);
+  const [isSidebar, setIsSidebar] = useState(false);
   const editProfileRef = useRef();
+  const sidebarRef = useRef();
   const handleCloseEdit = () => {
     setIsEdit(false);
+  };
+  const handleToggleSidebar = () => {
+    setIsSidebar(!isSidebar);
   };
 
   useEffect(() => {
@@ -28,11 +33,35 @@ const AdminLayout = () => {
     return () => document.removeEventListener("mousedown", handleClickOutSide);
   }, [isEdit]);
 
+  useEffect(() => {
+    const handleClickOutSide = (e) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
+        setIsSidebar(false);
+      }
+    };
+
+    if (isSidebar) {
+      document.addEventListener("mousedown", handleClickOutSide);
+    }
+
+    return () => document.removeEventListener("mousedown", handleClickOutSide);
+  }, [isSidebar]);
+
   return (
     <main className="w-full flex">
-      <AsideLayout />
-      <div className="w-full">
-        <HeaderLayout setIsEdit={setIsEdit} />
+      <aside
+        ref={sidebarRef}
+        className={`${
+          isSidebar ? "block" : "hidden"
+        } md:block bg-neutral fixed  md:relative   py-6 overflow-hidden w-[230px]  md:w-[260px] h-screen`}
+      >
+        <AsideLayout />
+      </aside>
+      <div className="w-full  overflow-auto">
+        <HeaderLayout
+          setIsEdit={setIsEdit}
+          handleToggleSidebar={handleToggleSidebar}
+        />
         <Outlet />
         {isEdit && (
           <SideProfile ref={editProfileRef} handleClose={handleCloseEdit} />
