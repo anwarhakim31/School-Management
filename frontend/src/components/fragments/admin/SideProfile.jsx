@@ -1,34 +1,13 @@
 import { selectedUserData, setUserData } from "@/store/slices/auth-slice";
-import { Edit2, Plus, Trash, User } from "lucide-react";
+import { Plus, Trash, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import responseError from "@/util/services";
 import axios from "axios";
 import { HOST } from "@/util/constant";
-
-// Definisikan schema validasi dengan Zod
-const schema = z.object({
-  username: z
-    .string()
-    .min(8, "Username harus lebih dari 8 karakter")
-    .max(20, "Username harus kurang dari 20 karakter")
-    .optional()
-    .nullable(),
-  password: z
-    .string()
-    .min(8, "Password harus lebih dari 8 karakter")
-    .optional()
-    .nullable(),
-  nama: z
-    .string()
-    .min(8, "Nama harus lebih dari 8 karakter")
-    .max(20, "Nama harus kurang dari 20 karakter")
-    .optional()
-    .nullable(),
-});
+import { toast } from "sonner";
 
 const SideProfile = () => {
   const uploadRef = useRef();
@@ -41,12 +20,12 @@ const SideProfile = () => {
     setValue,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(schema),
     defaultValues: {
       username: "",
       password: "",
       nama: "",
     },
+    mode: onchange,
   });
 
   const handleClickImage = () => {
@@ -75,14 +54,28 @@ const SideProfile = () => {
         if (res.status === 200) {
           dispatch(setUserData({ ...data, foto: res.data.foto }));
         }
+        e.target.value = null;
       } catch (error) {
         responseError(error);
       }
     }
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const newData = { ...data, foto: data.foto };
+
+    try {
+      const res = await axios.put(HOST + "/api/auth/update-profile", newData, {
+        withCredentials: true,
+      });
+
+      if (res.status === 200) {
+        dispatch(setUserData(res.data.user));
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      responseError(error);
+    }
   };
 
   useEffect(() => {
@@ -112,9 +105,9 @@ const SideProfile = () => {
           ) : (
             <User
               color="white"
-              width={50}
-              height={50}
-              className="mt-7 fill-white"
+              width={70}
+              height={70}
+              className="mt-5 fill-white"
             />
           )}
           {isHover && (
@@ -147,9 +140,19 @@ const SideProfile = () => {
             <Controller
               name="username"
               control={control}
+              rules={{
+                minLength: {
+                  value: 8,
+                  message: "Username harus lebih dari 8 karakter",
+                },
+                maxLength: {
+                  value: 20,
+                  message: "Username harus kurang dari 20 karakter",
+                },
+              }}
               render={({ field }) => (
                 <input
-                  className="w-full border my-1 px-2.5 py-1 text-sm rounded-full border-gray-500 outline-neutral"
+                  className="w-full border my-1 px-2.5 py-1.5 text-sm rounded-full border-gray-500 outline-neutral"
                   {...field}
                 />
               )}
@@ -169,10 +172,16 @@ const SideProfile = () => {
             <Controller
               name="password"
               control={control}
+              rules={{
+                minLength: {
+                  value: 8,
+                  message: "Password harus lebih dari 8 karakter",
+                },
+              }}
               render={({ field }) => (
                 <input
                   type="password"
-                  className="w-full border my-1 px-2.5 py-1 text-sm rounded-full border-gray-500 outline-neutral"
+                  className="w-full border my-1 px-2.5 py-1.5  text-sm rounded-full border-gray-500 outline-neutral"
                   {...field}
                 />
               )}
@@ -191,10 +200,20 @@ const SideProfile = () => {
             </label>
             <Controller
               name="nama"
+              rules={{
+                minLength: {
+                  value: 5,
+                  message: "Nama harus lebih dari 5 karakter",
+                },
+                maxLength: {
+                  value: 20,
+                  message: "Nama harus kurang dari 20 karakter",
+                },
+              }}
               control={control}
               render={({ field }) => (
                 <input
-                  className="w-full border my-1 px-2.5 py-1 text-sm rounded-full border-gray-500 outline-neutral"
+                  className="w-full border my-1 px-2.5 py-1.5  text-sm rounded-full border-gray-500 outline-neutral"
                   {...field}
                 />
               )}
@@ -209,7 +228,7 @@ const SideProfile = () => {
           </div>
           <button
             type="submit"
-            className="w-full py-2 mt-4 text-white bg-neutral hover:bg-indigo-600 text-sm rounded-full"
+            className="w-full py-2.5 mt-4 text-white bg-neutral hover:bg-indigo-600 text-sm rounded-full"
           >
             Submit
           </button>

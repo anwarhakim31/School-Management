@@ -64,7 +64,6 @@ const LoginPage = () => {
       if (res.status === 200) {
         console.log(res.data);
         setSuccess(true);
-        dispatch(setAccessToken(res.data.refreshToken));
         dispatch(setUserData(res.data.data));
 
         timeoutRef.current = setTimeout(() => {
@@ -76,6 +75,10 @@ const LoginPage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleInputClick = () => {
+    handleLogin();
   };
 
   return (
@@ -137,6 +140,7 @@ const LoginPage = () => {
               id="nip/nis"
               value={formData.ni}
               name="ni"
+              onClick={handleInputClick}
               onChange={handleInputChange}
               placeholder="Masukkan NIP / NIS"
               className="py-1.5 h-10 bg-white text-sm border text-gray-500 border-gray-700 w-full rounded-xl outline-neutral outline-offset-1 pl-10"
@@ -156,6 +160,7 @@ const LoginPage = () => {
               value={formData.password}
               name="password"
               onChange={handleInputChange}
+              onClick={handleInputClick}
               placeholder="Masukkan Password"
               className="py-1.5 h-10 bg-white border text-gray-500 text-sm border-gray-700 w-full rounded-xl outline-neutral outline-offset-1 pl-10"
             />

@@ -3,6 +3,8 @@ import {
   createAdmin,
   getAuth,
   loginUser,
+  logout,
+  updateProfile,
   uploadProfileImage,
 } from "../controllers/auth-controller.js";
 import verifyToken from "../middlewares/auth-middleware.js";
@@ -14,7 +16,10 @@ authRouter.post("/create-admin", createAdmin);
 authRouter.post("/login", loginUser);
 // authRouter.post("/refresh-token", verifyToken, refreshToken);
 authRouter.get("/get-auth", verifyToken, getAuth);
-authRouter.post(
+authRouter.put("/update-profile", verifyToken, updateProfile);
+authRouter.post("/logout", verifyToken, logout);
+
+authRouter.delete(
   "/add-profile-image",
   verifyToken,
   upload.single("image"),

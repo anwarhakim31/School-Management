@@ -1,4 +1,4 @@
-import { compare } from "bcrypt";
+import { compare, genSalt, hash } from "bcrypt";
 import Admin from "../models/admin-model.js";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
@@ -66,7 +66,6 @@ export const loginUser = async (req, res, next) => {
     //    }
 
     const accessToken = createToken(ni, user.id, user.role);
-    const refreshToken = createToken(ni, user.id, user.role);
 
     res.cookie("Schoolarcy", accessToken, {
       maxAge,
@@ -171,6 +170,59 @@ export const uploadProfileImage = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
+    next(error);
+  }
+};
+
+export const updateProfile = async (req, res, next) => {
+  try {
+    const id = req.userId;
+    const role = req.role;
+
+    const update = req.body;
+
+    if (update.password && update.password !== "") {
+      const salt = await genSalt();
+
+      update.password = await hash(update.password, salt);
+    } else {
+      delete update.password;
+    }
+
+    let updatedUser;
+
+    if (role === "admin")
+      updatedUser = await Admin.findByIdAndUpdate(
+        id,
+        { $set: update },
+        { runValidators: true, new: true }
+      ).select("-password");
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil memperbarui profil",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const logout = async (req, res, next) => {
+  try {
+    res.clearCookie("Schoolarcy", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    });
+
+    // Kirimkan respons berhasil
+    res.status(200).json({
+      success: true,
+      message: "Logout berhasil",
+    });
+  } catch (error) {
     next(error);
   }
 };

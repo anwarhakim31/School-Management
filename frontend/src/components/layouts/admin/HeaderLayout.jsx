@@ -1,12 +1,33 @@
 import HeaderPage from "@/components/elements/HeaderPage";
-import { selectedUserData } from "@/store/slices/auth-slice";
-import { Edit2Icon, LogOut, Settings, User, User2 } from "lucide-react";
+import { selectedUserData, setUserData } from "@/store/slices/auth-slice";
+import { HOST } from "@/util/constant";
+import responseError from "@/util/services";
+import axios from "axios";
+import { Edit2Icon, LogOut, Settings, User } from "lucide-react";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const HeaderLayout = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isSetting, setIsSetting] = useState(false);
   const data = useSelector(selectedUserData);
+
+  const handleLogout = async () => {
+    try {
+      const res = await axios.delete(HOST + "/api/auth/logout", {
+        withCredentials: true,
+      });
+
+      if (res.status === 200) {
+        dispatch(setUserData(undefined));
+        navigate("/login");
+      }
+    } catch (error) {
+      responseError(error);
+    }
+  };
 
   return (
     <header className="w-full p-6 flex justify-between items-center">
