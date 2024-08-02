@@ -14,6 +14,10 @@ const kelasSchema = new mongoose.Schema({
     ref: "Guru",
     required: false,
   },
+  posisi: {
+    type: String,
+    required: false,
+  },
   siswa: [
     {
       type: mongoose.Schema.ObjectId,
@@ -21,6 +25,10 @@ const kelasSchema = new mongoose.Schema({
       required: false,
     },
   ],
+  jumlahSiswa: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const Kelas = mongoose.model("Kelas", kelasSchema);

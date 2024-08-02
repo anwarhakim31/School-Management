@@ -52,13 +52,13 @@ const AdminLayout = () => {
       <aside
         ref={sidebarRef}
         className={`${
-          isSidebar ? "block" : "hidden"
-        } md:block bg-neutral fixed md:relative py-6 overflow-hidden w-[230px] md:w-[260px] min-h-screen`}
+          isSidebar ? "left-0 " : "-left-[300px] md:left-0"
+        } md:block bg-neutral z-50 fixed md:relative py-6 overflow-hidden w-[230px] md:w-[260px] min-h-screen transition-all duration-300`}
       >
         <AsideLayout />
       </aside>
 
-      <div className=" w-full h-screen">
+      <div className="p-2 overflow-hidden w-full h-screen">
         <div className="overflow-scroll h-full w-full">
           <HeaderLayout
             setIsEdit={setIsEdit}
