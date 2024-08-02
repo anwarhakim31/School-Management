@@ -64,7 +64,7 @@ const DataSiswaPage = () => {
           Tambah Siswa
         </button>
       </div>
-      <div className="relative bg-white w-full  mt-4 border  overflow-hidden  rounded-xl">
+      <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-xl">
         <TableSiswa data={dataSiswa} />
       </div>
     </section>

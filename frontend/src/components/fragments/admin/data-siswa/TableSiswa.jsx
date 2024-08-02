@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Mail, Phone } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 const TableSiswa = ({ data }) => {
@@ -14,27 +14,34 @@ const TableSiswa = ({ data }) => {
   const indexOfFirstsiswa = indexOfLastSiswa - siswaPerPage;
   const currentSiswa = siswa.slice(indexOfFirstsiswa, indexOfLastSiswa);
 
+  console.log(currentSiswa);
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <>
-      <div className="block min-h-[490px]  shadow-md pb-8">
+      <div className="block min-h-[480px]  shadow-md pb-8">
         <div className="w-full overflow-auto rounded-xl">
           <table className="w-full   text-sm text-left  text-gray-500 ">
             <thead className="text-xs  text-white uppercase bg-neutral">
               <tr>
-                <th scope="col" className="px-5 py-3">
+                <th scope="col" className="px-4 py-3">
                   NIS
                 </th>
                 <th scope="col" className="px-5 py-3">
                   Nama
                 </th>
-                <th scope="col" className="px-5 py-3">
-                  Category
+                <th scope="col" className=" py-3">
+                  Tahun Masuk
                 </th>
                 <th scope="col" className="px-5 py-3">
-                  Price
+                  Alamat
+                </th>
+                <th scope="col" className="py-3">
+                  Kontak
+                </th>
+                <th scope="Kelas" className="px-5 py-3">
+                  Kelas
                 </th>
                 <th scope="col" className="px-5 py-3">
                   <span className="sr-only">Edit</span>
@@ -46,24 +53,56 @@ const TableSiswa = ({ data }) => {
                 currentSiswa.map((siswa) => (
                   <tr
                     key={siswa.nis}
-                    className="bg-white hover:bg-gray-100 border-b dark:bg-gray-500 dark:border-gray-700"
+                    className="bg-white hover:bg-gray-100 border-b "
                   >
-                    <th
+                    <td
                       scope="row"
-                      className="px-5 py-4 text-xs font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      className="px-3 py-4 text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
-                      Apple MacBook Pro 17"
-                    </th>
-                    <td className="px-5 py-4">Silver</td>
-                    <td className="px-5 py-4">Laptop</td>
-                    <td className="px-5 py-4">$2999</td>
-                    <td className="px-5 py-4 text-right">
-                      <a
-                        href="#"
-                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                      >
-                        Edit
-                      </a>
+                      {siswa.nis}
+                    </td>
+                    <td
+                      scope="row"
+                      className="px-4 py-4 max-w-full overflow-hidden line-clamp-1 text-xs font-medium text-gray-900 whitespace-nowrap "
+                    >
+                      {siswa.nama}
+                    </td>
+                    <td
+                      scope="row"
+                      className=" py-4 max-w-full text-xs font-medium text-gray-900 whitespace-nowrap "
+                    >
+                      {siswa.tahunMasuk}
+                    </td>
+                    <td
+                      scope="row"
+                      className="px-4 py-4 max-w-full  overflow-hidden line-clamp-1 text-xs font-medium text-gray-900 whitespace-nowrap "
+                    >
+                      {siswa.alamat}
+                    </td>
+                    <td
+                      scope="row"
+                      className="py-4  text-xs font-medium text-gray-900 whitespace-nowrap "
+                    >
+                      <div className="flex space-x-2">
+                        <div
+                          className="cursor-pointer flex-center bg-backup text-neutral w-5 h-5 rounded-full"
+                          title={siswa.kontak[0].phone}
+                        >
+                          <Phone width={12} height={12} />
+                        </div>
+                        <div
+                          className="cursor-pointer flex-center bg-backup  text-neutral w-5 h-5 rounded-full"
+                          title={siswa.kontak[0].email}
+                        >
+                          <Mail width={12} height={12} />
+                        </div>
+                      </div>
+                    </td>
+                    <td
+                      scope="row"
+                      className=" py-4 max-w-full text-xs font-medium text-gray-900 whitespace-nowrap "
+                    >
+                      {siswa.}
                     </td>
                   </tr>
                 ))}
@@ -107,7 +146,7 @@ const Pagination = ({
   const visiblePages = pageNumbers.slice(startPage - 1, endPage);
 
   return (
-    <div className="w-full px-9  flex-between absolute left-0  py-5 bottom-0 text-gray-500">
+    <div className="w-full px-9  flex-between absolute left-0 py-2 sm:py-4 bottom-1 select-none text-gray-500">
       <div className="flex">
         <p className="text-xs">{`Menampilkan ${
           indexOfFirstsiswa + 1
@@ -129,7 +168,10 @@ const Pagination = ({
           >
             <button
               onClick={() => paginate(number)}
-              className="w-5 text-sm h-5"
+              className={`${
+                number === currentPage &&
+                "rounded-full border-b shadow border-gray-500"
+              } w-5 text-sm h-5`}
             >
               {number}
             </button>
