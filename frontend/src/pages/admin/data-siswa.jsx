@@ -2,11 +2,13 @@ import TableSiswa from "@/components/fragments/admin/data-siswa/TableSiswa";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { ArrowDown01, Plus, Search } from "lucide-react";
+import { ArrowDown01, ArrowDownNarrowWide, Plus, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 const DataSiswaPage = () => {
+  const [search, setSearch] = useState("");
   const [dataSiswa, setDataSiswa] = useState([]);
+  const [dataSearch, setDataSearch] = useState([]);
 
   useEffect(() => {
     const getSiswa = async () => {
@@ -24,6 +26,27 @@ const DataSiswaPage = () => {
     getSiswa();
   }, []);
 
+  useEffect(() => {
+    const splitValue = search.trim().toLowerCase().split(" ");
+
+    const dataFilter = dataSiswa.filter((siswa) => {
+      return splitValue.every((word) =>
+        siswa.nama.toLowerCase().includes(word)
+      );
+    });
+
+    if (dataFilter.length === 0) {
+      setDataSearch(dataSiswa);
+    } else {
+      setDataSearch(dataFilter);
+    }
+  }, [search]);
+
+  const handleSearch = (e) => {
+    const { value } = e.target;
+    setSearch(value);
+  };
+
   return (
     <section className="px-6 py-4  ">
       <div className="w-full flex-between flex-wrap gap-6">
@@ -31,6 +54,8 @@ const DataSiswaPage = () => {
           <input
             type="search"
             placeholder="Cari Siswa"
+            value={search}
+            onChange={handleSearch}
             className="w-full rounded-full py-2 pr-2 pl-8 text-sm border border-gray-400 outline-offset-1 outline-1 outline-neutral"
           />
           <button className="absolute left-2 top-1/2 -translate-y-1/2">
@@ -47,7 +72,7 @@ const DataSiswaPage = () => {
             Tingkat
           </button>
           <button className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-2.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-full flex-between gap-3">
-            <ArrowDown01
+            <ArrowDownNarrowWide
               width={15}
               height={15}
               className="rounded-full bg-white text-neutral"
@@ -65,7 +90,7 @@ const DataSiswaPage = () => {
         </button>
       </div>
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-xl">
-        <TableSiswa data={dataSiswa} />
+        <TableSiswa data={dataSearch} />
       </div>
     </section>
   );

@@ -73,10 +73,10 @@ const HeaderLayout = ({ handleOpenEdit, setIsEdit, handleToggleSidebar }) => {
       <div className="flex justify-center items-center gap-4">
         <div className="flex items-center space-x-4">
           <div className="block">
-            <h5 className="text-sm text-text font-semibold">
+            <h5 className="hidden sm:block text-sm text-text font-semibold">
               {data.nama ? data.nama : data.username}
             </h5>
-            <span className="text-xs leading-2 text-right font-medium block">
+            <span className="text-xs hidden sm:block leading-2 text-right font-medium ">
               {data.role}
             </span>
           </div>

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 const TableSiswa = ({ data }) => {
   const [siswa, setSiswa] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const siswaPerPage = 7;
+  const [siswaPerPage, setSiswaPerPage] = useState(7);
 
   useEffect(() => {
     setSiswa(data);
@@ -14,13 +14,12 @@ const TableSiswa = ({ data }) => {
   const indexOfFirstsiswa = indexOfLastSiswa - siswaPerPage;
   const currentSiswa = siswa.slice(indexOfFirstsiswa, indexOfLastSiswa);
 
-  console.log(currentSiswa);
-  // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const setPerPage = (perPage) => setSiswaPerPage(perPage);
 
   return (
     <>
-      <div className="block min-h-[480px]  shadow-md pb-8">
+      <div className="block min-h-[450px]  shadow-md pb-16">
         <div className="w-full overflow-auto rounded-xl">
           <table className="w-full   text-sm text-left  text-gray-500 ">
             <thead className="text-xs  text-white uppercase bg-neutral">
@@ -102,7 +101,7 @@ const TableSiswa = ({ data }) => {
                       scope="row"
                       className=" py-4 max-w-full text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
-                      {siswa.}
+                      {siswa.kelas}
                     </td>
                   </tr>
                 ))}
@@ -115,6 +114,7 @@ const TableSiswa = ({ data }) => {
           perPage={siswaPerPage}
           totalSiswa={siswa.length}
           paginate={paginate}
+          setPerPage={setPerPage}
           currentPage={currentPage}
         />
       </div>
@@ -129,8 +129,10 @@ const Pagination = ({
   totalSiswa,
   paginate,
   currentPage,
+  setPerPage,
 }) => {
   const pageNumbers = [];
+  const selectRow = [7, 14, 21, 28];
   const totalPages = Math.ceil(totalSiswa / perPage);
 
   for (let i = 1; i <= totalPages; i++) {
@@ -141,50 +143,64 @@ const Pagination = ({
 
   const endPage = Math.min(totalPages, currentPage + 1);
 
-  console.log(totalPages, currentPage + 1);
-
   const visiblePages = pageNumbers.slice(startPage - 1, endPage);
 
   return (
-    <div className="w-full px-9  flex-between absolute left-0 py-2 sm:py-4 bottom-1 select-none text-gray-500">
+    <div className="w-full px-4  flex-between absolute left-0 py-2 sm:py-4 bottom-1 select-none text-gray-500">
       <div className="flex">
-        <p className="text-xs">{`Menampilkan ${
+        <p className="text-[10px] sm:text-xs">{`Menampilkan ${
           indexOfFirstsiswa + 1
         } - ${indexOfLastSiswa} dari ${totalSiswa} data`}</p>
       </div>
-      <div className="flex gap-2 ">
-        <button
-          onClick={() => paginate(currentPage - 1)}
-          className="disabled:cursor-auto bg-neutral text-white rounded-sm disabled:bg-backup"
-          disabled={currentPage === 1}
-        >
-          <ChevronLeft width={20} height={20} />
-        </button>
-
-        {visiblePages.map((number) => (
-          <div
-            key={number}
-            className={`page-item ${currentPage === number ? "" : ""}`}
+      <div className="flex space-x-4">
+        <div>
+          <select
+            name="perpage"
+            id="perpage"
+            className="border border-gray-400 text-sm rounded-sm "
+            onChange={(e) => setPerPage(e.target.value)}
           >
-            <button
-              onClick={() => paginate(number)}
-              className={`${
-                number === currentPage &&
-                "rounded-full border-b shadow border-gray-500"
-              } w-5 text-sm h-5`}
-            >
-              {number}
-            </button>
-          </div>
-        ))}
+            {selectRow.map((item) => (
+              <option key={item} value={item} className="text-[14px] ">
+                {item}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex gap-2 ">
+          <button
+            onClick={() => paginate(currentPage - 1)}
+            className="disabled:cursor-auto bg-neutral text-white rounded-sm disabled:bg-backup"
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft width={20} height={20} />
+          </button>
 
-        <button
-          onClick={() => paginate(currentPage + 1)}
-          className="disabled:cursor-auto bg-neutral text-white rounded-sm disabled:bg-backup"
-          disabled={currentPage === pageNumbers.length}
-        >
-          <ChevronRight width={20} height={20} />
-        </button>
+          {visiblePages.map((number) => (
+            <div
+              key={number}
+              className={`page-item ${currentPage === number ? "" : ""}`}
+            >
+              <button
+                onClick={() => paginate(number)}
+                className={`${
+                  number === currentPage &&
+                  "rounded-full border-b shadow border-gray-500"
+                } w-5 text-sm h-5`}
+              >
+                {number}
+              </button>
+            </div>
+          ))}
+
+          <button
+            onClick={() => paginate(currentPage + 1)}
+            className="disabled:cursor-auto bg-neutral text-white rounded-sm disabled:bg-backup"
+            disabled={currentPage === pageNumbers.length}
+          >
+            <ChevronRight width={20} height={20} />
+          </button>
+        </div>
       </div>
     </div>
   );
