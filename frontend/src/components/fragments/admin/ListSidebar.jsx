@@ -109,9 +109,9 @@ const Navlist = [
 
 const ListSidebar = () => {
   return (
-    <ul className="w-full ml-6 md:ml-4 lg:ml-6 py-2 h-[80vh] overflow-auto">
+    <ul className="w-full py-2 h-[80vh] overflow-auto">
       {Navlist.map((list) => (
-        <li key={list.id} className="outline-none">
+        <li key={list.id} className="outline-none ml-6 md:ml-4 lg:ml-6 ">
           <Link
             to={list.path}
             className="flex justify-start outline-white z-10 pl-4 items-center py-3  gap-3 group hover:bg-background cursor-pointer rounded-tl-full rounded-bl-full "

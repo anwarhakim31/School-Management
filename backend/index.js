@@ -1,12 +1,25 @@
-import express from "express";
+import bcrypt, { genSalt } from "bcrypt";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { app } from "./src/app/app.js";
+// import { siswa } from "./src/data/siswa.js";
+// import Siswa from "./src/models/siswa-model.js";
 
 dotenv.config();
 
 const port = process.env.PORT || 2001;
 const databaseURL = process.env.DATABASE_URL;
+
+async function hashPassord(Users) {
+  for (const user of Users) {
+    if (user.password) {
+      const salt = await genSalt();
+      user.password = await bcrypt.hash(user.password, salt);
+    }
+  }
+
+  return Users;
+}
 
 app.get("/", (req, res) => {
   res.send(`
@@ -45,8 +58,14 @@ const connectDB = async () => {
   }
 };
 
-app.listen(port, () => {
+app.listen(port, async () => {
   connectDB();
+
+  // const hashedSiswa = await hashPassord(siswa);
+
+  // Siswa.insertMany(hashedSiswa)
+  //   .then(() => console.log("Users inserted successfully"))
+  //   .catch((err) => console.error("Error inserting users:", err));
 
   console.log("Server is running in port " + process.env.PORT);
 });

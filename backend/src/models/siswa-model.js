@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 const siswaSchema = new mongoose.Schema({
   nis: {
@@ -38,14 +39,15 @@ const siswaSchema = new mongoose.Schema({
       },
     },
   ],
-  kelas: { type: mongoose.Schema.ObjectId, ref: "Kelas", required: true },
+
   ortu: {
     type: String,
     required: true,
   },
-  mapel: [{ type: mongoose.Schema.ObjectId, ref: "Mapel", required: true }],
+  mapel: [{ type: mongoose.Schema.ObjectId, ref: "Mapel", required: false }],
+  kelas: { type: mongoose.Schema.ObjectId, ref: "Kelas", required: false },
 });
 
-const Siswa = siswaSchema.model("siswa", siswaSchema);
+const Siswa = mongoose.model("siswa", siswaSchema);
 
 export default Siswa;

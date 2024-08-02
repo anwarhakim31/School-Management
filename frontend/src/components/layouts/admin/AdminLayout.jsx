@@ -48,24 +48,27 @@ const AdminLayout = () => {
   }, [isSidebar]);
 
   return (
-    <main className="w-full flex">
+    <main className="w-full h-full flex">
       <aside
         ref={sidebarRef}
         className={`${
           isSidebar ? "block" : "hidden"
-        } md:block bg-neutral fixed  md:relative   py-6 overflow-hidden w-[230px]  md:w-[260px] h-screen`}
+        } md:block bg-neutral fixed md:relative py-6 overflow-hidden w-[230px] md:w-[260px] min-h-screen`}
       >
         <AsideLayout />
       </aside>
-      <div className="w-full  overflow-auto">
-        <HeaderLayout
-          setIsEdit={setIsEdit}
-          handleToggleSidebar={handleToggleSidebar}
-        />
-        <Outlet />
-        {isEdit && (
-          <SideProfile ref={editProfileRef} handleClose={handleCloseEdit} />
-        )}
+
+      <div className=" w-full h-screen">
+        <div className="overflow-scroll h-full w-full">
+          <HeaderLayout
+            setIsEdit={setIsEdit}
+            handleToggleSidebar={handleToggleSidebar}
+          />
+          <Outlet />
+          {isEdit && (
+            <SideProfile ref={editProfileRef} handleClose={handleCloseEdit} />
+          )}
+        </div>
       </div>
     </main>
   );

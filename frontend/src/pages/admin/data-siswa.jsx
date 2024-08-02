@@ -1,9 +1,31 @@
+import TableSiswa from "@/components/fragments/admin/data-siswa/TableSiswa";
+import { HOST } from "@/util/constant";
+import responseError from "@/util/services";
+import axios from "axios";
 import { ArrowDown01, Plus, Search } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const DataSiswaPage = () => {
+  const [dataSiswa, setDataSiswa] = useState([]);
+
+  useEffect(() => {
+    const getSiswa = async () => {
+      try {
+        const res = await axios.get(HOST + "/api/siswa/get-all-siswa", {
+          withCredentials: true,
+        });
+
+        setDataSiswa(res.data.data);
+      } catch (error) {
+        responseError(error);
+      }
+    };
+
+    getSiswa();
+  }, []);
+
   return (
-    <section className="px-6 py-4 w-full  ">
+    <section className="px-6 py-4  ">
       <div className="w-full flex-between flex-wrap gap-6">
         <div className="relative flex w-full  md:max-w-[240px]">
           <input
@@ -42,7 +64,9 @@ const DataSiswaPage = () => {
           Tambah Siswa
         </button>
       </div>
-      <div className="bg-white w-full  mt-12 border h-[65vh] overflow-hidden rounded-xl"></div>
+      <div className="relative bg-white w-full  mt-4 border  overflow-hidden  rounded-xl">
+        <TableSiswa data={dataSiswa} />
+      </div>
     </section>
   );
 };
