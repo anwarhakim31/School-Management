@@ -6,7 +6,7 @@ const BackdropOverlay = ({ onClose }) => {
     <div
       role="dialog"
       onClick={() => onClose()}
-      className="fixed w-screen h-screen inset-0 z-[50]  bg-black/10"
+      className="fixed w-screen h-screen inset-0 z-[50]  bg-black/30"
     ></div>
   );
 };
@@ -16,7 +16,9 @@ const ModalOverlay = ({ onClose, showModal, children }) => {
     <div
       role="dialog"
       onClick={() => onClose()}
-      className="fixed w-full h-full top-0 left-0 z-[100] flex justify-center items-end md:items-center"
+      className={`${
+        showModal ? "opacity-100 scale-100" : "opacity-0 scale-90"
+      } fixed w-full h-full top-0 left-0 z-[100] flex justify-center items-end sm:items-center transition-all  duration-300`}
     >
       {children}
     </div>
@@ -29,7 +31,7 @@ const Modal = ({ onClose, children }) => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setShowModal(true);
-    }, [30]);
+    }, [10]);
 
     return () => {
       clearTimeout(timeout);

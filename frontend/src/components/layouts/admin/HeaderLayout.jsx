@@ -15,9 +15,6 @@ const HeaderLayout = ({ handleOpenEdit, setIsEdit, handleToggleSidebar }) => {
   const buttonRef = useRef();
   const [isSetting, setIsSetting] = useState(false);
   const data = useSelector(selectedUserData);
-  const { pathname } = useLocation();
-  const path = pathname.split("/")[2];
-  const name = path.split("-").join(" ");
 
   const handleLogout = async () => {
     try {
@@ -68,7 +65,7 @@ const HeaderLayout = ({ handleOpenEdit, setIsEdit, handleToggleSidebar }) => {
         >
           <Menu width={25} height={25} />
         </button>
-        <HeaderPage title={name} />
+        <HeaderPage />
       </div>
       <div className="flex justify-center items-center gap-4">
         <div className="flex items-center space-x-4">

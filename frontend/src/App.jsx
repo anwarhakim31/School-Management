@@ -69,14 +69,7 @@ function App() {
             </PrivateRoute>
           }
         >
-          <Route
-            index
-            element={
-              <PrivateRoute role={"admin"}>
-                <AdminDashboard />
-              </PrivateRoute>
-            }
-          />
+          <Route index element={<Navigate to="/admin/dashboard" />} />
           <Route
             path="dashboard"
             element={

@@ -80,6 +80,12 @@
   }
 }
 
+@layer components {
+  .btn {
+    @apply bg-gray-800 hover:bg-neutral transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md;
+  }
+}
+
 *::-webkit-scrollbar {
   width: 0.5rem;
   height: 0.5rem;

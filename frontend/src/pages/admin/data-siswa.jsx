@@ -72,7 +72,7 @@ const DataSiswaPage = () => {
               height={15}
               className="rounded-full bg-white text-neutral"
             />
-            Tingkat
+            Kelas
           </button>
           <button className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-2.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-full flex-between gap-3">
             <ArrowDownNarrowWide

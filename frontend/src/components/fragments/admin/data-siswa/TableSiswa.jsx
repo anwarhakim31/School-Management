@@ -170,7 +170,7 @@ const Pagination = ({
           <select
             name="perpage"
             id="perpage"
-            className="border border-gray-400 text-sm rounded-sm "
+            className="border border-gray-400 text-sm rounded-sm outline-neutral"
             onChange={(e) => setPerPage(e.target.value)}
           >
             {selectRow.map((item) => (

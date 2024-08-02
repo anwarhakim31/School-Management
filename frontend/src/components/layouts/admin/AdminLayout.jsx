@@ -58,7 +58,7 @@ const AdminLayout = () => {
         <AsideLayout />
       </aside>
 
-      <div className="p-2 overflow-hidden w-full h-screen">
+      <div className="overflow-hidden w-full h-screen">
         <div className="overflow-scroll h-full w-full">
           <HeaderLayout
             setIsEdit={setIsEdit}

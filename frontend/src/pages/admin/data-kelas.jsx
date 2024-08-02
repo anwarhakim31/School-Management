@@ -1,12 +1,18 @@
+import AddModal from "@/components/fragments/admin/data-kelas/AddModal";
 import { ArrowDown01, ArrowDownNarrowWide, Plus, Search } from "lucide-react";
 import React, { useState } from "react";
 
 const DataKelasPage = () => {
   const [search, setSearch] = useState("");
+  const [isAddKelas, setIsAddKelas] = useState(false);
 
   const handleSearch = (e) => {
     const { value } = e.target;
     setSearch(value);
+  };
+
+  const handleToggleAdd = () => {
+    setIsAddKelas(!isAddKelas);
   };
 
   return (
@@ -42,7 +48,11 @@ const DataKelasPage = () => {
             Nama
           </button>
         </div>
-        <button className="bg-gray-700 hover:bg-neutral transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-full flex-between gap-3">
+        <button
+          aria-label="tambah kelas"
+          onClick={handleToggleAdd}
+          className="bg-gray-800 hover:bg-neutral transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md flex-between gap-3"
+        >
           <Plus
             width={15}
             height={15}
@@ -54,6 +64,7 @@ const DataKelasPage = () => {
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-xl">
         {/* <TableKelas data={dataSearch} /> */}
       </div>
+      {isAddKelas && <AddModal onClose={handleToggleAdd} />}
     </section>
   );
 };

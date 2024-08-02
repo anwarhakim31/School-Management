@@ -5,8 +5,8 @@ const kelasSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  tingkat: {
-    type: String,
+  kelas: {
+    type: Number,
     required: true,
   },
   waliKelas: {
