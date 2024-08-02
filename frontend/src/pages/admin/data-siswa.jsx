@@ -30,8 +30,11 @@ const DataSiswaPage = () => {
     const splitValue = search.trim().toLowerCase().split(" ");
 
     const dataFilter = dataSiswa.filter((siswa) => {
-      return splitValue.every((word) =>
-        siswa.nama.toLowerCase().includes(word)
+      const nisString = String(siswa.nis);
+
+      return splitValue.every(
+        (word) =>
+          siswa.nama.toLowerCase().includes(word) || nisString.includes(word)
       );
     });
 
@@ -40,7 +43,7 @@ const DataSiswaPage = () => {
     } else {
       setDataSearch(dataFilter);
     }
-  }, [search]);
+  }, [search, dataSiswa]);
 
   const handleSearch = (e) => {
     const { value } = e.target;

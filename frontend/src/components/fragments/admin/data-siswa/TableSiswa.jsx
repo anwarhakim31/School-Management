@@ -1,10 +1,13 @@
 import { ChevronLeft, ChevronRight, Mail, Phone } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const TableSiswa = ({ data }) => {
   const [siswa, setSiswa] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [siswaPerPage, setSiswaPerPage] = useState(7);
+
+  console.log(siswaPerPage);
 
   useEffect(() => {
     setSiswa(data);
@@ -16,6 +19,12 @@ const TableSiswa = ({ data }) => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const setPerPage = (perPage) => setSiswaPerPage(perPage);
+
+  const HandleCopyText = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      toast.info("Succes mengambil data");
+    });
+  };
 
   return (
     <>
@@ -62,19 +71,19 @@ const TableSiswa = ({ data }) => {
                     </td>
                     <td
                       scope="row"
-                      className="px-4 py-4 max-w-full overflow-hidden line-clamp-1 text-xs font-medium text-gray-900 whitespace-nowrap "
+                      className="px-4 py-4  overflow-hidden line-clamp-1 text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
                       {siswa.nama}
                     </td>
                     <td
                       scope="row"
-                      className=" py-4 max-w-full text-xs font-medium text-gray-900 whitespace-nowrap "
+                      className=" py-4  text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
                       {siswa.tahunMasuk}
                     </td>
                     <td
                       scope="row"
-                      className="px-4 py-4 max-w-full  overflow-hidden line-clamp-1 text-xs font-medium text-gray-900 whitespace-nowrap "
+                      className="px-4 py-4   overflow-hidden line-clamp-1 text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
                       {siswa.alamat}
                     </td>
@@ -86,12 +95,14 @@ const TableSiswa = ({ data }) => {
                         <div
                           className="cursor-pointer flex-center bg-backup text-neutral w-5 h-5 rounded-full"
                           title={siswa.kontak[0].phone}
+                          onClick={() => HandleCopyText(siswa.kontak[0].phone)}
                         >
                           <Phone width={12} height={12} />
                         </div>
                         <div
                           className="cursor-pointer flex-center bg-backup  text-neutral w-5 h-5 rounded-full"
                           title={siswa.kontak[0].email}
+                          onClick={() => HandleCopyText(siswa.kontak[0].email)}
                         >
                           <Mail width={12} height={12} />
                         </div>
@@ -150,7 +161,9 @@ const Pagination = ({
       <div className="flex">
         <p className="text-[10px] sm:text-xs">{`Menampilkan ${
           indexOfFirstsiswa + 1
-        } - ${indexOfLastSiswa} dari ${totalSiswa} data`}</p>
+        } - ${
+          indexOfLastSiswa > totalSiswa ? totalSiswa : indexOfLastSiswa
+        } dari ${totalSiswa} data`}</p>
       </div>
       <div className="flex space-x-4">
         <div>
