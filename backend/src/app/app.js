@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import errorMiddleware from "../middlewares/error-middleware.js";
 import authRouter from "../routes/auth-router.js";
 import siswaRouter from "../routes/siswa-router.js";
+import kelasRouter from "../routes/kelas-router.js";
 
 export const app = express();
 
@@ -22,5 +23,6 @@ app.use(express.json());
 
 app.use("/api/auth", authRouter);
 app.use("/api/siswa", siswaRouter);
+app.use("/api/kelas", kelasRouter);
 
 app.use(errorMiddleware);

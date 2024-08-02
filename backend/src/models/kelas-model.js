@@ -1,26 +1,27 @@
 import mongoose from "mongoose";
 
+// Define the schema
 const kelasSchema = new mongoose.Schema({
-  nama: {
-    type: String,
-    required: true,
-  },
   kelas: {
     type: Number,
     required: true,
   },
-  waliKelas: {
-    type: mongoose.Schema.ObjectId,
-    ref: "Guru",
-    required: false,
+  nama: {
+    type: String,
+    required: true,
   },
+  // waliKelas: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Guru",
+  //   required: false,
+  // },
   posisi: {
     type: String,
     required: false,
   },
   siswa: [
     {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Siswa",
       required: false,
     },

@@ -14,6 +14,10 @@ const siswaSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  tanggalLahir: {
+    type: String,
+    required: true,
+  },
   jenisKelamin: {
     type: String,
     required: true,
@@ -38,13 +42,18 @@ const siswaSchema = new mongoose.Schema({
       },
     },
   ],
-
   ortu: {
     type: String,
     required: true,
   },
-  mapel: [{ type: mongoose.Schema.ObjectId, ref: "Mapel", required: false }],
-  kelas: { type: mongoose.Schema.ObjectId, ref: "Kelas", required: false },
+  mapel: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Mapel", required: false },
+  ],
+  kelas: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Kelas",
+    required: false,
+  },
 });
 
 const Siswa = mongoose.model("siswa", siswaSchema);

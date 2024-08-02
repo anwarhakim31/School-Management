@@ -1,6 +1,12 @@
 import HeaderModal from "@/components/elements/HeaderModal";
+import LoaderButton from "@/components/elements/LoaderButton";
 import Modal from "@/components/elements/Modal";
+import { HOST } from "@/util/constant";
+import responseError from "@/util/services";
+import axios from "axios";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const AddModal = ({ onClose }) => {
   const {
@@ -8,16 +14,31 @@ const AddModal = ({ onClose }) => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    setLoading(true);
+    try {
+      const res = await axios.post(HOST + "/api/kelas/add-kelas", data, {
+        withCredentials: true,
+      });
+
+      if (res.status === 200) {
+        toast.success(res.data.message);
+        onClose();
+      }
+    } catch (error) {
+      responseError(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <Modal onClose={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-[425px] h-[400px] rounded-2xl shadow-md bg-white"
+        className="w-full sm:max-w-[425px]  rounded-2xl shadow-md bg-white"
       >
         <div className="p-4 border-b">
           <HeaderModal titile={"Tambah Kelas"} onClose={onClose} />
@@ -85,7 +106,7 @@ const AddModal = ({ onClose }) => {
               (opsional)
             </span>
           </div>
-          <div className="px-6">
+          {/* <div className="px-6">
             <label
               htmlFor="wali"
               className="text-xs mb-2 block font-semibold text-gray-700"
@@ -101,11 +122,11 @@ const AddModal = ({ onClose }) => {
             <span className="text-xs font-medium h-4 mt-1 block">
               (opsional)
             </span>
-          </div>
+          </div> */}
 
           <div className="text-end border-t mt-4 p-4 space-x-4">
             <button aria-label="simpan kelas" type="submit" className="btn">
-              Simpan
+              {loading ? <LoaderButton /> : "Simpan"}
             </button>
           </div>
         </form>
