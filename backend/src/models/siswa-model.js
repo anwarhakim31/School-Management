@@ -46,9 +46,9 @@ const siswaSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  mapel: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "Mapel", required: false },
-  ],
+  // mapel: [
+  //   { type: mongoose.Schema.Types.ObjectId, ref: "Mapel", required: false },
+  // ],
   kelas: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Kelas",

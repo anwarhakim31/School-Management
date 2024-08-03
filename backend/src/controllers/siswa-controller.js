@@ -1,8 +1,10 @@
 import ResponseError from "../error/response-error.js";
 import Siswa from "../models/siswa-model.js";
+import Kelas from "../models/kelas-model.js";
 import fs from "fs";
 import s3 from "../util/aws3.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { genSalt, hash } from "bcrypt";
 
 export const getAll = async (req, res, next) => {
   try {
@@ -42,6 +44,39 @@ export const uploadPhotoSiswa = async (req, res, next) => {
       message: "Berhasil unggah gambar",
       foto: fileName,
     });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const addSiswa = async (req, res, next) => {
+  try {
+    const { kelas, nama, nis, password } = res.body;
+
+    const siswaExist = await Siswa.findOne({ nis });
+
+    if (siswaExist) {
+      throw new ResponseError(404, "NIS sudah digunakan");
+    }
+
+    const kelasSiswa = await Kelas.findOne({ kelas, nama });
+
+    if (!kelasSiswa) {
+      throw new ResponseError(404, "Kelas tidak ditemukan.");
+    }
+
+    const salt = await genSalt();
+
+    req.body.password = await hash(password, salt);
+
+    const newSiswa = new Siswa(req.body);
+
+    await newSiswa.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: "Berhasil menambahkan siswa" });
   } catch (error) {
     console.log(error);
     next(error);
