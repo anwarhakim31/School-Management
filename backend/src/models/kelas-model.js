@@ -19,13 +19,7 @@ const kelasSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  siswa: [
-    {
-      type: mongoose.Schema.ObjectId,
-      ref: "Siswa",
-      required: false,
-    },
-  ],
+  siswa: [{ type: mongoose.Schema.Types.ObjectId, ref: "Siswa" }],
   jumlahSiswa: {
     type: Number,
     default: 0,

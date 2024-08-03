@@ -6,8 +6,10 @@ import responseError from "@/util/services";
 import { ALLOWED_FILE_TYPES, HOST, MAX_FILE_SIZE } from "@/util/constant";
 import axios from "axios";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const TambahSiswaPage = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -43,14 +45,31 @@ const TambahSiswaPage = () => {
     setImage("");
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    try {
+      const res = await axios.post(
+        HOST + "/api/siswa/add-siswa",
+        {
+          ...data,
+          photo: image,
+        },
+        { withCredentials: true }
+      );
+
+      if (res.status === 200) {
+        toast.success(res.status.message);
+        navigate("/admin/data-siswa");
+      }
+    } catch (error) {
+      responseError(error);
+    }
   };
 
   const handleChangeImage = async (e) => {
     const file = e.target.files[0];
 
-    if (!file.type.includes(ALLOWED_FILE_TYPES)) {
+    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
       return toast.error("Ektensi file tidak di dukung");
     } else if (file.size > MAX_FILE_SIZE) {
       return toast.error("Ukuran File Maksimal 1 MB.");
@@ -115,7 +134,7 @@ const TambahSiswaPage = () => {
   }, [kelasDB, selectedValue]);
 
   return (
-    <div className="h-full mx-6 mb-16 bg-white  grid grid-cols-1 rounded-lg py-4 px-6 gap-8 lg:grid-cols-4">
+    <div className="h-full  mx-6 mb-16 bg-white  grid grid-cols-1 rounded-lg py-4 px-6 gap-8 lg:grid-cols-4">
       <div className=" flex justify-start  items-center flex-col">
         <div
           className="relative cursor-pointer w-[150px] overflow-hidden   h-[150px] rounded-full border  bg-white"
@@ -238,7 +257,7 @@ const TambahSiswaPage = () => {
                 required: "Tempat Lahir di perlukan.",
                 maxLength: {
                   value: 50,
-                  message: "TempatLahir maksimal 20 karakter.",
+                  message: "Tempat Lahir maksimal 20 karakter.",
                 },
               })}
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
@@ -256,7 +275,7 @@ const TambahSiswaPage = () => {
               type="date"
               id="TanggalLahir"
               {...register("tanggalLahir", {
-                required: "Tanggal Lahir di perlukan,",
+                required: "Tanggal Lahir di perlukan.",
               })}
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
@@ -289,16 +308,16 @@ const TambahSiswaPage = () => {
             </label>
             <input
               type={"text"}
-              inputMode="numeric"
               id="Tahun Masuk"
               name="tahunMasuk"
               value={tahunMasuk}
-              onChange={(e) => handleNumberChange(e, "tahunMasuk")}
               {...register("tahunMasuk", {
-                required: "Tahun Masuk diperlukan..",
+                required: "Tahun Masuk diperlukan.",
               })}
+              onChange={(e) => handleNumberChange(e, "tahunMasuk")}
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
+
             <span className="text-xs h-4 block mt-1 text-neutral2">
               {errors.tahunMasuk && errors.tahunMasuk.message}
             </span>
@@ -419,13 +438,20 @@ const TambahSiswaPage = () => {
             </label>
             <textarea
               id="Alamat"
+              {...register("alamat")}
               className="py-1.5 h-[115px] bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
           </div>
+          <div className="flex justify-end">
+            <button
+              disabled={loading}
+              type="submit"
+              className="btn disabled:cursor-not-allowed disabled:bg-gray-700"
+            >
+              {"Simpan"}
+            </button>
+          </div>
         </div>
-        <button type="submit" className="btn ">
-          Submit
-        </button>
       </form>
     </div>
   );

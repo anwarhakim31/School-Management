@@ -52,7 +52,7 @@ export const uploadPhotoSiswa = async (req, res, next) => {
 
 export const addSiswa = async (req, res, next) => {
   try {
-    const { kelas, nama, nis, password } = res.body;
+    const { kelas, namaKelas, nis, password } = req.body;
 
     const siswaExist = await Siswa.findOne({ nis });
 
@@ -60,7 +60,10 @@ export const addSiswa = async (req, res, next) => {
       throw new ResponseError(404, "NIS sudah digunakan");
     }
 
-    const kelasSiswa = await Kelas.findOne({ kelas, nama });
+    const kelasSiswa = await Kelas.findOne({
+      kelas,
+      nama: namaKelas,
+    });
 
     if (!kelasSiswa) {
       throw new ResponseError(404, "Kelas tidak ditemukan.");
@@ -68,11 +71,18 @@ export const addSiswa = async (req, res, next) => {
 
     const salt = await genSalt();
 
-    req.body.password = await hash(password, salt);
+    const hashedPassword = await hash(password, salt);
 
-    const newSiswa = new Siswa(req.body);
+    const newSiswa = new Siswa({
+      password: hashedPassword,
+      ...req.body,
+      kelas: kelasSiswa._id,
+    });
 
-    await newSiswa.save();
+    const siswaSaved = await newSiswa.save();
+    kelasSiswa.siswa.push(siswaSaved._id);
+    kelasSiswa.jumlah === kelasSiswa.siswa.length();
+    kelasSiswa.save();
 
     res
       .status(200)

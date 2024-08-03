@@ -48,7 +48,7 @@ const AdminLayout = () => {
   }, [isSidebar]);
 
   return (
-    <main className="w-full h-full flex">
+    <main className="w-full overflow-hidden h-screen flex ">
       <aside
         ref={sidebarRef}
         className={`${
@@ -58,12 +58,13 @@ const AdminLayout = () => {
         <AsideLayout setIsSidebar={setIsSidebar} />
       </aside>
 
-      <div className="w-full h-full  overflow-hidden">
-        <div className="overflow-auto ">
+      <div className="flex flex-1 ">
+        <div className="flex flex-col flex-1 overflow-scroll">
           <HeaderLayout
             setIsEdit={setIsEdit}
             handleToggleSidebar={handleToggleSidebar}
           />
+
           <Outlet />
           {isEdit && (
             <SideProfile ref={editProfileRef} handleClose={handleCloseEdit} />

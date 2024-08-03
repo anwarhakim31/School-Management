@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const siswaSchema = new mongoose.Schema({
   nis: {
-    type: Number,
+    type: String,
     unique: true,
     required: true,
   },
@@ -46,9 +46,6 @@ const siswaSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  // mapel: [
-  //   { type: mongoose.Schema.Types.ObjectId, ref: "Mapel", required: false },
-  // ],
   kelas: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Kelas",
@@ -56,6 +53,6 @@ const siswaSchema = new mongoose.Schema({
   },
 });
 
-const Siswa = mongoose.model("siswa", siswaSchema);
+const Siswa = mongoose.model("Siswa", siswaSchema);
 
 export default Siswa;

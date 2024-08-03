@@ -87,7 +87,7 @@ const TableSiswa = ({ data }) => {
                     >
                       {siswa.alamat}
                     </td>
-                    <td
+                    {/* <td
                       scope="row"
                       className="py-4  text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
@@ -107,7 +107,7 @@ const TableSiswa = ({ data }) => {
                           <Mail width={12} height={12} />
                         </div>
                       </div>
-                    </td>
+                    </td> */}
                     <td
                       scope="row"
                       className=" py-4 max-w-full text-xs font-medium text-gray-900 whitespace-nowrap "
