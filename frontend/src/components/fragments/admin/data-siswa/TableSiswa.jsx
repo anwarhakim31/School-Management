@@ -28,8 +28,8 @@ const TableSiswa = ({ data }) => {
 
   return (
     <>
-      <div className="block min-h-[450px]  shadow-md pb-16">
-        <div className="w-full overflow-auto rounded-xl">
+      <div className="block w-full shadow-md pb-16">
+        <div className="w-full min-h-[450px]  overflow-auto rounded-xl">
           <table className="w-full   text-sm text-left  text-gray-500 ">
             <thead className="text-xs  text-white uppercase bg-neutral">
               <tr>

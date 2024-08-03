@@ -1,10 +1,33 @@
 import AddModal from "@/components/fragments/admin/data-kelas/AddModal";
+import TableKelas from "@/components/fragments/admin/data-kelas/TableKelas";
+import { HOST } from "@/util/constant";
+import responseError from "@/util/services";
+import axios from "axios";
 import { ArrowDown01, ArrowDownNarrowWide, Plus, Search } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const DataKelasPage = () => {
+  const [dataKelas, setDataKelas] = useState([]);
   const [search, setSearch] = useState("");
   const [isAddKelas, setIsAddKelas] = useState(false);
+
+  useEffect(() => {
+    const getKelas = async () => {
+      try {
+        const res = await axios.get(HOST + "/api/kelas/get-kelas", {
+          withCredentials: true,
+        });
+
+        if (res.status === 200) {
+          setDataKelas(res.data.kelas);
+        }
+      } catch (error) {
+        responseError(error);
+      }
+    };
+
+    getKelas();
+  }, [isAddKelas]);
 
   const handleSearch = (e) => {
     const { value } = e.target;
@@ -62,7 +85,7 @@ const DataKelasPage = () => {
         </button>
       </div>
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-xl">
-        {/* <TableKelas data={dataSearch} /> */}
+        <TableKelas data={dataKelas} />
       </div>
       {isAddKelas && <AddModal onClose={handleToggleAdd} />}
     </section>

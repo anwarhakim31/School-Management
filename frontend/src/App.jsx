@@ -16,6 +16,7 @@ import DataKelasPage from "./pages/admin/data-kelas";
 import DataGuruPage from "./pages/admin/data-guru";
 import DataSiswaPage from "./pages/admin/data-siswa";
 import AdminDashboard from "./pages/admin/admin-dashboard";
+import TambahSiswaPage from "./pages/admin/tambah-siswa";
 
 function App() {
   const dispatch = useDispatch();
@@ -83,6 +84,14 @@ function App() {
             element={
               <PrivateRoute role={"admin"}>
                 <DataSiswaPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={"tambah-siswa"}
+            element={
+              <PrivateRoute role={"admin"}>
+                <TambahSiswaPage />
               </PrivateRoute>
             }
           />

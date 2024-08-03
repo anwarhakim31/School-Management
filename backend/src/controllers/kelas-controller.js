@@ -3,13 +3,16 @@ import Kelas from "../models/kelas-model.js";
 
 export const addKelas = async (req, res, next) => {
   try {
-    const data = req.body;
+    const { kelas, nama } = req.body;
 
-    console.log(data);
+    const kelasExists = await Kelas.findOne({ kelas, nama });
 
-    const newUser = new Kelas(data);
+    if (kelasExists) {
+      throw new ResponseError(400, "Kombinasi kelas dan nama sudah digunakan.");
+    }
+    const newKelas = new Kelas(data);
 
-    await newUser.save();
+    await newKelas.save();
 
     res
       .status(200)

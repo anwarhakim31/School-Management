@@ -14,6 +14,10 @@ const siswaSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  tempatLahir: {
+    type: String,
+    required: true,
+  },
   tanggalLahir: {
     type: String,
     required: true,
@@ -22,7 +26,7 @@ const siswaSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  alamat: {
+  agama: {
     type: String,
     required: true,
   },
@@ -30,21 +34,17 @@ const siswaSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  kontak: [
-    {
-      phone: {
-        type: String,
-        required: true,
-      },
-      email: {
-        type: String,
-        required: false,
-      },
-    },
-  ],
-  ortu: {
+  alamat: {
+    type: String,
+    required: false,
+  },
+  phone: {
     type: String,
     required: true,
+  },
+  email: {
+    type: String,
+    required: false,
   },
   mapel: [
     { type: mongoose.Schema.Types.ObjectId, ref: "Mapel", required: false },

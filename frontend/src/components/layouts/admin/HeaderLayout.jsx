@@ -109,21 +109,21 @@ const HeaderLayout = ({ handleOpenEdit, setIsEdit, handleToggleSidebar }) => {
             >
               <ul>
                 <li
-                  className="flex gap-2 justify-between items-center cursor-pointer p-3 group rounded-md hover:bg-gray-100"
+                  className="flex gap-2 justify-between items-center cursor-pointer p-2 group rounded-md hover:bg-gray-100"
                   onClick={handleEdit}
                 >
                   <Edit2Icon className="bg-neutral1 text-white w-7 h-7  rounded-sm p-2" />
-                  <p className="text-sm font-medium group-hover:text-neutral">
+                  <p className="text-xs font-medium group-hover:text-neutral">
                     Edit profile
                   </p>
                 </li>
                 <li className="w-full h-[0.25px] bg-backup relative"></li>
                 <li
-                  className="flex gap-2 justify-between items-center cursor-pointer rounded-md p-3 group hover:bg-gray-100"
+                  className="flex gap-2 justify-between items-center cursor-pointer rounded-md p-2 group hover:bg-gray-100"
                   onClick={handleLogout}
                 >
                   <LogOut className="bg-neutral2 text-white w-7 h-7  rounded-sm p-2" />
-                  <p className="text-sm font-medium group-hover:text-neutral">
+                  <p className="text-xs font-medium group-hover:text-neutral">
                     Logout
                   </p>
                 </li>

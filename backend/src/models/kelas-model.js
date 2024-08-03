@@ -21,7 +21,7 @@ const kelasSchema = new mongoose.Schema({
   },
   siswa: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.ObjectId,
       ref: "Siswa",
       required: false,
     },

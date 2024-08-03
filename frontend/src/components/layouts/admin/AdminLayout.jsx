@@ -53,13 +53,13 @@ const AdminLayout = () => {
         ref={sidebarRef}
         className={`${
           isSidebar ? "left-0 " : "-left-[300px] md:left-0"
-        } md:block bg-neutral z-50 fixed md:relative py-6 overflow-hidden w-[230px] md:w-[260px] min-h-screen transition-all duration-300`}
+        } md:block bg-neutral z-50 fixed md:static py-6 -hidden w-[230px] md:w-[260px] min-h-screen transition-all duration-300`}
       >
-        <AsideLayout />
+        <AsideLayout setIsSidebar={setIsSidebar} />
       </aside>
 
-      <div className="overflow-hidden w-full h-screen">
-        <div className="overflow-scroll h-full w-full">
+      <div className="w-full h-full  overflow-hidden">
+        <div className="overflow-auto ">
           <HeaderLayout
             setIsEdit={setIsEdit}
             handleToggleSidebar={handleToggleSidebar}

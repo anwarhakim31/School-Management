@@ -6,7 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 
 import responseError from "@/util/services";
 import axios from "axios";
-import { HOST } from "@/util/constant";
+import { ALLOWED_FILE_TYPES, HOST, MAX_FILE_SIZE } from "@/util/constant";
 import { toast } from "sonner";
 import LoaderButton from "@/components/elements/LoaderButton";
 
@@ -42,7 +42,11 @@ const SideProfile = forwardRef(({ handleClose }, ref) => {
   const hangleChangeImage = async (e) => {
     const file = e.target.files[0];
 
-    if (file) {
+    if (!file.type.includes(ALLOWED_FILE_TYPES)) {
+      return toast.error("Ektensi file tidak di dukung");
+    } else if (file.size > MAX_FILE_SIZE) {
+      return toast.error("Ukuran File Maksimal 1 MB.");
+    } else {
       const formData = new FormData();
 
       formData.append("image", file);
@@ -158,7 +162,7 @@ const SideProfile = forwardRef(({ handleClose }, ref) => {
             type="file"
             name="image"
             ref={uploadRef}
-            accept=".png, .jpg, .svg, .jpeg, .webp"
+            accept=".png, .jpg, .jpeg"
             onChange={hangleChangeImage}
             className="hidden"
           />

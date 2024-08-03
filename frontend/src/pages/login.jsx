@@ -145,7 +145,7 @@ const LoginPage = () => {
               onKeyDown={handleInputClick}
               onChange={handleInputChange}
               placeholder="Masukkan NIP / NIS"
-              className="py-1.5 h-10 bg-white text-sm border text-gray-500 border-gray-700 w-full rounded-xl outline-neutral outline-offset-1 pl-10"
+              className="py-1.5 h-10 bg-white text-sm border text-gray-500 border-gray-700 w-full rounded-lg outline-neutral outline-offset-1 pl-10"
             />
             <User className="absolute w-4 h-4 stroke-slate-400 bottom-1/2 left-3 translate-y-1/2" />
           </div>
@@ -164,7 +164,7 @@ const LoginPage = () => {
               onChange={handleInputChange}
               onKeyDown={handleInputClick}
               placeholder="Masukkan Password"
-              className="py-1.5 h-10 bg-white border text-gray-500 text-sm border-gray-700 w-full rounded-xl outline-neutral outline-offset-1 pl-10"
+              className="py-1.5 h-10 bg-white border text-gray-500 text-sm border-gray-700 w-full rounded-lg outline-neutral outline-offset-1 pl-10"
             />
             <KeyRound className="absolute w-4 h-4 stroke-gray-400 bottom-1/2 left-3 translate-y-1/2" />
             <button
@@ -207,7 +207,7 @@ const LoginPage = () => {
             type="submit"
             aria-label="submit"
             onClick={handleLogin}
-            className="rounded-xl bg-neutral w-full  font-medium text-white text-sm h-12 mt-4"
+            className="rounded-lg bg-neutral w-full  font-medium text-white text-sm h-12 mt-4"
           >
             {loading ? <LoaderButton /> : "Masuk"}
           </button>

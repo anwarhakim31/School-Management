@@ -4,6 +4,7 @@ import responseError from "@/util/services";
 import axios from "axios";
 import { ArrowDown01, ArrowDownNarrowWide, Plus, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const DataSiswaPage = () => {
   const [search, setSearch] = useState("");
@@ -61,11 +62,11 @@ const DataSiswaPage = () => {
             onChange={handleSearch}
             className="w-full rounded-full py-2 pr-2 pl-8 text-sm border border-gray-400 outline-offset-1 outline-1 outline-neutral"
           />
-          <button className="absolute left-2 top-1/2 -translate-y-1/2">
+          <div className="absolute left-2 top-1/2 -translate-y-1/2">
             <Search height={20} width={20} className="text-gray-400" />
-          </button>
+          </div>
         </div>
-        <div className="flex gap-2  mr-auto  lg:ml-8">
+        {/* <div className="flex gap-2  mr-auto  lg:ml-8">
           <button className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-2.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-full flex-between gap-3">
             <ArrowDown01
               width={15}
@@ -82,15 +83,19 @@ const DataSiswaPage = () => {
             />
             Nama
           </button>
-        </div>
-        <button className="bg-gray-700 hover:bg-neutral transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-full flex-between gap-3">
+        </div> */}
+
+        <Link
+          to={"/admin/tambah-siswa"}
+          className="flex-between gap-3  bg-gray-700 hover:bg-neutral transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-lg "
+        >
           <Plus
             width={15}
             height={15}
             className="rounded-full bg-white text-neutral"
           />{" "}
           Tambah Siswa
-        </button>
+        </Link>
       </div>
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-xl">
         <TableSiswa data={dataSearch} />
