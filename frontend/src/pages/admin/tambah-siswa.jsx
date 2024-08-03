@@ -58,7 +58,7 @@ const TambahSiswaPage = () => {
       );
 
       if (res.status === 200) {
-        toast.success(res.status.message);
+        toast.success(res.data.message);
         navigate("/admin/data-siswa");
       }
     } catch (error) {

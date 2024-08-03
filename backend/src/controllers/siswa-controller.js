@@ -60,29 +60,40 @@ export const addSiswa = async (req, res, next) => {
       throw new ResponseError(404, "NIS sudah digunakan");
     }
 
-    const kelasSiswa = await Kelas.findOne({
-      kelas,
-      nama: namaKelas,
-    });
-
-    if (!kelasSiswa) {
-      throw new ResponseError(404, "Kelas tidak ditemukan.");
-    }
-
     const salt = await genSalt();
 
     const hashedPassword = await hash(password, salt);
 
-    const newSiswa = new Siswa({
-      password: hashedPassword,
-      ...req.body,
-      kelas: kelasSiswa._id,
-    });
+    let newSiswa;
 
-    const siswaSaved = await newSiswa.save();
-    kelasSiswa.siswa.push(siswaSaved._id);
-    kelasSiswa.jumlah === kelasSiswa.siswa.length();
-    kelasSiswa.save();
+    if (kelas && namaKelas) {
+      const kelasSiswa = await Kelas.findOne({
+        kelas,
+        nama: namaKelas,
+      });
+
+      if (!kelasSiswa) {
+        throw new ResponseError(404, "Kelas tidak ditemukan.");
+      }
+
+      newSiswa = new Siswa({
+        password: hashedPassword,
+        ...req.body,
+        kelas: kelasSiswa._id,
+      });
+
+      const siswaSaved = await newSiswa.save();
+      kelasSiswa.siswa.push(siswaSaved._id);
+      kelasSiswa.jumlahSiswa = kelasSiswa.siswa.length;
+
+      kelasSiswa.save();
+    } else {
+      newSiswa = new Siswa({
+        password: hashedPassword,
+        ...req.body,
+      });
+      await newSiswa.save();
+    }
 
     res
       .status(200)

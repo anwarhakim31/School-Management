@@ -189,7 +189,7 @@ const SideProfile = forwardRef(({ handleClose }, ref) => {
               render={({ field }) => (
                 <input
                   placeholder="Scholarcy"
-                  className="w-full border my-1 px-2.5 py-1.5 text-sm rounded-full border-gray-500 outline-neutral"
+                  className="w-full border my-1 px-2.5 py-1.5 text-sm rounded-md border-gray-500 outline-neutral"
                   {...field}
                 />
               )}
@@ -219,7 +219,7 @@ const SideProfile = forwardRef(({ handleClose }, ref) => {
                 <input
                   type="password"
                   placeholder="**************"
-                  className="w-full border my-1 px-2.5 py-1.5  text-sm rounded-full border-gray-500 outline-neutral"
+                  className="w-full border my-1 px-2.5 py-1.5  text-sm rounded-md border-gray-500 outline-neutral"
                   {...field}
                 />
               )}
@@ -252,7 +252,7 @@ const SideProfile = forwardRef(({ handleClose }, ref) => {
               render={({ field }) => (
                 <input
                   placeholder="Scholarcy"
-                  className="w-full border my-1 px-2.5 py-1.5  text-sm rounded-full border-gray-500 outline-neutral"
+                  className="w-full border my-1 px-2.5 py-1.5  text-sm rounded-md border-gray-500 outline-neutral"
                   {...field}
                 />
               )}

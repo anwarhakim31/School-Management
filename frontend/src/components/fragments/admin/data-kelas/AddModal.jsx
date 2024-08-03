@@ -41,7 +41,11 @@ const AddModal = ({ onClose }) => {
         className="w-full sm:max-w-[425px] max-h-[400px] rounded-2xl shadow-md bg-white"
       >
         <div className="p-4 border-b">
-          <HeaderModal titile={"Tambah Kelas"} onClose={onClose} />
+          <HeaderModal
+            titile={"Tambah Kelas"}
+            onClose={onClose}
+            className={"font-semibold"}
+          />
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4 ">

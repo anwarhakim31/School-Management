@@ -1,4 +1,5 @@
 import AddModal from "@/components/fragments/admin/data-kelas/AddModal";
+import DeleteModal from "@/components/fragments/admin/data-kelas/DeleteModal";
 import TableKelas from "@/components/fragments/admin/data-kelas/TableKelas";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
@@ -10,6 +11,7 @@ const DataKelasPage = () => {
   const [dataKelas, setDataKelas] = useState([]);
   const [search, setSearch] = useState("");
   const [isAddKelas, setIsAddKelas] = useState(false);
+  const [isDeleteKelas, setIsDeleteKelas] = useState(false);
 
   useEffect(() => {
     const getKelas = async () => {
@@ -27,7 +29,7 @@ const DataKelasPage = () => {
     };
 
     getKelas();
-  }, [isAddKelas]);
+  }, [isAddKelas, isDeleteKelas]);
 
   const handleSearch = (e) => {
     const { value } = e.target;
@@ -36,6 +38,9 @@ const DataKelasPage = () => {
 
   const handleToggleAdd = () => {
     setIsAddKelas(!isAddKelas);
+  };
+  const handleToggleDelete = () => {
+    setIsDeleteKelas(!isDeleteKelas);
   };
 
   return (
@@ -85,8 +90,9 @@ const DataKelasPage = () => {
         </button>
       </div>
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-xl">
-        <TableKelas data={dataKelas} />
+        <TableKelas data={dataKelas} handleToggleDelete={handleToggleDelete} />
       </div>
+      {isDeleteKelas && <DeleteModal onClose={handleToggleDelete} />}
       {isAddKelas && <AddModal onClose={handleToggleAdd} />}
     </section>
   );

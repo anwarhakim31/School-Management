@@ -26,10 +26,15 @@ export const getKelas = async (req, res, next) => {
   try {
     const kelas = await Kelas.find();
 
+    const newData = kelas.map((kel) => ({
+      ...kel._doc,
+      jumlahSiswa: kel.siswa.length,
+    }));
+
     res.status(200).json({
       success: true,
       message: "Berhasil mengambil data kelas.",
-      kelas,
+      kelas: newData,
     });
   } catch (error) {
     next(error);
@@ -40,11 +45,13 @@ export const deleteKelas = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const result = await Kelas.findByIdAndDelete(id);
+    const kelas = await Kelas.findById(id).populate("siswa");
 
     if (!result) {
       throw new ResponseError(404, "Kelas tidak di temukan");
     }
+
+    console.log(kelas);
 
     res.status(200).json({
       success: true,
