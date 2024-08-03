@@ -38,7 +38,7 @@ const AddModal = ({ onClose }) => {
     <Modal onClose={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-[425px]  rounded-2xl shadow-md bg-white"
+        className="w-full sm:max-w-[425px] max-h-[400px] rounded-2xl shadow-md bg-white"
       >
         <div className="p-4 border-b">
           <HeaderModal titile={"Tambah Kelas"} onClose={onClose} />
@@ -56,8 +56,17 @@ const AddModal = ({ onClose }) => {
               <input
                 type="number"
                 id="kelas"
+                min={1}
                 {...register("kelas", {
                   required: "Kelas tidak boleh kosong.",
+                  min: {
+                    value: 1,
+                    message: "Manimum kelas 1",
+                  },
+                  max: {
+                    value: 12,
+                    message: "Maksimal kelas 12",
+                  },
                 })}
                 className="w-full border text-xs px-2 py-1.5 rounded-lg  outline-neutral border-gray-500"
               />
@@ -125,8 +134,12 @@ const AddModal = ({ onClose }) => {
           </div> */}
 
           <div className="text-end border-t mt-4 p-4 space-x-4">
-            <button aria-label="simpan kelas" type="submit" className="btn">
-              {loading ? <LoaderButton /> : "Simpan"}
+            <button
+              aria-label="simpan kelas"
+              type="submit"
+              className="btn w-24 h-8.5"
+            >
+              {loading ? "Loading" : "Simpan"}
             </button>
           </div>
         </form>

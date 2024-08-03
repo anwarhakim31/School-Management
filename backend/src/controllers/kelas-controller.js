@@ -10,7 +10,7 @@ export const addKelas = async (req, res, next) => {
     if (kelasExists) {
       throw new ResponseError(400, "Kombinasi kelas dan nama sudah digunakan.");
     }
-    const newKelas = new Kelas(data);
+    const newKelas = new Kelas({ kelas, nama });
 
     await newKelas.save();
 

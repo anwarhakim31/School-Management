@@ -16,10 +16,14 @@ const TambahSiswaPage = () => {
     formState: { errors },
   } = useForm();
   const [image, setImage] = useState("");
+  const [kelasDB, setKelasDB] = useState([]);
   const [kelas, setKelas] = useState([]);
+  const [kelasNama, setKelasName] = useState([]);
   const [isHover, setIsHover] = useState(false);
+  const [loading, setLoading] = useState(false);
   const nis = watch("nis", "");
   const phone = watch("phone", "");
+  const selectedValue = watch("kelas");
   const tahunMasuk = watch("tahunMasuk", "");
 
   const PhotoRef = useRef();
@@ -28,7 +32,7 @@ const TambahSiswaPage = () => {
     const value = e.target.value;
 
     const cleanedValue = value.replace(/\D/g, "");
-    setValue(name, cleanedValue, { shouldValidate: true });
+    setValue(name, cleanedValue);
   };
 
   const handleClickInputImage = () => {
@@ -79,16 +83,7 @@ const TambahSiswaPage = () => {
           withCredentials: true,
         });
 
-        const seen = {};
-        const uniqueKelas = [];
-
-        for (const kel of res.data.kelas) {
-          if (!seen[kel.kelas]) {
-            seen[kel.kelas] = true;
-            uniqueKelas.push(kel);
-          }
-        }
-        setKelas(uniqueKelas);
+        setKelasDB(res.data.kelas);
       } catch (error) {
         responseError(error);
       }
@@ -97,10 +92,30 @@ const TambahSiswaPage = () => {
     getKelas();
   }, []);
 
-  console.log(kelas);
+  useEffect(() => {
+    const seen = {};
+    const uniqueKelas = [];
+
+    for (const kel of kelasDB) {
+      if (!seen[kel.kelas]) {
+        seen[kel.kelas] = true;
+        uniqueKelas.push(kel);
+      }
+    }
+
+    setKelas(uniqueKelas);
+
+    const nama = kelasDB
+      .filter((kel) => {
+        return kel.kelas === Number(selectedValue);
+      })
+      .sort((a, b) => a.nama.localeCompare(b.nama));
+
+    setKelasName(nama);
+  }, [kelasDB, selectedValue]);
 
   return (
-    <div className="h-full mx-6 mb-16 bg-white grid grid-cols-1 rounded-lg py-4 px-6 gap-2 lg:grid-cols-4">
+    <div className="h-full mx-6 mb-16 bg-white  grid grid-cols-1 rounded-lg py-4 px-6 gap-8 lg:grid-cols-4">
       <div className=" flex justify-start  items-center flex-col">
         <div
           className="relative cursor-pointer w-[150px] overflow-hidden   h-[150px] rounded-full border  bg-white"
@@ -144,7 +159,7 @@ const TambahSiswaPage = () => {
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid mobile:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 lg:gap-8 lg:col-span-3"
+        className="grid mobile:grid-cols-2 md:grid-cols-2 lg:grid-cols-2  md:gap-4 lg:gap-8 lg:col-span-3"
       >
         <div className="">
           <div className="mb-2">
@@ -156,7 +171,7 @@ const TambahSiswaPage = () => {
               id="nama"
               name="nama"
               {...register("nama", {
-                required: "Nama diperlukan",
+                required: "Nama diperlukan.",
                 maxLength: {
                   value: 50,
                   message: "Nama maksimal 50 karakter.",
@@ -178,7 +193,7 @@ const TambahSiswaPage = () => {
               name="nis"
               value={nis}
               {...register("nis", {
-                required: "NIS diperlukan",
+                required: "NIS diperlukan.",
               })}
               onChange={(e) => handleNumberChange(e, "nis")}
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
@@ -196,7 +211,7 @@ const TambahSiswaPage = () => {
               type={"text"}
               id="password"
               {...register("password", {
-                required: "Password di perlukan,",
+                required: "Password di perlukan.",
                 maxLength: {
                   value: 50,
                   message: "Password maksimal 20 karakter.",
@@ -208,7 +223,9 @@ const TambahSiswaPage = () => {
               })}
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
-            <span className="text-xs text-neutral2">asdasdsad</span>
+            <span className="text-xs h-4 block mt-1 text-neutral2">
+              {errors.password && errors.password.message}
+            </span>
           </div>
           <div className="mb-2">
             <label htmlFor="tempatLahir" className="text-xs mb-2 block">
@@ -218,7 +235,7 @@ const TambahSiswaPage = () => {
               type={"text"}
               id="tempatLahir"
               {...register("tempatLahir", {
-                required: "Tempat Lahir di perlukan,",
+                required: "Tempat Lahir di perlukan.",
                 maxLength: {
                   value: 50,
                   message: "TempatLahir maksimal 20 karakter.",
@@ -226,7 +243,9 @@ const TambahSiswaPage = () => {
               })}
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
-            <span className="text-xs text-neutral2">asdasdsad</span>
+            <span className="text-xs h-4 block mt-1 text-neutral2">
+              {errors.tempatLahir && errors.tempatLahir.message}
+            </span>
           </div>
           <div className="mb-2">
             <label htmlFor="TanggalLahir" className="text-xs mb-2 block">
@@ -241,7 +260,9 @@ const TambahSiswaPage = () => {
               })}
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
-            <span className="text-xs text-neutral2">asdasdsad</span>
+            <span className="text-xs h-4 block mt-1 text-neutral2">
+              {errors.tanggalLahir && errors.tanggalLahir.message}
+            </span>
           </div>
           <div className="mb-2">
             <label htmlFor="Jenis Kelamin" className="text-xs mb-2 block">
@@ -254,10 +275,13 @@ const TambahSiswaPage = () => {
               })}
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             >
+              <option value="">Pilih jenis kelamin</option>
               <option value="laki-laki">Laki-Laki</option>
               <option value="perempuan">Perempuan</option>
             </select>
-            <span className="text-xs text-neutral2">asdasdsad</span>
+            <span className="text-xs h-4 block mt-1 text-neutral2">
+              {errors.kelaminKelamin && errors.kelaminKelamin.message}
+            </span>
           </div>
           <div className="mb-2">
             <label htmlFor="Tahun Masuk" className="text-xs mb-2 block">
@@ -271,11 +295,13 @@ const TambahSiswaPage = () => {
               value={tahunMasuk}
               onChange={(e) => handleNumberChange(e, "tahunMasuk")}
               {...register("tahunMasuk", {
-                required: "Tahun Masuk diperlukan.",
+                required: "Tahun Masuk diperlukan..",
               })}
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
-            <span className="text-xs text-neutral2">asdasdsad</span>
+            <span className="text-xs h-4 block mt-1 text-neutral2">
+              {errors.tahunMasuk && errors.tahunMasuk.message}
+            </span>
           </div>
         </div>
         <div>
@@ -287,10 +313,11 @@ const TambahSiswaPage = () => {
               id="Agama"
               onChange={(e) => handleNumberChange(e, "agama")}
               {...register("agama", {
-                required: "Agama diperlukan.",
+                required: "Agama diperlukan..",
               })}
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             >
+              <option value="">Pilih Agama</option>
               <option value="islam">Islam</option>
               <option value="islam">Kristen Protestan</option>
               <option value="islam">Kristen Katolik</option>
@@ -299,7 +326,9 @@ const TambahSiswaPage = () => {
               <option value="islam">Kong Hu Chu</option>
               <option value="islam">Aliran Kepercayaan</option>
             </select>
-            <span className="text-xs text-neutral2">asdasdsad</span>
+            <span className="text-xs h-4 block mt-1 text-neutral2">
+              {errors.agama && errors.agama.message}
+            </span>
           </div>
           <div className="mb-2">
             <label htmlFor="No. Telepon" className="text-xs mb-2 block">
@@ -311,23 +340,33 @@ const TambahSiswaPage = () => {
               name="phone"
               value={phone}
               {...register("phone", {
-                required: "No. Telepon diperlukan",
+                required: "No. Telepon diperlukan.",
               })}
               onChange={(e) => handleNumberChange(e, "phone")}
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
-            <span className="text-xs text-neutral2">asdasdsad</span>
+            <span className="text-xs h-4 block mt-1 text-neutral2">
+              {errors.phone && errors.phone.message}
+            </span>
           </div>
-          <div className="mb-8">
+          <div className="mb-2">
             <label htmlFor="Email" className="text-xs mb-2 block">
               Email
             </label>
             <input
               type={"email"}
               id="Email"
+              {...register("email", {
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Format email tidak valid",
+                },
+              })}
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
-            <span className="text-xs text-neutral2">asdasdsad</span>
+            <span className="text-xs h-4 block mt-1 text-neutral2">
+              {errors.email && errors.email.message}
+            </span>
           </div>
           <div className="mb-2">
             <label htmlFor="kelas" className="text-xs mb-2 block">
@@ -335,29 +374,44 @@ const TambahSiswaPage = () => {
             </label>
             <select
               id="kelas"
+              {...register("kelas", { required: "Kelas diperlukan." })}
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             >
+              {kelasNama.length === 0 && <option value="">Pilih Kelas</option>}
               {kelas &&
-                kelas.map((kel) => (
-                  <option key={kel._id} className="rounded-md" value="">
+                kelas.map((kel, i) => (
+                  <option key={i} className="rounded-md" value={kel.kelas}>
                     {kel.kelas}
                   </option>
                 ))}
             </select>
-            <span className="text-xs text-neutral2">asdasdsad</span>
+            <span className="text-xs h-4 block mt-1 text-neutral2">
+              {errors.kelas && errors.kelas.message}
+            </span>
           </div>
           <div className="mb-2">
             <label htmlFor="Nama Kelas" className="text-xs mb-2 block">
               Nama Kelas <span className="text-red-500">*</span>
             </label>
             <select
-              type={"text"}
               id="Nama Kelas"
+              {...register("namaKelas", { required: "Nama Kelas diperlukan." })}
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             >
-              <option className="rounded-md" value=""></option>
+              {kelasNama.length === 0 && (
+                <option value="">Pilih Kelas Terlibih dulu</option>
+              )}
+
+              {kelasNama.length !== 0 &&
+                kelasNama.map((kel) => (
+                  <option key={kel._id} value={kel.nama} className="rounded-md">
+                    {kel.nama}
+                  </option>
+                ))}
             </select>
-            <span className="text-xs text-neutral2">asdasdsad</span>
+            <span className="text-xs h-4 block mt-1 text-neutral2">
+              {errors.namaKelas && errors.namaKelas.message}
+            </span>
           </div>
           <div className="mb-8">
             <label htmlFor="Alamat" className="text-xs mb-2 block">
@@ -369,7 +423,9 @@ const TambahSiswaPage = () => {
             />
           </div>
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" className="btn ">
+          Submit
+        </button>
       </form>
     </div>
   );
