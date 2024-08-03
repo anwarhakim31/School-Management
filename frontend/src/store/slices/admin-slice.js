@@ -18,8 +18,9 @@ const adminSlice = createSlice({
   },
 });
 
-export const { setDataDelete } = adminSlice.actions;
+export const { setDataDelete, setDataEdit } = adminSlice.actions;
 
 export default adminSlice.reducer;
 
-export const selectDataDelete = (state) => state.admin.dataDelete;
+export const selectedDataDelete = (state) => state.admin.dataDelete;
+export const selectedDataEdit = (state) => state.admin.dataEdit;

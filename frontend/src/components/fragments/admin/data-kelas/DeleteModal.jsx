@@ -1,6 +1,6 @@
 import HeaderModal from "@/components/elements/HeaderModal";
 import Modal from "@/components/elements/Modal";
-import { selectDataDelete } from "@/store/slices/admin-slice";
+import { selectedDataDelete } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
@@ -11,7 +11,7 @@ import { toast } from "sonner";
 
 const DeleteModal = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
-  const dataKelas = useSelector(selectDataDelete);
+  const dataKelas = useSelector(selectedDataDelete);
 
   const handleDelete = async () => {
     setLoading(true);

@@ -1,5 +1,6 @@
 import AddModal from "@/components/fragments/admin/data-kelas/AddModal";
 import DeleteModal from "@/components/fragments/admin/data-kelas/DeleteModal";
+import EditModal from "@/components/fragments/admin/data-kelas/EditModal";
 import TableKelas from "@/components/fragments/admin/data-kelas/TableKelas";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
@@ -9,8 +10,10 @@ import React, { useEffect, useState } from "react";
 
 const DataKelasPage = () => {
   const [dataKelas, setDataKelas] = useState([]);
+  const [dataFilter, setDataFilter] = useState([]);
   const [search, setSearch] = useState("");
   const [isAddKelas, setIsAddKelas] = useState(false);
+  const [isEditKelas, setIsEditKelas] = useState(false);
   const [isDeleteKelas, setIsDeleteKelas] = useState(false);
 
   useEffect(() => {
@@ -29,18 +32,31 @@ const DataKelasPage = () => {
     };
 
     getKelas();
-  }, [isAddKelas, isDeleteKelas]);
+  }, [isAddKelas, isDeleteKelas, isEditKelas]);
 
-  const handleSearch = (e) => {
-    const { value } = e.target;
-    setSearch(value);
-  };
+ 
+
+  useEffect(() => {
+    
+    
+    if (search) {
+        const 
+      
+    }
+
+
+
+  },[dataKelas,search])
+
 
   const handleToggleAdd = () => {
     setIsAddKelas(!isAddKelas);
   };
   const handleToggleDelete = () => {
     setIsDeleteKelas(!isDeleteKelas);
+  };
+  const handleToggleEdit = () => {
+    setIsEditKelas(!isEditKelas);
   };
 
   return (
@@ -51,7 +67,7 @@ const DataKelasPage = () => {
             type="search"
             placeholder="Cari Kelas"
             value={search}
-            onChange={handleSearch}
+            onChange={(e)=>setSearch(e.target.value)}
             className="w-full rounded-full py-2 pr-2 pl-8 text-sm border border-gray-400 outline-offset-1 outline-1 outline-neutral"
           />
           <button className="absolute left-2 top-1/2 -translate-y-1/2">
@@ -90,10 +106,15 @@ const DataKelasPage = () => {
         </button>
       </div>
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-xl">
-        <TableKelas data={dataKelas} handleToggleDelete={handleToggleDelete} />
+        <TableKelas
+          data={dataKelas}
+          handleToggleDelete={handleToggleDelete}
+          handleToggleEdit={handleToggleEdit}
+        />
       </div>
       {isDeleteKelas && <DeleteModal onClose={handleToggleDelete} />}
       {isAddKelas && <AddModal onClose={handleToggleAdd} />}
+      {isEditKelas && <EditModal onClose={handleToggleEdit} />}
     </section>
   );
 };

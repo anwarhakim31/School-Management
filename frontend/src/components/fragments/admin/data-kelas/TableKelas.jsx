@@ -1,15 +1,20 @@
-import { setDataDelete } from "@/store/slices/admin-slice";
+import { setDataDelete, setDataEdit } from "@/store/slices/admin-slice";
 import { Edit, Trash2 } from "lucide-react";
 import { space } from "postcss/lib/list";
 import React from "react";
 import { useDispatch } from "react-redux";
 
-const TableKelas = ({ data, handleToggleDelete }) => {
+const TableKelas = ({ data, handleToggleDelete, handleToggleEdit }) => {
   const dispatch = useDispatch();
 
   const handleDeleteKelas = (kelas) => {
     dispatch(setDataDelete(kelas));
     handleToggleDelete();
+  };
+
+  const handleEditKelas = (kelas) => {
+    dispatch(setDataEdit(kelas));
+    handleToggleEdit();
   };
 
   console.log(data);
@@ -85,7 +90,10 @@ const TableKelas = ({ data, handleToggleDelete }) => {
                   className="px-3  border-b  border-gray-300  py-4 text-xs font-medium text-gray-900 whitespace-nowrap "
                 >
                   <div className="flex-center gap-4">
-                    <button className="w-[20px] h-[20px]  flex-center">
+                    <button
+                      onClick={() => handleEditKelas(kelas)}
+                      className="w-[20px] h-[20px]  flex-center"
+                    >
                       <Edit width={18} height={18} className="text-gray-800" />
                     </button>
                     <button
