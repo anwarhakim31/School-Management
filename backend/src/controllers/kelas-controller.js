@@ -1,5 +1,6 @@
 import ResponseError from "../error/response-error.js";
 import Kelas from "../models/kelas-model.js";
+import Siswa from "../models/siswa-model.js";
 
 export const addKelas = async (req, res, next) => {
   try {
@@ -10,7 +11,7 @@ export const addKelas = async (req, res, next) => {
     if (kelasExists) {
       throw new ResponseError(400, "Kombinasi kelas dan nama sudah digunakan.");
     }
-    const newKelas = new Kelas({ kelas, nama });
+    const newKelas = new Kelas(req.body);
 
     await newKelas.save();
 
@@ -47,11 +48,18 @@ export const deleteKelas = async (req, res, next) => {
 
     const kelas = await Kelas.findById(id).populate("siswa");
 
-    if (!result) {
+    if (!kelas) {
       throw new ResponseError(404, "Kelas tidak di temukan");
     }
 
-    console.log(kelas);
+    if (kelas.siswa.length > 0) {
+      await Siswa.updateMany(
+        { _id: { $in: kelas.siswa } },
+        { $unset: { kelas: null } }
+      );
+    }
+
+    await Kelas.findByIdAndDelete(id);
 
     res.status(200).json({
       success: true,

@@ -1,5 +1,6 @@
 import { setDataDelete } from "@/store/slices/admin-slice";
 import { Edit, Trash2 } from "lucide-react";
+import { space } from "postcss/lib/list";
 import React from "react";
 import { useDispatch } from "react-redux";
 
@@ -11,9 +12,11 @@ const TableKelas = ({ data, handleToggleDelete }) => {
     handleToggleDelete();
   };
 
+  console.log(data);
+
   return (
-    <div className="block w-full shadow-md pb-16">
-      <div className="w-full  min-h-[450px] overflow-auto rounded-xl">
+    <div className="block w-full  shadow-md pb-16">
+      <div className="w-full  min-h-[450px] overflow-x-auto rounded-xl">
         <table className="text-center w-full text-gray-500">
           <thead className="text-xs text-white bg-neutral">
             <tr>

@@ -58,7 +58,7 @@ const AdminLayout = () => {
         <AsideLayout setIsSidebar={setIsSidebar} />
       </aside>
 
-      <div className="flex flex-1 ">
+      <div className="flex w-full ">
         <div className="flex flex-col flex-1 overflow-scroll">
           <HeaderLayout
             setIsEdit={setIsEdit}
