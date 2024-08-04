@@ -5,7 +5,7 @@ import KelasIcon from "../../../assets/svg/class.svg?react";
 import MapelIcon from "../../../assets/svg/pelajaran.svg?react";
 import JadwalIcon from "../../../assets/svg/jadwal.svg?react";
 import AcaraIcon from "../../../assets/svg/acara.svg?react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 // import KelasSVG from "@/components/base/svg/KelasSVG
 
 const Navlist = [
@@ -112,15 +112,15 @@ const ListSidebar = () => {
     <ul className="w-full py-2 h-[80vh] overflow-auto">
       {Navlist.map((list) => (
         <li key={list.id} className="outline-none ml-6 md:ml-4 lg:ml-6 ">
-          <Link
+          <NavLink
             to={list.path}
-            className="flex justify-start outline-white z-10 pl-4 items-center py-3  gap-3 group hover:bg-background cursor-pointer rounded-tl-full rounded-bl-full "
+            className="flex justify-start  outline-white z-10 pl-4 items-center py-3  gap-3 group hover:bg-background cursor-pointer rounded-tl-full rounded-bl-full "
           >
             {list.icon}
             <span className="text-white   mt-0.5 text-sm font-light group-hover:text-neutral group-hover:font-medium ">
               {list.nama}
             </span>
-          </Link>
+          </NavLink>
         </li>
       ))}
     </ul>

@@ -1,3 +1,4 @@
+import FilterKelas from "@/components/elements/FilterKelas";
 import AddModal from "@/components/fragments/admin/data-kelas/AddModal";
 import DeleteModal from "@/components/fragments/admin/data-kelas/DeleteModal";
 import EditModal from "@/components/fragments/admin/data-kelas/EditModal";
@@ -5,16 +6,28 @@ import TableKelas from "@/components/fragments/admin/data-kelas/TableKelas";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { ArrowDown01, ArrowDownNarrowWide, Plus, Search } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import {
+  ArrowDown01,
+  ArrowDownNarrowWide,
+  ListFilter,
+  Plus,
+  Search,
+} from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { set } from "react-hook-form";
 
 const DataKelasPage = () => {
   const [dataKelas, setDataKelas] = useState([]);
   const [dataFilter, setDataFilter] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
   const [isAddKelas, setIsAddKelas] = useState(false);
   const [isEditKelas, setIsEditKelas] = useState(false);
   const [isDeleteKelas, setIsDeleteKelas] = useState(false);
+  const [option, setOption] = useState(["", ""]);
+  const [isFilter, setIsFilter] = useState(false);
+  const filterRef = useRef();
+  const buttonFilterRef = useRef();
 
   useEffect(() => {
     const getKelas = async () => {
@@ -28,26 +41,75 @@ const DataKelasPage = () => {
         }
       } catch (error) {
         responseError(error);
+      } finally {
+        setLoading(false);
       }
     };
 
     getKelas();
   }, [isAddKelas, isDeleteKelas, isEditKelas]);
 
- 
-
   useEffect(() => {
-    
-    
+    let kelasFilter = [...dataKelas];
+
     if (search) {
-        const 
-      
+      const value = search.trim().toLowerCase().split(" ");
+
+      kelasFilter = kelasFilter.filter((kelas) => {
+        return value.every(
+          (key) =>
+            kelas.nama.toLowerCase().includes(key) ||
+            String(kelas.kelas).includes(key)
+        );
+      });
     }
 
+    if (option[0] === "kelas") {
+      if (option[1] === "asc") {
+        kelasFilter = kelasFilter.sort((a, b) => a.kelas - b.kelas);
+      } else if (option[1] === "desc") {
+        kelasFilter = kelasFilter.sort((a, b) => b.kelas - a.kelas);
+      }
+    }
 
+    if (option[0] === "nama") {
+      if (option[1] === "asc") {
+        kelasFilter = kelasFilter.sort((a, b) => a.nama.localeCompare(b.nama));
+      } else if (option[1] === "desc") {
+        kelasFilter = kelasFilter.sort((a, b) => b.nama.localeCompare(a.nama));
+      }
+    }
 
-  },[dataKelas,search])
+    setDataFilter(kelasFilter);
+  }, [dataKelas, search, option]);
 
+  useEffect(() => {
+    const handleClickOutSide = (e) => {
+      if (
+        filterRef.current &&
+        !filterRef.current.contains(e.target) &&
+        buttonFilterRef.current &&
+        !buttonFilterRef.current.contains(e.target)
+      ) {
+        setIsFilter(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutSide);
+
+    return () => document.removeEventListener("mousedown", handleClickOutSide);
+  }, [isFilter]);
+
+  const handleOptionChange = (e) => {
+    const { value, name } = e.target;
+
+    setOption([name, value]);
+    setIsFilter(false);
+  };
+
+  const handleToggleFilter = (e) => {
+    setIsFilter((prev) => !prev);
+  };
 
   const handleToggleAdd = () => {
     setIsAddKelas(!isAddKelas);
@@ -67,30 +129,39 @@ const DataKelasPage = () => {
             type="search"
             placeholder="Cari Kelas"
             value={search}
-            onChange={(e)=>setSearch(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
             className="w-full rounded-full py-2 pr-2 pl-8 text-sm border border-gray-400 outline-offset-1 outline-1 outline-neutral"
           />
           <button className="absolute left-2 top-1/2 -translate-y-1/2">
             <Search height={20} width={20} className="text-gray-400" />
           </button>
         </div>
-        <div className="flex gap-2  mr-auto  lg:ml-8">
-          <button className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-2.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-full flex-between gap-3">
-            <ArrowDown01
-              width={15}
-              height={15}
-              className="rounded-full bg-white text-neutral"
-            />
-            Tingkat
+        <div className="flex gap-2 relative  mr-auto  lg:ml-4">
+          <button
+            onClick={handleToggleFilter}
+            ref={buttonFilterRef}
+            disabled={dataFilter.length === 0}
+            className="border border-gray-400 disabled:cursor-not-allowed bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-lg flex-between gap-3"
+          >
+            <ListFilter width={15} height={15} className="" />
           </button>
-          <button className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-2.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-full flex-between gap-3">
-            <ArrowDownNarrowWide
-              width={15}
-              height={15}
-              className="rounded-full bg-white text-neutral"
+          {option[0] && (
+            <button
+              onClick={() => setOption(["", ""])}
+              className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-lg flex-between gap-3"
+            >
+              Clear
+            </button>
+          )}
+
+          {isFilter && (
+            <FilterKelas
+              option={option}
+              handleOptionChange={handleOptionChange}
+              onClose={handleToggleFilter}
+              ref={filterRef}
             />
-            Nama
-          </button>
+          )}
         </div>
         <button
           aria-label="tambah kelas"
@@ -107,9 +178,10 @@ const DataKelasPage = () => {
       </div>
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-xl">
         <TableKelas
-          data={dataKelas}
+          data={dataFilter}
           handleToggleDelete={handleToggleDelete}
           handleToggleEdit={handleToggleEdit}
+          loading={loading}
         />
       </div>
       {isDeleteKelas && <DeleteModal onClose={handleToggleDelete} />}

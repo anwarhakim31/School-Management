@@ -5,7 +5,6 @@ const HeaderPage = () => {
   const { pathname } = useLocation();
   const [title, setTitle] = useState("");
 
-  console.log(pathname);
   useEffect(() => {
     if (pathname !== "/admin") {
       const path = pathname.split("/")[2];

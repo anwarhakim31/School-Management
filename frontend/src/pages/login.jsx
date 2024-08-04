@@ -62,14 +62,13 @@ const LoginPage = () => {
       });
 
       if (res.status === 200) {
-        console.log(res.data);
         setSuccess(true);
-        dispatch(setUserData(res.data.data));
-
-        timeoutRef.current = setTimeout(() => {
-          res.data.data.role === "admin" && navigate("/admin");
-        }, 500);
       }
+
+      timeoutRef.current = setTimeout(() => {
+        dispatch(setUserData(res.data.data));
+        res.data.data.role === "admin" && navigate("/admin/dasboard");
+      }, 500);
     } catch (error) {
       responseError(error);
     } finally {
