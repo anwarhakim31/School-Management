@@ -24,6 +24,8 @@ const TableSiswa = ({
   totalSiswa,
   handlePagination,
   handleToggleDeleteOne,
+  setAllCheck,
+  allCheck,
 }) => {
   const lastOfIndexSiswa = page * limit;
   const firstOfindexSiswa = lastOfIndexSiswa - limit;
@@ -46,6 +48,18 @@ const TableSiswa = ({
     }
   };
 
+  const handleCheckboxAll = (checked) => {
+    setAllCheck(!allCheck);
+
+    if (checked) {
+      setDataChecked(data.map((siswa) => siswa._id));
+      dispatch(setDataDeleteMany(data.map((siswa) => siswa._id)));
+    } else {
+      setDataChecked([]);
+      dispatch(setDataDeleteMany([]));
+    }
+  };
+
   const handleDeleteSiswa = (data) => {
     handleToggleDeleteOne();
     dispatch(setDataDelete(data));
@@ -64,8 +78,8 @@ const TableSiswa = ({
                 >
                   <Checkbox
                     type="checkbox"
-                    name=""
-                    id=""
+                    checked={allCheck}
+                    onCheckedChange={handleCheckboxAll}
                     className={
                       "min-h-4 min-w-3  data-[state=checked]:bg-gray-800"
                     }
@@ -266,7 +280,7 @@ const Pagination = ({
         <p className="text-[10px] sm:text-xs">{`Menampilkan ${
           totalSiswa === 0 ? 0 : firstOfindexSiswa + 1
         } - ${
-          totalSiswa === 0 ? totalSiswa : firstOfindexSiswa + lastOfIndexSiswa
+          page === totalPage ? totalSiswa : lastOfIndexSiswa
         } dari ${totalSiswa} data`}</p>
       </div>
       <div className="flex-center space-x-4">

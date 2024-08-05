@@ -1,15 +1,19 @@
 import HeaderModal from "@/components/elements/HeaderModal";
 import Modal from "@/components/elements/Modal";
-import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
+import {
+  selectedDataDeleteMany,
+  setDataDeleteMany,
+} from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
 import { TriangleAlert } from "lucide-react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 
-const DeleteManyModal = ({ onClose }) => {
+const DeleteManyModal = ({ onClose, setAllCheck }) => {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const dataChecked = useSelector(selectedDataDeleteMany);
 
@@ -23,6 +27,8 @@ const DeleteManyModal = ({ onClose }) => {
       });
 
       toast.success(res.data.message);
+      setAllCheck(false);
+      dispatch(setDataDeleteMany([]));
       onClose();
     } catch (error) {
       responseError(error);

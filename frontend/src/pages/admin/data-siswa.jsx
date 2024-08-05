@@ -1,6 +1,7 @@
 import DeleteManyModal from "@/components/fragments/admin/data-siswa/DeleteManyModal";
 import DeleteModal from "@/components/fragments/admin/data-siswa/DeleteModal";
 import TableSiswa from "@/components/fragments/admin/data-siswa/TableSiswa";
+import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
@@ -10,6 +11,8 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const DataSiswaPage = () => {
+  const dataChecked = useSelector(selectedDataDeleteMany);
+
   const [search, setSearch] = useState("");
   const [dataSiswa, setDataSiswa] = useState([]);
   const [pagination, setPagination] = useState({});
@@ -17,6 +20,7 @@ const DataSiswaPage = () => {
   const [limit, setLimit] = useState(7);
   const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
   const [isDeleteManySiswa, setIsDeletManySiswa] = useState(false);
+  const [allCheck, setAllCheck] = useState(false);
 
   useEffect(() => {
     const getSiswa = async () => {
@@ -68,25 +72,19 @@ const DataSiswaPage = () => {
           </div>
         </div>
         <div className="flex gap-2  mr-auto  lg:ml-8">
-          <button
-            onClick={handleToggleDeleteMany}
-            className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 px-4 transition-all duration-300 font-medium hover:text-white  text-xs  rounded-md flex-between gap-3"
-          >
-            {/* <ArrowDown01
+          {dataChecked.length > 0 && (
+            <button
+              onClick={handleToggleDeleteMany}
+              className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 px-4 transition-all duration-300 font-medium hover:text-white  text-xs  rounded-md flex-between gap-3"
+            >
+              {/* <ArrowDown01
               width={15}
               height={15}
               className="rounded-full bg-white text-neutral"
             /> */}
-            Delete
-          </button>
-          {/* <button className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-2.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-full flex-between gap-3">
-            <ArrowDownNarrowWide
-              width={15}
-              height={15}
-              className="rounded-full bg-white text-neutral"
-            />
-            Nama
-          </button> */}
+              Delete
+            </button>
+          )}
         </div>
 
         <Link
@@ -110,11 +108,16 @@ const DataSiswaPage = () => {
           totalPage={pagination.totalPages}
           handlePagination={handlePagination}
           handleToggleDeleteOne={handleToggleDeleteOne}
+          setAllCheck={setAllCheck}
+          allCheck={allCheck}
         />
       </div>
       {isDeleteSiswa && <DeleteModal onClose={handleToggleDeleteOne} />}
       {isDeleteManySiswa && (
-        <DeleteManyModal onClose={handleToggleDeleteMany} />
+        <DeleteManyModal
+          onClose={handleToggleDeleteMany}
+          setAllCheck={setAllCheck}
+        />
       )}
     </section>
   );
