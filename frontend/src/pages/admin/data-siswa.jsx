@@ -1,3 +1,4 @@
+import ExportExcel from "@/components/elements/DataToExel";
 import CustomDropdown from "@/components/elements/DropDown";
 import DropdownFilter from "@/components/elements/DropDownFilter";
 import DeleteManyModal from "@/components/fragments/admin/data-siswa/DeleteManyModal";
@@ -5,10 +6,11 @@ import DeleteModal from "@/components/fragments/admin/data-siswa/DeleteModal";
 import TableSiswa from "@/components/fragments/admin/data-siswa/TableSiswa";
 import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
+import { formatDate } from "@/util/formatDate";
 import responseError from "@/util/services";
 import axios from "axios";
-import { Plus, Search, Trash2 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { FileDown, Plus, Search, Trash2 } from "lucide-react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -27,15 +29,72 @@ const DataSiswaPage = () => {
   const [allCheck, setAllCheck] = useState(false);
   const [filters, setFilters] = useState({
     kelas: "",
+    kelasNama: "",
     jenisKelamin: "",
     tahunMasuk: "",
   });
+  const columns = useMemo(
+    () => [
+      {
+        Header: "NIS",
+        accessor: "nis",
+      },
+      {
+        Header: "Nama",
+        accessor: "nama",
+      },
+      {
+        Header: "Jenis Kelamin",
+        accessor: "jenisKelamin",
+      },
+      {
+        Header: "Tempat Lahir",
+        accessor: "tempatLahir",
+      },
+
+      {
+        Header: "Tanggal Lahir",
+        accessor: (row) => `${formatDate(row.tanggalLahir)}`,
+      },
+      {
+        Header: "Agama",
+        accessor: "agama",
+      },
+      {
+        Header: "Alamat",
+        accessor: "alamat",
+      },
+      {
+        Header: "No. Tlp",
+        accessor: "phone",
+      },
+      {
+        Header: "Tahun Masuk",
+        accessor: "tahunMasuk",
+      },
+      {
+        Header: "Kelas",
+        accessor: (row) => `${row.kelas.kelas} ${row.kelas.nama}`,
+      },
+    ],
+    []
+  );
+
+  console.log(dataSiswa);
 
   useEffect(() => {
     const getSiswa = async () => {
       try {
         const res = await axios.get(`${HOST}/api/siswa/get-all-siswa`, {
-          params: { page, limit, search },
+          params: {
+            page,
+            limit,
+            search,
+            tahunMasuk: filters.tahunMasuk,
+            jenisKelamin: filters.jenisKelamin,
+            kelas: filters.jenisKelamin,
+            kelasNama: filters.kelasNama,
+          },
           withCredentials: true,
         });
 
@@ -47,7 +106,7 @@ const DataSiswaPage = () => {
     };
 
     getSiswa();
-  }, [limit, page, search, isDeleteSiswa, isDeleteManySiswa]);
+  }, [limit, page, search, isDeleteSiswa, isDeleteManySiswa, filters]);
 
   useEffect(() => {
     if (limit) {
@@ -81,8 +140,6 @@ const DataSiswaPage = () => {
       [filterName]: filterValue,
     }));
   };
-
-  console.log(filters);
 
   return (
     <section className="px-6 py-4  ">
@@ -131,10 +188,17 @@ const DataSiswaPage = () => {
               onSelect={handleSelectBaris}
               selected={limit}
             />
-            <DropdownFilter handleFilterChange={handleFilterChange} />
+            <DropdownFilter
+              handleFilterChange={handleFilterChange}
+              setFilters={setFilters}
+            />
           </div>
           <div>
-            <button>sds</button>
+            <ExportExcel
+              columns={columns}
+              data={dataSiswa}
+              namaFile={"Data-Siswa"}
+            />
           </div>
         </div>
         <TableSiswa

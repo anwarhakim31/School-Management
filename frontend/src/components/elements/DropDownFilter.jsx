@@ -1,16 +1,20 @@
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
+import axios from "axios";
 import { ListRestart, SlidersHorizontal } from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
-import { object } from "zod";
 
-const FilterDropdown = ({ handleFilterChange }) => {
+const FilterDropdown = ({ handleFilterChange, setFilters }) => {
   const [selectedFilter, setSelectedFilter] = useState({
     kelas: "",
+    kelasNama: "",
     jenisKelamin: "",
     tahunMasuk: "",
   });
-
+  const [kelasDB, setKelasDB] = useState([]);
+  const [kelas, setKelas] = useState([]);
+  const [kelasName, setKelasName] = useState([]);
+  const [tahunMasuk, setTahunMasuk] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -33,12 +37,40 @@ const FilterDropdown = ({ handleFilterChange }) => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await axios.get(HOST + "/api/auth/get-data-umum");
+        const res = await axios.get(HOST + "/api/auth/get-data-umum", {
+          withCredentials: true,
+        });
+
+        setTahunMasuk(res.data.data.tahunMasuk);
+        setKelasDB(res.data.data.kelas);
       } catch (error) {
         responseError(error);
       }
     };
-  }, [isOpen]);
+    getData();
+  }, []);
+
+  useEffect(() => {
+    if (kelasDB) {
+      const seen = {};
+      const uniqueKelas = [];
+      for (const kel of kelasDB) {
+        if (!seen[kel.kelas]) {
+          seen[kel.kelas] = true;
+          uniqueKelas.push(kel.kelas);
+        }
+      }
+      setKelas(uniqueKelas);
+
+      const nama = kelasDB
+        .filter((kel) => {
+          return kel.kelas === Number(selectedFilter.kelas);
+        })
+        .sort((a, b) => a.nama.localeCompare(b.nama));
+
+      setKelasName(nama);
+    }
+  }, [kelasDB, selectedFilter]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -46,6 +78,8 @@ const FilterDropdown = ({ handleFilterChange }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
+
+  console.log(selectedFilter);
 
   return (
     <div className="relative inline-block text-left " ref={dropdownRef}>
@@ -72,13 +106,21 @@ const FilterDropdown = ({ handleFilterChange }) => {
               <button
                 className="text-xs font-medium rounded-xl bg-indigo-400 p-1"
                 title="Clear Filter"
-                onClick={() =>
+                onClick={() => {
                   setSelectedFilter({
                     kelas: "",
+                    kelasNama: "",
                     jenisKelamin: "",
                     tahunMasuk: "",
-                  })
-                }
+                  });
+                  setFilters({
+                    kelas: "",
+                    kelasNama: "",
+                    jenisKelamin: "",
+                    tahunMasuk: "",
+                  });
+                  setIsOpen(false);
+                }}
               >
                 <ListRestart
                   width={15}
@@ -107,12 +149,34 @@ const FilterDropdown = ({ handleFilterChange }) => {
                 role="menuitem"
               >
                 <option value="">Semua</option>
-                <option value="Kelas 1">Kelas 1</option>
-                <option value="Kelas 2">Kelas 2</option>
-                <option value="Kelas 3">Kelas 3</option>
-                {/* Tambahkan opsi kelas lainnya sesuai kebutuhan */}
+                {kelas.map((kel, i) => (
+                  <option key={i} value={kel} className="my-2">
+                    {"Kelas " + kel}
+                  </option>
+                ))}
               </select>
             </div>
+            {selectedFilter.kelas !== "" && (
+              <div className="px-4 py-2">
+                <label className="block text-xs font-medium text-gray-700">
+                  Nama Kelas
+                </label>
+                <select
+                  name="kelasNama"
+                  value={selectedFilter.kelasNama}
+                  onChange={handleDropdownChange}
+                  className="block w-full px-4 py-1.5 mt-1 text-xs text-gray-700 bg-white border-gray-300 rounded-md border focus:outline-none"
+                  role="menuitem"
+                >
+                  <option value="">-----</option>
+                  {kelasName.map((kel, i) => (
+                    <option key={kel._id} value={kel._id}>
+                      {kel.nama}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div className="px-4 py-2">
               <label className="block text-xs font-medium text-gray-700">
@@ -126,7 +190,7 @@ const FilterDropdown = ({ handleFilterChange }) => {
                 role="menuitem"
               >
                 <option value="">Semua</option>
-                <option value="Laki-laki">Laki-laki</option>
+                <option value="Laki-Laki">Laki-Laki</option>
                 <option value="Perempuan">Perempuan</option>
               </select>
             </div>
@@ -143,10 +207,11 @@ const FilterDropdown = ({ handleFilterChange }) => {
                 role="menuitem"
               >
                 <option value="">Semua</option>
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                {/* Tambahkan opsi tahun masuk lainnya sesuai kebutuhan */}
+                {tahunMasuk.map((tahun, i) => (
+                  <option key={tahun} value={tahun}>
+                    {tahun}
+                  </option>
+                ))}
               </select>
             </div>
           </div>

@@ -65,10 +65,12 @@ const TableSiswa = ({
     dispatch(setDataDelete(data));
   };
 
+  console.log(data, totalSiswa);
+
   return (
     <>
-      <div className="block w-full shadow-md pb-[4rem]">
-        <div className="w-full min-h-[420px]  overflow-auto ">
+      <div className="block w-full shadow-md pb-[3.5rem]">
+        <div className="w-full min-h-[430px]  overflow-auto ">
           <table className="w-full    text-left  text-gray-500 ">
             <thead className="text-xs text-left  text-white uppercase bg-neutral">
               <tr>
@@ -119,9 +121,7 @@ const TableSiswa = ({
                 data.map((siswa, i) => (
                   <tr
                     key={siswa.nis}
-                    className={`${
-                      data.length === 7 && "last:border-none"
-                    } hover:bg-gray-100 border-b  `}
+                    className={` hover:bg-gray-100 border-b  `}
                   >
                     <td scope="row" className="px-3 py-3 relative">
                       <Checkbox
@@ -146,7 +146,7 @@ const TableSiswa = ({
 
                     <td
                       scope="row"
-                      className=" px-4 py-4 overflow-hidden line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap  "
+                      className=" px-4 py-5  line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap  "
                     >
                       {siswa.nama}
                     </td>
@@ -169,7 +169,9 @@ const TableSiswa = ({
                       {siswa.alamat ? (
                         `${siswa.alamat}`
                       ) : (
-                        <span className="text-gray-400">Data Kosong</span>
+                        <span className="text-gray-700 font-medium">
+                          Data Kosong
+                        </span>
                       )}
                     </td>
                     <td
@@ -200,7 +202,9 @@ const TableSiswa = ({
                       {siswa.kelas ? (
                         `${siswa.kelas.kelas} ${siswa.kelas.nama}`
                       ) : (
-                        <span className="text-gray-400">Data Kosong</span>
+                        <span className="text-gray-700 font-medium">
+                          Data Kosong
+                        </span>
                       )}
                     </td>
                     <td
@@ -215,19 +219,23 @@ const TableSiswa = ({
                         >
                           <Edit
                             width={18}
+                            absoluteStrokeWidth={true}
+                            strokeWidth={1}
                             height={18}
                             className="text-gray-800  hover:text-neutral1 transition-all duration-300"
                           />
                         </button>
                         <button
                           title="Hapus"
-                          className="w-[20px] h-[20px]  flex-center"
+                          className="w-[20px] h-[20px] border-b border-gray-500 flex-center"
                           onClick={() => handleDeleteSiswa(siswa)}
                         >
                           <Trash
                             width={18}
                             height={18}
-                            className="text-gray-800 hover:text-neutral2  transition-all duration-300"
+                            absoluteStrokeWidth={true}
+                            strokeWidth={1}
+                            className="text-gray-800  hover:text-neutral2 fill-gray-100 transition-all duration-300"
                           />
                         </button>
                       </div>

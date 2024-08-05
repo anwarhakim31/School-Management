@@ -12,27 +12,43 @@ export const getAll = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 7;
     const skip = (page - 1) * limit;
     const search = req.query.search || "";
+    const { tahunMasuk, jenisKelamin, kelas, kelasNama } = req.query;
+
+    console.log(kelasNama);
 
     const searchRegex = new RegExp(search.trim(), "i");
 
-    const siswa = await Siswa.find({
+    const filterQuery = {
       $or: [
         { nama: { $regex: searchRegex } },
         { nis: { $regex: searchRegex } },
       ],
-    })
+    };
+
+    if (tahunMasuk) {
+      filterQuery.tahunMasuk = tahunMasuk;
+    }
+
+    if (jenisKelamin) {
+      filterQuery.jenisKelamin = jenisKelamin;
+    }
+
+    if (kelasNama) {
+      filterQuery.kelas = kelasNama;
+    }
+
+    let siswa = await Siswa.find(filterQuery)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .populate("kelas")
       .exec();
 
-    const totalSiswa = await Siswa.countDocuments({
-      $or: [
-        { nama: { $regex: searchRegex } },
-        { nis: { $regex: searchRegex } },
-      ],
-    });
+    // if (kelasNama) {
+    //   siswa = siswa.filter((s) => s.kelas && s.kelas.nama === kelasNama);
+    // }
+
+    const totalSiswa = await Siswa.countDocuments(filterQuery);
 
     res.status(200).json({
       success: true,

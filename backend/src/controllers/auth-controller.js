@@ -230,7 +230,7 @@ export const logout = async (req, res, next) => {
 
 export const getDataUmum = async (req, res, next) => {
   try {
-    const tahunMasuk = await Siswa.find({ tahunMasuk });
+    const tahunMasuk = await Siswa.distinct("tahunMasuk");
     const kelas = await Kelas.find();
 
     res.status(200).json({
