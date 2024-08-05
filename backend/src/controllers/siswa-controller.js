@@ -171,15 +171,21 @@ export const deleteOneSiswa = async (req, res, next) => {
 
 export const deleteManySiswa = async (req, res, next) => {
   try {
-    const { ids } = req.body;
+    const { dataChecked } = req.body;
 
-    const SiswaList = await Siswa.find({ _id: { $in: ids } });
+    const SiswaList = await Siswa.find({ _id: { $in: dataChecked } });
 
-    console.log(siswaList);
+    await Siswa.deleteMany({ _id: { $in: dataChecked } });
+
+    for (const siswa in SiswaList) {
+      await Kelas.findByIdAndUpdate(siswa.kelas, {
+        $pull: { siswa: siswa._id },
+      });
+    }
 
     res.status(200).json({
       success: true,
-      message: `Berhasil menghapus siswa`,
+      message: `Berhasil menghapus siswa terpilih`,
     });
   } catch (error) {
     console.log(error);

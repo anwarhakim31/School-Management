@@ -1,6 +1,6 @@
 import HeaderModal from "@/components/elements/HeaderModal";
 import Modal from "@/components/elements/Modal";
-import { selectedDataDelete } from "@/store/slices/admin-slice";
+import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
@@ -9,23 +9,20 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 
-const DeleteModal = ({ onClose }) => {
+const DeleteManyModal = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
-  const dataSiswa = useSelector(selectedDataDelete);
+  const dataChecked = useSelector(selectedDataDeleteMany);
 
   const handleDelete = async () => {
     setLoading(true);
 
     try {
-      const res = await axios.delete(
-        HOST + "/api/siswa/delete-one-siswa/" + dataSiswa._id,
-        { withCredentials: true }
-      );
+      const res = await axios.delete(HOST + "/api/siswa/delete-many-siswa", {
+        data: { dataChecked },
+        withCredentials: true,
+      });
 
-      if (res.status === 200) {
-        toast.success(res.data.message);
-        onClose();
-      }
+      toast.success(res.data.message);
     } catch (error) {
       responseError(error);
     } finally {
@@ -51,7 +48,7 @@ const DeleteModal = ({ onClose }) => {
             <TriangleAlert className="w-8 h-8 text-neutral2" />
           </div>
           <h3 className="text-sm  font-medium">
-            {" Apakah And yakin ingin menghapus siswa?"}
+            {" Apakah And yakin ingin menghapus siswa terpilih?"}
           </h3>
         </div>
         <div className="text-end border-t mt-4 p-4 space-x-4">
@@ -79,4 +76,4 @@ const DeleteModal = ({ onClose }) => {
   );
 };
 
-export default DeleteModal;
+export default DeleteManyModal;

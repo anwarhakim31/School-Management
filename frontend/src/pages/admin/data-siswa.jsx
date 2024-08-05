@@ -1,6 +1,5 @@
 import DeleteModal from "@/components/fragments/admin/data-siswa/DeleteModal";
 import TableSiswa from "@/components/fragments/admin/data-siswa/TableSiswa";
-import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
@@ -16,7 +15,6 @@ const DataSiswaPage = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(7);
   const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
-  const dataChecked = useSelector(selectedDataDeleteMany);
 
   useEffect(() => {
     const getSiswa = async () => {
@@ -36,15 +34,10 @@ const DataSiswaPage = () => {
     getSiswa();
   }, [limit, page, search, isDeleteSiswa]);
 
-  const handleDeleteManySiswa = async () => {
-    try {
-      const res = axios.delete(HOST + "/api/siswa");
-    } catch (error) {
-      responseError(error);
-    }
+  const handleToggleDeleteOne = () => {
+    setIsDeleteSiswa(!isDeleteSiswa);
   };
-
-  const handleToggleDeleteOne = (data) => {
+  const handleToggleDeleteMany = () => {
     setIsDeleteSiswa(!isDeleteSiswa);
   };
 
@@ -73,7 +66,10 @@ const DataSiswaPage = () => {
           </div>
         </div>
         <div className="flex gap-2  mr-auto  lg:ml-8">
-          <button className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 px-4 transition-all duration-300 font-medium hover:text-white  text-xs  rounded-md flex-between gap-3">
+          <button
+            onClick={handleDeleteManySiswa}
+            className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 px-4 transition-all duration-300 font-medium hover:text-white  text-xs  rounded-md flex-between gap-3"
+          >
             {/* <ArrowDown01
               width={15}
               height={15}
