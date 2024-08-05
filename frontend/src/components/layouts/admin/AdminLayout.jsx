@@ -48,7 +48,7 @@ const AdminLayout = () => {
   }, [isSidebar]);
 
   return (
-    <main className="w-full overflow-hidden h-screen flex ">
+    <main className="w-screen overflow-hidden h-screen flex ">
       <aside
         ref={sidebarRef}
         className={`${

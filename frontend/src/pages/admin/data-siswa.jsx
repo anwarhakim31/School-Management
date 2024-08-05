@@ -10,46 +10,60 @@ const DataSiswaPage = () => {
   const [search, setSearch] = useState("");
   const [dataSiswa, setDataSiswa] = useState([]);
   const [dataSearch, setDataSearch] = useState([]);
+  const [pagination, setPagination] = useState({});
+  const [page, setPage] = useState(1);
+  const [limit, setSiswaPerPage] = useState(7);
 
   useEffect(() => {
     const getSiswa = async () => {
       try {
-        const res = await axios.get(HOST + "/api/siswa/get-all-siswa", {
+        const res = await axios.get(`${HOST}/api/siswa/get-all-siswa`, {
+          params: { page, limit, search },
           withCredentials: true,
         });
 
         setDataSiswa(res.data.data);
+        setPagination(res.data.pagination);
       } catch (error) {
         responseError(error);
       }
     };
 
     getSiswa();
-  }, []);
+  }, [limit, page, search]);
 
-  useEffect(() => {
-    const splitValue = search.trim().toLowerCase().split(" ");
+  console.log(pagination);
 
-    const dataFilter = dataSiswa.filter((siswa) => {
-      const nisString = String(siswa.nis);
+  // useEffect(() => {
+  //   const splitValue = search.trim().toLowerCase().split(" ");
 
-      return splitValue.every(
-        (word) =>
-          siswa.nama.toLowerCase().includes(word) || nisString.includes(word)
-      );
-    });
+  //   const dataFilter = dataSiswa.filter((siswa) => {
+  //     const nisString = String(siswa.nis);
 
-    if (dataFilter.length === 0) {
-      setDataSearch(dataSiswa);
-    } else {
-      setDataSearch(dataFilter);
-    }
-  }, [search, dataSiswa]);
+  //     return splitValue.every(
+  //       (word) =>
+  //         siswa.nama.toLowerCase().includes(word) || nisString.includes(word)
+  //     );
+  //   });
+
+  //   if (dataFilter.length === 0) {
+  //     setDataSearch(dataSiswa);
+  //   } else {
+  //     setDataSearch(dataFilter);
+  //   }
+  // }, [search, dataSiswa]);
 
   const handleSearch = (e) => {
     const { value } = e.target;
     setSearch(value);
   };
+
+  const handlePagination = (page) => {
+    console.log(page, "now");
+    setPage(page);
+  };
+
+  console.log(pagination.perPage);
 
   return (
     <section className="px-6 py-4  ">
@@ -98,7 +112,14 @@ const DataSiswaPage = () => {
         </Link>
       </div>
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-xl">
-        <TableSiswa data={dataSearch} />
+        <TableSiswa
+          data={dataSearch}
+          page={page}
+          limit={pagination.perPage}
+          totalSiswa={pagination.total}
+          totalPage={pagination.totalPages}
+          handlePagination={handlePagination}
+        />
       </div>
     </section>
   );

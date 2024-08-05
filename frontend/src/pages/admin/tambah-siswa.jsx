@@ -6,7 +6,7 @@ import responseError from "@/util/services";
 import { ALLOWED_FILE_TYPES, HOST, MAX_FILE_SIZE } from "@/util/constant";
 import axios from "axios";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const TambahSiswaPage = () => {
   const navigate = useNavigate();
@@ -393,7 +393,7 @@ const TambahSiswaPage = () => {
             </label>
             <select
               id="kelas"
-              {...register("kelas", { required: "Kelas diperlukan." })}
+              {...register("kelas")}
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             >
               {kelasNama.length === 0 && <option value="">Pilih Kelas</option>}
@@ -414,7 +414,7 @@ const TambahSiswaPage = () => {
             </label>
             <select
               id="Nama Kelas"
-              {...register("namaKelas", { required: "Nama Kelas diperlukan." })}
+              {...register("namaKelas")}
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             >
               {kelasNama.length === 0 && (
@@ -442,7 +442,17 @@ const TambahSiswaPage = () => {
               className="py-1.5 h-[115px] bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-4">
+            <Link to={"/admin/data-siswa"}>
+              <button
+                disabled={loading}
+                type="submit"
+                className="btn bg-gray-300 text-gray-800 hover:text-white disabled:cursor-not-allowed border disabled:bg-gray-700"
+              >
+                {"Batal"}
+              </button>
+            </Link>
+
             <button
               disabled={loading}
               type="submit"

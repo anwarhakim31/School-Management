@@ -65,7 +65,7 @@ const TableKelas = ({
             {loading && (
               <tr className="w-full h-full">
                 <td
-                  colSpan="6"
+                  colSpan="7"
                   className="px-2 py-4  border-gray-300 text-xs font-medium text-gray800 whitespace-nowrap h-[350px]"
                 >
                   <div className="flex flex-col items-center justify-center">
@@ -78,7 +78,7 @@ const TableKelas = ({
             {dataSlice && !loading && dataSlice.length === 0 && (
               <tr className="w-full h-full">
                 <td
-                  colSpan="6"
+                  colSpan="10"
                   className="px-2 py-4  border-gray-300 text-xs font-medium text-gray-900 whitespace-nowrap h-[350px]"
                 >
                   Tidak ada data
@@ -90,7 +90,9 @@ const TableKelas = ({
               [...dataSlice].reverse().map((kelas) => (
                 <tr
                   key={kelas._id}
-                  className="hover:bg-gray-100 border-b  last:border-none"
+                  className={`${
+                    dataSlice.length === 7 && "last:border-none"
+                  } hover:bg-gray-100 border-b  `}
                 >
                   <td
                     scope="row"
@@ -190,7 +192,6 @@ const Pagination = ({
   dataSlice,
 }) => {
   const pageNumber = [];
-  const maxPage = 2;
 
   const totalPage = Math.ceil(totalKelas / perPage);
 
@@ -198,11 +199,16 @@ const Pagination = ({
     pageNumber.push(i);
   }
 
-  const startPage = Math.max(1, currentPage - maxPage);
-  const endPage = Math.min(totalPage, currentPage + maxPage);
+  const startPage =
+    currentPage === 1
+      ? Math.max(1, currentPage - 2)
+      : Math.max(1, currentPage - 1);
+  const endPage = Math.min(totalPage, currentPage + 1);
 
-  const visiblePage = pageNumber.slice(startPage - 1, endPage);
-  console.log(totalKelas);
+  const visiblePage =
+    currentPage === totalPage
+      ? pageNumber.slice(startPage - 2, endPage)
+      : pageNumber.slice(startPage - 1, endPage);
 
   return (
     <div className=" absolute h-9 left-0 bottom-5 border-t pt-4 w-full flex-between px-3">
@@ -226,15 +232,12 @@ const Pagination = ({
               </button>
 
               {visiblePage.map((number) => (
-                <div
-                  key={number}
-                  className={`page-item ${currentPage === number ? "" : ""}`}
-                >
+                <div key={number}>
                   <button
                     onClick={() => paginate(number)}
                     className={`${
                       number === currentPage &&
-                      "rounded-full  shadow border-gray-500"
+                      "rounded-full border-b  shadow border-gray-400"
                     } w-5 text-sm h-5`}
                   >
                     {number}

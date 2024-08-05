@@ -2,23 +2,16 @@ import { ChevronLeft, ChevronRight, Mail, Phone } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-const TableSiswa = ({ data }) => {
-  const [siswa, setSiswa] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [siswaPerPage, setSiswaPerPage] = useState(7);
-
-  console.log(siswaPerPage);
-
-  useEffect(() => {
-    setSiswa(data);
-  }, [data]);
-
-  const indexOfLastSiswa = currentPage * siswaPerPage;
-  const indexOfFirstsiswa = indexOfLastSiswa - siswaPerPage;
-  const currentSiswa = siswa.slice(indexOfFirstsiswa, indexOfLastSiswa);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const setPerPage = (perPage) => setSiswaPerPage(perPage);
+const TableSiswa = ({
+  data,
+  limit,
+  page,
+  totalPage,
+  totalSiswa,
+  handlePagination,
+}) => {
+  const lastOfIndexSiswa = page * limit;
+  const firstOfindexSiswa = lastOfIndexSiswa - limit;
 
   const HandleCopyText = (text) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -29,26 +22,29 @@ const TableSiswa = ({ data }) => {
   return (
     <>
       <div className="block w-full shadow-md pb-16">
-        <div className="w-full min-h-[450px]  overflow-auto rounded-xl">
-          <table className="w-full   text-sm text-left  text-gray-500 ">
+        <div className="w-full min-h-[410px]  overflow-auto rounded-xl">
+          <table className="w-full   text-xs text-center  text-gray-500 ">
             <thead className="text-xs  text-white uppercase bg-neutral">
               <tr>
-                <th scope="col" className="px-4 py-3">
+                <th scope="col" className="px-3 py-3">
                   NIS
                 </th>
-                <th scope="col" className="px-5 py-3">
+                <th scope="col" className="px-4 py-3">
                   Nama
                 </th>
-                <th scope="col" className=" py-3">
+                <th scope="col" className="px-4 py-3 whitespace-nowrap">
+                  Jenis Kelamin
+                </th>
+                <th scope="col" className=" py-4 whitespace-nowrap">
                   Tahun Masuk
                 </th>
                 <th scope="col" className="px-5 py-3">
                   Alamat
                 </th>
-                <th scope="col" className="py-3">
+                <th scope="col" className="py-3 px-5">
                   Kontak
                 </th>
-                <th scope="Kelas" className="px-5 py-3">
+                <th scope="Kelas" className="px-4 py-4">
                   Kelas
                 </th>
                 <th scope="col" className="px-5 py-3">
@@ -57,35 +53,44 @@ const TableSiswa = ({ data }) => {
               </tr>
             </thead>
             <tbody>
-              {currentSiswa &&
-                currentSiswa.map((siswa) => (
+              {data &&
+                data.map((siswa) => (
                   <tr
                     key={siswa.nis}
-                    className="bg-white hover:bg-gray-100 border-b "
+                    className={`${
+                      data.length === 7 && "last:border-none"
+                    } hover:bg-gray-100 border-b  `}
                   >
                     <td
                       scope="row"
                       className="px-3 py-4 text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
-                      {siswa.nis}
+                      {/* {siswa.nis} */}
                     </td>
+
                     <td
                       scope="row"
                       className="px-4 py-4  overflow-hidden line-clamp-1 text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
-                      {siswa.nama}
+                      {/* {siswa.nama} */}
+                    </td>
+                    <td
+                      scope="row"
+                      className="px-2 py-4 text-xs font-medium text-gray-900 whitespace-nowrap "
+                    >
+                      {/* {siswa.jenisKelamin} */}
                     </td>
                     <td
                       scope="row"
                       className=" py-4  text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
-                      {siswa.tahunMasuk}
+                      {/* {siswa.tahunMasuk} */}
                     </td>
                     <td
                       scope="row"
                       className="px-4 py-4   overflow-hidden line-clamp-1 text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
-                      {siswa.alamat}
+                      {/* {siswa.alamat} */}
                     </td>
                     {/* <td
                       scope="row"
@@ -112,7 +117,7 @@ const TableSiswa = ({ data }) => {
                       scope="row"
                       className=" py-4 max-w-full text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
-                      {siswa.kelas}
+                      {/* {siswa.kelas} */}
                     </td>
                   </tr>
                 ))}
@@ -120,13 +125,14 @@ const TableSiswa = ({ data }) => {
           </table>
         </div>
         <Pagination
-          indexOfLastSiswa={indexOfLastSiswa}
-          indexOfFirstsiswa={indexOfFirstsiswa}
-          perPage={siswaPerPage}
-          totalSiswa={siswa.length}
-          paginate={paginate}
-          setPerPage={setPerPage}
-          currentPage={currentPage}
+          lastOfIndexSiswa={lastOfIndexSiswa}
+          firstOfindexSiswa={firstOfindexSiswa}
+          limit={limit}
+          page={page}
+          totalPage={totalPage}
+          data={data}
+          totalSiswa={totalSiswa}
+          handlePagination={handlePagination}
         />
       </div>
     </>
@@ -134,40 +140,41 @@ const TableSiswa = ({ data }) => {
 };
 
 const Pagination = ({
-  indexOfLastSiswa,
-  indexOfFirstsiswa,
-  perPage,
+  lastOfIndexSiswa,
+  firstOfindexSiswa,
+  limit,
+  data,
+  page,
   totalSiswa,
-  paginate,
-  currentPage,
-  setPerPage,
+  handlePagination,
+  totalPage,
 }) => {
-  const pageNumbers = [];
-  const selectRow = [7, 14, 21, 28];
-  const totalPages = Math.ceil(totalSiswa / perPage);
+  const pageNumber = [];
 
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i);
+  for (let i = 1; i <= totalPage; i++) {
+    pageNumber.push(i);
   }
 
-  const startPage = Math.max(1, currentPage - 1);
+  const startPage =
+    page === totalPage ? Math.max(1, page - 2) : Math.max(1, page - 1);
 
-  const endPage = Math.min(totalPages, currentPage + 1);
+  const endPage =
+    page === 1 ? Math.min(totalPage, page + 2) : Math.min(totalPage, page + 1);
 
-  const visiblePages = pageNumbers.slice(startPage - 1, endPage);
+  const visiblePage = pageNumber.slice(startPage - 1, endPage);
 
   return (
     <div className="w-full px-4  flex-between absolute left-0 py-2 sm:py-4 bottom-1 select-none text-gray-500">
       <div className="flex">
         <p className="text-[10px] sm:text-xs">{`Menampilkan ${
-          indexOfFirstsiswa + 1
+          firstOfindexSiswa + 1
         } - ${
-          indexOfLastSiswa > totalSiswa ? totalSiswa : indexOfLastSiswa
+          page === totalPage ? totalSiswa : firstOfindexSiswa + lastOfIndexSiswa
         } dari ${totalSiswa} data`}</p>
       </div>
       <div className="flex space-x-4">
         <div>
-          <select
+          {/* <select
             name="perpage"
             id="perpage"
             className="border border-gray-400 text-sm rounded-sm outline-neutral"
@@ -178,26 +185,26 @@ const Pagination = ({
                 {item}
               </option>
             ))}
-          </select>
+          </select> */}
         </div>
         <div className="flex gap-2 ">
           <button
-            onClick={() => paginate(currentPage - 1)}
+            onClick={() => handlePagination(page - 1)}
             className="disabled:cursor-auto bg-neutral text-white rounded-sm disabled:bg-backup"
-            disabled={currentPage === 1}
+            disabled={page === 1}
           >
             <ChevronLeft width={20} height={20} />
           </button>
 
-          {visiblePages.map((number) => (
+          {visiblePage.map((number) => (
             <div
               key={number}
-              className={`page-item ${currentPage === number ? "" : ""}`}
+              className={`page-item ${page === number ? "" : ""}`}
             >
               <button
-                onClick={() => paginate(number)}
+                onClick={() => handlePagination(number)}
                 className={`${
-                  number === currentPage &&
+                  number === page &&
                   "rounded-full border-b shadow border-gray-500"
                 } w-5 text-sm h-5`}
               >
@@ -207,9 +214,9 @@ const Pagination = ({
           ))}
 
           <button
-            onClick={() => paginate(currentPage + 1)}
+            onClick={() => handlePagination(page + 1)}
             className="disabled:cursor-auto bg-neutral text-white rounded-sm disabled:bg-backup"
-            disabled={currentPage === pageNumbers.length}
+            disabled={page === pageNumber.length}
           >
             <ChevronRight width={20} height={20} />
           </button>

@@ -8,12 +8,43 @@ import { genSalt, hash } from "bcrypt";
 
 export const getAll = async (req, res, next) => {
   try {
-    const siswa = await Siswa.find();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 7;
+    const skip = (page - 1) * limit;
+    const search = req.query.search || "";
+
+    const searchRegex = new RegExp(search.trim(), "i");
+
+    const siswa = await Siswa.find({
+      $or: [
+        { nama: { $regex: searchRegex } },
+        { nis: { $regex: searchRegex } },
+      ],
+    })
+      .skip(skip)
+      .limit(limit)
+      .populate("kelas")
+      .exec();
+
+    console.log(siswa);
+
+    const totalSiswa = await Siswa.countDocuments({
+      $or: [
+        { nama: { $regex: searchRegex } },
+        { nis: { $regex: searchRegex } },
+      ],
+    });
 
     res.status(200).json({
       success: true,
       message: "Berhasil mengambil data siswa",
       data: siswa,
+      pagination: {
+        currentPage: page,
+        perPage: limit,
+        total: totalSiswa,
+        totalPages: Math.ceil(totalSiswa / limit),
+      },
     });
   } catch (error) {
     next(error);
@@ -66,7 +97,16 @@ export const addSiswa = async (req, res, next) => {
 
     let newSiswa;
 
-    if (kelas && namaKelas) {
+    if (!kelas && !namaKelas) {
+      delete req.body.kelas;
+      delete req.body.namaKelas;
+
+      newSiswa = new Siswa({
+        password: hashedPassword,
+        ...req.body,
+      });
+      await newSiswa.save();
+    } else {
       const kelasSiswa = await Kelas.findOne({
         kelas,
         nama: namaKelas,
@@ -86,13 +126,7 @@ export const addSiswa = async (req, res, next) => {
       kelasSiswa.siswa.push(siswaSaved._id);
       kelasSiswa.jumlahSiswa = kelasSiswa.siswa.length;
 
-      kelasSiswa.save();
-    } else {
-      newSiswa = new Siswa({
-        password: hashedPassword,
-        ...req.body,
-      });
-      await newSiswa.save();
+      await kelasSiswa.save();
     }
 
     res

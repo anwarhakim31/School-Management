@@ -1,11 +1,60 @@
-import bcrypt, { genSalt } from "bcrypt";
+import bcrypt, { hash, genSalt } from "bcrypt";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import path from "path";
+import fs from "fs";
 import { app } from "./src/app/app.js";
 // import { siswa } from "./src/data/siswa.js";
-// import Siswa from "./src/models/siswa-model.js";
+import Siswa from "./src/models/siswa-model.js";
+import Kelas from "./src/models/kelas-model.js";
+import { siswas } from "./src/data/siswa.js";
 
 dotenv.config();
+
+const bulkInsertStudents = async () => {
+  try {
+    // Adjusted file path to src/data/siswa.json
+    const filePath = path.resolve("src", "data", "siswa.json");
+
+    // Read and parse the JSON file
+    const data = fs.readFileSync(filePath, "utf-8");
+    const students = JSON.parse(data);
+
+    if (!Array.isArray(students) || students.length === 0) {
+      console.error("Invalid or empty student data.");
+      return;
+    }
+
+    const studentsToInsert = [];
+    const errors = [];
+
+    for (const student of students) {
+      const { kelas, namaKelas, nis, password, ...otherFields } = student;
+
+      const siswaExist = await Siswa.findOne({ nis });
+      if (siswaExist) {
+        errors.push({ nis, message: "NIS sudah digunakan" });
+        continue;
+      }
+
+      const salt = await genSalt();
+      const hashedPassword = await hash(password, salt);
+
+      studentsToInsert.push(newStudentData);
+    }
+
+    if (studentsToInsert.length > 0) {
+      await Siswa.insertMany(studentsToInsert);
+      console.log("Siswa berhasil ditambahkan");
+    }
+
+    if (errors.length > 0) {
+      console.error("Errors occurred during insertion:", errors);
+    }
+  } catch (error) {
+    console.error("Error during bulk insertion:", error);
+  }
+};
 
 const port = process.env.PORT || 2001;
 const databaseURL = process.env.DATABASE_URL;
@@ -60,12 +109,31 @@ const connectDB = async () => {
 
 app.listen(port, async () => {
   connectDB();
+  // try {
+  //   // Masukkan data ke koleksi Siswa
+  //   const insertedSiswa = await Siswa.insertMany(siswas);
+  //   console.log("Data siswa berhasil dimasukkan");
 
-  // const hashedSiswa = await hashPassord(siswa);
+  //   // Kelompokkan siswa berdasarkan kelas dan perbarui dokumen Kelas
+  //   const kelasUpdates = insertedSiswa.reduce((acc, siswa) => {
+  //     const kelasId = siswa.kelas.toString();
+  //     if (!acc[kelasId]) {
+  //       acc[kelasId] = [];
+  //     }
+  //     acc[kelasId].push(siswa._id);
+  //     return acc;
+  //   }, {});
 
-  // Siswa.insertMany(hashedSiswa)
-  //   .then(() => console.log("Users inserted successfully"))
-  //   .catch((err) => console.error("Error inserting users:", err));
+  //   for (const [kelasId, siswaIds] of Object.entries(kelasUpdates)) {
+  //     await Kelas.findByIdAndUpdate(kelasId, {
+  //       $push: { siswa: { $each: siswaIds } },
+  //     });
+  //   }
+
+  //   console.log("Data kelas berhasil diperbarui");
+  // } catch (error) {
+  //   console.error("Gagal memasukkan data siswa:", error);
+  // }
 
   console.log("Server is running in port " + process.env.PORT);
 });
