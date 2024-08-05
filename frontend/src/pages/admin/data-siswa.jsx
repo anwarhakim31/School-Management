@@ -1,3 +1,4 @@
+import DeleteManyModal from "@/components/fragments/admin/data-siswa/DeleteManyModal";
 import DeleteModal from "@/components/fragments/admin/data-siswa/DeleteModal";
 import TableSiswa from "@/components/fragments/admin/data-siswa/TableSiswa";
 import { HOST } from "@/util/constant";
@@ -15,6 +16,7 @@ const DataSiswaPage = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(7);
   const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
+  const [isDeleteManySiswa, setIsDeletManySiswa] = useState(false);
 
   useEffect(() => {
     const getSiswa = async () => {
@@ -32,13 +34,13 @@ const DataSiswaPage = () => {
     };
 
     getSiswa();
-  }, [limit, page, search, isDeleteSiswa]);
+  }, [limit, page, search, isDeleteSiswa, isDeleteManySiswa]);
 
   const handleToggleDeleteOne = () => {
     setIsDeleteSiswa(!isDeleteSiswa);
   };
   const handleToggleDeleteMany = () => {
-    setIsDeleteSiswa(!isDeleteSiswa);
+    setIsDeletManySiswa(!isDeleteManySiswa);
   };
 
   const handleSearch = (e) => {
@@ -67,7 +69,7 @@ const DataSiswaPage = () => {
         </div>
         <div className="flex gap-2  mr-auto  lg:ml-8">
           <button
-            onClick={handleDeleteManySiswa}
+            onClick={handleToggleDeleteMany}
             className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 px-4 transition-all duration-300 font-medium hover:text-white  text-xs  rounded-md flex-between gap-3"
           >
             {/* <ArrowDown01
@@ -111,6 +113,9 @@ const DataSiswaPage = () => {
         />
       </div>
       {isDeleteSiswa && <DeleteModal onClose={handleToggleDeleteOne} />}
+      {isDeleteManySiswa && (
+        <DeleteManyModal onClose={handleToggleDeleteMany} />
+      )}
     </section>
   );
 };

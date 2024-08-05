@@ -23,6 +23,7 @@ const DeleteManyModal = ({ onClose }) => {
       });
 
       toast.success(res.data.message);
+      onClose();
     } catch (error) {
       responseError(error);
     } finally {
