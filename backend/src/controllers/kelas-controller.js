@@ -29,7 +29,6 @@ export const getKelas = async (req, res, next) => {
 
     const newData = kelas.map((kel) => ({
       ...kel._doc,
-      jumlahSiswa: kel.siswa.length,
     }));
 
     res.status(200).json({

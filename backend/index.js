@@ -109,40 +109,40 @@ const connectDB = async () => {
 
 app.listen(port, async () => {
   connectDB();
-  // try {
-  //   // Masukkan data ke koleksi Siswa
-  //   const insertedSiswa = await Siswa.insertMany(siswas);
-  //   console.log("Data siswa berhasil dimasukkan");
+  try {
+    // Masukkan data ke koleksi Siswa
+    const insertedSiswa = await Siswa.insertMany(siswas);
+    console.log("Data siswa berhasil dimasukkan");
 
-  //   // Kelompokkan siswa berdasarkan kelas dan perbarui dokumen Kelas
-  //   const kelasUpdates = insertedSiswa.reduce((acc, siswa) => {
-  //     const kelasId = siswa.kelas.toString();
-  //     if (!acc[kelasId]) {
-  //       acc[kelasId] = [];
-  //     }
-  //     acc[kelasId].push(siswa._id);
-  //     return acc;
-  //   }, {});
+    // Kelompokkan siswa berdasarkan kelas dan perbarui dokumen Kelas
+    const kelasUpdates = insertedSiswa.reduce((acc, siswa) => {
+      const kelasId = siswa.kelas.toString();
+      if (!acc[kelasId]) {
+        acc[kelasId] = [];
+      }
+      acc[kelasId].push(siswa._id);
+      return acc;
+    }, {});
 
-  //   for (const [kelasId, siswaIds] of Object.entries(kelasUpdates)) {
-  //     await Kelas.findByIdAndUpdate(kelasId, {
-  //       $push: { siswa: { $each: siswaIds } },
-  //     });
+    for (const [kelasId, siswaIds] of Object.entries(kelasUpdates)) {
+      await Kelas.findByIdAndUpdate(kelasId, {
+        $push: { siswa: { $each: siswaIds } },
+      });
 
-  //     const updatedKelas = await Kelas.findById(kelasId);
+      const updatedKelas = await Kelas.findById(kelasId);
 
-  //     const jumlahSiswaBaru = updatedKelas.siswa.length;
+      const jumlahSiswaBaru = updatedKelas.siswa.length;
 
-  //     // Update the jumlahSiswa field with the new total
-  //     await Kelas.findByIdAndUpdate(kelasId, {
-  //       jumlahSiswa: jumlahSiswaBaru,
-  //     });
-  //   }
+      // Update the jumlahSiswa field with the new total
+      await Kelas.findByIdAndUpdate(kelasId, {
+        jumlahSiswa: jumlahSiswaBaru,
+      });
+    }
 
-  //   console.log("Data kelas berhasil diperbarui");
-  // } catch (error) {
-  //   console.error("Gagal memasukkan data siswa:", error);
-  // }
+    console.log("Data kelas berhasil diperbarui");
+  } catch (error) {
+    console.error("Gagal memasukkan data siswa:", error);
+  }
 
   console.log("Server is running in port " + process.env.PORT);
 });

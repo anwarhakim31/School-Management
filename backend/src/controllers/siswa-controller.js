@@ -153,8 +153,12 @@ export const deleteOneSiswa = async (req, res, next) => {
 
     if (siswa.kelas) {
       const updateKelas = kelas.siswa.filter((data) => data.toString() !== id);
+      const jumlahSiswa = updateKelas.length;
 
-      await Kelas.findByIdAndUpdate(kelas._id, { siswa: updateKelas });
+      await Kelas.findByIdAndUpdate(kelas._id, {
+        siswa: updateKelas,
+        jumlahSiswa,
+      });
     }
 
     await Siswa.deleteOne({ _id: id });
@@ -177,10 +181,22 @@ export const deleteManySiswa = async (req, res, next) => {
 
     await Siswa.deleteMany({ _id: { $in: dataChecked } });
 
-    for (const siswa in SiswaList) {
-      await Kelas.findByIdAndUpdate(siswa.kelas, {
-        $pull: { siswa: siswa._id },
-      });
+    for (const siswa of SiswaList) {
+      const updatedKelas = await Kelas.findByIdAndUpdate(
+        siswa.kelas,
+        {
+          $pull: { siswa: siswa._id },
+        },
+        { new: true }
+      );
+
+      if (updatedKelas) {
+        const jumlahSiswa = updatedKelas.siswa.length;
+
+        await Kelas.findByIdAndUpdate(siswa.kelas, {
+          jumlahSiswa: jumlahSiswa,
+        });
+      }
     }
 
     res.status(200).json({

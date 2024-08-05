@@ -264,9 +264,9 @@ const Pagination = ({
     <div className=" absolute h-9 left-0 bottom-5 border-t pt-4 w-full flex-between px-3">
       <div className="flex">
         <p className="text-[10px] sm:text-xs">{`Menampilkan ${
-          firstOfindexSiswa + 1
+          totalSiswa === 0 ? 0 : firstOfindexSiswa + 1
         } - ${
-          page === totalPage ? totalSiswa : firstOfindexSiswa + lastOfIndexSiswa
+          totalSiswa === 0 ? totalSiswa : firstOfindexSiswa + lastOfIndexSiswa
         } dari ${totalSiswa} data`}</p>
       </div>
       <div className="flex-center space-x-4">
