@@ -176,7 +176,7 @@ const DataKelasPage = () => {
           Tambah Kelas
         </button>
       </div>
-      <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-xl">
+      <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-lg">
         <TableKelas
           data={dataFilter}
           handleToggleDelete={handleToggleDelete}

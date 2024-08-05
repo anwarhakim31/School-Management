@@ -389,7 +389,7 @@ const TambahSiswaPage = () => {
           </div>
           <div className="mb-2">
             <label htmlFor="kelas" className="text-xs mb-2 block">
-              Kelas <span className="text-red-500">*</span>
+              Kelas
             </label>
             <select
               id="kelas"
@@ -410,7 +410,7 @@ const TambahSiswaPage = () => {
           </div>
           <div className="mb-2">
             <label htmlFor="Nama Kelas" className="text-xs mb-2 block">
-              Nama Kelas <span className="text-red-500">*</span>
+              Nama Kelas
             </label>
             <select
               id="Nama Kelas"

@@ -1,5 +1,10 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  selectedDataDeleteMany,
+  setDataDelete,
+  setDataDeleteMany,
+} from "@/store/slices/admin-slice";
+import {
   ChevronLeft,
   ChevronRight,
   Edit,
@@ -8,6 +13,7 @@ import {
   Trash,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 
 const TableSiswa = ({
@@ -17,9 +23,12 @@ const TableSiswa = ({
   totalPage,
   totalSiswa,
   handlePagination,
+  handleToggleDeleteOne,
 }) => {
   const lastOfIndexSiswa = page * limit;
   const firstOfindexSiswa = lastOfIndexSiswa - limit;
+  const [dataChecked, setDataChecked] = useState([]);
+  const dispatch = useDispatch();
 
   const HandleCopyText = (text) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -27,14 +36,27 @@ const TableSiswa = ({
     });
   };
 
-  console.log(data);
+  const handleCheckboxChange = (checked, siswa) => {
+    if (checked) {
+      setDataChecked((prev) => [...prev, siswa._id]);
+      dispatch(setDataDeleteMany([...dataChecked, siswa._id]));
+    } else {
+      setDataChecked((prev) => prev.filter((id) => id !== siswa._id));
+      dispatch(setDataDeleteMany(dataChecked.filter((id) => id !== siswa._id)));
+    }
+  };
+
+  const handleDeleteSiswa = (data) => {
+    handleToggleDeleteOne();
+    dispatch(setDataDelete(data));
+  };
 
   return (
     <>
       <div className="block w-full shadow-md pb-[4rem]">
-        <div className="w-full min-h-[420px]  overflow-auto rounded-xl">
-          <table className="w-full    text-center  text-gray-500 ">
-            <thead className="text-xs  text-white uppercase bg-neutral">
+        <div className="w-full min-h-[420px]  overflow-auto rounded-sm">
+          <table className="w-full    text-left  text-gray-500 ">
+            <thead className="text-xs text-left  text-white uppercase bg-neutral">
               <tr>
                 <th
                   scope="col"
@@ -55,19 +77,19 @@ const TableSiswa = ({
                 <th scope="col" className="px-4 py-4">
                   Nama
                 </th>
-                <th scope="col" className="px-4 py-4 whitespace-nowrap">
+                <th scope="col" className=" py-4 whitespace-nowrap">
                   Jenis Kelamin
                 </th>
-                <th scope="col" className=" py-4 whitespace-nowrap">
+                <th scope="col" className=" py-4 text-center whitespace-nowrap">
                   Tahun Masuk
                 </th>
-                <th scope="col" className="px-5 py-4">
+                <th scope="col" className="px-1 py-4">
                   Alamat
                 </th>
-                <th scope="col" className="py-4 px-5">
+                <th scope="col" className="py-4 ">
                   Kontak
                 </th>
-                <th scope="Kelas" className="px-4 py-4">
+                <th scope="Kelas" className="text-center py-4">
                   Kelas
                 </th>
                 <th scope="col" className="px-5 py-3">
@@ -77,7 +99,7 @@ const TableSiswa = ({
             </thead>
             <tbody>
               {data &&
-                data.map((siswa) => (
+                data.map((siswa, i) => (
                   <tr
                     key={siswa.nis}
                     className={`${
@@ -88,6 +110,10 @@ const TableSiswa = ({
                       <Checkbox
                         type="checkbox"
                         name=""
+                        checked={dataChecked.includes(siswa._id)}
+                        onCheckedChange={(checked) =>
+                          handleCheckboxChange(checked, siswa)
+                        }
                         id=""
                         className={
                           "w-4 h-4 absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2  data-[state=checked]:bg-gray-800"
@@ -109,27 +135,31 @@ const TableSiswa = ({
                     </td>
                     <td
                       scope="row"
-                      className="px-2 py-4 text-xs font-medium text-gray-900 whitespace-nowrap "
+                      className="py-4 text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
                       {siswa.jenisKelamin}
                     </td>
                     <td
                       scope="row"
-                      className=" py-4  text-xs font-medium text-gray-900 whitespace-nowrap "
+                      className=" py-4  text-xs text-center font-medium text-gray-900 whitespace-nowrap "
                     >
                       {siswa.tahunMasuk}
                     </td>
                     <td
                       scope="row"
-                      className="px-4 py-4   overflow-hidden line-clamp-1 text-xs font-medium text-gray-900 whitespace-nowrap "
+                      className="px-1 py-4   overflow-hidden line-clamp-1 text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
-                      {siswa.alamat}
+                      {siswa.alamat ? (
+                        `${siswa.alamat}`
+                      ) : (
+                        <span className="text-gray-400">Data Kosong</span>
+                      )}
                     </td>
                     <td
                       scope="row"
-                      className="py-4  text-xs font-medium text-gray-900 whitespace-nowrap "
+                      className="py-4   text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
-                      <div className="flex-center space-x-2">
+                      <div className="flex items-center gap-4 ">
                         <div
                           className="cursor-pointer flex-center bg-backup text-neutral w-[20px] h-[20px] rounded-full"
                           title={siswa.phone}
@@ -148,9 +178,13 @@ const TableSiswa = ({
                     </td>
                     <td
                       scope="row"
-                      className=" py-4 max-w-full flex-center text-xs font-medium text-gray-900 whitespace-nowrap "
+                      className=" py-4 max-w-full text-center text-xs font-medium text-gray-900 "
                     >
-                      {siswa.kelas.kelas} {siswa.kelas.nama}
+                      {siswa.kelas ? (
+                        `${siswa.kelas.kelas} ${siswa.kelas.nama}`
+                      ) : (
+                        <span className="text-gray-400">Data Kosong</span>
+                      )}
                     </td>
                     <td
                       scope="row"
@@ -159,7 +193,7 @@ const TableSiswa = ({
                       <div className="flex-center gap-4">
                         <button
                           title="Edit"
-                          onClick={() => handleEditKelas(kelas)}
+                          // onClick={() => handleEditKelas(siswa)}
                           className="w-[20px] h-[20px]  flex-center"
                         >
                           <Edit
@@ -171,7 +205,7 @@ const TableSiswa = ({
                         <button
                           title="Hapus"
                           className="w-[20px] h-[20px]  flex-center"
-                          onClick={() => handleDeleteKelas(kelas)}
+                          onClick={() => handleDeleteSiswa(siswa)}
                         >
                           <Trash
                             width={18}
@@ -235,7 +269,7 @@ const Pagination = ({
           page === totalPage ? totalSiswa : firstOfindexSiswa + lastOfIndexSiswa
         } dari ${totalSiswa} data`}</p>
       </div>
-      <div className="flex space-x-4">
+      <div className="flex-center space-x-4">
         <div>
           <select
             name="perpage"

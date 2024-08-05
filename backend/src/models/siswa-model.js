@@ -51,6 +51,9 @@ const siswaSchema = new mongoose.Schema({
     ref: "Kelas",
     required: false,
   },
+  createdAt: {
+    type: Date,
+  },
 });
 
 const Siswa = mongoose.model("Siswa", siswaSchema);

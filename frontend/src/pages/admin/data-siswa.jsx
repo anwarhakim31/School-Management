@@ -1,18 +1,22 @@
+import DeleteModal from "@/components/fragments/admin/data-siswa/DeleteModal";
 import TableSiswa from "@/components/fragments/admin/data-siswa/TableSiswa";
+import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { ArrowDown01, ArrowDownNarrowWide, Plus, Search } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const DataSiswaPage = () => {
   const [search, setSearch] = useState("");
   const [dataSiswa, setDataSiswa] = useState([]);
-  const [dataSearch, setDataSearch] = useState([]);
   const [pagination, setPagination] = useState({});
   const [page, setPage] = useState(1);
-  const [limit, setSiswaPerPage] = useState(7);
+  const [limit, setLimit] = useState(7);
+  const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
+  const dataChecked = useSelector(selectedDataDeleteMany);
 
   useEffect(() => {
     const getSiswa = async () => {
@@ -30,28 +34,19 @@ const DataSiswaPage = () => {
     };
 
     getSiswa();
-  }, [limit, page, search]);
+  }, [limit, page, search, isDeleteSiswa]);
 
-  console.log(pagination);
+  const handleDeleteManySiswa = async () => {
+    try {
+      const res = axios.delete(HOST + "/api/siswa");
+    } catch (error) {
+      responseError(error);
+    }
+  };
 
-  // useEffect(() => {
-  //   const splitValue = search.trim().toLowerCase().split(" ");
-
-  //   const dataFilter = dataSiswa.filter((siswa) => {
-  //     const nisString = String(siswa.nis);
-
-  //     return splitValue.every(
-  //       (word) =>
-  //         siswa.nama.toLowerCase().includes(word) || nisString.includes(word)
-  //     );
-  //   });
-
-  //   if (dataFilter.length === 0) {
-  //     setDataSearch(dataSiswa);
-  //   } else {
-  //     setDataSearch(dataFilter);
-  //   }
-  // }, [search, dataSiswa]);
+  const handleToggleDeleteOne = (data) => {
+    setIsDeleteSiswa(!isDeleteSiswa);
+  };
 
   const handleSearch = (e) => {
     const { value } = e.target;
@@ -59,11 +54,8 @@ const DataSiswaPage = () => {
   };
 
   const handlePagination = (page) => {
-    console.log(page, "now");
     setPage(page);
   };
-
-  console.log(pagination.perPage);
 
   return (
     <section className="px-6 py-4  ">
@@ -80,24 +72,24 @@ const DataSiswaPage = () => {
             <Search height={20} width={20} className="text-gray-400" />
           </div>
         </div>
-        {/* <div className="flex gap-2  mr-auto  lg:ml-8">
-          <button className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-2.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-full flex-between gap-3">
-            <ArrowDown01
+        <div className="flex gap-2  mr-auto  lg:ml-8">
+          <button className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 px-4 transition-all duration-300 font-medium hover:text-white  text-xs  rounded-md flex-between gap-3">
+            {/* <ArrowDown01
               width={15}
               height={15}
               className="rounded-full bg-white text-neutral"
-            />
-            Kelas
+            /> */}
+            Delete
           </button>
-          <button className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-2.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-full flex-between gap-3">
+          {/* <button className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-2.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-full flex-between gap-3">
             <ArrowDownNarrowWide
               width={15}
               height={15}
               className="rounded-full bg-white text-neutral"
             />
             Nama
-          </button>
-        </div> */}
+          </button> */}
+        </div>
 
         <Link
           to={"/admin/tambah-siswa"}
@@ -111,7 +103,7 @@ const DataSiswaPage = () => {
           Tambah Siswa
         </Link>
       </div>
-      <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-xl">
+      <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-lg">
         <TableSiswa
           data={dataSiswa}
           page={page}
@@ -119,8 +111,10 @@ const DataSiswaPage = () => {
           totalSiswa={pagination.total}
           totalPage={pagination.totalPages}
           handlePagination={handlePagination}
+          handleToggleDeleteOne={handleToggleDeleteOne}
         />
       </div>
+      {isDeleteSiswa && <DeleteModal onClose={handleToggleDeleteOne} />}
     </section>
   );
 };

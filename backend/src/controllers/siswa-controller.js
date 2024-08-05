@@ -21,12 +21,11 @@ export const getAll = async (req, res, next) => {
         { nis: { $regex: searchRegex } },
       ],
     })
+      // .sort({ createdAt: 1 })
       .skip(skip)
       .limit(limit)
       .populate("kelas")
       .exec();
-
-    console.log(siswa);
 
     const totalSiswa = await Siswa.countDocuments({
       $or: [
@@ -132,6 +131,56 @@ export const addSiswa = async (req, res, next) => {
     res
       .status(200)
       .json({ success: true, message: "Berhasil menambahkan siswa" });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const deleteOneSiswa = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    const siswa = await Siswa.findById(id);
+
+    console.log(siswa);
+
+    if (!siswa) {
+      throw new ResponseError(404, "Siswa tidak ditemukan.");
+    }
+
+    const kelas = await Kelas.findById(siswa.kelas);
+
+    if (siswa.kelas) {
+      const updateKelas = kelas.siswa.filter((data) => data.toString() !== id);
+
+      await Kelas.findByIdAndUpdate(kelas._id, { siswa: updateKelas });
+    }
+
+    await Siswa.deleteOne({ _id: id });
+
+    res.status(200).json({
+      success: true,
+      message: `Berhasil menghapus siswa`,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const deleteManySiswa = async (req, res, next) => {
+  try {
+    const { ids } = req.body;
+
+    const SiswaList = await Siswa.find({ _id: { $in: ids } });
+
+    console.log(siswaList);
+
+    res.status(200).json({
+      success: true,
+      message: `Berhasil menghapus siswa`,
+    });
   } catch (error) {
     console.log(error);
     next(error);

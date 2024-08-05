@@ -53,12 +53,12 @@ const AdminLayout = () => {
         ref={sidebarRef}
         className={`${
           isSidebar ? "left-0 " : "-left-[300px] md:left-0"
-        } md:block bg-neutral z-50 fixed md:static py-6 -hidden w-[230px] md:w-[260px] min-h-screen transition-all duration-300`}
+        } md:block bg-neutral z-50 fixed md:static py-6 -hidden w-[230px] md:w-[240px] min-h-screen transition-all duration-300`}
       >
         <AsideLayout setIsSidebar={setIsSidebar} />
       </aside>
 
-      <div className="flex w-full flex-1 overflow-hidden">
+      <div className="flex  flex-1 overflow-hidden">
         <div className="flex flex-col flex-1 overflow-auto">
           <HeaderLayout
             setIsEdit={setIsEdit}

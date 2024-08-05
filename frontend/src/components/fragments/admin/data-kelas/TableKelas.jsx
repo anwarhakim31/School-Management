@@ -37,8 +37,8 @@ const TableKelas = ({
   }, [dataSlice]);
 
   return (
-    <div className="block w-full relative  shadow-md pb-[4.25rem]">
-      <div className="w-full  min-h-[420px] overflow-x-auto rounded-xl">
+    <div className="block w-full relative  shadow-md pb-[4rem]">
+      <div className="w-full  min-h-[420px] overflow-x-auto rounded-lg">
         <table className="text-center w-full text-gray-500 table-a">
           <thead className="text-xs uppercase text-white bg-neutral">
             <tr>
