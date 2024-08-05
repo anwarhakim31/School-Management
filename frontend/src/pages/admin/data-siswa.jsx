@@ -113,7 +113,7 @@ const DataSiswaPage = () => {
       </div>
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-xl">
         <TableSiswa
-          data={dataSearch}
+          data={dataSiswa}
           page={page}
           limit={pagination.perPage}
           totalSiswa={pagination.total}

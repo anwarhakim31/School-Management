@@ -1,4 +1,12 @@
-import { ChevronLeft, ChevronRight, Mail, Phone } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Edit,
+  Mail,
+  Phone,
+  Trash,
+} from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -19,29 +27,44 @@ const TableSiswa = ({
     });
   };
 
+  console.log(data);
+
   return (
     <>
-      <div className="block w-full shadow-md pb-16">
-        <div className="w-full min-h-[410px]  overflow-auto rounded-xl">
-          <table className="w-full   text-xs text-center  text-gray-500 ">
+      <div className="block w-full shadow-md pb-[4rem]">
+        <div className="w-full min-h-[420px]  overflow-auto rounded-xl">
+          <table className="w-full    text-center  text-gray-500 ">
             <thead className="text-xs  text-white uppercase bg-neutral">
               <tr>
-                <th scope="col" className="px-3 py-3">
+                <th
+                  scope="col"
+                  className="px-3 py-4 flex items-center justify-center"
+                >
+                  <Checkbox
+                    type="checkbox"
+                    name=""
+                    id=""
+                    className={
+                      "min-h-4 min-w-3  data-[state=checked]:bg-gray-800"
+                    }
+                  />
+                </th>
+                <th scope="col" className="px-3 py-4">
                   NIS
                 </th>
-                <th scope="col" className="px-4 py-3">
+                <th scope="col" className="px-4 py-4">
                   Nama
                 </th>
-                <th scope="col" className="px-4 py-3 whitespace-nowrap">
+                <th scope="col" className="px-4 py-4 whitespace-nowrap">
                   Jenis Kelamin
                 </th>
                 <th scope="col" className=" py-4 whitespace-nowrap">
                   Tahun Masuk
                 </th>
-                <th scope="col" className="px-5 py-3">
+                <th scope="col" className="px-5 py-4">
                   Alamat
                 </th>
-                <th scope="col" className="py-3 px-5">
+                <th scope="col" className="py-4 px-5">
                   Kontak
                 </th>
                 <th scope="Kelas" className="px-4 py-4">
@@ -61,63 +84,102 @@ const TableSiswa = ({
                       data.length === 7 && "last:border-none"
                     } hover:bg-gray-100 border-b  `}
                   >
+                    <td scope="row" className="px-3 py-3 relative">
+                      <Checkbox
+                        type="checkbox"
+                        name=""
+                        id=""
+                        className={
+                          "w-4 h-4 absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2  data-[state=checked]:bg-gray-800"
+                        }
+                      />
+                    </td>
                     <td
                       scope="row"
                       className="px-3 py-4 text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
-                      {/* {siswa.nis} */}
+                      {siswa.nis}
                     </td>
 
                     <td
                       scope="row"
-                      className="px-4 py-4  overflow-hidden line-clamp-1 text-xs font-medium text-gray-900 whitespace-nowrap "
+                      className=" px-4 py-4 overflow-hidden line-clamp-1 text-xs font-medium text-gray-900 whitespace-nowrap  "
                     >
-                      {/* {siswa.nama} */}
+                      {siswa.nama}
                     </td>
                     <td
                       scope="row"
                       className="px-2 py-4 text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
-                      {/* {siswa.jenisKelamin} */}
+                      {siswa.jenisKelamin}
                     </td>
                     <td
                       scope="row"
                       className=" py-4  text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
-                      {/* {siswa.tahunMasuk} */}
+                      {siswa.tahunMasuk}
                     </td>
                     <td
                       scope="row"
                       className="px-4 py-4   overflow-hidden line-clamp-1 text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
-                      {/* {siswa.alamat} */}
+                      {siswa.alamat}
                     </td>
-                    {/* <td
+                    <td
                       scope="row"
                       className="py-4  text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
-                      <div className="flex space-x-2">
+                      <div className="flex-center space-x-2">
                         <div
-                          className="cursor-pointer flex-center bg-backup text-neutral w-5 h-5 rounded-full"
-                          title={siswa.kontak[0].phone}
-                          onClick={() => HandleCopyText(siswa.kontak[0].phone)}
+                          className="cursor-pointer flex-center bg-backup text-neutral w-[20px] h-[20px] rounded-full"
+                          title={siswa.phone}
+                          onClick={() => HandleCopyText(siswa.phone)}
                         >
                           <Phone width={12} height={12} />
                         </div>
                         <div
-                          className="cursor-pointer flex-center bg-backup  text-neutral w-5 h-5 rounded-full"
-                          title={siswa.kontak[0].email}
-                          onClick={() => HandleCopyText(siswa.kontak[0].email)}
+                          className="cursor-pointer flex-center bg-backup  text-neutral w-[20px] h-[20px] rounded-full"
+                          title={siswa.email}
+                          onClick={() => HandleCopyText(siswa.email)}
                         >
                           <Mail width={12} height={12} />
                         </div>
                       </div>
-                    </td> */}
+                    </td>
                     <td
                       scope="row"
-                      className=" py-4 max-w-full text-xs font-medium text-gray-900 whitespace-nowrap "
+                      className=" py-4 max-w-full flex-center text-xs font-medium text-gray-900 whitespace-nowrap "
                     >
-                      {/* {siswa.kelas} */}
+                      {siswa.kelas.kelas} {siswa.kelas.nama}
+                    </td>
+                    <td
+                      scope="row"
+                      className="px-3    border-gray-300  py-4 text-xs font-medium text-gray-900 whitespace-nowrap "
+                    >
+                      <div className="flex-center gap-4">
+                        <button
+                          title="Edit"
+                          onClick={() => handleEditKelas(kelas)}
+                          className="w-[20px] h-[20px]  flex-center"
+                        >
+                          <Edit
+                            width={18}
+                            height={18}
+                            className="text-gray-800  hover:text-neutral1 transition-all duration-300"
+                          />
+                        </button>
+                        <button
+                          title="Hapus"
+                          className="w-[20px] h-[20px]  flex-center"
+                          onClick={() => handleDeleteKelas(kelas)}
+                        >
+                          <Trash
+                            width={18}
+                            height={18}
+                            className="text-gray-800 hover:text-neutral2  transition-all duration-300"
+                          />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -150,6 +212,7 @@ const Pagination = ({
   totalPage,
 }) => {
   const pageNumber = [];
+  const selectRow = [7, 14, 21, 28];
 
   for (let i = 1; i <= totalPage; i++) {
     pageNumber.push(i);
@@ -164,7 +227,7 @@ const Pagination = ({
   const visiblePage = pageNumber.slice(startPage - 1, endPage);
 
   return (
-    <div className="w-full px-4  flex-between absolute left-0 py-2 sm:py-4 bottom-1 select-none text-gray-500">
+    <div className=" absolute h-9 left-0 bottom-5 border-t pt-4 w-full flex-between px-3">
       <div className="flex">
         <p className="text-[10px] sm:text-xs">{`Menampilkan ${
           firstOfindexSiswa + 1
@@ -174,18 +237,18 @@ const Pagination = ({
       </div>
       <div className="flex space-x-4">
         <div>
-          {/* <select
+          <select
             name="perpage"
             id="perpage"
-            className="border border-gray-400 text-sm rounded-sm outline-neutral"
-            onChange={(e) => setPerPage(e.target.value)}
+            className="border border-gray-400 text-sm rounded-sm outline-neutral flex"
+            onChange={(e) => handlePagination(e.target.value)}
           >
             {selectRow.map((item) => (
               <option key={item} value={item} className="text-[14px] ">
                 {item}
               </option>
             ))}
-          </select> */}
+          </select>
         </div>
         <div className="flex gap-2 ">
           <button

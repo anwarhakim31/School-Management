@@ -37,24 +37,24 @@ const TableKelas = ({
   }, [dataSlice]);
 
   return (
-    <div className="block w-full relative  shadow-md pb-16">
-      <div className="w-full  min-h-[410px] overflow-x-auto rounded-xl">
+    <div className="block w-full relative  shadow-md pb-[4.25rem]">
+      <div className="w-full  min-h-[420px] overflow-x-auto rounded-xl">
         <table className="text-center w-full text-gray-500 table-a">
-          <thead className="text-xs text-white bg-neutral">
+          <thead className="text-xs uppercase text-white bg-neutral">
             <tr>
-              <th scope="col" className="px-2 py-3">
+              <th scope="col" className="px-2 py-4">
                 Kelas
               </th>
-              <th scope="col" className="px-3 py-3">
+              <th scope="col" className="px-3 py-4">
                 Nama
               </th>
-              <th scope="col" className="px-3 py-3">
+              <th scope="col" className="px-3 py-4">
                 Jumlah Siswa
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-4">
                 Wali Kelas
               </th>
-              <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-4">
                 Posisi Kelas
               </th>
 
