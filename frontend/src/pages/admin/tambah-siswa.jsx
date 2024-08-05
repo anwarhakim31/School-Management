@@ -46,7 +46,7 @@ const TambahSiswaPage = () => {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
+    setLoading(true);
     try {
       const res = await axios.post(
         HOST + "/api/siswa/add-siswa",
@@ -63,6 +63,8 @@ const TambahSiswaPage = () => {
       }
     } catch (error) {
       responseError(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -77,7 +79,7 @@ const TambahSiswaPage = () => {
       const formData = new FormData();
 
       formData.append("image", file);
-
+      setLoading(true);
       try {
         const res = await axios.post(
           HOST + "/api/siswa/upload-photo-siswa",
@@ -91,6 +93,8 @@ const TambahSiswaPage = () => {
         }
       } catch (error) {
         responseError(error);
+      } finally {
+        setLoading(true);
       }
     }
   };
@@ -295,8 +299,8 @@ const TambahSiswaPage = () => {
               className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             >
               <option value="">Pilih jenis kelamin</option>
-              <option value="laki-laki">Laki-Laki</option>
-              <option value="perempuan">Perempuan</option>
+              <option value="Laki-Laki">Laki-Laki</option>
+              <option value="Perempuan">Perempuan</option>
             </select>
             <span className="text-xs h-4 block mt-1 text-neutral2">
               {errors.kelaminKelamin && errors.kelaminKelamin.message}
@@ -323,7 +327,7 @@ const TambahSiswaPage = () => {
             </span>
           </div>
         </div>
-        <div>
+        <div className="">
           <div className="mb-2">
             <label htmlFor="Agama" className="text-xs mb-2 block">
               Agama <span className="text-red-500">*</span>
@@ -408,30 +412,39 @@ const TambahSiswaPage = () => {
               {errors.kelas && errors.kelas.message}
             </span>
           </div>
-          <div className="mb-2">
-            <label htmlFor="Nama Kelas" className="text-xs mb-2 block">
-              Nama Kelas
-            </label>
-            <select
-              id="Nama Kelas"
-              {...register("namaKelas")}
-              className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
-            >
-              {kelasNama.length === 0 && (
-                <option value="">Pilih Kelas Terlibih dulu</option>
-              )}
-
-              {kelasNama.length !== 0 &&
-                kelasNama.map((kel) => (
-                  <option key={kel._id} value={kel.nama} className="rounded-md">
-                    {kel.nama}
-                  </option>
-                ))}
-            </select>
-            <span className="text-xs h-4 block mt-1 text-neutral2">
-              {errors.namaKelas && errors.namaKelas.message}
-            </span>
-          </div>
+          {kelasNama.length !== 0 && (
+            <>
+              <div className="mb-2">
+                <label htmlFor="Nama Kelas" className="text-xs mb-2 block">
+                  Nama Kelas <span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="Nama Kelas"
+                  {...register("namaKelas")}
+                  className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+                >
+                  {kelasNama &&
+                    kelasNama.map((kel) => {
+                      return (
+                        <>
+                          <option
+                            key={kel._id}
+                            value={kel.nama}
+                            className="rounded-md"
+                          >
+                            {kel.nama}
+                          </option>
+                          ;
+                        </>
+                      );
+                    })}
+                </select>
+                <span className="text-xs h-4 block mt-1 text-neutral2">
+                  {errors.namaKelas && errors.namaKelas.message}
+                </span>
+              </div>
+            </>
+          )}
           <div className="mb-8">
             <label htmlFor="Alamat" className="text-xs mb-2 block">
               Alamat
@@ -439,26 +452,26 @@ const TambahSiswaPage = () => {
             <textarea
               id="Alamat"
               {...register("alamat")}
-              className="py-1.5 h-[115px] bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+              className="py-1.5 h-[112px] bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
           </div>
-          <div className="flex justify-end gap-4">
+          <div className="flex justify-end pt-2 gap-4 ">
             <Link to={"/admin/data-siswa"}>
               <button
                 disabled={loading}
                 type="submit"
-                className="btn bg-gray-300 text-gray-800 hover:text-white disabled:cursor-not-allowed border disabled:bg-gray-700"
+                className="btn px-8 bg-gray-300 text-gray-800 hover:text-white disabled:cursor-not-allowed border disabled:bg-gray-700"
               >
-                {"Batal"}
+                {loading ? "Loading" : "Batal"}
               </button>
             </Link>
 
             <button
               disabled={loading}
               type="submit"
-              className="btn disabled:cursor-not-allowed disabled:bg-gray-700"
+              className="btn disabled:cursor-not-allowed px-6  disabled:bg-gray-700"
             >
-              {"Simpan"}
+              {loading ? "Loading" : "Simpan"}
             </button>
           </div>
         </div>

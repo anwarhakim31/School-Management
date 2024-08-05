@@ -68,7 +68,7 @@ const TableSiswa = ({
   return (
     <>
       <div className="block w-full shadow-md pb-[4rem]">
-        <div className="w-full min-h-[420px]  overflow-auto rounded-sm">
+        <div className="w-full min-h-[420px]  overflow-auto ">
           <table className="w-full    text-left  text-gray-500 ">
             <thead className="text-xs text-left  text-white uppercase bg-neutral">
               <tr>
@@ -94,16 +94,19 @@ const TableSiswa = ({
                 <th scope="col" className=" py-4 whitespace-nowrap">
                   Jenis Kelamin
                 </th>
-                <th scope="col" className=" py-4 text-center whitespace-nowrap">
+                <th
+                  scope="col"
+                  className="px-3 py-4 text-center whitespace-nowrap"
+                >
                   Tahun Masuk
                 </th>
-                <th scope="col" className="px-1 py-4">
+                <th scope="col" className="px-2 py-4">
                   Alamat
                 </th>
                 <th scope="col" className="py-4 ">
                   Kontak
                 </th>
-                <th scope="Kelas" className="text-center py-4">
+                <th scope="Kelas" className="text-center px-4 py-4">
                   Kelas
                 </th>
                 <th scope="col" className="px-5 py-3">
@@ -136,32 +139,32 @@ const TableSiswa = ({
                     </td>
                     <td
                       scope="row"
-                      className="px-3 py-4 text-xs font-medium text-gray-900 whitespace-nowrap "
+                      className="px-3 py-4 text-xs font-normal text-gray-900 whitespace-nowrap "
                     >
                       {siswa.nis}
                     </td>
 
                     <td
                       scope="row"
-                      className=" px-4 py-4 overflow-hidden line-clamp-1 text-xs font-medium text-gray-900 whitespace-nowrap  "
+                      className=" px-4 py-4 overflow-hidden line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap  "
                     >
                       {siswa.nama}
                     </td>
                     <td
                       scope="row"
-                      className="py-4 text-xs font-medium text-gray-900 whitespace-nowrap "
+                      className="py-4 text-xs font-normal text-gray-900 whitespace-nowrap "
                     >
                       {siswa.jenisKelamin}
                     </td>
                     <td
                       scope="row"
-                      className=" py-4  text-xs text-center font-medium text-gray-900 whitespace-nowrap "
+                      className=" py-4 px-3 text-xs text-center font-normal text-gray-900 whitespace-nowrap "
                     >
                       {siswa.tahunMasuk}
                     </td>
                     <td
                       scope="row"
-                      className="px-1 py-4   overflow-hidden line-clamp-1 text-xs font-medium text-gray-900 whitespace-nowrap "
+                      className="px-2 py-4   overflow-hidden line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap "
                     >
                       {siswa.alamat ? (
                         `${siswa.alamat}`
@@ -171,28 +174,28 @@ const TableSiswa = ({
                     </td>
                     <td
                       scope="row"
-                      className="py-4   text-xs font-medium text-gray-900 whitespace-nowrap "
+                      className="py-4   text-xs font-normal text-gray-900 whitespace-nowrap "
                     >
                       <div className="flex items-center gap-4 ">
                         <div
-                          className="cursor-pointer flex-center bg-backup text-neutral w-[20px] h-[20px] rounded-full"
+                          className="cursor-pointer flex-center  border shadow-md  text-indigo-500 w-[24px] h-[24px] rounded-full"
                           title={siswa.phone}
                           onClick={() => HandleCopyText(siswa.phone)}
                         >
-                          <Phone width={12} height={12} />
+                          <Phone width={15} height={15} />
                         </div>
                         <div
-                          className="cursor-pointer flex-center bg-backup  text-neutral w-[20px] h-[20px] rounded-full"
+                          className="cursor-pointer flex-center border shadow-md  text-indigo-500 w-[24px] h-[24px] rounded-full"
                           title={siswa.email}
                           onClick={() => HandleCopyText(siswa.email)}
                         >
-                          <Mail width={12} height={12} />
+                          <Mail width={15} height={15} />
                         </div>
                       </div>
                     </td>
                     <td
                       scope="row"
-                      className=" py-4 max-w-full text-center text-xs font-medium text-gray-900 "
+                      className=" py-4 px-4 max-w-full text-center text-xs font-normal text-gray-900 "
                     >
                       {siswa.kelas ? (
                         `${siswa.kelas.kelas} ${siswa.kelas.nama}`
@@ -202,7 +205,7 @@ const TableSiswa = ({
                     </td>
                     <td
                       scope="row"
-                      className="px-3    border-gray-300  py-4 text-xs font-medium text-gray-900 whitespace-nowrap "
+                      className="px-3    border-gray-300  py-4 text-xs font-normal text-gray-900 whitespace-nowrap "
                     >
                       <div className="flex-center gap-4">
                         <button
@@ -260,7 +263,6 @@ const Pagination = ({
   totalPage,
 }) => {
   const pageNumber = [];
-  const selectRow = [7, 14, 21, 28];
 
   for (let i = 1; i <= totalPage; i++) {
     pageNumber.push(i);
@@ -280,24 +282,14 @@ const Pagination = ({
         <p className="text-[10px] sm:text-xs">{`Menampilkan ${
           totalSiswa === 0 ? 0 : firstOfindexSiswa + 1
         } - ${
-          page === totalPage ? totalSiswa : lastOfIndexSiswa
+          page === totalPage
+            ? totalSiswa
+            : totalSiswa === 0
+            ? 0
+            : lastOfIndexSiswa
         } dari ${totalSiswa} data`}</p>
       </div>
       <div className="flex-center space-x-4">
-        <div>
-          <select
-            name="perpage"
-            id="perpage"
-            className="border border-gray-400 text-sm rounded-sm outline-neutral flex"
-            onChange={(e) => handlePagination(e.target.value)}
-          >
-            {selectRow.map((item) => (
-              <option key={item} value={item} className="text-[14px] ">
-                {item}
-              </option>
-            ))}
-          </select>
-        </div>
         <div className="flex gap-2 ">
           <button
             onClick={() => handlePagination(page - 1)}

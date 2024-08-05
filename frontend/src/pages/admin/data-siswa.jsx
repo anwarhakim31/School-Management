@@ -1,3 +1,5 @@
+import CustomDropdown from "@/components/elements/DropDown";
+import DropdownFilter from "@/components/elements/DropDownFilter";
 import DeleteManyModal from "@/components/fragments/admin/data-siswa/DeleteManyModal";
 import DeleteModal from "@/components/fragments/admin/data-siswa/DeleteModal";
 import TableSiswa from "@/components/fragments/admin/data-siswa/TableSiswa";
@@ -5,10 +7,12 @@ import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+
+const selectRow = [7, 14, 21, 28];
 
 const DataSiswaPage = () => {
   const dataChecked = useSelector(selectedDataDeleteMany);
@@ -21,6 +25,11 @@ const DataSiswaPage = () => {
   const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
   const [isDeleteManySiswa, setIsDeletManySiswa] = useState(false);
   const [allCheck, setAllCheck] = useState(false);
+  const [filters, setFilters] = useState({
+    kelas: "",
+    jenisKelamin: "",
+    tahunMasuk: "",
+  });
 
   useEffect(() => {
     const getSiswa = async () => {
@@ -40,6 +49,12 @@ const DataSiswaPage = () => {
     getSiswa();
   }, [limit, page, search, isDeleteSiswa, isDeleteManySiswa]);
 
+  useEffect(() => {
+    if (limit) {
+      setPage(1);
+    }
+  }, [limit]);
+
   const handleToggleDeleteOne = () => {
     setIsDeleteSiswa(!isDeleteSiswa);
   };
@@ -56,6 +71,19 @@ const DataSiswaPage = () => {
     setPage(page);
   };
 
+  const handleSelectBaris = (option) => {
+    setLimit(option);
+  };
+
+  const handleFilterChange = (filterName, filterValue) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterName]: filterValue,
+    }));
+  };
+
+  console.log(filters);
+
   return (
     <section className="px-6 py-4  ">
       <div className="w-full flex-between flex-wrap gap-6">
@@ -65,31 +93,16 @@ const DataSiswaPage = () => {
             placeholder="Cari Siswa"
             value={search}
             onChange={handleSearch}
-            className="w-full rounded-full py-2 pr-2 pl-8 text-sm border border-gray-400 outline-offset-1 outline-1 outline-neutral"
+            className="w-full rounded-full py-2 pr-2 pl-8 text-sm border border-gray-400 outline-offset-0 outline-1 outline-neutral"
           />
           <div className="absolute left-2 top-1/2 -translate-y-1/2">
             <Search height={20} width={20} className="text-gray-400" />
           </div>
         </div>
-        <div className="flex gap-2  mr-auto  lg:ml-8">
-          {dataChecked.length > 0 && (
-            <button
-              onClick={handleToggleDeleteMany}
-              className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 px-4 transition-all duration-300 font-medium hover:text-white  text-xs  rounded-md flex-between gap-3"
-            >
-              {/* <ArrowDown01
-              width={15}
-              height={15}
-              className="rounded-full bg-white text-neutral"
-            /> */}
-              Delete
-            </button>
-          )}
-        </div>
 
         <Link
           to={"/admin/tambah-siswa"}
-          className="flex-between gap-3  bg-gray-700 hover:bg-neutral transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-lg "
+          className="flex-between gap-3  bg-gray-700 hover:bg-neutral transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
         >
           <Plus
             width={15}
@@ -99,7 +112,31 @@ const DataSiswaPage = () => {
           Tambah Siswa
         </Link>
       </div>
+
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-lg">
+        <div className="flex-between px-4 h-14 ">
+          <div className="flex items-center gap-4  ">
+            <button
+              title="Hapus siswa terpilih"
+              onClick={handleToggleDeleteMany}
+              className={`${
+                dataChecked.length > 0 ? "opacity-100" : "opacity-0"
+              } border block border-gray-300 bg-white text-gray-500 group rounded-md  hover:border-gray-400    py-1.5 px-2 transition-all duration-300 font-medium hover:text-white  text-xs   flex-between gap-3`}
+            >
+              <Trash2 width={15} height={15} className=" text-neutral2 " />
+            </button>
+
+            <CustomDropdown
+              options={selectRow}
+              onSelect={handleSelectBaris}
+              selected={limit}
+            />
+            <DropdownFilter handleFilterChange={handleFilterChange} />
+          </div>
+          <div>
+            <button>sds</button>
+          </div>
+        </div>
         <TableSiswa
           data={dataSiswa}
           page={page}

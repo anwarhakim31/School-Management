@@ -6,6 +6,8 @@ import ResponseError from "../error/response-error.js";
 import fs from "fs";
 import s3 from "../util/aws3.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
+import Siswa from "../models/siswa-model.js";
+import Kelas from "../models/kelas-model.js";
 
 dotenv.config();
 
@@ -217,10 +219,24 @@ export const logout = async (req, res, next) => {
       sameSite: "None",
     });
 
-    // Kirimkan respons berhasil
     res.status(200).json({
       success: true,
       message: "Logout berhasil",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getDataUmum = async (req, res, next) => {
+  try {
+    const tahunMasuk = await Siswa.find({ tahunMasuk });
+    const kelas = await Kelas.find();
+
+    res.status(200).json({
+      success: true,
+      message: "Data umum",
+      data: { tahunMasuk, kelas },
     });
   } catch (error) {
     next(error);

@@ -2,6 +2,7 @@ import express from "express";
 import {
   createAdmin,
   getAuth,
+  getDataUmum,
   loginUser,
   logout,
   updateProfile,
@@ -24,4 +25,7 @@ authRouter.post(
   upload.single("image"),
   uploadProfileImage
 );
+
+authRouter.get("/get-data-umum", verifyToken, getDataUmum);
+
 export default authRouter;

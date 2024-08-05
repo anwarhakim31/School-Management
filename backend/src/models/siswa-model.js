@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { date } from "zod";
 
 const siswaSchema = new mongoose.Schema({
   nis: {
@@ -19,11 +20,12 @@ const siswaSchema = new mongoose.Schema({
     required: true,
   },
   tanggalLahir: {
-    type: String,
+    type: Date,
     required: true,
   },
   jenisKelamin: {
     type: String,
+    enum: ["Laki-Laki", "Perempuan"],
     required: true,
   },
   agama: {
@@ -53,6 +55,7 @@ const siswaSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
+    default: Date.now,
   },
 });
 

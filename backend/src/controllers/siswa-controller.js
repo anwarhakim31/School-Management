@@ -21,7 +21,7 @@ export const getAll = async (req, res, next) => {
         { nis: { $regex: searchRegex } },
       ],
     })
-      // .sort({ createdAt: 1 })
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .populate("kelas")
