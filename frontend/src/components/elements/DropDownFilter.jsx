@@ -79,8 +79,6 @@ const FilterDropdown = ({ handleFilterChange, setFilters }) => {
     };
   }, [isOpen]);
 
-  console.log(selectedFilter);
-
   return (
     <div className="relative inline-block text-left " ref={dropdownRef}>
       <div>

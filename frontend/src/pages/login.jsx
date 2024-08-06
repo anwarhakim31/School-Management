@@ -88,7 +88,7 @@ const LoginPage = () => {
         <div className="w-full h-full my-10 sm:my-0  flex justify-center order-2 sm:order-1 items-center lg:px-24 ">
           <Slider />
         </div>
-        <div className="bg-background py-24 sm:py-0 w-full h-full sm:order-2 flex justify-center flex-col px-14 lg:px-20 bg items-center">
+        <div className="bg-background py-24 sm:py-0 w-full h-full sm:order-2 flex justify-center flex-col px-14 sm:px-8 md:px-14 lg:px-24 xl:px-28 bg items-center">
           <figure>
             <img
               src={logo}

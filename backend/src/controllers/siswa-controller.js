@@ -14,8 +14,6 @@ export const getAll = async (req, res, next) => {
     const search = req.query.search || "";
     const { tahunMasuk, jenisKelamin, kelas, kelasNama } = req.query;
 
-    console.log(kelasNama);
-
     const searchRegex = new RegExp(search.trim(), "i");
 
     const filterQuery = {
@@ -218,6 +216,23 @@ export const deleteManySiswa = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: `Berhasil menghapus siswa terpilih`,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const getAllDetail = async (req, res, next) => {
+  try {
+    const jumlahSiswa = await Siswa.countDocuments();
+    const lk = await Siswa.find({ jenisKelamin: "Laki-Laki" });
+    const pr = await Siswa.find({ jenisKelamin: "Perempuan" });
+
+    res.status(200).json({
+      success: true,
+      message: `Berhasil mengambil detail data`,
+      data: { jumlahSiswa, pr, lk },
     });
   } catch (error) {
     console.log(error);

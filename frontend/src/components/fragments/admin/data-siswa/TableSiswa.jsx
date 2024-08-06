@@ -65,8 +65,6 @@ const TableSiswa = ({
     dispatch(setDataDelete(data));
   };
 
-  console.log(data, totalSiswa);
-
   return (
     <>
       <div className="block w-full shadow-md pb-[3.5rem]">
@@ -105,7 +103,7 @@ const TableSiswa = ({
                 <th scope="col" className="px-2 py-4">
                   Alamat
                 </th>
-                <th scope="col" className="py-4 ">
+                <th scope="col" className="py-4 text-center">
                   Kontak
                 </th>
                 <th scope="Kelas" className="text-center px-4 py-4">
@@ -176,22 +174,22 @@ const TableSiswa = ({
                     </td>
                     <td
                       scope="row"
-                      className="py-4   text-xs font-normal text-gray-900 whitespace-nowrap "
+                      className="py-4 text-center  text-xs font-normal text-gray-900 whitespace-nowrap "
                     >
-                      <div className="flex items-center gap-4 ">
+                      <div className="flex items-center justify-center gap-4 ">
                         <div
-                          className="cursor-pointer flex-center  border shadow-md  text-indigo-500 w-[24px] h-[24px] rounded-full"
+                          className="cursor-pointer flex-center  border shadow-md  text-indigo-700 w-[24px] h-[24px] rounded-full"
                           title={siswa.phone}
                           onClick={() => HandleCopyText(siswa.phone)}
                         >
-                          <Phone width={15} height={15} />
+                          <Phone strokeWidth={1} width={15} height={15} />
                         </div>
                         <div
-                          className="cursor-pointer flex-center border shadow-md  text-indigo-500 w-[24px] h-[24px] rounded-full"
+                          className="cursor-pointer flex-center border shadow-md  text-indigo-700 w-[24px] h-[24px] rounded-full"
                           title={siswa.email}
                           onClick={() => HandleCopyText(siswa.email)}
                         >
-                          <Mail width={15} height={15} />
+                          <Mail strokeWidth={1} width={15} height={15} />
                         </div>
                       </div>
                     </td>

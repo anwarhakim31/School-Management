@@ -3,6 +3,7 @@ import CustomDropdown from "@/components/elements/DropDown";
 import DropdownFilter from "@/components/elements/DropDownFilter";
 import DeleteManyModal from "@/components/fragments/admin/data-siswa/DeleteManyModal";
 import DeleteModal from "@/components/fragments/admin/data-siswa/DeleteModal";
+import HeaderBox from "@/components/fragments/admin/data-siswa/HeaderBox";
 import TableSiswa from "@/components/fragments/admin/data-siswa/TableSiswa";
 import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
@@ -10,7 +11,7 @@ import { formatDate } from "@/util/formatDate";
 import responseError from "@/util/services";
 import axios from "axios";
 import { FileDown, Plus, Search, Trash2 } from "lucide-react";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -22,6 +23,7 @@ const DataSiswaPage = () => {
   const [search, setSearch] = useState("");
   const [dataSiswa, setDataSiswa] = useState([]);
   const [pagination, setPagination] = useState({});
+  const [dataDetail, setDataDetail] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(7);
   const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
@@ -80,8 +82,6 @@ const DataSiswaPage = () => {
     []
   );
 
-  console.log(dataSiswa);
-
   useEffect(() => {
     const getSiswa = async () => {
       try {
@@ -104,8 +104,20 @@ const DataSiswaPage = () => {
         responseError(error);
       }
     };
+    const getDetail = async () => {
+      try {
+        const res = await axios.get(`${HOST}/api/siswa/get-detail-siswa`, {
+          withCredentials: true,
+        });
+
+        setDataDetail(res.data.data);
+      } catch (error) {
+        responseError(error);
+      }
+    };
 
     getSiswa();
+    getDetail();
   }, [limit, page, search, isDeleteSiswa, isDeleteManySiswa, filters]);
 
   useEffect(() => {
@@ -143,6 +155,7 @@ const DataSiswaPage = () => {
 
   return (
     <section className="px-6 py-4  ">
+      <HeaderBox dataDetail={dataDetail} />
       <div className="w-full flex-between flex-wrap gap-6">
         <div className="relative flex w-full  md:max-w-[240px]">
           <input

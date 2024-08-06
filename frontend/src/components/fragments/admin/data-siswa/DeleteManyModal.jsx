@@ -41,7 +41,7 @@ const DeleteManyModal = ({ onClose, setAllCheck }) => {
     <Modal onClose={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-[425px] h-[200px] rounded-2xl shadow-md bg-white"
+        className="w-full sm:max-w-[425px] h-[200px] rounded-md shadow-md bg-white"
       >
         <div className="p-4 border-b">
           <HeaderModal
