@@ -1,31 +1,21 @@
-import FilterKelas from "@/components/elements/FilterKelas";
-
-import DeleteModal from "@/components/fragments/admin/data-kelas/DeleteModal";
-import EditModal from "@/components/fragments/admin/data-kelas/EditModal";
-import TableKelas from "@/components/fragments/admin/data-kelas/TableKelas";
+import DeleteModal from "@/components/fragments/admin/data-pelajaran/DeleteModal";
+import EditModal from "@/components/fragments/admin/data-pelajaran/EditModal";
 import AddModal from "@/components/fragments/admin/data-pelajaran/AddModal";
 import TablePelajaran from "@/components/fragments/admin/data-pelajaran/TablePelajaran";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import {
-  ArrowDown01,
-  ArrowDownNarrowWide,
-  ListFilter,
-  Plus,
-  Search,
-} from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-import { set } from "react-hook-form";
 
 const DataPelajaranPage = () => {
-  const [dataKelas, setDataKelas] = useState([]);
+  const [dataMapel, setDataMapel] = useState([]);
   const [dataFilter, setDataFilter] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [isAddMapel, setIsAddMapel] = useState(false);
-  const [isEditKelas, setIsEditKelas] = useState(false);
-  const [isDeleteKelas, setIsDeleteKelas] = useState(false);
+  const [isEditMapel, setisEditMapel] = useState(false);
+  const [isDeleteMapel, setisDeleteMapel] = useState(false);
   const [option, setOption] = useState(["", ""]);
   const [isFilter, setIsFilter] = useState(false);
   const filterRef = useRef();
@@ -34,12 +24,12 @@ const DataPelajaranPage = () => {
   useEffect(() => {
     const getKelas = async () => {
       try {
-        const res = await axios.get(HOST + "/api/kelas/get-kelas", {
+        const res = await axios.get(HOST + "/api/mapel/get-mapel", {
           withCredentials: true,
         });
 
         if (res.status === 200) {
-          setDataKelas(res.data.kelas);
+          setDataMapel(res.data.mapel);
         }
       } catch (error) {
         responseError(error);
@@ -51,10 +41,10 @@ const DataPelajaranPage = () => {
     };
 
     getKelas();
-  }, [isAddMapel, isDeleteKelas, isEditKelas]);
+  }, [isAddMapel, isDeleteMapel, isEditMapel]);
 
   useEffect(() => {
-    let kelasFilter = [...dataKelas];
+    let kelasFilter = [...dataMapel];
 
     if (search) {
       const value = search.trim().toLowerCase().split(" ");
@@ -85,7 +75,7 @@ const DataPelajaranPage = () => {
     }
 
     setDataFilter(kelasFilter);
-  }, [dataKelas, search, option]);
+  }, [dataMapel, search, option]);
 
   useEffect(() => {
     const handleClickOutSide = (e) => {
@@ -119,19 +109,19 @@ const DataPelajaranPage = () => {
     setIsAddMapel(!isAddMapel);
   };
   const handleToggleDelete = () => {
-    setIsDeleteKelas(!isDeleteKelas);
+    setisDeleteMapel(!isDeleteMapel);
   };
   const handleToggleEdit = () => {
-    setIsEditKelas(!isEditKelas);
+    setisEditMapel(!isEditMapel);
   };
 
   return (
     <section className="px-6 py-4  ">
       <div className="w-full flex-between flex-wrap gap-6">
-        <div className="relative flex w-full  md:max-w-[240px]">
+        <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
-            placeholder="Cari Kelas"
+            placeholder="Cari..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full rounded-full py-2 pr-2 pl-8 text-sm border border-gray-400 outline-offset-1 outline-1 outline-neutral"
@@ -188,18 +178,17 @@ const DataPelajaranPage = () => {
             </div>
           </div>
         ) : (
-          ""
-          // <TablePelajaran
-          // // data={dataFilter}
-          // // handleToggleDelete={handleToggleDelete}
-          // // handleToggleEdit={handleToggleEdit}
-          // // loading={loading}
-          // />
+          <TablePelajaran
+            data={dataFilter}
+            handleToggleDelete={handleToggleDelete}
+            handleToggleEdit={handleToggleEdit}
+            loading={loading}
+          />
         )}
       </div>
-      {/* {isDeleteKelas && <DeleteModal onClose={handleToggleDelete} />} */}
+      {isDeleteMapel && <DeleteModal onClose={handleToggleDelete} />}
       {isAddMapel && <AddModal onClose={handleToggleAdd} />}
-      {/* {isEditKelas && <EditModal onClose={handleToggleEdit} />} */}
+      {isEditMapel && <EditModal onClose={handleToggleEdit} />}
     </section>
   );
 };

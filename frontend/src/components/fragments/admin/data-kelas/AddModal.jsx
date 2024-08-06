@@ -53,7 +53,7 @@ const AddModal = ({ onClose }) => {
         onClick={(e) => e.stopPropagation()}
         className="w-full sm:max-w-[425px] max-h-[400px] rounded-md shadow-md bg-white"
       >
-        <div className="p-4 border-b">
+        <div className="px-6 py-4 border-b">
           <HeaderModal
             titile={"Tambah Kelas"}
             onClose={onClose}

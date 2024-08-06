@@ -15,18 +15,18 @@ const TablePelajaran = ({
   const [currentPage, setCurrentPage] = useState(1);
   const perPage = 7;
 
-  const lastIndexKelas = perPage * currentPage;
-  const firstIndexKelas = lastIndexKelas - perPage;
+  const lastIndexmapel = perPage * currentPage;
+  const firstIndexmapel = lastIndexmapel - perPage;
 
-  const dataSlice = data.slice(firstIndexKelas, lastIndexKelas);
+  const dataSlice = data.slice(firstIndexmapel, lastIndexmapel);
 
-  const handleDeleteKelas = (kelas) => {
-    dispatch(setDataDelete(kelas));
+  const handleDeletemapel = (mapel) => {
+    dispatch(setDataDelete(mapel));
     handleToggleDelete();
   };
 
-  const handleEditKelas = (kelas) => {
-    dispatch(setDataEdit(kelas));
+  const handleEditmapel = (mapel) => {
+    dispatch(setDataEdit(mapel));
     handleToggleEdit();
   };
 
@@ -44,21 +44,11 @@ const TablePelajaran = ({
           <thead className="text-xs uppercase text-white bg-neutral">
             <tr>
               <th scope="col" className="px-2 py-4">
-                Kelas
+                Kode Mata Pelajaran
               </th>
               <th scope="col" className="px-3 py-4">
-                Nama
+                Nama Mata Pelajaran
               </th>
-              <th scope="col" className="px-3 py-4">
-                Jumlah Siswa
-              </th>
-              <th scope="col" className="px-6 py-4 text-left">
-                Wali Kelas
-              </th>
-              <th scope="col" className="px-6 py-4 text-left">
-                Posisi Kelas
-              </th>
-
               <th className="sr-only"></th>
             </tr>
           </thead>
@@ -88,9 +78,9 @@ const TablePelajaran = ({
             )}
             {dataSlice &&
               !loading &&
-              [...dataSlice].reverse().map((kelas) => (
+              [...dataSlice].reverse().map((mapel) => (
                 <tr
-                  key={kelas._id}
+                  key={mapel._id}
                   className={`${
                     dataSlice.length === 7 && "last:border-none"
                   } hover:bg-gray-100 border-b  `}
@@ -99,40 +89,15 @@ const TablePelajaran = ({
                     scope="row"
                     className="px-2    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
                   >
-                    {kelas.kelas}
+                    {mapel.kode}
                   </td>
                   <td
                     scope="row"
                     className="px-3    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
                   >
-                    {kelas.nama}
+                    {mapel.nama}
                   </td>
-                  <td
-                    scope="row"
-                    className="px-3    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
-                  >
-                    {kelas.jumlahSiswa} Siswa
-                  </td>
-                  <td
-                    scope="row"
-                    className="px-6    border-gray-300 text-left py-4 text-xs text-gray-900 whitespace-nowrap "
-                  >
-                    {kelas.waliKelas ? (
-                      kelas.waliKelas
-                    ) : (
-                      <span className="text-gray-800">Data Kosong</span>
-                    )}
-                  </td>
-                  <td
-                    scope="row"
-                    className="px-6    border-gray-300 text-left  py-4 text-xs text-gray-900 whitespace-nowrap "
-                  >
-                    {kelas.posisi ? (
-                      kelas.posisi
-                    ) : (
-                      <span className="text-gray-800">Data Kosong</span>
-                    )}
-                  </td>
+
                   <td
                     scope="row"
                     className="px-3    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
@@ -140,7 +105,7 @@ const TablePelajaran = ({
                     <div className="flex-center gap-4">
                       <button
                         title="Edit"
-                        onClick={() => handleEditKelas(kelas)}
+                        onClick={() => handleEditmapel(mapel)}
                         className="w-[20px] h-[20px]  flex-center"
                       >
                         <Edit
@@ -153,7 +118,7 @@ const TablePelajaran = ({
                       <button
                         title="Hapus"
                         className="w-[20px] h-[20px]  flex-center"
-                        onClick={() => handleDeleteKelas(kelas)}
+                        onClick={() => handleDeletemapel(mapel)}
                       >
                         <Trash2
                           width={18}
@@ -171,11 +136,11 @@ const TablePelajaran = ({
       </div>
 
       <Pagination
-        totalKelas={data.length}
+        totalmapel={data.length}
         perPage={perPage}
         currentPage={currentPage}
-        firstIndexKelas={firstIndexKelas}
-        lastIndexKelas={lastIndexKelas}
+        firstIndexmapel={firstIndexmapel}
+        lastIndexmapel={lastIndexmapel}
         paginate={handlePaginate}
         loading={loading}
         dataSlice={dataSlice}
@@ -186,17 +151,17 @@ const TablePelajaran = ({
 
 const Pagination = ({
   loading,
-  totalKelas,
+  totalmapel,
   perPage,
   currentPage,
-  firstIndexKelas,
-  lastIndexKelas,
+  firstIndexmapel,
+  lastIndexmapel,
   paginate,
   dataSlice,
 }) => {
   const pageNumber = [];
 
-  const totalPage = Math.ceil(totalKelas / perPage);
+  const totalPage = Math.ceil(totalmapel / perPage);
 
   for (let i = 1; i <= totalPage; i++) {
     pageNumber.push(i);
@@ -221,10 +186,10 @@ const Pagination = ({
         <>
           <div className="h-6 flex-center">
             <p className="text-xs">{`Menampilkan ${
-              dataSlice.length === 0 ? 0 : firstIndexKelas + 1
+              dataSlice.length === 0 ? 0 : firstIndexmapel + 1
             } - ${
-              firstIndexKelas + dataSlice.length
-            } dari ${totalKelas} Data`}</p>
+              firstIndexmapel + dataSlice.length
+            } dari ${totalmapel} Data`}</p>
           </div>
           {pageNumber.length !== 0 && (
             <div className="flex gap-2 ">

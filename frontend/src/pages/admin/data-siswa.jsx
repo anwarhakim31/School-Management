@@ -173,7 +173,7 @@ const DataSiswaPage = () => {
         <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
-            placeholder="Pencarian..."
+            placeholder="Cari..."
             value={search}
             disabled={loading}
             onChange={handleSearch}

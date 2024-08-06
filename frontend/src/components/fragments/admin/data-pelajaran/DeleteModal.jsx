@@ -11,14 +11,16 @@ import { toast } from "sonner";
 
 const DeleteModal = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
-  const dataKelas = useSelector(selectedDataDelete);
+  const dataMapel = useSelector(selectedDataDelete);
+
+  console.log(dataMapel);
 
   const handleDelete = async () => {
     setLoading(true);
 
     try {
       const res = await axios.delete(
-        HOST + "/api/kelas/delete-kelas/" + dataKelas._id,
+        HOST + "/api/mapel/delete-mapel/" + dataMapel._id,
         { withCredentials: true }
       );
 
@@ -51,9 +53,7 @@ const DeleteModal = ({ onClose }) => {
             <TriangleAlert className="w-8 h-8 text-neutral2" />
           </div>
           <h3 className="text-sm  font-medium">
-            {dataKelas.siswa.length > 0
-              ? " Anda akan menghapus kelas yang memiliki data siswa. Apakah And yakin ingin melanjutkan?"
-              : " Apakah And yakin ingin menghapus kelas?"}
+            Apakah And yakin ingin menghapus ?
           </h3>
         </div>
         <div className="text-end border-t mt-4 p-4 space-x-4">

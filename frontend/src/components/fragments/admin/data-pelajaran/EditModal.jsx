@@ -1,26 +1,43 @@
 import HeaderModal from "@/components/elements/HeaderModal";
 import Modal from "@/components/elements/Modal";
+import { selectedDataEdit } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { toast } from "sonner";
 
-const AddModal = ({ onClose }) => {
+const EditModal = ({ onClose }) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
   const [loading, setLoading] = useState(false);
+  const editData = useSelector(selectedDataEdit);
+
+  useEffect(() => {
+    if (editData) {
+      setValue("kode", editData.kode);
+      setValue("nama", editData.nama);
+    }
+  }, [editData]);
+
+  console.log(editData);
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const res = await axios.post(HOST + "/api/mapel/add-mapel", data, {
-        withCredentials: true,
-      });
+      const res = await axios.put(
+        HOST + "/api/mapel/edit-mapel/" + editData._id,
+        data,
+        {
+          withCredentials: true,
+        }
+      );
       if (res.status === 200) {
         toast.success(res.data.message);
         onClose();
@@ -102,4 +119,4 @@ const AddModal = ({ onClose }) => {
   );
 };
 
-export default AddModal;
+export default EditModal;
