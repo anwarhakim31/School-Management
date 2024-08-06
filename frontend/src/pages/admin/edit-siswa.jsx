@@ -244,7 +244,7 @@ const EditSiswaPage = () => {
               id="nama"
               name="nama"
               {...register("nama", {
-                required: "Nama diperlukan.",
+                required: "Nama tidak boleh kosong.",
                 maxLength: {
                   value: 50,
                   message: "Nama maksimal 50 karakter.",
@@ -266,7 +266,7 @@ const EditSiswaPage = () => {
               name="nis"
               value={nis}
               {...register("nis", {
-                required: "NIS diperlukan.",
+                required: "NIS tidak boleh kosong.",
               })}
               onChange={(e) => handleNumberChange(e, "nis")}
               className="py-1.5 h-8  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
@@ -354,7 +354,7 @@ const EditSiswaPage = () => {
               <option value="Perempuan">Perempuan</option>
             </select>
             <span className="text-xs h-4 block mt-1 text-neutral2">
-              {errors.kelaminKelamin && errors.kelaminKelamin.message}
+              {errors.jenisKelamin && errors.jenisKelamin.message}
             </span>
           </div>
           <div className="mb-2">
@@ -367,7 +367,7 @@ const EditSiswaPage = () => {
               name="tahunMasuk"
               value={tahunMasuk}
               {...register("tahunMasuk", {
-                required: "Tahun Masuk diperlukan.",
+                required: "Tahun Masuk tidak boleh kosong.",
               })}
               onChange={(e) => handleNumberChange(e, "tahunMasuk")}
               className="py-1.5 h-8  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
@@ -387,7 +387,7 @@ const EditSiswaPage = () => {
               id="Agama"
               value={agama}
               {...register("agama", {
-                required: "Agama diperlukan..",
+                required: "Agama tidak boleh kosong..",
               })}
               className="py-1.5 h-8  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             >
@@ -414,7 +414,7 @@ const EditSiswaPage = () => {
               name="phone"
               value={phone}
               {...register("phone", {
-                required: "No. Telepon diperlukan.",
+                required: "No. Telepon tidak boleh kosong.",
               })}
               onChange={(e) => handleNumberChange(e, "phone")}
               className="py-1.5 h-8  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"

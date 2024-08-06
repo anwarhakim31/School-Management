@@ -1,8 +1,10 @@
 import FilterKelas from "@/components/elements/FilterKelas";
-import AddModal from "@/components/fragments/admin/data-kelas/AddModal";
+
 import DeleteModal from "@/components/fragments/admin/data-kelas/DeleteModal";
 import EditModal from "@/components/fragments/admin/data-kelas/EditModal";
 import TableKelas from "@/components/fragments/admin/data-kelas/TableKelas";
+import AddModal from "@/components/fragments/admin/data-pelajaran/AddModal";
+import TablePelajaran from "@/components/fragments/admin/data-pelajaran/TablePelajaran";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
@@ -21,7 +23,7 @@ const DataPelajaranPage = () => {
   const [dataFilter, setDataFilter] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
-  const [isAddKelas, setIsAddKelas] = useState(false);
+  const [isAddMapel, setIsAddMapel] = useState(false);
   const [isEditKelas, setIsEditKelas] = useState(false);
   const [isDeleteKelas, setIsDeleteKelas] = useState(false);
   const [option, setOption] = useState(["", ""]);
@@ -49,7 +51,7 @@ const DataPelajaranPage = () => {
     };
 
     getKelas();
-  }, [isAddKelas, isDeleteKelas, isEditKelas]);
+  }, [isAddMapel, isDeleteKelas, isEditKelas]);
 
   useEffect(() => {
     let kelasFilter = [...dataKelas];
@@ -114,7 +116,7 @@ const DataPelajaranPage = () => {
   };
 
   const handleToggleAdd = () => {
-    setIsAddKelas(!isAddKelas);
+    setIsAddMapel(!isAddMapel);
   };
   const handleToggleDelete = () => {
     setIsDeleteKelas(!isDeleteKelas);
@@ -139,14 +141,14 @@ const DataPelajaranPage = () => {
           </button>
         </div>
         <div className="flex gap-2 relative  mr-auto  lg:ml-4">
-          <button
+          {/* <button
             onClick={handleToggleFilter}
             ref={buttonFilterRef}
             disabled={dataFilter.length === 0}
             className="border border-gray-400 disabled:cursor-not-allowed bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-lg flex-between gap-3"
           >
             <ListFilter width={15} height={15} className="" />
-          </button>
+          </button> */}
           {option[0] && (
             <button
               onClick={() => setOption(["", ""])}
@@ -187,17 +189,17 @@ const DataPelajaranPage = () => {
           </div>
         ) : (
           ""
-          // <TableKelas
-          //   data={dataFilter}
-          //   handleToggleDelete={handleToggleDelete}
-          //   handleToggleEdit={handleToggleEdit}
-          //   loading={loading}
+          // <TablePelajaran
+          // // data={dataFilter}
+          // // handleToggleDelete={handleToggleDelete}
+          // // handleToggleEdit={handleToggleEdit}
+          // // loading={loading}
           // />
         )}
       </div>
-      {/* {isDeleteKelas && <DeleteModal onClose={handleToggleDelete} />}
-      {isAddKelas && <AddModal onClose={handleToggleAdd} />}
-      {isEditKelas && <EditModal onClose={handleToggleEdit} />} */}
+      {/* {isDeleteKelas && <DeleteModal onClose={handleToggleDelete} />} */}
+      {isAddMapel && <AddModal onClose={handleToggleAdd} />}
+      {/* {isEditKelas && <EditModal onClose={handleToggleEdit} />} */}
     </section>
   );
 };

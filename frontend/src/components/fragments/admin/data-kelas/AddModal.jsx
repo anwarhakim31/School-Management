@@ -12,9 +12,22 @@ const AddModal = ({ onClose }) => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm();
   const [loading, setLoading] = useState(false);
+  const nis = watch("kelas");
+
+  const handleChangeKelas = (e, name) => {
+    const value = e.target.value;
+
+    const cleanedValue = value.replace(/\D/g, "");
+
+    setValue(name, cleanedValue);
+  };
+
+  console.log(nis);
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -58,8 +71,8 @@ const AddModal = ({ onClose }) => {
                 Kelas
               </label>
               <input
-                type="number"
-                id="kelas"
+                type="text"
+                name="kelas"
                 min={1}
                 {...register("kelas", {
                   required: "Kelas tidak boleh kosong.",
@@ -72,6 +85,7 @@ const AddModal = ({ onClose }) => {
                     message: "Maksimal kelas 12",
                   },
                 })}
+                onChange={(e) => handleChangeKelas(e, "kelas")}
                 className="w-full border text-xs px-2 py-1.5 rounded-lg  outline-neutral border-gray-500"
               />
               <span className="text-xs h-4 text-neutral2 block">
