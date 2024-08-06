@@ -1,15 +1,18 @@
 import { selectedDataEdit, setDataEdit } from "@/store/slices/admin-slice";
-import { HOST } from "@/util/constant";
+import { ALLOWED_FILE_TYPES, HOST, MAX_FILE_SIZE } from "@/util/constant";
 import { formatDate } from "@/util/formatDate";
 import responseError from "@/util/services";
+import profile from "../../assets/profile.png";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { Plus, Trash } from "lucide-react";
 
 const EditSiswaPage = () => {
+  const PhotoRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const editData = useSelector(selectedDataEdit);
@@ -17,6 +20,8 @@ const EditSiswaPage = () => {
   const [kelas, setKelas] = useState([]);
   const [kelasNama, setKelasNama] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isHover, setIsHover] = useState(false);
+  const [photo, setPhoto] = useState("");
   const {
     register,
     handleSubmit,
@@ -76,7 +81,9 @@ const EditSiswaPage = () => {
       }
       setKelas(uniqueKelas);
 
-      const nama = kelasDB.filter((kel) => kel.kelas === Number(selectKelas));
+      const nama = kelasDB
+        .filter((kel) => kel.kelas === Number(selectKelas))
+        .sort((a, b) => a.nama.localeCompare(b.nama));
 
       setKelasNama(nama);
     }
@@ -92,6 +99,8 @@ const EditSiswaPage = () => {
           setValue("namaKelas", editData[data].nama);
         } else if (data === "password") {
           setValue("password", undefined);
+        } else if (data === "photo") {
+          setPhoto(editData[data]);
         } else {
           setValue(data, editData[data]);
         }
@@ -100,16 +109,15 @@ const EditSiswaPage = () => {
   }, [editData, kelasDB]);
 
   useEffect(() => {
-    if (selectKelas === "") {
-      setValue("namaKelas", "");
-    }
+    setValue("namaKelas", "");
   }, [selectKelas]);
 
   useEffect(() => {
-    if (!selectedDataEdit) {
+    if (!editData) {
       navigate("/admin/data-siswa");
     }
   }, []);
+  console.log(photo);
 
   const handleNumberChange = (e, name) => {
     const value = e.target.value;
@@ -122,9 +130,13 @@ const EditSiswaPage = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const res = await axios.post(HOST + "/api/siswa/edit-siswa", data, {
-        withCredentials: true,
-      });
+      const res = await axios.post(
+        HOST + "/api/siswa/edit-siswa",
+        { ...data, photo },
+        {
+          withCredentials: true,
+        }
+      );
 
       toast.success(res.data.message);
       dispatch(setDataEdit(undefined));
@@ -136,16 +148,55 @@ const EditSiswaPage = () => {
     }
   };
 
+  console.log(editData);
+
+  const handleChangeImage = async (e) => {
+    const file = e.target.files[0];
+
+    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+      return toast.error("Ektensi file tidak di dukung");
+    } else if (file.size > MAX_FILE_SIZE) {
+      return toast.error("Ukuran File Maksimal 1 MB.");
+    } else {
+      const formData = new FormData();
+
+      formData.append("image", file);
+      setLoading(true);
+      try {
+        const res = await axios.post(
+          HOST + "/api/siswa/upload-photo-siswa",
+          formData,
+          { withCredentials: true }
+        );
+
+        if (res.status === 200) {
+          setPhoto(res.data.foto);
+          e.target.value = null;
+        }
+      } catch (error) {
+        responseError(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleDeleteImage = () => {
+    setPhoto("");
+  };
+  const handleClickInputImage = () => {
+    PhotoRef.current.click();
+  };
   return (
     <div className="  mx-6 mb-16  grid  bg-white grid-cols-1 rounded-lg py-4 px-6 gap-8 lg:grid-cols-4">
       <div className=" flex justify-start  items-center flex-col">
-        {/* <div
+        <div
           className="relative cursor-pointer w-[150px] overflow-hidden   h-[150px] rounded-full border  bg-white"
           onMouseEnter={() => setIsHover(true)}
           onMouseLeave={() => setIsHover(false)}
         >
           <img
-            src={image ? image : profile}
+            src={photo ? photo : profile}
             alt="foto"
             className="w-full h-full object-cover bg-gray-300 border-gray-500 rounded-full"
           />
@@ -158,7 +209,7 @@ const EditSiswaPage = () => {
             accept=".jpg, .png, .jpeg"
             onChange={handleChangeImage}
           />
-          {!image && (
+          {!photo && (
             <div className="absolute inset-0 bg-black/30 w-full h-full flex-center">
               <p></p>
             </div>
@@ -166,16 +217,16 @@ const EditSiswaPage = () => {
           {isHover && (
             <div
               className="absolute inset-0 bg-black/30 w-full h-full flex-center"
-              onClick={image ? handleDeleteImage : handleClickInputImage}
+              onClick={photo ? handleDeleteImage : handleClickInputImage}
             >
-              {image ? (
+              {photo ? (
                 <Trash color="white" width={20} height={20} />
               ) : (
                 <Plus color="white" width={20} height={20} />
               )}
             </div>
           )}
-        </div> */}
+        </div>
         <p className="text-xs mt-8">Besar file maksimal 1 MB</p>
         <p className="text-xs mt-2">Ekstensi file: jpeg/jpg, png</p>
       </div>
@@ -452,12 +503,12 @@ const EditSiswaPage = () => {
               className="py-1.5  h-[114px] bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
           </div>
-          <div className="flex justify-end pt-2 gap-4 ">
+          <div className="flex justify-end pt-8 gap-4 ">
             <Link to={"/admin/data-siswa"}>
               <button
                 disabled={loading}
                 type="submit"
-                className="btn px-8 bg-gray-300 text-gray-800 hover:text-white disabled:cursor-not-allowed border disabled:bg-gray-700"
+                className="btn  w-28 bg-gray-300 text-gray-800 hover:text-white disabled:cursor-not-allowed   border border-gray-500"
               >
                 {loading ? "Loading" : "Batal"}
               </button>
@@ -466,7 +517,7 @@ const EditSiswaPage = () => {
             <button
               disabled={loading}
               type="submit"
-              className="btn disabled:cursor-not-allowed px-6  disabled:bg-gray-700"
+              className="btn disabled:cursor-not-allowed w-28 "
             >
               {loading ? "Loading" : "Simpan"}
             </button>

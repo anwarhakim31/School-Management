@@ -45,6 +45,8 @@ const EditModal = ({ onClose }) => {
       }
     } catch (error) {
       responseError(error);
+    } finally {
+      setLoading(false);
     }
   };
 

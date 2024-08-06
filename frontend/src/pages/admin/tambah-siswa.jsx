@@ -30,21 +30,6 @@ const TambahSiswaPage = () => {
 
   const PhotoRef = useRef();
 
-  const handleNumberChange = (e, name) => {
-    const value = e.target.value;
-
-    const cleanedValue = value.replace(/\D/g, "");
-    setValue(name, cleanedValue);
-  };
-
-  const handleClickInputImage = () => {
-    PhotoRef.current.click();
-  };
-
-  const handleDeleteImage = () => {
-    setImage("");
-  };
-
   const onSubmit = async (data) => {
     setLoading(true);
     try {
@@ -65,37 +50,6 @@ const TambahSiswaPage = () => {
       responseError(error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleChangeImage = async (e) => {
-    const file = e.target.files[0];
-
-    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-      return toast.error("Ektensi file tidak di dukung");
-    } else if (file.size > MAX_FILE_SIZE) {
-      return toast.error("Ukuran File Maksimal 1 MB.");
-    } else {
-      const formData = new FormData();
-
-      formData.append("image", file);
-      setLoading(true);
-      try {
-        const res = await axios.post(
-          HOST + "/api/siswa/upload-photo-siswa",
-          formData,
-          { withCredentials: true }
-        );
-
-        if (res.status === 200) {
-          setImage(res.data.foto);
-          e.target.value = null;
-        }
-      } catch (error) {
-        responseError(error);
-      } finally {
-        setLoading(true);
-      }
     }
   };
 
@@ -136,6 +90,52 @@ const TambahSiswaPage = () => {
 
     setKelasName(nama);
   }, [kelasDB, selectedValue]);
+
+  const handleNumberChange = (e, name) => {
+    const value = e.target.value;
+
+    const cleanedValue = value.replace(/\D/g, "");
+    setValue(name, cleanedValue);
+  };
+
+  const handleClickInputImage = () => {
+    PhotoRef.current.click();
+  };
+
+  const handleDeleteImage = () => {
+    setImage("");
+  };
+
+  const handleChangeImage = async (e) => {
+    const file = e.target.files[0];
+
+    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+      return toast.error("Ektensi file tidak di dukung");
+    } else if (file.size > MAX_FILE_SIZE) {
+      return toast.error("Ukuran File Maksimal 1 MB.");
+    } else {
+      const formData = new FormData();
+
+      formData.append("image", file);
+      setLoading(true);
+      try {
+        const res = await axios.post(
+          HOST + "/api/siswa/upload-photo-siswa",
+          formData,
+          { withCredentials: true }
+        );
+
+        if (res.status === 200) {
+          setImage(res.data.foto);
+          e.target.value = null;
+        }
+      } catch (error) {
+        responseError(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
   return (
     <div className="h-full  mx-6 mb-16 bg-white  grid grid-cols-1 rounded-lg py-4 px-6 gap-8 lg:grid-cols-4">
@@ -445,14 +445,14 @@ const TambahSiswaPage = () => {
               </div>
             </>
           )}
-          <div className="mb-8">
+          <div className="mb-10">
             <label htmlFor="Alamat" className="text-xs mb-2 block">
               Alamat
             </label>
             <textarea
               id="Alamat"
               {...register("alamat")}
-              className="py-1.5 h-[112px] bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+              className="py-1.5 h-[116px] bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
           </div>
           <div className="flex justify-end pt-2 gap-4 ">

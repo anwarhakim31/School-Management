@@ -157,15 +157,15 @@ const DataSiswaPage = () => {
     <section className="px-6 py-4 mb-4 ">
       <HeaderBox dataDetail={dataDetail} />
       <div className="w-full flex-between gap-6">
-        <div className="relative flex w-full  md:max-w-[330px]">
+        <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
-            placeholder="Cari Siswa"
+            placeholder="Pencarian..."
             value={search}
             onChange={handleSearch}
-            className="w-full rounded-full py-2 pr-2 pl-8 text-sm border border-gray-400 outline-offset-0 outline-1 outline-neutral"
+            className="w-full rounded-full py-2 pr-2 pl-10 text-sm border border-gray-400 outline-offset-0 outline-1 outline-neutral"
           />
-          <div className="absolute left-2 top-1/2 -translate-y-1/2">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2">
             <Search height={20} width={20} className="text-gray-400" />
           </div>
         </div>

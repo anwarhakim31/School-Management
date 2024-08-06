@@ -89,7 +89,7 @@ const TableSiswa = ({
                     checked={allCheck}
                     onCheckedChange={handleCheckboxAll}
                     className={
-                      "min-h-4 min-w-3  data-[state=checked]:bg-gray-800"
+                      "min-h-4 min-w-3 border-white data-[state=checked]:bg-gray-800"
                     }
                   />
                 </th>

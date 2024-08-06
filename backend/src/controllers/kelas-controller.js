@@ -72,17 +72,19 @@ export const deleteKelas = async (req, res, next) => {
 export const updateKelas = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const updateData = req.body;
+    const { nama, kelas } = req.body;
 
-    const kelas = await Kelas.findByIdAndUpdate(
+    const kelasExists = await Kelas.findOne({ nama, kelas, _id: { $ne: id } });
+
+    if (kelasExists) {
+      throw new ResponseError(400, "Kombinasi kelas dan nama sudah digunakan.");
+    }
+
+    await Kelas.findByIdAndUpdate(
       id,
-      { $set: updateData },
+      { $set: req.body },
       { runValidators: true, new: true }
     );
-
-    if (!kelas) {
-      throw new ResponseError(404, "Kelas tidak di temukan");
-    }
 
     res.status(200).json({
       success: true,
