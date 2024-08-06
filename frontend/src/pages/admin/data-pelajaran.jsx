@@ -5,8 +5,9 @@ import TablePelajaran from "@/components/fragments/admin/data-pelajaran/TablePel
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, SlidersHorizontal } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import FilterMapel from "@/components/elements/FilterMapel";
 
 const DataPelajaranPage = () => {
   const [dataMapel, setDataMapel] = useState([]);
@@ -16,13 +17,13 @@ const DataPelajaranPage = () => {
   const [isAddMapel, setIsAddMapel] = useState(false);
   const [isEditMapel, setisEditMapel] = useState(false);
   const [isDeleteMapel, setisDeleteMapel] = useState(false);
-  const [option, setOption] = useState(["", ""]);
+  const [option, setOption] = useState("terbaru");
   const [isFilter, setIsFilter] = useState(false);
   const filterRef = useRef();
   const buttonFilterRef = useRef();
 
   useEffect(() => {
-    const getKelas = async () => {
+    const getmapel = async () => {
       try {
         const res = await axios.get(HOST + "/api/mapel/get-mapel", {
           withCredentials: true,
@@ -40,41 +41,37 @@ const DataPelajaranPage = () => {
       }
     };
 
-    getKelas();
+    getmapel();
   }, [isAddMapel, isDeleteMapel, isEditMapel]);
 
   useEffect(() => {
-    let kelasFilter = [...dataMapel];
+    let mapelFilter = [...dataMapel];
 
     if (search) {
       const value = search.trim().toLowerCase().split(" ");
 
-      kelasFilter = kelasFilter.filter((kelas) => {
+      mapelFilter = mapelFilter.filter((mapel) => {
         return value.every(
           (key) =>
-            kelas.nama.toLowerCase().includes(key) ||
-            String(kelas.kelas).includes(key)
+            mapel.nama.toLowerCase().includes(key) ||
+            String(mapel.kode).includes(key)
         );
       });
     }
 
-    if (option[0] === "kelas") {
-      if (option[1] === "asc") {
-        kelasFilter = kelasFilter.sort((a, b) => a.kelas - b.kelas);
-      } else if (option[1] === "desc") {
-        kelasFilter = kelasFilter.sort((a, b) => b.kelas - a.kelas);
-      }
+    if (option === "terlama") {
+      mapelFilter = mapelFilter.reverse();
     }
 
-    if (option[0] === "nama") {
-      if (option[1] === "asc") {
-        kelasFilter = kelasFilter.sort((a, b) => a.nama.localeCompare(b.nama));
-      } else if (option[1] === "desc") {
-        kelasFilter = kelasFilter.sort((a, b) => b.nama.localeCompare(a.nama));
-      }
+    if (option === "a-z") {
+      mapelFilter = mapelFilter.sort((a, b) => a.nama.localeCompare(b.nama));
     }
 
-    setDataFilter(kelasFilter);
+    if (option === "z-a") {
+      mapelFilter = mapelFilter.sort((a, b) => b.nama.localeCompare(a.nama));
+    }
+
+    setDataFilter(mapelFilter);
   }, [dataMapel, search, option]);
 
   useEffect(() => {
@@ -95,9 +92,9 @@ const DataPelajaranPage = () => {
   }, [isFilter]);
 
   const handleOptionChange = (e) => {
-    const { value, name } = e.target;
+    const { value } = e.target;
 
-    setOption([name, value]);
+    setOption(value);
     setIsFilter(false);
   };
 
@@ -124,43 +121,43 @@ const DataPelajaranPage = () => {
             placeholder="Cari..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-full py-2 pr-2 pl-8 text-sm border border-gray-400 outline-offset-1 outline-1 outline-neutral"
+            className="w-full rounded-full py-2 pr-2 pl-10 text-sm border border-gray-400 outline-offset-1 outline-1 outline-neutral"
           />
-          <button className="absolute left-2 top-1/2 -translate-y-1/2">
+          <button className="absolute left-4 top-1/2 -translate-y-1/2">
             <Search height={20} width={20} className="text-gray-400" />
           </button>
         </div>
-        <div className="flex gap-2 relative  mr-auto  lg:ml-4">
-          {/* <button
+        <div className="flex gap-2 relative  mr-auto  ">
+          <button
             onClick={handleToggleFilter}
             ref={buttonFilterRef}
             disabled={dataFilter.length === 0}
             className="border border-gray-400 disabled:cursor-not-allowed bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-lg flex-between gap-3"
           >
-            <ListFilter width={15} height={15} className="" />
-          </button> */}
-          {option[0] && (
+            <SlidersHorizontal width={15} height={15} />
+          </button>
+          {option !== "terbaru" && (
             <button
-              onClick={() => setOption(["", ""])}
+              onClick={() => setOption("terbaru")}
               className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-lg flex-between gap-3"
             >
               Clear
             </button>
           )}
 
-          {/* {isFilter && (
-            <FilterKelas
+          {isFilter && (
+            <FilterMapel
               option={option}
               handleOptionChange={handleOptionChange}
               onClose={handleToggleFilter}
               ref={filterRef}
             />
-          )} */}
+          )}
         </div>
         <button
-          aria-label="tambah kelas"
+          aria-label="tambah mapel"
           onClick={handleToggleAdd}
-          className="bg-gray-700 hover:bg-neutral transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md flex-between gap-3"
+          className="bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md flex-between gap-3"
         >
           <Plus
             width={15}

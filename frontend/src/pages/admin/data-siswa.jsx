@@ -177,7 +177,7 @@ const DataSiswaPage = () => {
             value={search}
             disabled={loading}
             onChange={handleSearch}
-            className="w-full rounded-full disabled:cursor-not-allowed py-2 pr-2 pl-10 text-sm border border-gray-400 outline-offset-0 outline-1 outline-neutral"
+            className="w-full rounded-full disabled:cursor-not-allowed py-1.5 pr-2 pl-10 text-sm border border-gray-400 outline-offset-0 outline-1 outline-neutral"
           />
           <div className="absolute left-4 top-1/2 -translate-y-1/2">
             <Search height={20} width={20} className="text-gray-400" />
@@ -186,7 +186,7 @@ const DataSiswaPage = () => {
 
         <Link
           to={"/admin/tambah-siswa"}
-          className="flex-between gap-3 min-w-fit bg-gray-700 hover:bg-neutral transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
+          className="flex-between gap-3 min-w-fit bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
         >
           <Plus
             width={15}

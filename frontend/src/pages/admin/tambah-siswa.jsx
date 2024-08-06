@@ -471,7 +471,7 @@ const TambahSiswaPage = () => {
             <button
               disabled={loading}
               type="submit"
-              className="btn disabled:cursor-not-allowed w-28 "
+              className="btn  disabled:cursor-not-allowed w-28 "
             >
               {loading ? "Loading" : "Simpan"}
             </button>
