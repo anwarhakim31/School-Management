@@ -28,6 +28,7 @@ const TableSiswa = ({
   handleToggleDeleteOne,
   setAllCheck,
   allCheck,
+  loading,
 }) => {
   const lastOfIndexSiswa = page * limit;
   const firstOfindexSiswa = lastOfIndexSiswa - limit;
@@ -126,7 +127,20 @@ const TableSiswa = ({
               </tr>
             </thead>
             <tbody>
+              {data && !loading && data.length === 0 && (
+                <tr>
+                  <td
+                    colSpan="9"
+                    className="px-2 py-4 border-gray-300 text-xs font-medium text-gray-900 h-[350px] whitespace-nowrap"
+                  >
+                    <div className="flex justify-center w-full">
+                      Tidak ada data
+                    </div>
+                  </td>
+                </tr>
+              )}
               {data &&
+                data.length !== 0 &&
                 data.map((siswa, i) => (
                   <tr
                     key={siswa.nis}

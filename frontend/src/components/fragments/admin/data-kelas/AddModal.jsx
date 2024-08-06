@@ -38,7 +38,7 @@ const AddModal = ({ onClose }) => {
     <Modal onClose={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-[425px] max-h-[400px] rounded-2xl shadow-md bg-white"
+        className="w-full sm:max-w-[425px] max-h-[400px] rounded-md shadow-md bg-white"
       >
         <div className="p-4 border-b">
           <HeaderModal

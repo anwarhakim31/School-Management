@@ -11,7 +11,7 @@ const getNestedValue = (obj, path) => {
   );
 };
 
-const ExportExcel = ({ columns, data, namaFile }) => {
+const ExportExcel = ({ columns, data, namaFile, loading }) => {
   const handleExport = () => {
     // Map the data to a format suitable for json_to_sheet
     const sheetData = data.map((row) => {
@@ -71,6 +71,8 @@ const ExportExcel = ({ columns, data, namaFile }) => {
       onClick={handleExport}
       aria-label="export to exel"
       title="export ke exel"
+      disabled={loading}
+      className="disabled:cursor-not-allowed"
     >
       <FileDown
         width={20}

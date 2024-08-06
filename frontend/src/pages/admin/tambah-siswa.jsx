@@ -200,7 +200,7 @@ const TambahSiswaPage = () => {
                   message: "Nama maksimal 50 karakter.",
                 },
               })}
-              className="py-1.5 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral px-2"
+              className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral px-2"
             />
             <span className="text-xs h-4 block mt-1 text-neutral2">
               {errors.nama && errors.nama.message}
@@ -219,7 +219,7 @@ const TambahSiswaPage = () => {
                 required: "NIS diperlukan.",
               })}
               onChange={(e) => handleNumberChange(e, "nis")}
-              className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+              className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
 
             <span className="text-xs h-4 block mt-1 text-neutral2">
@@ -244,7 +244,7 @@ const TambahSiswaPage = () => {
                   message: "Password minimal 5 karakter.",
                 },
               })}
-              className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+              className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
             <span className="text-xs h-4 block mt-1 text-neutral2">
               {errors.password && errors.password.message}
@@ -264,7 +264,7 @@ const TambahSiswaPage = () => {
                   message: "Tempat Lahir maksimal 20 karakter.",
                 },
               })}
-              className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+              className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
             <span className="text-xs h-4 block mt-1 text-neutral2">
               {errors.tempatLahir && errors.tempatLahir.message}
@@ -281,7 +281,7 @@ const TambahSiswaPage = () => {
               {...register("tanggalLahir", {
                 required: "Tanggal Lahir di perlukan.",
               })}
-              className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+              className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
             <span className="text-xs h-4 block mt-1 text-neutral2">
               {errors.tanggalLahir && errors.tanggalLahir.message}
@@ -296,7 +296,7 @@ const TambahSiswaPage = () => {
               {...register("jenisKelamin", {
                 required: "Jenis Kelamin di perlukan.",
               })}
-              className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+              className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             >
               <option value="">Pilih jenis kelamin</option>
               <option value="Laki-Laki">Laki-Laki</option>
@@ -319,7 +319,7 @@ const TambahSiswaPage = () => {
                 required: "Tahun Masuk diperlukan.",
               })}
               onChange={(e) => handleNumberChange(e, "tahunMasuk")}
-              className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+              className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
 
             <span className="text-xs h-4 block mt-1 text-neutral2">
@@ -338,9 +338,11 @@ const TambahSiswaPage = () => {
               {...register("agama", {
                 required: "Agama diperlukan..",
               })}
-              className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+              className="py-1.5 h-8 bg-white border text-gray-500   text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             >
-              <option value="">Pilih Agama</option>
+              <option value="" className="">
+                Pilih agama
+              </option>
               <option value="islam">Islam</option>
               <option value="islam">Kristen Protestan</option>
               <option value="islam">Kristen Katolik</option>
@@ -366,7 +368,7 @@ const TambahSiswaPage = () => {
                 required: "No. Telepon diperlukan.",
               })}
               onChange={(e) => handleNumberChange(e, "phone")}
-              className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+              className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
             <span className="text-xs h-4 block mt-1 text-neutral2">
               {errors.phone && errors.phone.message}
@@ -385,7 +387,7 @@ const TambahSiswaPage = () => {
                   message: "Format email tidak valid",
                 },
               })}
-              className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+              className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
             <span className="text-xs h-4 block mt-1 text-neutral2">
               {errors.email && errors.email.message}
@@ -398,7 +400,7 @@ const TambahSiswaPage = () => {
             <select
               id="kelas"
               {...register("kelas")}
-              className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+              className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             >
               {kelasNama.length === 0 && <option value="">Pilih Kelas</option>}
               {kelas &&
@@ -421,7 +423,7 @@ const TambahSiswaPage = () => {
                 <select
                   id="Nama Kelas"
                   {...register("namaKelas")}
-                  className="py-1.5  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+                  className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
                 >
                   {kelasNama &&
                     kelasNama.map((kel) => {
@@ -455,12 +457,12 @@ const TambahSiswaPage = () => {
               className="py-1.5 h-[116px] bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
           </div>
-          <div className="flex justify-end pt-2 gap-4 ">
+          <div className="flex justify-end pt-8 gap-4 ">
             <Link to={"/admin/data-siswa"}>
               <button
                 disabled={loading}
                 type="submit"
-                className="btn px-8 bg-gray-300 text-gray-800 hover:text-white disabled:cursor-not-allowed border disabled:bg-gray-700"
+                className="btn  w-28 bg-gray-300 text-gray-800 hover:text-white disabled:cursor-not-allowed   border border-gray-500"
               >
                 {loading ? "Loading" : "Batal"}
               </button>
@@ -469,7 +471,7 @@ const TambahSiswaPage = () => {
             <button
               disabled={loading}
               type="submit"
-              className="btn disabled:cursor-not-allowed px-6  disabled:bg-gray-700"
+              className="btn disabled:cursor-not-allowed w-28 "
             >
               {loading ? "Loading" : "Simpan"}
             </button>

@@ -19,7 +19,7 @@ const selectRow = [7, 14, 21, 28];
 
 const DataSiswaPage = () => {
   const dataChecked = useSelector(selectedDataDeleteMany);
-
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [dataSiswa, setDataSiswa] = useState([]);
   const [pagination, setPagination] = useState({});
@@ -76,7 +76,8 @@ const DataSiswaPage = () => {
       },
       {
         Header: "Kelas",
-        accessor: (row) => `${row.kelas.kelas} ${row.kelas.nama}`,
+        accessor: (row) =>
+          `${row.kelas ? row.kelas.kelas + row.kelas.nama : ""}`,
       },
     ],
     []
@@ -98,10 +99,16 @@ const DataSiswaPage = () => {
           withCredentials: true,
         });
 
-        setDataSiswa(res.data.data);
-        setPagination(res.data.pagination);
+        if (res.status == 200) {
+          setDataSiswa(res.data.data);
+          setPagination(res.data.pagination);
+        }
       } catch (error) {
         responseError(error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
       }
     };
     const getDetail = async () => {
@@ -110,9 +117,15 @@ const DataSiswaPage = () => {
           withCredentials: true,
         });
 
-        setDataDetail(res.data.data);
+        if (res.status === 200) {
+          setDataDetail(res.data.data);
+        }
       } catch (error) {
         responseError(error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
       }
     };
 
@@ -155,15 +168,16 @@ const DataSiswaPage = () => {
 
   return (
     <section className="px-6 py-4 mb-4 ">
-      <HeaderBox dataDetail={dataDetail} />
+      <HeaderBox dataDetail={dataDetail} loading={loading} />
       <div className="w-full flex-between gap-6">
         <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
             placeholder="Pencarian..."
             value={search}
+            disabled={loading}
             onChange={handleSearch}
-            className="w-full rounded-full py-2 pr-2 pl-10 text-sm border border-gray-400 outline-offset-0 outline-1 outline-neutral"
+            className="w-full rounded-full disabled:cursor-not-allowed py-2 pr-2 pl-10 text-sm border border-gray-400 outline-offset-0 outline-1 outline-neutral"
           />
           <div className="absolute left-4 top-1/2 -translate-y-1/2">
             <Search height={20} width={20} className="text-gray-400" />
@@ -211,20 +225,30 @@ const DataSiswaPage = () => {
               columns={columns}
               data={dataSiswa}
               namaFile={"Data-Siswa"}
+              loading={loading}
             />
           </div>
         </div>
-        <TableSiswa
-          data={dataSiswa}
-          page={page}
-          limit={pagination.perPage}
-          totalSiswa={pagination.total}
-          totalPage={pagination.totalPages}
-          handlePagination={handlePagination}
-          handleToggleDeleteOne={handleToggleDeleteOne}
-          setAllCheck={setAllCheck}
-          allCheck={allCheck}
-        />
+        {loading ? (
+          <div className="block w-full shadow-md pb-[3.5rem]">
+            <div className="w-full min-h-[430px] flex-center bg-gray-200 animate-pulse overflow-auto ">
+              <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
+            </div>
+          </div>
+        ) : (
+          <TableSiswa
+            data={dataSiswa}
+            page={page}
+            limit={pagination.perPage}
+            totalSiswa={pagination.total}
+            totalPage={pagination.totalPages}
+            handlePagination={handlePagination}
+            handleToggleDeleteOne={handleToggleDeleteOne}
+            setAllCheck={setAllCheck}
+            allCheck={allCheck}
+            loading={loading}
+          />
+        )}
       </div>
       {isDeleteSiswa && <DeleteModal onClose={handleToggleDeleteOne} />}
       {isDeleteManySiswa && (

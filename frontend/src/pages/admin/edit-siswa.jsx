@@ -521,7 +521,7 @@ const EditSiswaPage = () => {
             >
               {loading ? "Loading" : "Simpan"}
             </button>
-          </div>{" "}
+          </div>
         </div>
       </form>
     </div>

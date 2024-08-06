@@ -42,7 +42,9 @@ const DataKelasPage = () => {
       } catch (error) {
         responseError(error);
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
       }
     };
 
@@ -176,13 +178,21 @@ const DataKelasPage = () => {
           Tambah Kelas
         </button>
       </div>
-      <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-lg">
-        <TableKelas
-          data={dataFilter}
-          handleToggleDelete={handleToggleDelete}
-          handleToggleEdit={handleToggleEdit}
-          loading={loading}
-        />
+      <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-md">
+        {loading ? (
+          <div className="block w-full relative bg-gray-200 animate-pulse shadow-md pb-[3.5rem]">
+            <div className="w-full flex-center min-h-[420px] overflow-x-auto rounded-md">
+              <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
+            </div>
+          </div>
+        ) : (
+          <TableKelas
+            data={dataFilter}
+            handleToggleDelete={handleToggleDelete}
+            handleToggleEdit={handleToggleEdit}
+            loading={loading}
+          />
+        )}
       </div>
       {isDeleteKelas && <DeleteModal onClose={handleToggleDelete} />}
       {isAddKelas && <AddModal onClose={handleToggleAdd} />}
