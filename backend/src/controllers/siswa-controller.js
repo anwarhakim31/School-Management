@@ -39,12 +39,8 @@ export const getAll = async (req, res, next) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .populate("kelas")
+      .populate({ path: "kelas", select: "-siswa" })
       .exec();
-
-    // if (kelasNama) {
-    //   siswa = siswa.filter((s) => s.kelas && s.kelas.nama === kelasNama);
-    // }
 
     const totalSiswa = await Siswa.countDocuments(filterQuery);
 
@@ -101,7 +97,7 @@ export const addSiswa = async (req, res, next) => {
     const siswaExist = await Siswa.findOne({ nis });
 
     if (siswaExist) {
-      throw new ResponseError(404, "NIS sudah digunakan");
+      throw new ResponseError(400, "NIS sudah digunakan");
     }
 
     const salt = await genSalt();
@@ -151,13 +147,107 @@ export const addSiswa = async (req, res, next) => {
   }
 };
 
+export const editSiswa = async (req, res, next) => {
+  try {
+    const { kelas, namaKelas, nis, password, _id } = req.body;
+
+    const siswa = await Siswa.findById({ _id });
+
+    if (!siswa) {
+      throw new ResponseError(404, "Siswa tidak ditemukan");
+    }
+
+    const existingSiswa = await Siswa.findOne({ nis, _id: { $ne: _id } });
+
+    if (existingSiswa) {
+      throw new ResponseError(409, "NIS sudah digunakan oleh siswa lain");
+    }
+
+    if (password) {
+      const salt = await genSalt();
+
+      req.body.password = await hash(password, salt);
+    }
+
+    if (!kelas && !namaKelas) {
+      delete req.body.kelas;
+      delete req.body.namaKelas;
+      if (siswa.kelas) {
+        const kelasUpdate = await Kelas.findByIdAndUpdate(
+          siswa.kelas,
+          {
+            $pull: { siswa: siswa._id },
+          },
+          { new: true }
+        );
+
+        if (kelasUpdate) {
+          const jumlahSiswa = kelasUpdate.siswa.length;
+
+          await Kelas.findByIdAndUpdate(
+            siswa.kelas,
+            {
+              kelasUpdate,
+              jumlahSiswa: jumlahSiswa,
+            },
+            { new: true }
+          );
+        }
+      }
+      await Siswa.findByIdAndUpdate(
+        siswa._id,
+        {
+          $unset: { kelas: null },
+          ...req.body,
+        },
+        { new: true }
+      );
+    } else {
+      const newKelas = await Kelas.findOne({ kelas, nama: namaKelas });
+
+      console.log(newKelas);
+
+      if (!newKelas) {
+        throw new ResponseError(404, "Kelas tidak ditemukan.");
+      }
+
+      if (siswa.kelas) {
+        await Kelas.findByIdAndUpdate(
+          siswa.kelas,
+          { $pull: { siswa: siswa._id } },
+          { new: true }
+        );
+      }
+
+      delete req.body.kelas;
+      delete req.body.namaKelas;
+      const siswaUpdate = await Siswa.findByIdAndUpdate(siswa._id, {
+        kelas: newKelas._id,
+        ...req.body,
+      });
+
+      await Kelas.findByIdAndUpdate(
+        newKelas._id,
+        {
+          $addToSet: { siswa: siswaUpdate._id },
+          $inc: { jumlahSiswa: 1 },
+        },
+        { new: true }
+      );
+    }
+
+    res.status(200).json({ success: true, message: "Berhasil edit siswa" });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 export const deleteOneSiswa = async (req, res, next) => {
   try {
     const id = req.params.id;
 
     const siswa = await Siswa.findById(id);
-
-    console.log(siswa);
 
     if (!siswa) {
       throw new ResponseError(404, "Siswa tidak ditemukan.");
@@ -226,8 +316,8 @@ export const deleteManySiswa = async (req, res, next) => {
 export const getAllDetail = async (req, res, next) => {
   try {
     const jumlahSiswa = await Siswa.countDocuments();
-    const lk = await Siswa.find({ jenisKelamin: "Laki-Laki" });
-    const pr = await Siswa.find({ jenisKelamin: "Perempuan" });
+    const lk = (await Siswa.find({ jenisKelamin: "Laki-Laki" })).length;
+    const pr = (await Siswa.find({ jenisKelamin: "Perempuan" })).length;
 
     res.status(200).json({
       success: true,

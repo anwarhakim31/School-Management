@@ -14,7 +14,7 @@ const AsideLayout = ({ setIsSidebar }) => {
       <button
         aria-label="close sidebar"
         onClick={() => setIsSidebar(false)}
-        className="flex md:hidden absolute items-center justify-center top-[25px] -right-[15px] w-8 h-8 border border-gray-300 bg-white rounded-full "
+        className="flex lg:hidden absolute items-center justify-center top-[25px] -right-[15px] w-8 h-8 border border-gray-300 bg-white rounded-full "
       >
         <X width={20} height={20} />
       </button>

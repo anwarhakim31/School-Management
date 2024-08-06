@@ -53,7 +53,7 @@ export const siswas = [
     alamat: "Jl. Malioboro No.4, Yogyakarta",
     phone: "084567890123",
     email: "dewi.ayu@example.com",
-    kelas: "66b01c16521242d6d8eef372",
+    kelas: "66b1b719e185970eaa39bc78",
   },
   {
     nis: "20240005",
@@ -81,7 +81,7 @@ export const siswas = [
     alamat: "Jl. Sudirman No.6, Makassar",
     phone: "086789012345",
     email: "fani.lestari@example.com",
-    kelas: "66b01c16521242d6d8eef372",
+    kelas: "66b1b719e185970eaa39bc78",
   },
   {
     nis: "20240007",
@@ -109,7 +109,7 @@ export const siswas = [
     alamat: "Jl. Demang Lebar Daun No.8, Palembang",
     phone: "088901234567",
     email: "hani.putri@example.com",
-    kelas: "66b01c16521242d6d8eef372",
+    kelas: "66b1b719e185970eaa39bc78",
   },
   {
     nis: "20240009",
@@ -137,7 +137,7 @@ export const siswas = [
     alamat: "Jl. Slamet Riyadi No.10, Surakarta",
     phone: "090123456789",
     email: "jeni.rahmawati@example.com",
-    kelas: "66b01c16521242d6d8eef372",
+    kelas: "66b1b719e185970eaa39bc78",
   },
   {
     nis: "20240011",
@@ -165,7 +165,7 @@ export const siswas = [
     alamat: "Jl. Pattimura No.12, Ambon",
     phone: "092345678901",
     email: "lia.lestari@example.com",
-    kelas: "66b01c16521242d6d8eef372",
+    kelas: "66b1b719e185970eaa39bc78",
   },
   {
     nis: "20240013",
@@ -193,7 +193,7 @@ export const siswas = [
     alamat: "Jl. Cihampelas No.14, Bandung",
     phone: "094567890123",
     email: "nando.aditya@example.com",
-    kelas: "66b01c16521242d6d8eef372",
+    kelas: "66b1b719e185970eaa39bc78",
   },
   {
     nis: "20240015",
@@ -221,7 +221,7 @@ export const siswas = [
     alamat: "Jl. Malioboro No.16, Yogyakarta",
     phone: "096789012345",
     email: "putu.wayan@example.com",
-    kelas: "66b01c16521242d6d8eef372",
+    kelas: "66b1b719e185970eaa39bc78",
   },
   {
     nis: "20240017",
@@ -249,7 +249,7 @@ export const siswas = [
     alamat: "Jl. Sudirman No.18, Makassar",
     phone: "098901234567",
     email: "rara.sari@example.com",
-    kelas: "66b01c16521242d6d8eef372",
+    kelas: "66b1b719e185970eaa39bc78",
   },
   {
     nis: "20240019",
@@ -277,7 +277,7 @@ export const siswas = [
     alamat: "Jl. Demang Lebar Daun No.20, Palembang",
     phone: "100123456789",
     email: "tina.rahma@example.com",
-    kelas: "66b01c16521242d6d8eef372",
+    kelas: "66b1b719e185970eaa39bc78",
   },
   {
     nis: "20240021",
@@ -305,7 +305,7 @@ export const siswas = [
     alamat: "Jl. Slamet Riyadi No.22, Surakarta",
     phone: "102345678901",
     email: "vina.sari@example.com",
-    kelas: "66b01c16521242d6d8eef372",
+    kelas: "66b1b719e185970eaa39bc78",
   },
   {
     nis: "20240023",
@@ -333,7 +333,7 @@ export const siswas = [
     alamat: "Jl. Pattimura No.24, Ambon",
     phone: "104567890123",
     email: "xena.lestari@example.com",
-    kelas: "66b01c16521242d6d8eef372",
+    kelas: "66b1b719e185970eaa39bc78",
   },
   {
     nis: "20240025",
@@ -361,7 +361,7 @@ export const siswas = [
     alamat: "Jl. Cihampelas No.26, Bandung",
     phone: "106789012345",
     email: "zahra.anindita@example.com",
-    kelas: "66b01c16521242d6d8eef372",
+    kelas: "66b1b719e185970eaa39bc78",
   },
   {
     nis: "20240027",
@@ -389,7 +389,7 @@ export const siswas = [
     alamat: "Jl. Malioboro No.28, Yogyakarta",
     phone: "108901234567",
     email: "bela.sari@example.com",
-    kelas: "66b01c16521242d6d8eef372",
+    kelas: "66b1b719e185970eaa39bc78",
   },
   {
     nis: "20240029",
@@ -417,6 +417,6 @@ export const siswas = [
     alamat: "Jl. Sudirman No.30, Makassar",
     phone: "110123456789",
     email: "dani.rijal@example.com",
-    kelas: "66b01c16521242d6d8eef372",
+    kelas: "66b1b719e185970eaa39bc78",
   },
 ];

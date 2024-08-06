@@ -3,7 +3,7 @@ import CustomDropdown from "@/components/elements/DropDown";
 import DropdownFilter from "@/components/elements/DropDownFilter";
 import DeleteManyModal from "@/components/fragments/admin/data-siswa/DeleteManyModal";
 import DeleteModal from "@/components/fragments/admin/data-siswa/DeleteModal";
-import HeaderBox from "@/components/fragments/admin/data-siswa/HeaderBox";
+import HeaderBox from "@/components/elements/admin/HeaderBox";
 import TableSiswa from "@/components/fragments/admin/data-siswa/TableSiswa";
 import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
@@ -154,10 +154,10 @@ const DataSiswaPage = () => {
   };
 
   return (
-    <section className="px-6 py-4  ">
+    <section className="px-6 py-4 mb-4 ">
       <HeaderBox dataDetail={dataDetail} />
-      <div className="w-full flex-between flex-wrap gap-6">
-        <div className="relative flex w-full  md:max-w-[240px]">
+      <div className="w-full flex-between gap-6">
+        <div className="relative flex w-full  md:max-w-[330px]">
           <input
             type="search"
             placeholder="Cari Siswa"
@@ -172,7 +172,7 @@ const DataSiswaPage = () => {
 
         <Link
           to={"/admin/tambah-siswa"}
-          className="flex-between gap-3  bg-gray-700 hover:bg-neutral transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
+          className="flex-between gap-3 min-w-fit bg-gray-700 hover:bg-neutral transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
         >
           <Plus
             width={15}

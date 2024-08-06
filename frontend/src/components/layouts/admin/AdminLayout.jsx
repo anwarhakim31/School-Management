@@ -52,8 +52,8 @@ const AdminLayout = () => {
       <aside
         ref={sidebarRef}
         className={`${
-          isSidebar ? "left-0 " : "-left-[300px] md:left-0"
-        } md:block bg-neutral z-50 fixed md:static py-6 -hidden w-[230px] md:w-[240px] min-h-screen transition-all duration-300`}
+          isSidebar ? "left-0 " : "-left-[300px] lg:left-0"
+        } lg:block bg-neutral z-50 fixed lg:static py-6 -hidden w-[230px] lg:w-[225px] min-h-screen transition-all duration-300`}
       >
         <AsideLayout setIsSidebar={setIsSidebar} />
       </aside>

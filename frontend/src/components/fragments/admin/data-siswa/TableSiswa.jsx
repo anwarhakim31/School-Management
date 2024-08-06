@@ -3,6 +3,7 @@ import {
   selectedDataDeleteMany,
   setDataDelete,
   setDataDeleteMany,
+  setDataEdit,
 } from "@/store/slices/admin-slice";
 import {
   ChevronLeft,
@@ -14,6 +15,7 @@ import {
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const TableSiswa = ({
@@ -31,6 +33,7 @@ const TableSiswa = ({
   const firstOfindexSiswa = lastOfIndexSiswa - limit;
   const [dataChecked, setDataChecked] = useState([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const HandleCopyText = (text) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -63,6 +66,11 @@ const TableSiswa = ({
   const handleDeleteSiswa = (data) => {
     handleToggleDeleteOne();
     dispatch(setDataDelete(data));
+  };
+
+  const handleEditSiswa = (data) => {
+    dispatch(setDataEdit(data));
+    navigate("/admin/edit-siswa");
   };
 
   return (
@@ -106,7 +114,10 @@ const TableSiswa = ({
                 <th scope="col" className="py-4 text-center">
                   Kontak
                 </th>
-                <th scope="Kelas" className="text-center px-4 py-4">
+                <th
+                  scope="Kelas"
+                  className="text-center px-8 py-4 whitespace-nowrap"
+                >
                   Kelas
                 </th>
                 <th scope="col" className="px-5 py-3">
@@ -195,7 +206,7 @@ const TableSiswa = ({
                     </td>
                     <td
                       scope="row"
-                      className=" py-4 px-4 max-w-full text-center text-xs font-normal text-gray-900 "
+                      className=" py-4 px-8 max-w-full text-center text-xs font-normal whitespace-nowrap text-gray-900 "
                     >
                       {siswa.kelas ? (
                         `${siswa.kelas.kelas} ${siswa.kelas.nama}`
@@ -212,7 +223,7 @@ const TableSiswa = ({
                       <div className="flex-center gap-4">
                         <button
                           title="Edit"
-                          // onClick={() => handleEditKelas(siswa)}
+                          onClick={() => handleEditSiswa(siswa)}
                           className="w-[20px] h-[20px]  flex-center"
                         >
                           <Edit

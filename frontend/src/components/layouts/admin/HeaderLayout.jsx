@@ -61,7 +61,7 @@ const HeaderLayout = ({ handleOpenEdit, setIsEdit, handleToggleSidebar }) => {
         <button
           aria-label="toggle sidebar"
           onClick={handleToggleSidebar}
-          className=" md:hidden w-9 h-9  p-2 border bg-white hover:border-neutral transition-all duration-300 flex-center rounded-lg"
+          className=" lg:hidden w-9 h-9  p-2 border bg-white hover:border-neutral transition-all duration-300 flex-center rounded-lg"
         >
           <Menu width={25} height={25} />
         </button>
