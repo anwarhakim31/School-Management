@@ -13,7 +13,7 @@ const guruSchema = new mongoose.Schema({
   },
   phone: { type: String, required: true },
   bidangStudi: { type: String, required: true },
-  waliKelas: { type: String, required: false },
+  waliKelas: { type: String, required: false, ref: "Kelas" },
   status: {
     type: String,
     enum: ["active", "non active"],
@@ -24,6 +24,6 @@ const guruSchema = new mongoose.Schema({
   photo: { type: String },
 });
 
-const Guru = mongoose.model("guru", guruSchema);
+const Guru = mongoose.model("Guru", guruSchema);
 
 export default Guru;

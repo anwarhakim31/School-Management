@@ -123,7 +123,7 @@ const TableKelas = ({
                     className="px-6    border-gray-300 text-left py-4 text-xs text-gray-900 whitespace-nowrap "
                   >
                     {kelas.waliKelas ? (
-                      kelas.waliKelas
+                      kelas.waliKelas.nama
                     ) : (
                       <span className="text-gray-800">Data Kosong</span>
                     )}
