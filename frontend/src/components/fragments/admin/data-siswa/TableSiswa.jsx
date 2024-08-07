@@ -192,7 +192,7 @@ const TableSiswa = ({
                       {siswa.alamat ? (
                         `${siswa.alamat}`
                       ) : (
-                        <span className="text-gray-700 font-medium">
+                        <span className="text-gray-700 font-bold">
                           Data Kosong
                         </span>
                       )}
@@ -225,7 +225,7 @@ const TableSiswa = ({
                       {siswa.kelas ? (
                         `${siswa.kelas.kelas} ${siswa.kelas.nama}`
                       ) : (
-                        <span className="text-gray-700 font-medium">
+                        <span className="text-gray-700 font-bold">
                           Data Kosong
                         </span>
                       )}

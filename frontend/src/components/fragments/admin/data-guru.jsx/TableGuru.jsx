@@ -23,15 +23,15 @@ const TableGuru = ({
   limit,
   page,
   totalPage,
-  totalSiswa,
+  totalGuru,
   handlePagination,
   handleToggleDeleteOne,
   setAllCheck,
   allCheck,
   loading,
 }) => {
-  const lastOfIndexSiswa = page * limit;
-  const firstOfindexSiswa = lastOfIndexSiswa - limit;
+  const lastOfIndexguru = page * limit;
+  const firstOfindexguru = lastOfIndexguru - limit;
   const [dataChecked, setDataChecked] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,13 +42,13 @@ const TableGuru = ({
     });
   };
 
-  const handleCheckboxChange = (checked, siswa) => {
+  const handleCheckboxChange = (checked, guru) => {
     if (checked) {
-      setDataChecked((prev) => [...prev, siswa._id]);
-      dispatch(setDataDeleteMany([...dataChecked, siswa._id]));
+      setDataChecked((prev) => [...prev, guru._id]);
+      dispatch(setDataDeleteMany([...dataChecked, guru._id]));
     } else {
-      setDataChecked((prev) => prev.filter((id) => id !== siswa._id));
-      dispatch(setDataDeleteMany(dataChecked.filter((id) => id !== siswa._id)));
+      setDataChecked((prev) => prev.filter((id) => id !== guru._id));
+      dispatch(setDataDeleteMany(dataChecked.filter((id) => id !== guru._id)));
     }
   };
 
@@ -56,22 +56,22 @@ const TableGuru = ({
     setAllCheck(!allCheck);
 
     if (checked) {
-      setDataChecked(data.map((siswa) => siswa._id));
-      dispatch(setDataDeleteMany(data.map((siswa) => siswa._id)));
+      setDataChecked(data.map((guru) => guru._id));
+      dispatch(setDataDeleteMany(data.map((guru) => guru._id)));
     } else {
       setDataChecked([]);
       dispatch(setDataDeleteMany([]));
     }
   };
 
-  const handleDeleteSiswa = (data) => {
+  const handleDeleteguru = (data) => {
     handleToggleDeleteOne();
     dispatch(setDataDelete(data));
   };
 
-  const handleEditSiswa = (data) => {
+  const handleEditguru = (data) => {
     dispatch(setDataEdit(data));
-    navigate("/admin/edit-siswa");
+    navigate("/admin/edit-guru");
   };
 
   return (
@@ -111,7 +111,7 @@ const TableGuru = ({
                 </th>
                 <th
                   scope="col"
-                  className="px-8 py-4 text-left whitespace-nowrap"
+                  className="px-4 py-4 text-left whitespace-nowrap"
                 >
                   Alamat
                 </th>
@@ -150,18 +150,18 @@ const TableGuru = ({
               )}
               {data &&
                 data.length !== 0 &&
-                data.map((siswa, i) => (
+                data.map((guru, i) => (
                   <tr
-                    key={siswa.nis}
+                    key={guru.nip}
                     className={` hover:bg-gray-100 border-b  `}
                   >
                     <td scope="row" className="px-3 py-3 relative">
                       <Checkbox
                         type="checkbox"
                         name=""
-                        checked={dataChecked.includes(siswa._id)}
+                        checked={dataChecked.includes(guru._id)}
                         onCheckedChange={(checked) =>
-                          handleCheckboxChange(checked, siswa)
+                          handleCheckboxChange(checked, guru)
                         }
                         id=""
                         className={
@@ -173,39 +173,40 @@ const TableGuru = ({
                       scope="row"
                       className="px-3 py-4 text-xs font-normal text-gray-900 whitespace-nowrap "
                     >
-                      {siswa.nis}
+                      {guru.nip}
                     </td>
 
                     <td
                       scope="row"
                       className=" px-4 py-5  line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap  "
                     >
-                      {siswa.nama}
+                      {guru.nama}
                     </td>
                     <td
                       scope="row"
                       className="py-4 text-xs font-normal text-gray-900 whitespace-nowrap "
                     >
-                      {siswa.jenisKelamin}
+                      {guru.jenisKelamin}
                     </td>
                     <td
                       scope="row"
-                      className=" py-4 px-3 text-xs text-center font-normal text-gray-900 whitespace-nowrap "
+                      className="py-4 px-4 text-xs font-normal text-gray-900 whitespace-nowrap "
                     >
-                      {siswa.tahunMasuk}
+                      {guru.bidangStudi}
                     </td>
                     <td
                       scope="row"
-                      className="px-2 py-4   overflow-hidden line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap "
+                      className="px-4 py-4   overflow-hidden line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap "
                     >
-                      {siswa.alamat ? (
-                        `${siswa.alamat}`
+                      {guru.alamat ? (
+                        `${guru.alamat}`
                       ) : (
-                        <span className="text-gray-700 font-medium">
+                        <span className="text-gray-700 font-bold">
                           Data Kosong
                         </span>
                       )}
                     </td>
+
                     <td
                       scope="row"
                       className="py-4 text-center  text-xs font-normal text-gray-900 whitespace-nowrap "
@@ -213,28 +214,36 @@ const TableGuru = ({
                       <div className="flex items-center justify-center gap-4 ">
                         <div
                           className="cursor-pointer flex-center  border shadow-md  text-indigo-700 w-[24px] h-[24px] rounded-full"
-                          title={siswa.phone}
-                          onClick={() => HandleCopyText(siswa.phone)}
+                          title={guru.phone}
+                          onClick={() => HandleCopyText(guru.phone)}
                         >
                           <Phone strokeWidth={1} width={15} height={15} />
-                        </div>
-                        <div
-                          className="cursor-pointer flex-center border shadow-md  text-indigo-700 w-[24px] h-[24px] rounded-full"
-                          title={siswa.email}
-                          onClick={() => HandleCopyText(siswa.email)}
-                        >
-                          <Mail strokeWidth={1} width={15} height={15} />
                         </div>
                       </div>
                     </td>
                     <td
                       scope="row"
+                      className={`   py-4 px-8 max-w-full text-center text-xs font-normal whitespace-nowrap text-gray-900 `}
+                    >
+                      <span
+                        className={`${
+                          guru.status === "active"
+                            ? "bg-gray-700"
+                            : "bg-gray-600"
+                        } px-4 py-1 text-white rounded-full`}
+                      >
+                        {" "}
+                        {guru.status}
+                      </span>
+                    </td>
+                    <td
+                      scope="row"
                       className=" py-4 px-8 max-w-full text-center text-xs font-normal whitespace-nowrap text-gray-900 "
                     >
-                      {siswa.kelas ? (
-                        `${siswa.kelas.kelas} ${siswa.kelas.nama}`
+                      {guru.kelas ? (
+                        `${guru.kelas.kelas} ${guru.kelas.nama}`
                       ) : (
-                        <span className="text-gray-700 font-medium">
+                        <span className="text-gray-700 font-bold">
                           Data Kosong
                         </span>
                       )}
@@ -246,7 +255,7 @@ const TableGuru = ({
                       <div className="flex-center gap-4">
                         <button
                           title="Edit"
-                          onClick={() => handleEditSiswa(siswa)}
+                          onClick={() => handleEditguru(guru)}
                           className="w-[20px] h-[20px]  flex-center"
                         >
                           <Edit
@@ -260,7 +269,7 @@ const TableGuru = ({
                         <button
                           title="Hapus"
                           className="w-[20px] h-[20px] border-b border-gray-500 flex-center"
-                          onClick={() => handleDeleteSiswa(siswa)}
+                          onClick={() => handleDeleteguru(guru)}
                         >
                           <Trash
                             width={18}
@@ -278,13 +287,13 @@ const TableGuru = ({
           </table>
         </div>
         <Pagination
-          lastOfIndexSiswa={lastOfIndexSiswa}
-          firstOfindexSiswa={firstOfindexSiswa}
+          lastOfIndexguru={lastOfIndexguru}
+          firstOfindexguru={firstOfindexguru}
           limit={limit}
           page={page}
           totalPage={totalPage}
           data={data}
-          totalSiswa={totalSiswa}
+          totalGuru={totalGuru}
           handlePagination={handlePagination}
         />
       </div>
@@ -293,12 +302,12 @@ const TableGuru = ({
 };
 
 const Pagination = ({
-  lastOfIndexSiswa,
-  firstOfindexSiswa,
+  lastOfIndexguru,
+  firstOfindexguru,
   limit,
   data,
   page,
-  totalSiswa,
+  totalGuru,
   handlePagination,
   totalPage,
 }) => {
@@ -320,14 +329,10 @@ const Pagination = ({
     <div className=" absolute h-9 left-0 bottom-5 border-t pt-4 w-full flex-between px-3">
       <div className="flex">
         <p className="text-[10px] sm:text-xs">{`Menampilkan ${
-          totalSiswa === 0 ? 0 : firstOfindexSiswa + 1
+          totalGuru === 0 ? 0 : firstOfindexguru + 1
         } - ${
-          page === totalPage
-            ? totalSiswa
-            : totalSiswa === 0
-            ? 0
-            : lastOfIndexSiswa
-        } dari ${totalSiswa} data`}</p>
+          page === totalPage ? totalGuru : totalGuru === 0 ? 0 : lastOfIndexguru
+        } dari ${totalGuru} data`}</p>
       </div>
       <div className="flex-center space-x-4">
         <div className="flex gap-2 ">

@@ -1,10 +1,11 @@
+import CustomSelectOption from "@/components/elements/CustomSelectOption";
 import HeaderModal from "@/components/elements/HeaderModal";
 import LoaderButton from "@/components/elements/LoaderButton";
 import Modal from "@/components/elements/Modal";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -13,10 +14,16 @@ const AddModal = ({ onClose }) => {
     register,
     handleSubmit,
     setValue,
+
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: { waliKelas: "", kelas: "", nama: "", posisi: "" },
+  });
   const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [guru, setGuru] = useState([]);
+  const [waliKelas, setWaliKelas] = useState("");
+  const ref = useRef();
 
   const handleChangeKelas = (e, name) => {
     const value = e.target.value;
@@ -24,6 +31,16 @@ const AddModal = ({ onClose }) => {
     const cleanedValue = value.replace(/\D/g, "");
 
     setValue(name, cleanedValue);
+  };
+
+  const handleToggleSelect = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleWaliKelasSelection = (nama, id) => {
+    setWaliKelas(nama);
+
+    setValue("waliKelas", id);
   };
 
   const onSubmit = async (data) => {
@@ -68,7 +85,7 @@ const AddModal = ({ onClose }) => {
     <Modal onClose={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-[425px] max-h-[400px] rounded-md shadow-md bg-white"
+        className="w-full relative sm:max-w-[425px] max-h-[400px] rounded-md shadow-md bg-white"
       >
         <div className="px-6 py-4 border-b">
           <HeaderModal
@@ -133,27 +150,33 @@ const AddModal = ({ onClose }) => {
               </span>
             </div>
           </div>
-          <div className="px-6 mb-4">
+          <div className="px-6  mb-4">
             <label
               htmlFor="wali"
               className="text-xs mb-2 block font-semibold text-gray-700"
             >
               Wali Kelas
             </label>
-            <select
-              id="wali"
-              type="text"
-              {...register("waliKelas")}
-              className="w-full border text-xs px-2 py-1.5 rounded-md  outline-neutral border-gray-500"
+            <div
+              className="w-full relative  text-xs  rounded-md "
+              onClick={() => setIsOpen(true)}
             >
-              <option value="">Tidak ada Wali Kelas</option>
-              {guru &&
-                guru.map((gu) => (
-                  <option key={gu._id} value={gu._id}>
-                    {gu.nama}
-                  </option>
-                ))}
-            </select>
+              <input
+                type="text"
+                id="wali"
+                defaultValue={waliKelas}
+                className="px-2 py-1.5 w-full  border  rounded-md  outline-neutral select-none cursor-pointer border-gray-500"
+              />
+              {isOpen && (
+                <CustomSelectOption
+                  handleSelect={handleWaliKelasSelection}
+                  onClose={handleToggleSelect}
+                  data={guru}
+                  def={"Tidak sebagai Wali Kelas"}
+                />
+              )}
+            </div>
+
             <span className="text-xs font-medium h-4 mt-1 block">
               (opsional)
             </span>

@@ -5,10 +5,10 @@ import female from "../../../assets/svg/female.svg";
 const HeaderBox = ({ dataDetail, loading }) => {
   return (
     <div className="flex-between flex-wrap xl:flex-nowrap gap-4 mb-6">
-      <div className=" grid flex-1 md:grid-cols-3 gap-4 md:justify-center items-center  md:gap-2  px-4 py-8 border border-gray-300 rounded-md  bg-white ">
-        <div className=" bg-white  flex flex-col justify-between  p-4 sm:px-3 xl:p-5 h-[110px] shadow-xl w-full rounded-md border-t border-t-gray-100 border-l-gray-100 border-r-4 border-l border-b-4  border-blue-800">
+      <div className=" grid flex-1 grid-cols-2 lg:grid-cols-4 gap-4 lg:justify-center items-center  md:gap-2   ">
+        <div className=" bg-white  flex flex-col justify-between  p-4 sm:px-3 xl:p-5 h-[110px] shadow-lg w-full rounded-md border-t border-t-gray-100 border-l-gray-100 border-r-4 border-l   border-blue-800">
           <div className="flex-between">
-            <h1 className="text-sm font-medium ">Total Guru</h1>
+            <h1 className="text-sm font-medium text-blue-700">Total Guru</h1>
             <div className="bg-blue-700 w-10 h-10 flex-center rounded-full">
               <img
                 src={guru}
@@ -20,16 +20,14 @@ const HeaderBox = ({ dataDetail, loading }) => {
             </div>
           </div>
           {loading ? (
-            <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t border-t-gray-100 border-l-gray-100 blue-700 animate-spin"></div>
+            <div className="border-4  border-gray-300 rounded-full w-6 h-6 border-t-4 border-t-gray-500  border-l-gray-100  animate-spin"></div>
           ) : (
-            <h3 className="text-lg font-semibold text-blue-700">
-              {dataDetail.jumlahSiswa}
-            </h3>
+            <h3 className="text-lg font-semibold ">{dataDetail.jumlahGuru}</h3>
           )}
         </div>
-        <div className=" bg-white flex flex-col justify-between  p-4 sm:px-3 xl:p-5 h-[110px] shadow-xl rounded-md border-t border-t-gray-100 border-l-gray-100 border-r-4 border-l border-b-4  border-purple-800">
+        <div className="order-3 lg:order-2 bg-white flex flex-col justify-between  p-4 sm:px-3 xl:p-5 h-[110px] shadow-lg rounded-md border-t border-t-gray-100 border-l-gray-100 border-r-4 border-l   border-purple-800">
           <div className="flex-between">
-            <h1 className="text-sm font-medium">Laki - Laki</h1>
+            <h1 className="text-sm font-medium text-purple-700">Laki - Laki</h1>
             <div className="bg-purple-700 w-10 h-10 flex-center rounded-full">
               <img
                 src={male}
@@ -41,17 +39,15 @@ const HeaderBox = ({ dataDetail, loading }) => {
             </div>
           </div>
           {loading ? (
-            <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t border-t-gray-100 border-l-gray-100 purple-700 animate-spin"></div>
+            <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-4 border-t-gray-500 border-l-gray-100  animate-spin"></div>
           ) : (
-            <h3 className="text-lg font-semibold text-purple-700">
-              {dataDetail.lk}
-            </h3>
+            <h3 className="text-lg font-semibold ">{dataDetail.lk}</h3>
           )}
         </div>
-        <div className=" bg-white flex flex-col justify-between  p-4 sm:px-3 xl:p-5 h-[110px] shadow-xl rounded-md border-b-4 border-t border-t-gray-100 border-l-gray-100 border-r-4 border-l border-pink-800">
+        <div className="order-4 lg:order-3 bg-white flex flex-col justify-between  p-4 sm:px-3 xl:p-5 h-[110px] shadow-lg rounded-md  border-t border-t-gray-100 border-l-gray-100 border-r-4 border-l border-pink-800">
           <div className="flex-between">
-            <h1 className="text-sm font-medium ">Perempuan</h1>
-            <div className="bg-pink-600 w-10 h-10 flex-center rounded-full">
+            <h1 className="text-sm font-medium text-rose-500">Perempuan</h1>
+            <div className="bg-rose-500 w-10 h-10 flex-center rounded-full">
               <img
                 src={female}
                 alt="guru"
@@ -62,34 +58,31 @@ const HeaderBox = ({ dataDetail, loading }) => {
             </div>
           </div>
           {loading ? (
-            <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t border-t-pink-600  animate-spin"></div>
+            <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-4 border-t-gray-500  animate-spin"></div>
           ) : (
-            <h3 className="text-lg font-semibold text-pink-600">
-              {dataDetail.pr}
-            </h3>
+            <h3 className="text-lg font-semibold ">{dataDetail.pr}</h3>
           )}
         </div>
-      </div>
-      <div className=" w-[250px]  bg-white px-4 py-8 boder rounded-md border border-gray-300">
-        <div className=" bg-white flex flex-col justify-between  py-4 border-l  h-[110px] rounded-md  border-r-4 border-b-4 border-t border-t-gray-100 border-l-gray-100 shadow-xl border-green-700">
-          <div className="flex-between px-4 pb-3 border-green-500">
-            <h1 className="text-xs font-medium ">Aktif</h1>
+
+        <div className="order-2 lg:order-4 bg-white flex flex-col justify-between  py-4 border-l  h-[110px] rounded-md  border-r-4  border-t border-t-gray-100 border-l-gray-100 shadow-lg border-green-700">
+          <div className="flex-between px-4 pb-3 h-8 border-green-500">
+            <h1 className="text-xs font-medium text-green-500">Aktif</h1>
             {loading ? (
-              <div className="border-4 border-gray-300 rounded-full w-6 h-6 animate-spin"></div>
+              <div className="border-4 border-gray-300 border-t-gray-500 rounded-full w-4 h-4 animate-spin"></div>
             ) : (
-              <h3 className="text-lg font-semibold text-pink-600">
-                {dataDetail.pr}
+              <h3 className="text-sm font-semibold ">
+                {dataDetail.active || 0}
               </h3>
             )}
           </div>
-          <div className="w-full h-2 bg-green-100"></div>
-          <div className="flex-between px-4 pt-3">
-            <h1 className="text-xs font-medium ">Non Aktif</h1>
+
+          <div className="flex-between px-4 h-8 pt-3">
+            <h1 className="text-xs font-medium  text-green-500">Non Aktif</h1>
             {loading ? (
-              <div className="border-4 border-gray-300 rounded-full w-6 h-6 animate-spin"></div>
+              <div className="border-4 border-gray-300 border-t-gray-500 rounded-full w-4 h-4 animate-spin"></div>
             ) : (
-              <h3 className="text-lg font-semibold text-pink-600">
-                {dataDetail.pr}
+              <h3 className="text-sm font-semibold ">
+                {dataDetail.nonActive || 0}{" "}
               </h3>
             )}
           </div>

@@ -187,7 +187,7 @@ const DataKelasPage = () => {
         <button
           aria-label="tambah kelas"
           onClick={handleToggleAdd}
-          className="bg-gray-700 hover:bg-neutral transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md flex-between gap-3"
+          className="bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md flex-between gap-3"
         >
           <Plus
             width={15}

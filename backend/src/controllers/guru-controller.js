@@ -59,6 +59,47 @@ export const addGuru = async (req, res, next) => {
   }
 };
 
+export const getAllGuru = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 7;
+    const skip = (page - 1) * limit;
+    const search = req.query.search || "";
+
+    const searchRegex = new RegExp(search.trim(), "i");
+
+    const filterQuery = {
+      $or: [
+        { nama: { $regex: searchRegex } },
+        { nis: { $regex: searchRegex } },
+      ],
+    };
+
+    const guru = await Guru.find(filterQuery)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .populate({ path: "waliKelas", select: "nama kelas" })
+      .exec();
+
+    const totalGuru = await Guru.countDocuments(filterQuery);
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengambil data guru.",
+      data: guru,
+      pagination: {
+        page,
+        limit,
+        totalGuru,
+        totalPage: Math.ceil(totalGuru / limit),
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getGuru = async (req, res, next) => {
   try {
     const guru = await Guru.find().select("nama _id");
@@ -67,6 +108,28 @@ export const getGuru = async (req, res, next) => {
       success: true,
       message: "Berhasil mengambil data guru.",
       guru,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getDetail = async (req, res, next) => {
+  try {
+    const jumlahGuru = await Guru.countDocuments();
+    const lk = await Guru.countDocuments({
+      jenisKelamin: "Laki-Laki",
+    });
+    const pr = await Guru.countDocuments({
+      jenisKelamin: "Perempuan",
+    });
+    const active = await Guru.countDocuments({ status: "active" });
+    const nonActive = await Guru.countDocuments({ status: "non active" });
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengambil detail guru.",
+      data: { jumlahGuru, pr, lk, active, nonActive },
     });
   } catch (error) {
     next(error);

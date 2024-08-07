@@ -20,9 +20,9 @@ const selectRow = [7, 14, 21, 28];
 
 const DataGuruPage = () => {
   const dataChecked = useSelector(selectedDataDeleteMany);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [dataSiswa, setDataSiswa] = useState([]);
+  const [dataGuru, setDataGuru] = useState([]);
   const [pagination, setPagination] = useState({});
   const [dataDetail, setDataDetail] = useState([]);
   const [page, setPage] = useState(1);
@@ -85,50 +85,51 @@ const DataGuruPage = () => {
   );
 
   useEffect(() => {
-    // const getSiswa = async () => {
-    //   try {
-    //     const res = await axios.get(`${HOST}/api/siswa/get-all-siswa`, {
-    //       params: {
-    //         page,
-    //         limit,
-    //         search,
-    //         tahunMasuk: filters.tahunMasuk,
-    //         jenisKelamin: filters.jenisKelamin,
-    //         kelas: filters.jenisKelamin,
-    //         kelasNama: filters.kelasNama,
-    //       },
-    //       withCredentials: true,
-    //     });
-    //     if (res.status == 200) {
-    //       setDataSiswa(res.data.data);
-    //       setPagination(res.data.pagination);
-    //     }
-    //   } catch (error) {
-    //     responseError(error);
-    //   } finally {
-    //     setTimeout(() => {
-    //       setLoading(false);
-    //     }, 50);
-    //   }
-    // };
-    // const getDetail = async () => {
-    //   try {
-    //     const res = await axios.get(`${HOST}/api/siswa/get-detail-siswa`, {
-    //       withCredentials: true,
-    //     });
-    //     if (res.status === 200) {
-    //       setDataDetail(res.data.data);
-    //     }
-    //   } catch (error) {
-    //     responseError(error);
-    //   } finally {
-    //     setTimeout(() => {
-    //       setLoading(false);
-    //     }, 50);
-    //   }
-    // };
-    // getSiswa();
-    // getDetail();
+    const getSiswa = async () => {
+      try {
+        const res = await axios.get(`${HOST}/api/guru/get-all-guru`, {
+          params: {
+            page,
+            limit,
+            search,
+            jenisKelamin: filters.jenisKelamin,
+            // kelas: filters.jenisKelamin,
+            // kelasNama: filters.kelasNama,
+          },
+          withCredentials: true,
+        });
+        if (res.status == 200) {
+          setDataGuru(res.data.data);
+          setPagination(res.data.pagination);
+        }
+      } catch (error) {
+        responseError(error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
+      }
+    };
+    const getDetail = async () => {
+      try {
+        const res = await axios.get(`${HOST}/api/guru/get-detail-guru`, {
+          withCredentials: true,
+        });
+        if (res.status === 200) {
+          setDataDetail(res.data.data);
+
+          console.log(res.data.data);
+        }
+      } catch (error) {
+        responseError(error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
+      }
+    };
+    getSiswa();
+    getDetail();
   }, [limit, page, search, isDeleteSiswa, isDeleteManySiswa, filters]);
 
   useEffect(() => {
@@ -163,6 +164,8 @@ const DataGuruPage = () => {
       [filterName]: filterValue,
     }));
   };
+
+  console.log(pagination);
 
   return (
     <section className="px-6 py-4 mb-4 ">
@@ -217,7 +220,7 @@ const DataGuruPage = () => {
           <div>
             <ExportExcel
               columns={columns}
-              data={dataSiswa}
+              data={dataGuru}
               namaFile={"Data-Siswa"}
               loading={loading}
             />
@@ -231,11 +234,11 @@ const DataGuruPage = () => {
           </div>
         ) : (
           <TableGuru
-            data={dataSiswa}
+            data={dataGuru}
             page={page}
-            limit={pagination.perPage}
-            totalSiswa={pagination.total}
-            totalPage={pagination.totalPages}
+            limit={pagination.page}
+            totalGuru={pagination.totalGuru}
+            totalPage={pagination.totalPage}
             handlePagination={handlePagination}
             handleToggleDeleteOne={handleToggleDeleteOne}
             setAllCheck={setAllCheck}
@@ -244,13 +247,13 @@ const DataGuruPage = () => {
           />
         )}
       </div>
-      {isDeleteSiswa && <DeleteModal onClose={handleToggleDeleteOne} />}
+      {/* {isDeleteSiswa && <DeleteModal onClose={handleToggleDeleteOne} />}
       {isDeleteManySiswa && (
         <DeleteManyModal
           onClose={handleToggleDeleteMany}
           setAllCheck={setAllCheck}
         />
-      )}
+      )} */}
     </section>
   );
 };

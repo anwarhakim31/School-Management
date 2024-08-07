@@ -22,6 +22,7 @@ const guruSchema = new mongoose.Schema({
   },
   alamat: { type: String, required: false },
   photo: { type: String },
+  createdAt: { type: Date, default: Date.now },
 });
 
 const Guru = mongoose.model("Guru", guruSchema);

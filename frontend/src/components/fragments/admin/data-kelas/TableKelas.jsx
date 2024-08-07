@@ -125,7 +125,9 @@ const TableKelas = ({
                     {kelas.waliKelas ? (
                       kelas.waliKelas.nama
                     ) : (
-                      <span className="text-gray-800">Data Kosong</span>
+                      <span className="text-gray-800 font-bold">
+                        Data Kosong
+                      </span>
                     )}
                   </td>
                   <td
@@ -135,7 +137,9 @@ const TableKelas = ({
                     {kelas.posisi ? (
                       kelas.posisi
                     ) : (
-                      <span className="text-gray-800">Data Kosong</span>
+                      <span className="text-gray-800 font-bold">
+                        Data Kosong
+                      </span>
                     )}
                   </td>
                   <td
