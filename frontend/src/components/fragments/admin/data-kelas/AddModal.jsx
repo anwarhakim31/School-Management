@@ -4,7 +4,7 @@ import Modal from "@/components/elements/Modal";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -13,11 +13,10 @@ const AddModal = ({ onClose }) => {
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
   } = useForm();
   const [loading, setLoading] = useState(false);
-  const nis = watch("kelas");
+  const [guru, setGuru] = useState([]);
 
   const handleChangeKelas = (e, name) => {
     const value = e.target.value;
@@ -26,8 +25,6 @@ const AddModal = ({ onClose }) => {
 
     setValue(name, cleanedValue);
   };
-
-  console.log(nis);
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -46,6 +43,26 @@ const AddModal = ({ onClose }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const guru = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get(HOST + "/api/guru/get-guru", {
+          withCredentials: true,
+        });
+
+        if (res.status === 200) {
+          setGuru(res.data.guru);
+        }
+      } catch (error) {
+        responseError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    guru();
+  }, []);
 
   return (
     <Modal onClose={onClose}>
@@ -86,7 +103,7 @@ const AddModal = ({ onClose }) => {
                   },
                 })}
                 onChange={(e) => handleChangeKelas(e, "kelas")}
-                className="w-full border text-xs px-2 py-1.5 rounded-lg  outline-neutral border-gray-500"
+                className="w-full border text-xs px-2 py-1.5 rounded-md  outline-neutral border-gray-500"
               />
               <span className="text-xs h-4 text-neutral2 block">
                 {errors.kelas && errors.kelas.message}
@@ -109,14 +126,39 @@ const AddModal = ({ onClose }) => {
                     message: "Nama maksimal 20 karakter.",
                   },
                 })}
-                className="w-full border text-xs px-2 py-1.5 rounded-lg  outline-neutral border-gray-500"
+                className="w-full border text-xs px-2 py-1.5 rounded-md  outline-neutral border-gray-500"
               />
               <span className="text-xs h-4 text-neutral2 block">
                 {errors.nama && errors.nama.message}
               </span>
             </div>
           </div>
-          <div className="mb-4 px-6">
+          <div className="px-6 mb-4">
+            <label
+              htmlFor="wali"
+              className="text-xs mb-2 block font-semibold text-gray-700"
+            >
+              Wali Kelas
+            </label>
+            <select
+              id="wali"
+              type="text"
+              {...register("waliKelas")}
+              className="w-full border text-xs px-2 py-1.5 rounded-md  outline-neutral border-gray-500"
+            >
+              <option value="">Tidak ada Wali Kelas</option>
+              {guru &&
+                guru.map((gu) => (
+                  <option key={gu._id} value={gu._id}>
+                    {gu.nama}
+                  </option>
+                ))}
+            </select>
+            <span className="text-xs font-medium h-4 mt-1 block">
+              (opsional)
+            </span>
+          </div>
+          <div className=" px-6">
             <label
               htmlFor="nama"
               className="text-xs mb-2 block font-semibold text-gray-700"
@@ -127,29 +169,12 @@ const AddModal = ({ onClose }) => {
               id="posisi"
               type="text"
               {...register("posisi")}
-              className="w-full border text-xs px-2 py-1.5 rounded-lg  outline-neutral border-gray-500"
+              className="w-full border text-xs px-2 py-1.5 rounded-md  outline-neutral border-gray-500"
             />
             <span className="text-xs font-medium h-4 mt-1 block">
               (opsional)
             </span>
           </div>
-          {/* <div className="px-6">
-            <label
-              htmlFor="wali"
-              className="text-xs mb-2 block font-semibold text-gray-700"
-            >
-              Wali Kelas
-            </label>
-            <input
-              id="wali"
-              type="text"
-              {...register("waliKelas")}
-              className="w-full border text-xs px-2 py-1.5 rounded-lg  outline-neutral border-gray-500"
-            />
-            <span className="text-xs font-medium h-4 mt-1 block">
-              (opsional)
-            </span>
-          </div> */}
 
           <div className="text-end border-t mt-4 p-4 space-x-4">
             <button

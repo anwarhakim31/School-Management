@@ -5,16 +5,21 @@ import Siswa from "../models/siswa-model.js";
 
 export const addKelas = async (req, res, next) => {
   try {
-    const { kelas, nama } = req.body;
+    const { kelas, nama, waliKelas } = req.body;
 
     const kelasExists = await Kelas.findOne({ kelas, nama });
 
     if (kelasExists) {
       throw new ResponseError(400, "Kombinasi kelas dan nama sudah digunakan.");
     }
+
     const newKelas = new Kelas(req.body);
 
     await newKelas.save();
+
+    if (waliKelas) {
+      await Guru.findByIdAndUpdate(waliKelas, { waliKelas: newKelas._id });
+    }
 
     res
       .status(200)
@@ -79,7 +84,7 @@ export const deleteKelas = async (req, res, next) => {
 export const updateKelas = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { nama, kelas } = req.body;
+    const { nama, kelas, waliKelas } = req.body;
 
     const kelasExists = await Kelas.findOne({ nama, kelas, _id: { $ne: id } });
 
@@ -87,11 +92,47 @@ export const updateKelas = async (req, res, next) => {
       throw new ResponseError(400, "Kombinasi kelas dan nama sudah digunakan.");
     }
 
-    await Kelas.findByIdAndUpdate(
-      id,
-      { $set: req.body },
-      { runValidators: true, new: true }
-    );
+    const isExist = await Kelas.findById(id);
+
+    if (!waliKelas) {
+      if (isExist.waliKelas) {
+        await Guru.findByIdAndUpdate(
+          isExist.waliKelas,
+          {
+            $unset: { waliKelas: null },
+          },
+          { new: true }
+        );
+      }
+
+      delete req.body.waliKelas;
+
+      await Kelas.findByIdAndUpdate(
+        id,
+        { $set: req.body },
+        { runValidators: true, new: true }
+      );
+    } else {
+      if (isExist.waliKelas) {
+        await Guru.findByIdAndUpdate(
+          isExist.waliKelas,
+          {
+            $unset: { waliKelas: null },
+          },
+          { new: true }
+        );
+      }
+
+      await Guru.findByIdAndUpdate(waliKelas, {
+        waliKelas: id,
+      });
+
+      await Kelas.findByIdAndUpdate(
+        id,
+        { $set: { ...req.body } },
+        { runValidators: true, new: true }
+      );
+    }
 
     res.status(200).json({
       success: true,

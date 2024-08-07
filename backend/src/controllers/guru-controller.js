@@ -58,3 +58,17 @@ export const addGuru = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getGuru = async (req, res, next) => {
+  try {
+    const guru = await Guru.find().select("nama _id");
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengambil data guru.",
+      guru,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
