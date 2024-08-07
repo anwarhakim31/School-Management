@@ -1,5 +1,6 @@
 import ExportExcel from "@/components/elements/DataToExel";
 import CustomDropdown from "@/components/elements/DropDown";
+import Student from "../../assets/svg/Teacher.svg";
 import DropdownFilter from "@/components/elements/DropDownFilter";
 import DeleteManyModal from "@/components/fragments/admin/data-siswa/DeleteManyModal";
 import DeleteModal from "@/components/fragments/admin/data-siswa/DeleteModal";
@@ -188,11 +189,12 @@ const DataSiswaPage = () => {
           to={"/admin/tambah-siswa"}
           className="flex-between gap-3 min-w-fit bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
         >
-          <Plus
+          {/* <Plus
             width={15}
             height={15}
             className="rounded-full bg-white text-neutral"
-          />{" "}
+          />{" "} */}
+          <img src={Student} alt="student" width={15} height={15} />
           Tambah Siswa
         </Link>
       </div>

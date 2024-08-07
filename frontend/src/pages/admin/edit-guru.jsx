@@ -23,6 +23,7 @@ const EditGuruPage = () => {
   const [loading, setLoading] = useState(false);
   const [isHover, setIsHover] = useState(false);
   const [photo, setPhoto] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -46,7 +47,7 @@ const EditGuruPage = () => {
   const nip = watch("nip");
   const tanggalLahir = watch("tanggalLahir");
   const bidangStudi = watch("bidangStudi");
-  const agama = watch("agama");
+  const status = watch("status");
   const phone = watch("phone");
   const selectKelas = watch("kelas");
 
@@ -111,7 +112,7 @@ const EditGuruPage = () => {
       Object.keys(editData).forEach((data) => {
         if (data === "tanggalLahir" && editData[data]) {
           setValue(data, formatDate(editData[data]));
-        } else if (data === "kelas") {
+        } else if (data === "waliKelas") {
           setValue("kelas", editData[data].kelas);
           setValue("namaKelas", editData[data].nama);
         } else if (data === "password") {
@@ -134,7 +135,6 @@ const EditGuruPage = () => {
       navigate("/admin/data-siswa");
     }
   }, []);
-  console.log(photo);
 
   const handleNumberChange = (e, name) => {
     const value = e.target.value;
@@ -147,8 +147,8 @@ const EditGuruPage = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const res = await axios.post(
-        HOST + "/api/siswa/edit-siswa",
+      const res = await axios.put(
+        HOST + "/api/guru/edit-guru/" + editData._id,
         { ...data, photo },
         {
           withCredentials: true,
@@ -157,7 +157,7 @@ const EditGuruPage = () => {
 
       toast.success(res.data.message);
       dispatch(setDataEdit(undefined));
-      navigate("/admin/data-siswa");
+      navigate("/admin/data-guru  ");
     } catch (error) {
       responseError(error);
     } finally {
@@ -165,7 +165,7 @@ const EditGuruPage = () => {
     }
   };
 
-  console.log(editData);
+  console.log(status);
 
   const handleChangeImage = async (e) => {
     const file = e.target.files[0];
@@ -195,6 +195,14 @@ const EditGuruPage = () => {
       } finally {
         setLoading(false);
       }
+    }
+  };
+
+  const handleChangeStatus = (e) => {
+    if (e.target.checked) {
+      setValue("status", false);
+    } else {
+      setValue("status", true);
     }
   };
 
@@ -246,6 +254,31 @@ const EditGuruPage = () => {
         </div>
         <p className="text-xs mt-8">Besar file maksimal 1 MB</p>
         <p className="text-xs mt-2">Ekstensi file: jpeg/jpg, png</p>
+
+        <div className="flex flex-col justify-center  mt-8">
+          <p className="text-xs mb-2">Status</p>
+          <div className="relative inline-block w-10 h-5">
+            <input
+              type="checkbox"
+              id="toggle"
+              checked={status}
+              onChange={handleChangeStatus}
+              className="opacity-0 w-0 h-0 peer"
+              {...register("status")}
+            />
+            <label
+              htmlFor="toggle"
+              className={`absolute cursor-pointer inset-0 bg-backup border border-gray-400 rounded-full transition-colors duration-300 ${
+                status ? "bg-gray-700" : ""
+              }`}
+            ></label>
+            <span
+              className={`absolute top-1/2 -translate-y-1/2 left-0 w-4 h-4 bg-white rounded-full transition-transform duration-300 transform ${
+                status ? "translate-x-6" : ""
+              }`}
+            ></span>
+          </div>
+        </div>
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -487,7 +520,7 @@ const EditGuruPage = () => {
             />
           </div>
           <div className="flex justify-end pt-8 gap-4 ">
-            <Link to={"/admin/data-siswa"}>
+            <Link to={"/admin/data-guru"}>
               <button
                 disabled={loading}
                 type="submit"

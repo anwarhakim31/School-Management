@@ -15,9 +15,9 @@ const guruSchema = new mongoose.Schema({
   bidangStudi: { type: String, required: true },
   waliKelas: { type: String, required: false, ref: "Kelas" },
   status: {
-    type: String,
-    enum: ["active", "non active"],
-    default: "active",
+    type: Boolean,
+    enum: [true, false],
+    default: true,
     required: true,
   },
   alamat: { type: String, required: false },

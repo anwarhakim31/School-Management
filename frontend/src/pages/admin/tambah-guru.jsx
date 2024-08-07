@@ -27,12 +27,13 @@ const TambahGuruPage = () => {
   const nip = watch("nip", "");
   const bidangStudi = watch("bidangStudi", "");
   const phone = watch("phone", "");
+  const kelass = watch("kelas", "");
   const selectedValue = watch("kelas");
-  const tahunMasuk = watch("tahunMasuk", "");
 
   const PhotoRef = useRef();
 
   const onSubmit = async (data) => {
+    console.log(data);
     setLoading(true);
     try {
       const res = await axios.post(
@@ -111,6 +112,12 @@ const TambahGuruPage = () => {
 
     setKelasName(nama);
   }, [kelasDB, selectedValue]);
+
+  useEffect(() => {
+    if (kelass === "") {
+      setValue("namaKelas", "");
+    }
+  }, [kelass]);
 
   const handleNumberChange = (e, name) => {
     const value = e.target.value;
@@ -337,7 +344,7 @@ const TambahGuruPage = () => {
               id="bidangstudi"
               onChange={(e) => handleNumberChange(e, "agama")}
               {...register("bidangStudi", {
-                required: "Agama tidak boleh kosong..",
+                required: "Bidang Studi tidak boleh kosong.",
               })}
               className="py-1.5 h-8 bg-white border text-gray-500   text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             >
@@ -411,11 +418,11 @@ const TambahGuruPage = () => {
                   className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
                 >
                   {kelasNama &&
-                    kelasNama.map((kel) => {
+                    kelasNama.map((kel, i) => {
                       return (
                         <>
                           <option
-                            key={kel._id}
+                            key={i}
                             value={kel.nama}
                             className="rounded-md"
                           >

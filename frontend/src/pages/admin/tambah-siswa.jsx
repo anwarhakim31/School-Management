@@ -344,12 +344,12 @@ const TambahSiswaPage = () => {
                 Pilih agama
               </option>
               <option value="islam">Islam</option>
-              <option value="islam">Kristen Protestan</option>
-              <option value="islam">Kristen Katolik</option>
-              <option value="islam">Hindu</option>
-              <option value="islam">Budha</option>
-              <option value="islam">Kong Hu Chu</option>
-              <option value="islam">Aliran Kepercayaan</option>
+              <option value="Kristen Protestan">Kristen Protestan</option>
+              <option value="Kristen Katolik">Kristen Katolik</option>
+              <option value="Hindu">Hindu</option>
+              <option value="Budha">Budha</option>
+              <option value="Kong Hu Chu">Kong Hu Chu</option>
+              <option value="Aliran Kepercayaan">Aliran Kepercayaan</option>
             </select>
             <span className="text-xs h-4 block mt-1 text-neutral2">
               {errors.agama && errors.agama.message}

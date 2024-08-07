@@ -227,13 +227,11 @@ const TableGuru = ({
                     >
                       <span
                         className={`${
-                          guru.status === "active"
-                            ? "bg-gray-700"
-                            : "bg-gray-600"
+                          guru.status ? "bg-gray-700" : "bg-gray-600"
                         } px-4 py-1 text-white rounded-full`}
                       >
                         {" "}
-                        {guru.status}
+                        {guru.status ? "Aktif" : "Non Aktif"}
                       </span>
                     </td>
                     <td

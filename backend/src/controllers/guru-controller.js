@@ -123,8 +123,8 @@ export const getDetail = async (req, res, next) => {
     const pr = await Guru.countDocuments({
       jenisKelamin: "Perempuan",
     });
-    const active = await Guru.countDocuments({ status: "active" });
-    const nonActive = await Guru.countDocuments({ status: "non active" });
+    const active = await Guru.countDocuments({ status: true });
+    const nonActive = await Guru.countDocuments({ status: false });
 
     res.status(200).json({
       success: true,
@@ -167,13 +167,88 @@ export const deleteManyGuru = async (req, res, next) => {
   try {
     const { dataChecked } = req.body;
 
-    const GuruList = await Guru;
+    const GuruList = await Guru.find({ _id: { $in: dataChecked } });
+
+    await Guru.deleteMany({ _id: { $in: dataChecked } });
+
+    for (const guru of GuruList) {
+      if (guru.waliKelas) {
+        await Kelas.findByIdAndUpdate(
+          { _id: guru.waliKelas },
+          { $unset: { waliKelas: null } }
+        );
+      }
+    }
 
     res.status(200).json({
       success: true,
       message: "Berhasil menghapus guru terpilih.",
     });
   } catch (error) {
+    next(error);
+  }
+};
+
+export const updateGuru = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const { kelas, namaKelas } = req.body;
+
+    const guru = await Guru.findById(id);
+
+    if (!guru) {
+      throw new ResponseError(404, "Guru tidak ditemukan.");
+    }
+
+    if (!kelas && !namaKelas) {
+      delete req.body.namaKelas;
+      delete req.body.kelas;
+      if (guru.waliKelas) {
+        await Kelas.findByIdAndUpdate(
+          { _id: guru.waliKelas },
+          { $unset: { waliKelas: null } }
+        );
+        await Guru.findByIdAndUpdate(
+          { _id: id },
+          { $unset: { waliKelas: null } }
+        );
+      }
+
+      await guru.save();
+    } else {
+      if (guru.waliKelas) {
+        await Kelas.findByIdAndUpdate(
+          { _id: guru.waliKelas },
+          { $unset: { waliKelas: null } }
+        );
+      }
+
+      const newKelas = await Kelas.findOne({ kelas, nama: namaKelas });
+
+      if (!newKelas) {
+        throw new ResponseError(404, "kelas tidak ditemukan.");
+      }
+
+      delete req.body.namaKelas;
+      delete req.body.kelas;
+
+      await Kelas.findByIdAndUpdate(
+        { _id: newKelas._id },
+        { waliKelas: guru._id }
+      );
+
+      await Guru.findByIdAndUpdate(
+        { _id: id },
+        { ...req.body, waliKelas: newKelas._id }
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengedit guru.",
+    });
+  } catch (error) {
+    console.log(error);
     next(error);
   }
 };

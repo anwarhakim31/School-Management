@@ -21,7 +21,7 @@ const DeleteManyModal = ({ onClose, setAllCheck }) => {
     setLoading(true);
 
     try {
-      const res = await axios.delete(HOST + "/api/siswa/delete-many-siswa", {
+      const res = await axios.delete(HOST + "/api/guru/delete-many-guru", {
         data: { dataChecked },
         withCredentials: true,
       });
