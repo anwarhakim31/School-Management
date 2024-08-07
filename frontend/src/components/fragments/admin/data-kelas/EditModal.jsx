@@ -1,9 +1,11 @@
+import CustomSelectOption from "@/components/elements/CustomSelectOption";
 import HeaderModal from "@/components/elements/HeaderModal";
 import Modal from "@/components/elements/Modal";
 import { selectedDataEdit, setDataEdit } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,12 +16,17 @@ const EditModal = ({ onClose }) => {
     register,
     handleSubmit,
     setValue,
+
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: { waliKelas: "", kelas: "", nama: "", posisi: "" },
+  });
   const dataEdit = useSelector(selectedDataEdit);
   const dispatch = useDispatch();
+  const [isOpen, setIsOpen] = useState(false);
   const [guru, setGuru] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [waliKelas, setWaliKelas] = useState("Tidak Sebagai Wali Kelas");
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -68,14 +75,30 @@ const EditModal = ({ onClose }) => {
       setValue("nama", dataEdit.nama || "");
       setValue("posisi", dataEdit.posisi || "");
       setValue("waliKelas", dataEdit.waliKelas._id || "");
+      setWaliKelas(dataEdit.waliKelas.nama || "");
     }
   }, [dataEdit, guru]);
 
+  const handleWaliKelasSelection = (nama, id) => {
+    if (nama === "") {
+      setWaliKelas("Tidak sebagai Wali Kelas");
+    } else {
+      setWaliKelas(nama);
+    }
+
+    setValue("waliKelas", id);
+
+    setIsOpen(false);
+  };
+
+  const handleToggleSelect = () => {
+    setIsOpen(false);
+  };
   return (
     <Modal onClose={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-[425px] max-h-[400px] rounded-md shadow-md bg-white"
+        className="w-full sm:max-w-[425px] max-h-[400px] rounded-lg shadow-md bg-white"
       >
         <div className="p-4 px-6 border-b">
           <HeaderModal
@@ -139,27 +162,47 @@ const EditModal = ({ onClose }) => {
               </span>
             </div>
           </div>
-          <div className="px-6 mb-4">
+          <div className="px-6  mb-4">
             <label
-              htmlFor="wali"
+              htmlFor=""
               className="text-xs mb-2 block font-semibold text-gray-700"
             >
               Wali Kelas
             </label>
-            <select
-              id="wali"
-              type="text"
-              {...register("waliKelas")}
-              className="w-full border text-xs px-2 py-1.5 rounded-md  outline-neutral border-gray-500"
+            <div
+              className="w-full relative  text-xs  rounded-md "
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
             >
-              <option value="">Tidak ada Wali Kelas</option>
-              {guru &&
-                guru.map((gu) => (
-                  <option key={gu._id} value={gu._id}>
-                    {gu.nama}
-                  </option>
-                ))}
-            </select>
+              <input
+                type="text"
+                id="wali"
+                onClick={() => {
+                  setIsOpen(true);
+                }}
+                value={waliKelas}
+                readOnly
+                className="px-2 py-1.5 w-full  border  rounded-md  outline-neutral select-none cursor-pointer border-gray-500"
+              />
+              <div className="absolute top-2 right-2 ">
+                {isOpen ? (
+                  <ChevronUp width={15} height={15} />
+                ) : (
+                  <ChevronDown width={15} height={15} />
+                )}
+              </div>
+              {isOpen && (
+                <CustomSelectOption
+                  handleSelect={handleWaliKelasSelection}
+                  onClose={handleToggleSelect}
+                  data={guru}
+                  def={"Tidak ada Wali Kelas"}
+                  isOpen={isOpen}
+                />
+              )}
+            </div>
+
             <span className="text-xs font-medium h-4 mt-1 block">
               (opsional)
             </span>

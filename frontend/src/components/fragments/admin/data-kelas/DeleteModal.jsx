@@ -37,7 +37,7 @@ const DeleteModal = ({ onClose }) => {
     <Modal onClose={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-[425px] h-[200px] rounded-md shadow-md bg-white"
+        className="w-full sm:max-w-[425px] h-[200px] rounded-lg shadow-md bg-white"
       >
         <div className="py-4 px-6 border-b">
           <HeaderModal

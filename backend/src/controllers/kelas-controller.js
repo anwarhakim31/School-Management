@@ -109,7 +109,7 @@ export const updateKelas = async (req, res, next) => {
 
       await Kelas.findByIdAndUpdate(
         id,
-        { $set: req.body },
+        { $unset: { waliKelas: null } },
         { runValidators: true, new: true }
       );
     } else {

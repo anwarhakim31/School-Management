@@ -55,7 +55,7 @@ const DeleteManyModal = ({ onClose, setAllCheck }) => {
             <TriangleAlert className="w-8 h-8 text-neutral2" />
           </div>
           <h3 className="text-sm  font-medium">
-            {" Apakah And yakin ingin menghapus siswa terpilih?"}
+            {" Apakah Anda yakin ingin menghapus siswa terpilih?"}
           </h3>
         </div>
         <div className="text-end border-t mt-4 p-4 space-x-4">

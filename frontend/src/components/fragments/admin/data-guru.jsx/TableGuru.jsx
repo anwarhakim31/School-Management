@@ -240,8 +240,8 @@ const TableGuru = ({
                       scope="row"
                       className=" py-4 px-8 max-w-full text-center text-xs font-normal whitespace-nowrap text-gray-900 "
                     >
-                      {guru.kelas ? (
-                        `${guru.kelas.kelas} ${guru.kelas.nama}`
+                      {guru.waliKelas ? (
+                        `${guru.waliKelas.kelas} ${guru.waliKelas.nama}`
                       ) : (
                         <span className="text-gray-700 font-bold">
                           Data Kosong

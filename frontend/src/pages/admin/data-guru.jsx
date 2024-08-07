@@ -2,8 +2,6 @@ import guru from "../../assets/svg/Student.svg";
 import ExportExcel from "@/components/elements/DataToExel";
 import CustomDropdown from "@/components/elements/DropDown";
 import DropdownFilter from "@/components/elements/DropDownFilter";
-import DeleteManyModal from "@/components/fragments/admin/data-siswa/DeleteManyModal";
-import DeleteModal from "@/components/fragments/admin/data-siswa/DeleteModal";
 import HeaderBox from "@/components/elements/data-guru/HeaderBox";
 import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
@@ -15,6 +13,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import TableGuru from "@/components/fragments/admin/data-guru.jsx/TableGuru";
+import DeleteModal from "@/components/fragments/admin/data-guru.jsx/DeleteModal";
+import DeleteManyModal from "@/components/fragments/admin/data-guru.jsx/DeleteManyModal";
 
 const selectRow = [7, 14, 21, 28];
 
@@ -39,8 +39,8 @@ const DataGuruPage = () => {
   const columns = useMemo(
     () => [
       {
-        Header: "NIS",
-        accessor: "nis",
+        Header: "NIP",
+        accessor: "nip",
       },
       {
         Header: "Nama",
@@ -60,25 +60,21 @@ const DataGuruPage = () => {
         accessor: (row) => `${formatDate(row.tanggalLahir)}`,
       },
       {
-        Header: "Agama",
-        accessor: "agama",
+        Header: "Bidang Studi",
+        accessor: "bidangStudi",
       },
       {
         Header: "Alamat",
         accessor: "alamat",
       },
       {
-        Header: "No. Tlp",
-        accessor: "phone",
+        Header: "Status",
+        accessor: "status",
       },
       {
-        Header: "Tahun Masuk",
-        accessor: "tahunMasuk",
-      },
-      {
-        Header: "Kelas",
+        Header: "Wali Kelas",
         accessor: (row) =>
-          `${row.kelas ? row.kelas.kelas + row.kelas.nama : ""}`,
+          `${row.waliKelas ? row.waliKelas.kelas + row.waliKelas.nama : ""}`,
       },
     ],
     []
@@ -165,8 +161,6 @@ const DataGuruPage = () => {
     }));
   };
 
-  console.log(pagination);
-
   return (
     <section className="px-6 py-4 mb-4 ">
       <HeaderBox dataDetail={dataDetail} loading={loading} />
@@ -247,13 +241,13 @@ const DataGuruPage = () => {
           />
         )}
       </div>
-      {/* {isDeleteSiswa && <DeleteModal onClose={handleToggleDeleteOne} />}
+      {isDeleteSiswa && <DeleteModal onClose={handleToggleDeleteOne} />}
       {isDeleteManySiswa && (
         <DeleteManyModal
           onClose={handleToggleDeleteMany}
           setAllCheck={setAllCheck}
         />
-      )} */}
+      )}
     </section>
   );
 };

@@ -95,8 +95,8 @@ const EditSiswaPage = () => {
         if (data === "tanggalLahir" && editData[data]) {
           setValue(data, formatDate(editData[data]));
         } else if (data === "kelas") {
-          setValue("kelas", editData[data].kelas);
-          setValue("namaKelas", editData[data].nama);
+          setValue("kelas", editData[data]?.kelas);
+          setValue("namaKelas", editData[data]?.nama);
         } else if (data === "password") {
           setValue("password", undefined);
         } else if (data === "photo") {

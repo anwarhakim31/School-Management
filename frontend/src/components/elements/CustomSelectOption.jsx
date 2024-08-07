@@ -5,7 +5,7 @@ const CustomSelectOption = ({ handleSelect, data, isOpen, onClose, def }) => {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) {
+      if (dropRef.current && !dropRef.current.contains(e.target)) {
         onClose();
       }
     };

@@ -1,35 +1,31 @@
 import HeaderModal from "@/components/elements/HeaderModal";
 import Modal from "@/components/elements/Modal";
-import {
-  selectedDataDeleteMany,
-  setDataDeleteMany,
-} from "@/store/slices/admin-slice";
+import { selectedDataDelete } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
 import { TriangleAlert } from "lucide-react";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { toast } from "sonner";
 
-const DeleteManyModal = ({ onClose, setAllCheck }) => {
-  const dispatch = useDispatch();
+const DeleteModal = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
-  const dataChecked = useSelector(selectedDataDeleteMany);
+  const dataGuru = useSelector(selectedDataDelete);
 
   const handleDelete = async () => {
     setLoading(true);
 
     try {
-      const res = await axios.delete(HOST + "/api/siswa/delete-many-siswa", {
-        data: { dataChecked },
-        withCredentials: true,
-      });
+      const res = await axios.delete(
+        HOST + "/api/guru/delete-one-guru/" + dataGuru._id,
+        { withCredentials: true }
+      );
 
-      toast.success(res.data.message);
-      setAllCheck(false);
-      dispatch(setDataDeleteMany([]));
-      onClose();
+      if (res.status === 200) {
+        toast.success(res.data.message);
+        onClose();
+      }
     } catch (error) {
       responseError(error);
     } finally {
@@ -55,7 +51,7 @@ const DeleteManyModal = ({ onClose, setAllCheck }) => {
             <TriangleAlert className="w-8 h-8 text-neutral2" />
           </div>
           <h3 className="text-sm  font-medium">
-            {" Apakah And yakin ingin menghapus siswa terpilih?"}
+            {" Apakah And yakin ingin menghapus siswa?"}
           </h3>
         </div>
         <div className="text-end border-t mt-4 p-4 space-x-4">
@@ -83,4 +79,4 @@ const DeleteManyModal = ({ onClose, setAllCheck }) => {
   );
 };
 
-export default DeleteManyModal;
+export default DeleteModal;

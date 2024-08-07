@@ -1,10 +1,10 @@
 import CustomSelectOption from "@/components/elements/CustomSelectOption";
 import HeaderModal from "@/components/elements/HeaderModal";
-import LoaderButton from "@/components/elements/LoaderButton";
 import Modal from "@/components/elements/Modal";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -14,7 +14,7 @@ const AddModal = ({ onClose }) => {
     register,
     handleSubmit,
     setValue,
-
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: { waliKelas: "", kelas: "", nama: "", posisi: "" },
@@ -22,8 +22,7 @@ const AddModal = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [guru, setGuru] = useState([]);
-  const [waliKelas, setWaliKelas] = useState("");
-  const ref = useRef();
+  const [waliKelas, setWaliKelas] = useState("Tidak Sebagai Wali Kelas");
 
   const handleChangeKelas = (e, name) => {
     const value = e.target.value;
@@ -34,13 +33,18 @@ const AddModal = ({ onClose }) => {
   };
 
   const handleToggleSelect = () => {
-    setIsOpen(!isOpen);
+    setIsOpen(false);
   };
 
   const handleWaliKelasSelection = (nama, id) => {
-    setWaliKelas(nama);
+    if (nama === "") {
+      setWaliKelas("Tidak sebagai Wali Kelas");
+    } else {
+      setWaliKelas(nama);
+    }
 
     setValue("waliKelas", id);
+    setIsOpen(false);
   };
 
   const onSubmit = async (data) => {
@@ -85,7 +89,7 @@ const AddModal = ({ onClose }) => {
     <Modal onClose={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full relative sm:max-w-[425px] max-h-[400px] rounded-md shadow-md bg-white"
+        className="w-full relative sm:max-w-[425px] max-h-[400px] rounded-lg shadow-md bg-white"
       >
         <div className="px-6 py-4 border-b">
           <HeaderModal
@@ -152,27 +156,41 @@ const AddModal = ({ onClose }) => {
           </div>
           <div className="px-6  mb-4">
             <label
-              htmlFor="wali"
+              htmlFor=""
               className="text-xs mb-2 block font-semibold text-gray-700"
             >
               Wali Kelas
             </label>
             <div
               className="w-full relative  text-xs  rounded-md "
-              onClick={() => setIsOpen(true)}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
             >
               <input
                 type="text"
                 id="wali"
-                defaultValue={waliKelas}
+                onClick={(e) => {
+                  setIsOpen(true);
+                }}
+                value={waliKelas}
+                readOnly
                 className="px-2 py-1.5 w-full  border  rounded-md  outline-neutral select-none cursor-pointer border-gray-500"
               />
+              <div className="absolute top-2 right-2 ">
+                {isOpen ? (
+                  <ChevronUp width={15} height={15} />
+                ) : (
+                  <ChevronDown width={15} height={15} />
+                )}
+              </div>
               {isOpen && (
                 <CustomSelectOption
                   handleSelect={handleWaliKelasSelection}
                   onClose={handleToggleSelect}
                   data={guru}
-                  def={"Tidak sebagai Wali Kelas"}
+                  def={"Tidak ada Wali Kelas"}
+                  isOpen={isOpen}
                 />
               )}
             </div>

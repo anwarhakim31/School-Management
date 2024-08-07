@@ -135,3 +135,45 @@ export const getDetail = async (req, res, next) => {
     next(error);
   }
 };
+
+export const deleteOneGuru = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    const guru = await Guru.findById({ _id: id });
+
+    if (!guru) {
+      throw new ResponseError(404, "Data guru tidak ditemukan");
+    }
+
+    if (guru.waliKelas) {
+      await Kelas.findByIdAndUpdate(guru.waliKelas, {
+        $unset: { waliKelas: null },
+      });
+    }
+
+    await Guru.findByIdAndDelete({ _id: id });
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil menghapus guru.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteManyGuru = async (req, res, next) => {
+  try {
+    const { dataChecked } = req.body;
+
+    const GuruList = await Guru;
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil menghapus guru terpilih.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
