@@ -138,7 +138,7 @@ const TambahSiswaPage = () => {
   };
 
   return (
-    <div className="h-full  mx-6 mb-16 bg-white  grid grid-cols-1 rounded-lg py-4 px-6 gap-8 lg:grid-cols-4">
+    <div className=" mx-6 mb-16 bg-white  grid grid-cols-1 rounded-lg py-6 px-6 gap-8 lg:grid-cols-4">
       <div className=" flex justify-start  items-center flex-col">
         <div
           className="relative cursor-pointer w-[150px] overflow-hidden   h-[150px] rounded-full border  bg-white"
@@ -234,7 +234,7 @@ const TambahSiswaPage = () => {
               type={"text"}
               id="password"
               {...register("password", {
-                required: "Password di perlukan.",
+                required: "Password tidak boleh kosong.",
                 maxLength: {
                   value: 50,
                   message: "Password maksimal 20 karakter.",
@@ -258,7 +258,7 @@ const TambahSiswaPage = () => {
               type={"text"}
               id="tempatLahir"
               {...register("tempatLahir", {
-                required: "Tempat Lahir di perlukan.",
+                required: "Tempat Lahir tidak boleh kosong.",
                 maxLength: {
                   value: 50,
                   message: "Tempat Lahir maksimal 20 karakter.",
@@ -279,7 +279,7 @@ const TambahSiswaPage = () => {
               type="date"
               id="TanggalLahir"
               {...register("tanggalLahir", {
-                required: "Tanggal Lahir di perlukan.",
+                required: "Tanggal Lahir tidak boleh kosong.",
               })}
               className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
@@ -447,7 +447,7 @@ const TambahSiswaPage = () => {
               </div>
             </>
           )}
-          <div className="mb-10">
+          <div className="mb-3">
             <label htmlFor="Alamat" className="text-xs mb-2 block">
               Alamat
             </label>

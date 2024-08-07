@@ -5,7 +5,7 @@ import TablePelajaran from "@/components/fragments/admin/data-pelajaran/TablePel
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { Plus, Search, SlidersHorizontal } from "lucide-react";
+import { Filter, Plus, Search, SlidersHorizontal } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import FilterMapel from "@/components/elements/FilterMapel";
 
@@ -132,9 +132,13 @@ const DataPelajaranPage = () => {
             onClick={handleToggleFilter}
             ref={buttonFilterRef}
             disabled={dataFilter.length === 0}
-            className="border border-gray-400 disabled:cursor-not-allowed bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-lg flex-between gap-3"
+            className="border border-gray-400 group disabled:cursor-not-allowed bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-md flex-between gap-3"
           >
-            <SlidersHorizontal width={15} height={15} />
+            <Filter
+              width={15}
+              height={15}
+              className="text-gray-600 group-hover:text-white"
+            />
           </button>
           {option !== "terbaru" && (
             <button

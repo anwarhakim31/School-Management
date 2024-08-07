@@ -3,7 +3,7 @@ import CustomDropdown from "@/components/elements/DropDown";
 import DropdownFilter from "@/components/elements/DropDownFilter";
 import DeleteManyModal from "@/components/fragments/admin/data-siswa/DeleteManyModal";
 import DeleteModal from "@/components/fragments/admin/data-siswa/DeleteModal";
-import HeaderBox from "@/components/elements/admin/HeaderBox";
+import HeaderBox from "@/components/elements/data-siswa/HeaderBox";
 import TableSiswa from "@/components/fragments/admin/data-siswa/TableSiswa";
 import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";

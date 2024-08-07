@@ -48,13 +48,19 @@ const TableKelas = ({
               <th scope="col" className="px-3 py-4">
                 Nama
               </th>
-              <th scope="col" className="px-3 py-4">
+              <th scope="col" className="px-3 py-4 whitespace-nowrap">
                 Jumlah Siswa
               </th>
-              <th scope="col" className="px-6 py-4 text-left">
+              <th
+                scope="col"
+                className="px-6 py-4  whitespace-nowrap text-left"
+              >
                 Wali Kelas
               </th>
-              <th scope="col" className="px-6 py-4 text-left">
+              <th
+                scope="col"
+                className="px-6  whitespace-nowrap  py-4 text-left"
+              >
                 Posisi Kelas
               </th>
 
@@ -87,7 +93,7 @@ const TableKelas = ({
             )}
             {dataSlice &&
               !loading &&
-              [...dataSlice].reverse().map((kelas) => (
+              [...dataSlice].map((kelas) => (
                 <tr
                   key={kelas._id}
                   className={`${

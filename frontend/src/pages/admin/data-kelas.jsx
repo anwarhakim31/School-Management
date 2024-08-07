@@ -1,4 +1,4 @@
-import FilterKelas from "@/components/elements/FilterKelas";
+import FilterKelas from "@/components/elements/data-kelas/FilterKelas";
 import AddModal from "@/components/fragments/admin/data-kelas/AddModal";
 import DeleteModal from "@/components/fragments/admin/data-kelas/DeleteModal";
 import EditModal from "@/components/fragments/admin/data-kelas/EditModal";
@@ -9,6 +9,7 @@ import axios from "axios";
 import {
   ArrowDown01,
   ArrowDownNarrowWide,
+  Filter,
   ListFilter,
   Plus,
   Search,
@@ -24,7 +25,7 @@ const DataKelasPage = () => {
   const [isAddKelas, setIsAddKelas] = useState(false);
   const [isEditKelas, setIsEditKelas] = useState(false);
   const [isDeleteKelas, setIsDeleteKelas] = useState(false);
-  const [option, setOption] = useState(["", ""]);
+  const [option, setOption] = useState("terbaru");
   const [isFilter, setIsFilter] = useState(false);
   const filterRef = useRef();
   const buttonFilterRef = useRef();
@@ -61,25 +62,38 @@ const DataKelasPage = () => {
         return value.every(
           (key) =>
             kelas.nama.toLowerCase().includes(key) ||
-            String(kelas.kelas).includes(key)
+            String(kelas.kelas).includes(key) ||
+            String(kelas.jumlahSiswa).startsWith(key)
         );
       });
     }
 
-    if (option[0] === "kelas") {
-      if (option[1] === "asc") {
-        kelasFilter = kelasFilter.sort((a, b) => a.kelas - b.kelas);
-      } else if (option[1] === "desc") {
-        kelasFilter = kelasFilter.sort((a, b) => b.kelas - a.kelas);
-      }
+    if (option === "terbaru") {
+      kelasFilter = kelasFilter.reverse();
     }
 
-    if (option[0] === "nama") {
-      if (option[1] === "asc") {
-        kelasFilter = kelasFilter.sort((a, b) => a.nama.localeCompare(b.nama));
-      } else if (option[1] === "desc") {
-        kelasFilter = kelasFilter.sort((a, b) => b.nama.localeCompare(a.nama));
-      }
+    if (option === "a-z") {
+      kelasFilter = kelasFilter.sort((a, b) => a.nama.localeCompare(b.nama));
+    }
+
+    if (option === "z-a") {
+      kelasFilter = kelasFilter.sort((a, b) => b.nama.localeCompare(a.nama));
+    }
+
+    if (option === "1-12") {
+      kelasFilter = kelasFilter.sort((a, b) => a.kelas - b.kelas);
+    }
+
+    if (option === "12-1") {
+      kelasFilter = kelasFilter.sort((a, b) => b.kelas - a.kelas);
+    }
+
+    if (option === "terbanyak") {
+      kelasFilter = kelasFilter.sort((a, b) => b.jumlahSiswa - a.jumlahSiswa);
+    }
+
+    if (option === "terdikit") {
+      kelasFilter = kelasFilter.sort((a, b) => a.jumlahSiswa - b.jumlahSiswa);
     }
 
     setDataFilter(kelasFilter);
@@ -103,9 +117,9 @@ const DataKelasPage = () => {
   }, [isFilter]);
 
   const handleOptionChange = (e) => {
-    const { value, name } = e.target;
+    const { value } = e.target;
 
-    setOption([name, value]);
+    setOption(value);
     setIsFilter(false);
   };
 
@@ -143,14 +157,19 @@ const DataKelasPage = () => {
             onClick={handleToggleFilter}
             ref={buttonFilterRef}
             disabled={dataFilter.length === 0}
-            className="border border-gray-400 disabled:cursor-not-allowed bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-lg flex-between gap-3"
+            className="border border-gray-400 group disabled:cursor-not-allowed bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-md flex-between gap-3"
           >
-            <ListFilter width={15} height={15} className="" />
+            <Filter
+              strokeWidth={2}
+              width={15}
+              height={15}
+              className="text-gray-600 group-hover:text-white"
+            />
           </button>
-          {option[0] && (
+          {option !== "terbaru" && (
             <button
-              onClick={() => setOption(["", ""])}
-              className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-lg flex-between gap-3"
+              onClick={() => setOption("terbaru")}
+              className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-md flex-between gap-3"
             >
               Clear
             </button>

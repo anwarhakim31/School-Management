@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// Define the schema
 const kelasSchema = new mongoose.Schema({
   kelas: {
     type: Number,
@@ -10,11 +9,11 @@ const kelasSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  // waliKelas: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "Guru",
-  //   required: false,
-  // },
+  waliKelas: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Guru",
+    required: false,
+  },
   posisi: {
     type: String,
     required: false,
