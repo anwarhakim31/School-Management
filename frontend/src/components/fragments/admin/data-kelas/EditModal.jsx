@@ -26,7 +26,7 @@ const EditModal = ({ onClose }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [guru, setGuru] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [waliKelas, setWaliKelas] = useState("Tidak Sebagai Wali Kelas");
+  const [waliKelas, setWaliKelas] = useState("Tidak memiliki Wali Kelas");
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -74,14 +74,19 @@ const EditModal = ({ onClose }) => {
       setValue("kelas", dataEdit.kelas || "");
       setValue("nama", dataEdit.nama || "");
       setValue("posisi", dataEdit.posisi || "");
-      setValue("waliKelas", dataEdit.waliKelas._id || "");
-      setWaliKelas(dataEdit.waliKelas.nama || "");
+
+      if (dataEdit.waliKelas) {
+        setValue("waliKelas", dataEdit.waliKelas._id || "");
+        setWaliKelas(dataEdit.waliKelas.nama || "");
+      } else {
+        setWaliKelas("Tidak memeliki Wali Kelas.");
+      }
     }
   }, [dataEdit, guru]);
 
   const handleWaliKelasSelection = (nama, id) => {
     if (nama === "") {
-      setWaliKelas("Tidak sebagai Wali Kelas");
+      setWaliKelas("Tidak memiliki Wali Kelas");
     } else {
       setWaliKelas(nama);
     }
@@ -109,8 +114,8 @@ const EditModal = ({ onClose }) => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4 ">
-          <div className="flex-between gap-2 mb-2 px-6">
-            <div className="">
+          <div className="flex-between w-full  gap-2 mb-2 px-6">
+            <div className="w-1/2">
               <label
                 htmlFor="kelas"
                 className="text-xs mb-2 block font-semibold text-gray-700"
@@ -138,7 +143,7 @@ const EditModal = ({ onClose }) => {
                 {errors.kelas && errors.kelas.message}
               </span>
             </div>
-            <div className="">
+            <div className="w-1/2">
               <label
                 htmlFor="nama"
                 className="text-xs mb-2 block font-semibold text-gray-700"
@@ -197,7 +202,7 @@ const EditModal = ({ onClose }) => {
                   handleSelect={handleWaliKelasSelection}
                   onClose={handleToggleSelect}
                   data={guru}
-                  def={"Tidak ada Wali Kelas"}
+                  def={"Tidak memiliki Wali Kelas"}
                   isOpen={isOpen}
                 />
               )}

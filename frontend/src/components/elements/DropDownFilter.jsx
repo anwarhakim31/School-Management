@@ -3,8 +3,11 @@ import responseError from "@/util/services";
 import axios from "axios";
 import { ListRestart, SlidersHorizontal } from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const FilterDropdown = ({ handleFilterChange, setFilters }) => {
+  const { pathname } = useLocation();
+
   const [selectedFilter, setSelectedFilter] = useState({
     kelas: "",
     kelasNama: "",
@@ -96,7 +99,7 @@ const FilterDropdown = ({ handleFilterChange, setFilters }) => {
       {isOpen && (
         <div
           role="menu"
-          className=" absolute right-0 mt-1 w-[11.5rem] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+          className=" absolute right-0 mt-1 w-[11rem] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
         >
           <div className="flex-between px-4 py-4 h-12 border-gray-200 border-b ">
             <h3 className=" font-bold  text-xs">Kategori Filter</h3>
@@ -193,25 +196,27 @@ const FilterDropdown = ({ handleFilterChange, setFilters }) => {
               </select>
             </div>
 
-            <div className="px-4 py-2">
-              <label className="block text-xs font-medium text-gray-700">
-                Tahun Masuk
-              </label>
-              <select
-                name="tahunMasuk"
-                value={selectedFilter.tahunMasuk}
-                onChange={handleDropdownChange}
-                className="block w-full px-4 py-1.5 mt-1 text-xs text-gray-700 bg-white border-gray-300 rounded-md  border focus:outline-none"
-                role="menuitem"
-              >
-                <option value="">Semua</option>
-                {tahunMasuk.map((tahun, i) => (
-                  <option key={tahun} value={tahun}>
-                    {tahun}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {pathname !== "/admin/data-guru" && (
+              <div className="px-4 py-2">
+                <label className="block text-xs font-medium text-gray-700">
+                  Tahun Masuk
+                </label>
+                <select
+                  name="tahunMasuk"
+                  value={selectedFilter.tahunMasuk}
+                  onChange={handleDropdownChange}
+                  className="block w-full px-4 py-1.5 mt-1 text-xs text-gray-700 bg-white border-gray-300 rounded-md  border focus:outline-none"
+                  role="menuitem"
+                >
+                  <option value="">Semua</option>
+                  {tahunMasuk.map((tahun, i) => (
+                    <option key={tahun} value={tahun}>
+                      {tahun}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
         </div>
       )}

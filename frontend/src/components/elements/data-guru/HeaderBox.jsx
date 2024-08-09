@@ -5,7 +5,7 @@ import female from "../../../assets/svg/female.svg";
 const HeaderBox = ({ dataDetail, loading }) => {
   return (
     <div className="flex-between flex-wrap xl:flex-nowrap gap-4 mb-6">
-      <div className=" grid flex-1 grid-cols-2  md:grid-cols-4 gap-4 lg:justify-center items-center  md:gap-2   ">
+      <div className=" grid flex-1 sm:grid-cols-2  md:grid-cols-4 gap-4 lg:justify-center items-center  md:gap-2   ">
         <div className=" bg-white  flex items-center justify-between  p-4 sm:px-3 xl:p-5 h-[85px] shadow-lg w-full rounded-md border-t border-t-gray-100 border-l-gray-100 border-r-4 border-l   border-blue-800">
           <div className="flex items-center gap-2">
             <div className="bg-blue-700 w-10 h-10 flex-center rounded-full">

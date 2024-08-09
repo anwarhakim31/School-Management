@@ -22,7 +22,7 @@ const AddModal = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [guru, setGuru] = useState([]);
-  const [waliKelas, setWaliKelas] = useState("Tidak Sebagai Wali Kelas");
+  const [waliKelas, setWaliKelas] = useState("Tidak memiliki Wali Kelas");
 
   const handleChangeKelas = (e, name) => {
     const value = e.target.value;
@@ -38,7 +38,7 @@ const AddModal = ({ onClose }) => {
 
   const handleWaliKelasSelection = (nama, id) => {
     if (nama === "") {
-      setWaliKelas("Tidak sebagai Wali Kelas");
+      setWaliKelas("Tidak memiliki Wali Kelas");
     } else {
       setWaliKelas(nama);
     }
@@ -48,6 +48,7 @@ const AddModal = ({ onClose }) => {
   };
 
   const onSubmit = async (data) => {
+    console.log(data);
     setLoading(true);
     try {
       const res = await axios.post(HOST + "/api/kelas/add-kelas", data, {
@@ -189,7 +190,7 @@ const AddModal = ({ onClose }) => {
                   handleSelect={handleWaliKelasSelection}
                   onClose={handleToggleSelect}
                   data={guru}
-                  def={"Tidak ada Wali Kelas"}
+                  def={"Tidak memiliki Wali Kelas"}
                   isOpen={isOpen}
                 />
               )}

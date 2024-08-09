@@ -13,11 +13,23 @@ export const addKelas = async (req, res, next) => {
       throw new ResponseError(400, "Kombinasi kelas dan nama sudah digunakan.");
     }
 
-    const newKelas = new Kelas(req.body);
+    if (!waliKelas) {
+      delete req.body.waliKelas;
 
-    await newKelas.save();
+      const newKelas = new Kelas(req.body);
 
-    if (waliKelas) {
+      await newKelas.save();
+    } else {
+      const waliExist = await Guru.findById({ _id: waliKelas });
+
+      if (waliExist.waliKelas) {
+        throw new ResponseError(400, "Guru sudah sebagai Wali Kelas.");
+      }
+
+      const newKelas = new Kelas(req.body);
+
+      await newKelas.save();
+
       await Guru.findByIdAndUpdate(waliKelas, { waliKelas: newKelas._id });
     }
 
@@ -113,9 +125,17 @@ export const updateKelas = async (req, res, next) => {
         { runValidators: true, new: true }
       );
     } else {
+      const alreadyWali = await Guru.findOne({ _id: waliKelas });
+
+      if (alreadyWali.waliKelas) {
+        throw new ResponseError(404, "Guru sudah sebagai Wali Kelas.");
+      }
+
       if (isExist.waliKelas) {
+        console.log(true);
+
         await Guru.findByIdAndUpdate(
-          isExist.waliKelas,
+          { _id: isExist.waliKelas },
           {
             $unset: { waliKelas: null },
           },

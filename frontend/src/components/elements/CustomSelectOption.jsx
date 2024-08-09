@@ -19,7 +19,7 @@ const CustomSelectOption = ({ handleSelect, data, isOpen, onClose, def }) => {
     <div
       ref={dropRef}
       role="dropdown"
-      className="absolute left-0 top-8 w-full  overflow-y-scroll h-[125px] bg-white border  border-gray-500 rounded-md"
+      className="absolute left-0 top-8 w-full  overflow-y-scroll max-h-[125px] bg-white border  border-gray-500 rounded-md"
     >
       {
         <button

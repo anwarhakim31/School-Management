@@ -461,7 +461,7 @@ const TambahSiswaPage = () => {
             <Link to={"/admin/data-guru"}>
               <button
                 disabled={loading}
-                type="submit"
+                type="button"
                 className="btn  w-28 bg-gray-300 text-gray-800 hover:text-white disabled:cursor-not-allowed   border border-gray-500"
               >
                 {loading ? "Loading" : "Batal"}

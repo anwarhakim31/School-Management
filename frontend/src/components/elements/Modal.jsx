@@ -17,7 +17,9 @@ const ModalOverlay = ({ onClose, showModal, children }) => {
       role="dialog"
       onClick={() => onClose()}
       className={`${
-        showModal ? "opacity-100 scale-100" : "opacity-0 scale-90"
+        showModal
+          ? "opacity-100 sm:scale-100"
+          : "opacity-0 translate-y-28 sm:translate-y-0 sm:scale-90"
       } fixed w-full h-full top-0 left-0 z-[100] flex justify-center items-end sm:items-center transition-all  duration-300`}
     >
       {children}

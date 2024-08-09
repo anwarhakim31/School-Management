@@ -16,7 +16,7 @@ const TambahGuruPage = () => {
     setValue,
     watch,
     formState: { errors },
-  } = useForm({ mode: onchange });
+  } = useForm();
   const [image, setImage] = useState("");
   const [kelasDB, setKelasDB] = useState([]);
   const [mapel, setMapel] = useState([]);
@@ -116,6 +116,8 @@ const TambahGuruPage = () => {
   useEffect(() => {
     if (kelass === "") {
       setValue("namaKelas", "");
+    } else {
+      setValue("namaKelas", kelasNama[0]?.nama);
     }
   }, [kelass]);
 
@@ -395,49 +397,37 @@ const TambahGuruPage = () => {
             >
               <option value="">Tidak sebagai wali kelas</option>
 
-              {kelas &&
-                kelas.map((kel, i) => (
-                  <option key={i} className="rounded-md" value={kel.kelas}>
-                    {kel.kelas}
-                  </option>
-                ))}
+              {kelas.map((kel, i) => (
+                <option key={kel._id} className="rounded-md" value={kel.kelas}>
+                  {kel.kelas}
+                </option>
+              ))}
             </select>
             <span className="text-xs h-4 block mt-1 text-neutral2">
               {errors.kelas && errors.kelas.message}
             </span>
           </div>
           {kelasNama.length !== 0 && (
-            <>
-              <div className="mb-2">
-                <label htmlFor="Nama Kelas" className="text-xs mb-2 block">
-                  Nama Kelas <span className="text-red-500">*</span>
-                </label>
-                <select
-                  id="Nama Kelas"
-                  {...register("namaKelas")}
-                  className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
-                >
-                  {kelasNama &&
-                    kelasNama.map((kel, i) => {
-                      return (
-                        <>
-                          <option
-                            key={i}
-                            value={kel.nama}
-                            className="rounded-md"
-                          >
-                            {kel.nama}
-                          </option>
-                          ;
-                        </>
-                      );
-                    })}
-                </select>
-                <span className="text-xs h-4 block mt-1 text-neutral2">
-                  {errors.namaKelas && errors.namaKelas.message}
-                </span>
-              </div>
-            </>
+            <div className="mb-2">
+              <label htmlFor="Nama Kelas" className="text-xs mb-2 block">
+                Nama Kelas <span className="text-red-500">*</span>
+              </label>
+              <select
+                id="Nama Kelas"
+                {...register("namaKelas")}
+                className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+              >
+                {kelasNama &&
+                  kelasNama.map((kel, i) => (
+                    <option key={i} value={kel.nama} className="rounded-md">
+                      {kel.nama}
+                    </option>
+                  ))}
+              </select>
+              <span className="text-xs h-4 block mt-1 text-neutral2">
+                {errors.namaKelas && errors.namaKelas.message}
+              </span>
+            </div>
           )}
           <div className="mb-3">
             <label htmlFor="Alamat" className="text-xs mb-2 block">
@@ -450,10 +440,10 @@ const TambahGuruPage = () => {
             />
           </div>
           <div className="flex justify-end pt-8 gap-4 ">
-            <Link to={"/admin/data-siswa"}>
+            <Link to={"/admin/data-guru"}>
               <button
                 disabled={loading}
-                type="submit"
+                type="button"
                 className="btn  w-28 bg-gray-300 text-gray-800 hover:text-white disabled:cursor-not-allowed   border border-gray-500"
               >
                 {loading ? "Loading" : "Batal"}

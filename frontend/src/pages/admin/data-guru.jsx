@@ -89,8 +89,7 @@ const DataGuruPage = () => {
             limit,
             search,
             jenisKelamin: filters.jenisKelamin,
-            // kelas: filters.jenisKelamin,
-            // kelasNama: filters.kelasNama,
+            kelasNama: filters.kelasNama,
           },
           withCredentials: true,
         });
@@ -155,6 +154,10 @@ const DataGuruPage = () => {
   };
 
   const handleFilterChange = (filterName, filterValue) => {
+    if (filterName === "kelas" && filterValue === "") {
+      setFilters((prev) => ({ ...prev, kelasNama: "" }));
+    }
+
     setFilters((prevFilters) => ({
       ...prevFilters,
       [filterName]: filterValue,

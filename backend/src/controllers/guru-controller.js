@@ -67,6 +67,7 @@ export const getAllGuru = async (req, res, next) => {
     const search = req.query.search || "";
 
     const searchRegex = new RegExp(search.trim(), "i");
+    const { jenisKelamin, kelasNama } = req.query;
 
     const filterQuery = {
       $or: [
@@ -74,6 +75,14 @@ export const getAllGuru = async (req, res, next) => {
         { nis: { $regex: searchRegex } },
       ],
     };
+
+    if (kelasNama) {
+      filterQuery.waliKelas = kelasNama;
+    }
+
+    if (jenisKelamin) {
+      filterQuery.jenisKelamin = jenisKelamin;
+    }
 
     const guru = await Guru.find(filterQuery)
       .sort({ createdAt: -1 })
@@ -248,7 +257,6 @@ export const updateGuru = async (req, res, next) => {
       message: "Berhasil mengedit guru.",
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

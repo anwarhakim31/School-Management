@@ -161,6 +161,9 @@ const DataSiswaPage = () => {
   };
 
   const handleFilterChange = (filterName, filterValue) => {
+    if (filterName === "kelas" && filterValue === "") {
+      setFilters((prev) => ({ ...prev, kelasNama: "" }));
+    }
     setFilters((prevFilters) => ({
       ...prevFilters,
       [filterName]: filterValue,
