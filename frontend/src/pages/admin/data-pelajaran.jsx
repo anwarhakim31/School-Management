@@ -5,8 +5,9 @@ import TablePelajaran from "@/components/fragments/admin/data-pelajaran/TablePel
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { Filter, Plus, Search, SlidersHorizontal } from "lucide-react";
+import { Filter, Plus, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import mapelIcon from "";
 import FilterMapel from "@/components/elements/FilterMapel";
 
 const DataPelajaranPage = () => {

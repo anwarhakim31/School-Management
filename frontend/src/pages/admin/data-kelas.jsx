@@ -6,16 +6,9 @@ import TableKelas from "@/components/fragments/admin/data-kelas/TableKelas";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import {
-  ArrowDown01,
-  ArrowDownNarrowWide,
-  Filter,
-  ListFilter,
-  Plus,
-  Search,
-} from "lucide-react";
+import { Filter, Plus, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-import { set } from "react-hook-form";
+import ClassIcon from "../../assets/svg/class.svg?react";
 
 const DataKelasPage = () => {
   const [dataKelas, setDataKelas] = useState([]);
@@ -189,12 +182,7 @@ const DataKelasPage = () => {
           onClick={handleToggleAdd}
           className="bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md flex-between gap-3"
         >
-          <Plus
-            width={15}
-            height={15}
-            className="rounded-full bg-white text-neutral"
-          />{" "}
-          Tambah Kelas
+          <ClassIcon width={15} height={15} className=" " /> Tambah Kelas
         </button>
       </div>
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-md">

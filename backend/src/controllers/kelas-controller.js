@@ -132,8 +132,6 @@ export const updateKelas = async (req, res, next) => {
       }
 
       if (isExist.waliKelas) {
-        console.log(true);
-
         await Guru.findByIdAndUpdate(
           { _id: isExist.waliKelas },
           {

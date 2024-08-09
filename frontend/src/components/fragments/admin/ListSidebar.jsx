@@ -4,8 +4,10 @@ import GuruIcon from "../../../assets/svg/guru.svg?react";
 import KelasIcon from "../../../assets/svg/class.svg?react";
 import MapelIcon from "../../../assets/svg/pelajaran.svg?react";
 import JadwalIcon from "../../../assets/svg/jadwal.svg?react";
+// import DataIcon from "../../../assets/svg/data.svg?react";
 import AcaraIcon from "../../../assets/svg/acara.svg?react";
 import { Link, NavLink } from "react-router-dom";
+import { FileStack } from "lucide-react";
 // import KelasSVG from "@/components/base/svg/KelasSVG
 
 const Navlist = [
@@ -15,6 +17,20 @@ const Navlist = [
     path: "/admin/dashboard",
     icon: (
       <DashboardIcon
+        height={17}
+        width={17}
+        className={
+          "text-white group-hover:text-neutral stroke-[2] duration-300 transition-all"
+        }
+      />
+    ),
+  },
+  {
+    id: 1,
+    nama: "Data Umum",
+    path: "/admin/data-umum",
+    icon: (
+      <FileStack
         height={17}
         width={17}
         className={
@@ -91,20 +107,20 @@ const Navlist = [
       />
     ),
   },
-  {
-    id: 7,
-    nama: "Acara",
-    path: "/admin/data-acara",
-    icon: (
-      <AcaraIcon
-        height={20}
-        width={20}
-        className={
-          "text-white group-hover:text-neutral duration-300 transition-all"
-        }
-      />
-    ),
-  },
+  // {
+  //   id: 7,
+  //   nama: "Acara",
+  //   path: "/admin/data-acara",
+  //   icon: (
+  //     <AcaraIcon
+  //       height={20}
+  //       width={20}
+  //       className={
+  //         "text-white group-hover:text-neutral duration-300 transition-all"
+  //       }
+  //     />
+  //   ),
+  // },
 ];
 
 const ListSidebar = () => {

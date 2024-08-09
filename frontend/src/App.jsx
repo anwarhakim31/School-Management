@@ -20,6 +20,7 @@ import TambahSiswaPage from "./pages/admin/tambah-siswa";
 import EditSiswaPage from "./pages/admin/edit-siswa";
 import TambahGuruPage from "./pages/admin/tambah-guru";
 import EditGuruPage from "./pages/admin/edit-guru";
+import DataUmumPage from "./pages/admin/data-umum";
 
 function App() {
   const dispatch = useDispatch();
@@ -79,6 +80,14 @@ function App() {
             element={
               <PrivateRoute role={"admin"}>
                 <AdminDashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="data-umum"
+            element={
+              <PrivateRoute role={"admin"}>
+                <DataUmumPage />
               </PrivateRoute>
             }
           />
