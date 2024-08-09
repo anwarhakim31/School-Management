@@ -9,6 +9,7 @@ import siswaRouter from "../routes/siswa-router.js";
 import kelasRouter from "../routes/kelas-router.js";
 import MapelRouter from "../routes/mapel-router.js";
 import guruRouter from "../routes/guru-router.js";
+import ajaranRouter from "../routes/tahunAjaran-router.js";
 
 export const app = express();
 
@@ -28,5 +29,6 @@ app.use("/api/siswa", siswaRouter);
 app.use("/api/kelas", kelasRouter);
 app.use("/api/mapel", MapelRouter);
 app.use("/api/guru", guruRouter);
+app.use("/api/ajaran", ajaranRouter);
 
 app.use(errorMiddleware);

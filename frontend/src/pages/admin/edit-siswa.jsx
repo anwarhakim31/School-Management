@@ -236,7 +236,7 @@ const EditSiswaPage = () => {
       >
         <div className="">
           <div className="mb-2">
-            <label htmlFor="nama" className="text-xs mb-2 block">
+            <label htmlFor="nama" className="text-xs mb-2 block font-semibold">
               Nama <span className="text-red-500">*</span>
             </label>
             <input
@@ -257,7 +257,7 @@ const EditSiswaPage = () => {
             </span>
           </div>
           <div className="mb-2">
-            <label htmlFor="nis" className="text-xs mb-2 block">
+            <label htmlFor="nis" className="text-xs mb-2 block font-semibold">
               NIS <span className="text-red-500">*</span>
             </label>
             <input
@@ -277,7 +277,10 @@ const EditSiswaPage = () => {
             </span>
           </div>
           <div className="mb-2">
-            <label htmlFor="password" className="text-xs mb-2 block">
+            <label
+              htmlFor="password"
+              className="text-xs mb-2 block font-semibold"
+            >
               Password
             </label>
             <input
@@ -301,7 +304,10 @@ const EditSiswaPage = () => {
             </span>
           </div>
           <div className="mb-2">
-            <label htmlFor="tempatLahir" className="text-xs mb-2 block">
+            <label
+              htmlFor="tempatLahir"
+              className="text-xs mb-2 block font-semibold"
+            >
               Tempat Lahir <span className="text-red-500">*</span>
             </label>
             <input
@@ -321,7 +327,10 @@ const EditSiswaPage = () => {
             </span>
           </div>
           <div className="mb-2">
-            <label htmlFor="TanggalLahir" className="text-xs mb-2 block">
+            <label
+              htmlFor="TanggalLahir"
+              className="text-xs mb-2 block font-semibold"
+            >
               Tanggal Lahir <span className="text-red-500">*</span>
             </label>
 
@@ -339,7 +348,10 @@ const EditSiswaPage = () => {
             </span>
           </div>
           <div className="mb-2">
-            <label htmlFor="Jenis Kelamin" className="text-xs mb-2 block">
+            <label
+              htmlFor="Jenis Kelamin"
+              className="text-xs mb-2 block font-semibold"
+            >
               Jenis Kelamin <span className="text-red-500">*</span>
             </label>
             <select
@@ -358,7 +370,10 @@ const EditSiswaPage = () => {
             </span>
           </div>
           <div className="mb-2">
-            <label htmlFor="Tahun Masuk" className="text-xs mb-2 block">
+            <label
+              htmlFor="Tahun Masuk"
+              className="text-xs mb-2 block font-semibold"
+            >
               Tahun Masuk <span className="text-red-500">*</span>
             </label>
             <input
@@ -380,7 +395,7 @@ const EditSiswaPage = () => {
         </div>
         <div className="">
           <div className="mb-2">
-            <label htmlFor="Agama" className="text-xs mb-2 block">
+            <label htmlFor="Agama" className="text-xs mb-2 block font-semibold">
               Agama <span className="text-red-500">*</span>
             </label>
             <select
@@ -405,7 +420,10 @@ const EditSiswaPage = () => {
             </span>
           </div>
           <div className="mb-2">
-            <label htmlFor="No. Telepon" className="text-xs mb-2 block">
+            <label
+              htmlFor="No. Telepon"
+              className="text-xs mb-2 block font-semibold"
+            >
               No. Telepon <span className="text-red-500">*</span>
             </label>
             <input
@@ -424,7 +442,7 @@ const EditSiswaPage = () => {
             </span>
           </div>
           <div className="mb-2">
-            <label htmlFor="Email" className="text-xs mb-2 block">
+            <label htmlFor="Email" className="text-xs mb-2 block font-semibold">
               Email
             </label>
             <input
@@ -443,7 +461,7 @@ const EditSiswaPage = () => {
             </span>
           </div>
           <div className="mb-2">
-            <label htmlFor="kelas" className="text-xs mb-2 block">
+            <label htmlFor="kelas" className="text-xs mb-2 block font-semibold">
               Kelas
             </label>
             <select
@@ -468,7 +486,10 @@ const EditSiswaPage = () => {
           {kelasNama.length !== 0 && (
             <>
               <div className="mb-2">
-                <label htmlFor="namaKelas" className="text-xs mb-2 block">
+                <label
+                  htmlFor="namaKelas"
+                  className="text-xs mb-2 block font-semibold"
+                >
                   Nama Kelas <span className="text-red-500">*</span>
                 </label>
                 <select
@@ -494,7 +515,10 @@ const EditSiswaPage = () => {
             </>
           )}
           <div className="mb-8">
-            <label htmlFor="Alamat" className="text-xs mb-2 block">
+            <label
+              htmlFor="Alamat"
+              className="text-xs mb-2 block font-semibold"
+            >
               Alamat
             </label>
             <textarea

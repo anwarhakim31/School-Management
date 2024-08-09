@@ -11,14 +11,14 @@ import { toast } from "sonner";
 
 const DeleteModal = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
-  const dataMapel = useSelector(selectedDataDelete);
+  const dataAjaran = useSelector(selectedDataDelete);
 
   const handleDelete = async () => {
     setLoading(true);
 
     try {
       const res = await axios.delete(
-        HOST + "/api/mapel/delete-mapel/" + dataMapel._id,
+        HOST + "/api/ajaran/delete-ajaran/" + dataAjaran._id,
         { withCredentials: true }
       );
 

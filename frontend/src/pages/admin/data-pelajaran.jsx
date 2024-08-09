@@ -7,7 +7,7 @@ import responseError from "@/util/services";
 import axios from "axios";
 import { Filter, Plus, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-import mapelIcon from "";
+import MapelIcon from "../../assets/svg/pelajaran.svg?react";
 import FilterMapel from "@/components/elements/FilterMapel";
 
 const DataPelajaranPage = () => {
@@ -122,7 +122,7 @@ const DataPelajaranPage = () => {
             placeholder="Cari..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-full py-2 pr-2 pl-10 text-sm border border-gray-400 outline-offset-1 outline-1 outline-neutral"
+            className="w-full rounded-full py-1.5 pr-2 pl-10 text-sm border border-gray-400 outline-offset-1 outline-1 outline-neutral"
           />
           <button className="absolute left-4 top-1/2 -translate-y-1/2">
             <Search height={20} width={20} className="text-gray-400" />
@@ -164,11 +164,7 @@ const DataPelajaranPage = () => {
           onClick={handleToggleAdd}
           className="bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md flex-between gap-3"
         >
-          <Plus
-            width={15}
-            height={15}
-            className="rounded-full bg-white text-neutral"
-          />
+          <MapelIcon width={15} height={15} className="" />
           Tambah pelajaran
         </button>
       </div>

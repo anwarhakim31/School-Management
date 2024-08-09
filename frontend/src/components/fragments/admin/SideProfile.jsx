@@ -167,10 +167,10 @@ const SideProfile = forwardRef(({ handleClose }, ref) => {
             className="hidden"
           />
         </div>
-        <p className="font-medium text-sm text-center mt-2">Foto</p>
+        <p className="font-medium text-xs text-center mt-2">Foto</p>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="">
-            <label htmlFor="username" className="text-sm ">
+            <label htmlFor="username" className="text-xs ">
               Username :
             </label>
             <Controller
@@ -189,7 +189,7 @@ const SideProfile = forwardRef(({ handleClose }, ref) => {
               render={({ field }) => (
                 <input
                   placeholder="Scholarcy"
-                  className="w-full border my-1 px-2.5 py-1.5 text-sm rounded-md border-gray-500 outline-neutral"
+                  className="w-full border my-1 px-2.5 py-1.5 text-xs rounded-md border-gray-500 outline-neutral"
                   {...field}
                 />
               )}
@@ -203,7 +203,7 @@ const SideProfile = forwardRef(({ handleClose }, ref) => {
             )}
           </div>
           <div className="">
-            <label htmlFor="password" className="text-sm ">
+            <label htmlFor="password" className="text-xs ">
               Password :
             </label>
             <Controller
@@ -219,7 +219,7 @@ const SideProfile = forwardRef(({ handleClose }, ref) => {
                 <input
                   type="password"
                   placeholder="**************"
-                  className="w-full border my-1 px-2.5 py-1.5  text-sm rounded-md border-gray-500 outline-neutral"
+                  className="w-full border my-1 px-2.5 py-1.5  text-xs rounded-md border-gray-500 outline-neutral"
                   {...field}
                 />
               )}
@@ -233,7 +233,7 @@ const SideProfile = forwardRef(({ handleClose }, ref) => {
             )}
           </div>
           <div className="">
-            <label htmlFor="nama" className="text-sm ">
+            <label htmlFor="nama" className="text-xs ">
               Nama :
             </label>
             <Controller
@@ -252,7 +252,7 @@ const SideProfile = forwardRef(({ handleClose }, ref) => {
               render={({ field }) => (
                 <input
                   placeholder="Scholarcy"
-                  className="w-full border my-1 px-2.5 py-1.5  text-sm rounded-md border-gray-500 outline-neutral"
+                  className="w-full border my-1 px-2.5 py-1.5  text-xs rounded-md border-gray-500 outline-neutral"
                   {...field}
                 />
               )}
@@ -267,7 +267,7 @@ const SideProfile = forwardRef(({ handleClose }, ref) => {
           </div>
           <button
             type="submit"
-            className="w-full py-2.5 mt-4 text-white bg-neutral hover:bg-indigo-600 text-sm rounded-full"
+            className="w-full py-2.5 mt-4 text-white bg-neutral hover:bg-indigo-600 text-xs rounded-full"
           >
             {loading ? <LoaderButton /> : "Submit"}
           </button>

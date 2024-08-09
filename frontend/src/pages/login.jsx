@@ -45,13 +45,13 @@ const LoginPage = () => {
     }
   }, [remember, formData]);
 
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     if (timeoutRef.current) {
+  //       clearTimeout(timeoutRef.current);
+  //     }
+  //   };
+  // }, []);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -65,10 +65,10 @@ const LoginPage = () => {
         setSuccess(true);
       }
 
-      timeoutRef.current = setTimeout(() => {
-        dispatch(setUserData(res.data.data));
-        res.data.data.role === "admin" && navigate("/admin/dasboard");
-      }, 500);
+      // timeoutRef.current = setTimeout(() => {
+      dispatch(setUserData(res.data.data));
+      res.data.data.role === "admin" && navigate("/admin/dasboard");
+      // }, 500);
     } catch (error) {
       responseError(error);
     } finally {
@@ -88,7 +88,7 @@ const LoginPage = () => {
         <div className="w-full h-full my-10 sm:my-0  flex justify-center order-2 sm:order-1 items-center lg:px-24 ">
           <Slider />
         </div>
-        <div className="bg-background py-24 sm:py-0 w-full h-full sm:order-2 flex justify-center flex-col px-14 sm:px-8 md:px-14 lg:px-24 xl:px-28 bg items-center">
+        <div className="bg-background py-24 sm:py-0 w-full h-full sm:order-2 flex justify-center flex-col px-14 sm:px-8 md:px-14 lg:px-28 xl:px-32 bg items-center">
           <figure>
             <img
               src={logo}
@@ -98,7 +98,7 @@ const LoginPage = () => {
               width={200}
             />
           </figure>
-          <div className="h-2 w-full mt-14  mb-4 relative">
+          {/* <div className="h-2 w-full mt-14  mb-4 relative">
             <div
               className={`before:absolute before:-right-2 before:animate-pulse before:duration-800 before:bottom-1/2 before:translate-y-1/2 before:w-2 before:h-2 before:rounded-full before:bg-neutral bg-purple-400 absolute left-0 w-1/2 h-0.5 bottom-1/2 duration-300 ease-in translate-y-1/2 ${
                 success ? "w-1/2" : "w-[8%]"
@@ -124,8 +124,8 @@ const LoginPage = () => {
                 />
               )}
             </div>
-          </div>
-          <h1 className="text-center text-sm font-semibold text-md text-gray-800 mt-8 mb-7 leading-relaxed">
+          </div> */}
+          <h1 className="text-center text-sm font-semibold text-md text-gray-800 mt-12 mb-7 leading-relaxed">
             Masukkan NIP / NIS & password <br />
             <span>pada form di bawah ini dengan benar.</span>
           </h1>
@@ -144,7 +144,7 @@ const LoginPage = () => {
               onKeyDown={handleInputClick}
               onChange={handleInputChange}
               placeholder="Masukkan NIP / NIS"
-              className="py-1.5 h-10 bg-white text-sm border text-gray-500 border-gray-700 w-full rounded-lg outline-neutral outline-offset-1 pl-10"
+              className="py-1.5 h-10 bg-white text-xs border text-gray-500 border-gray-700 w-full rounded-lg outline-neutral outline-offset-1 pl-10"
             />
             <User className="absolute w-4 h-4 stroke-slate-400 bottom-1/2 left-3 translate-y-1/2" />
           </div>
@@ -163,7 +163,7 @@ const LoginPage = () => {
               onChange={handleInputChange}
               onKeyDown={handleInputClick}
               placeholder="Masukkan Password"
-              className="py-1.5 h-10 bg-white border text-gray-500 text-sm border-gray-700 w-full rounded-lg outline-neutral outline-offset-1 pl-10"
+              className="py-1.5 h-10 bg-white border text-gray-500 text-xs border-gray-700 w-full rounded-lg outline-neutral outline-offset-1 pl-10"
             />
             <KeyRound className="absolute w-4 h-4 stroke-gray-400 bottom-1/2 left-3 translate-y-1/2" />
             <button
