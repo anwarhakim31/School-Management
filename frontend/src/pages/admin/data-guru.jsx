@@ -112,8 +112,6 @@ const DataGuruPage = () => {
         });
         if (res.status === 200) {
           setDataDetail(res.data.data);
-
-          console.log(res.data.data);
         }
       } catch (error) {
         responseError(error);

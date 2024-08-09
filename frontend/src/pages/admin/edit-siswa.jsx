@@ -380,12 +380,14 @@ const EditSiswaPage = () => {
               type={"text"}
               id="Tahun Masuk"
               name="tahunMasuk"
+              readOnly
+              disabled
               value={tahunMasuk}
               {...register("tahunMasuk", {
                 required: "Tahun Masuk tidak boleh kosong.",
               })}
               onChange={(e) => handleNumberChange(e, "tahunMasuk")}
-              className="py-1.5 h-8  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+              className="py-1.5 h-8  bg-gray-100 border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
 
             <span className="text-xs h-4 block mt-1 text-neutral2">

@@ -13,7 +13,7 @@ const UmumSchema = new mongoose.Schema({
   },
   semester: {
     type: String,
-    enum: ["ganjil,genap"],
+    enum: ["ganjil", "genap"],
     default: "ganjil",
     required: true,
   },

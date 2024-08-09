@@ -5,6 +5,8 @@ import fs from "fs";
 import s3 from "../util/aws3.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { genSalt, hash } from "bcrypt";
+import Total from "../models/total-model.js";
+import TahunAjaran from "../models/tahunAjaran-model.js";
 
 export const getAll = async (req, res, next) => {
   try {
@@ -92,12 +94,19 @@ export const uploadPhotoSiswa = async (req, res, next) => {
 
 export const addSiswa = async (req, res, next) => {
   try {
-    const { kelas, namaKelas, nis, password } = req.body;
+    const { kelas, namaKelas, nis, password, tahunMasuk } = req.body;
 
     const siswaExist = await Siswa.findOne({ nis });
 
     if (siswaExist) {
       throw new ResponseError(400, "NIS sudah digunakan");
+    }
+
+    if (!tahunMasuk) {
+      throw new ResponseError(
+        401,
+        "Silakan mengatur Tahun Masuk Ajaran pada data umum terleboh dulu"
+      );
     }
 
     const salt = await genSalt();
@@ -137,6 +146,12 @@ export const addSiswa = async (req, res, next) => {
 
       await kelasSiswa.save();
     }
+
+    await Total.findOneAndUpdate(
+      { ajaran: tahunMasuk },
+      { $inc: { totalSiswa: 1 } },
+      { upsert: true, new: true }
+    );
 
     res
       .status(200)
@@ -268,6 +283,19 @@ export const deleteOneSiswa = async (req, res, next) => {
     }
 
     await Siswa.deleteOne({ _id: id });
+
+    const tahunAjaran = await TahunAjaran.findOne({ status: true }).select(
+      "ajaran"
+    );
+
+    console.log(tahunAjaran);
+    if (tahunAjaran) {
+      await Total.findOneAndUpdate(
+        { ajaran: tahunAjaran.ajaran },
+        { $inc: { totalSiswa: -1 } },
+        { new: true }
+      );
+    }
 
     res.status(200).json({
       success: true,

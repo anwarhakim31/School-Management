@@ -26,7 +26,7 @@ const Navlist = [
     ),
   },
   {
-    id: 1,
+    id: 2,
     nama: "Data Umum",
     path: "/admin/data-umum",
     icon: (
@@ -40,7 +40,7 @@ const Navlist = [
     ),
   },
   {
-    id: 2,
+    id: 3,
     nama: "Siswa",
     path: "/admin/data-siswa",
     icon: (
@@ -54,7 +54,7 @@ const Navlist = [
     ),
   },
   {
-    id: 3,
+    id: 4,
     nama: "Guru",
     path: "/admin/data-guru",
     icon: (
@@ -66,7 +66,7 @@ const Navlist = [
     ),
   },
   {
-    id: 4,
+    id: 5,
     nama: "Kelas",
     path: "/admin/data-kelas",
     icon: (
@@ -80,7 +80,7 @@ const Navlist = [
     ),
   },
   {
-    id: 5,
+    id: 6,
     nama: "Mata Pelajaran",
     path: "/admin/data-pelajaran",
     icon: (
@@ -94,7 +94,7 @@ const Navlist = [
     ),
   },
   {
-    id: 6,
+    id: 7,
     nama: "Jadwal Belajar",
     path: "/admin/data-jadwal",
     icon: (

@@ -66,6 +66,21 @@ const TambahSiswaPage = () => {
       }
     };
 
+    const getAjaran = async () => {
+      try {
+        const res = await axios.get(HOST + "/api/ajaran/get-ajaran-aktif", {
+          withCredentials: true,
+        });
+
+        console.log(res.data.ajaran.ajaran);
+
+        setValue("tahunMasuk", res.data.ajaran.ajaran);
+      } catch (error) {
+        responseError(error);
+      }
+    };
+
+    getAjaran();
     getKelas();
   }, []);
 
@@ -328,13 +343,15 @@ const TambahSiswaPage = () => {
             <input
               type={"text"}
               id="Tahun Masuk"
+              readOnly
+              disabled
               name="tahunMasuk"
               value={tahunMasuk}
               {...register("tahunMasuk", {
                 required: "Tahun Masuk tidak boleh kosong.",
               })}
               onChange={(e) => handleNumberChange(e, "tahunMasuk")}
-              className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+              className="py-1.5 h-8 bg-gray-100 border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
             />
 
             <span className="text-xs h-4 block mt-1 text-neutral2">

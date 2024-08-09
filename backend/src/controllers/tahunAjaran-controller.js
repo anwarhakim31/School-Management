@@ -42,6 +42,20 @@ export const getAjaran = async (req, res, next) => {
   }
 };
 
+export const getAjaranAktif = async (req, res, next) => {
+  try {
+    const ajaran = await TahunAjaran.findOne({ status: true });
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengambil Tahun Ajaran.",
+      ajaran,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const editAjaran = async (req, res, next) => {
   try {
     const id = req.params.id;
