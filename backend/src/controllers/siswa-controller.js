@@ -105,7 +105,7 @@ export const addSiswa = async (req, res, next) => {
     if (!tahunMasuk) {
       throw new ResponseError(
         401,
-        "Silakan mengatur Tahun Masuk Ajaran pada data umum terleboh dulu"
+        "Silakan mengatur Tahun Masuk Ajaran pada data umum terlebih dulu"
       );
     }
 
@@ -288,10 +288,9 @@ export const deleteOneSiswa = async (req, res, next) => {
       "ajaran"
     );
 
-    console.log(tahunAjaran);
     if (tahunAjaran) {
       await Total.findOneAndUpdate(
-        { ajaran: tahunAjaran.ajaran },
+        { ajaran: tahunAjaran },
         { $inc: { totalSiswa: -1 } },
         { new: true }
       );
@@ -331,6 +330,15 @@ export const deleteManySiswa = async (req, res, next) => {
           jumlahSiswa: jumlahSiswa,
         });
       }
+    }
+
+    const tahunAjaran = await TahunAjaran.findOne({ status: true });
+
+    if (tahunAjaran) {
+      await Total.findOneAndUpdate(
+        { ajaran: tahunAjaran.ajaran },
+        { $inc: { totalSiswa: -dataChecked.length } }
+      );
     }
 
     res.status(200).json({

@@ -72,9 +72,9 @@ const TambahSiswaPage = () => {
           withCredentials: true,
         });
 
-        console.log(res.data.ajaran.ajaran);
-
-        setValue("tahunMasuk", res.data.ajaran.ajaran);
+        if (res.data.ajaran) {
+          setValue("tahunMasuk", res.data.ajaran.ajaran);
+        }
       } catch (error) {
         responseError(error);
       }
@@ -348,7 +348,8 @@ const TambahSiswaPage = () => {
               name="tahunMasuk"
               value={tahunMasuk}
               {...register("tahunMasuk", {
-                required: "Tahun Masuk tidak boleh kosong.",
+                required:
+                  "Tahun Masuk tidak boleh kosong. Silahkan atur tahun ajaran di Data Umum terlebih dulu",
               })}
               onChange={(e) => handleNumberChange(e, "tahunMasuk")}
               className="py-1.5 h-8 bg-gray-100 border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"

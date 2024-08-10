@@ -85,6 +85,7 @@ const TableUmum = ({ data, handleToggleDelete, handleEditAjaran, loading }) => {
                   >
                     <button
                       onClick={() => handleEditAjaran(ajaran._id)}
+                      disabled={ajaran.status}
                       className={`${
                         ajaran.status ? "bg-neutral1" : "bg-neutral2"
                       }  text-white w-20 py-1.5 rounded-md font-medium`}
