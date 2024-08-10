@@ -5,6 +5,7 @@ import Kelas from "../models/kelas-model.js";
 import Guru from "../models/guru-model.js";
 import Mapel from "../models/mapel-model.js";
 import Total from "../models/total-model.js";
+import { color, getColor } from "../data/color.js";
 
 export const getUmum = async (req, res, next) => {
   try {
@@ -31,6 +32,35 @@ export const getUmum = async (req, res, next) => {
         },
       },
     ]);
+    const kelasPerTotal = await Kelas.aggregate([
+      {
+        $group: {
+          _id: "$kelas",
+          totalKelas: { $sum: 1 },
+        },
+      },
+      {
+        $addFields: {
+          colorIndex: { $mod: [{ $toInt: "$_id" }, color.length] },
+        },
+      },
+      {
+        $addFields: {
+          fill: { $arrayElemAt: [color, "$colorIndex"] },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          kelas: { $concat: ["kelas ", { $toString: "$_id" }] },
+          totalKelas: 1,
+          fill: 1,
+        },
+      },
+      {
+        $sort: { kelas: 1 },
+      },
+    ]);
 
     res.status(200).json({
       success: true,
@@ -41,6 +71,7 @@ export const getUmum = async (req, res, next) => {
         totalKelas,
         totalMapel,
         siswaPerAjaran,
+        kelasPerTotal,
       },
     });
   } catch (error) {

@@ -1,20 +1,7 @@
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  LabelList,
-  Pie,
-  Cell,
-  PieChart,
-} from "recharts";
+import { Tooltip, ResponsiveContainer, Pie, PieChart, Legend } from "recharts";
 import React, { useEffect, useRef, useState } from "react";
 import SiswaIcon from "../../assets/svg/Teacher.svg?react";
 import GuruIcon from "../../assets/svg/Student.svg?react";
@@ -22,26 +9,15 @@ import ClassIcon from "../../assets/svg/class.svg?react";
 import MapelIcon from "../../assets/svg/pelajaran.svg?react";
 import AnimasiCounter from "@/components/elements/AnimasiCounter";
 import Barchart from "../../assets/svg/barchart.svg?react";
+import Piechart from "../../assets/svg/piechart.svg?react";
+import BarChartComponent from "@/components/elements/dashboard-admin/BarChart";
 
-const data = [
-  { name: "Group A", value: 400 },
-  { name: "Group B", value: 300 },
-  { name: "Group C", value: 300 },
-  { name: "Group D", value: 200 },
-];
-
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#FF6347"];
-
-const BarChartComponent = ({ data, x, y, loading }) => {
+const PieChartComponent = ({ data, loading }) => {
   if (loading) {
     return (
       <div className="w-full h-full flex-center">
-        <div className="flex items-end w-3/4  justify-between px-4 gap-8 animate-pulse duration-300 border-b">
-          <div className="h-[150px] w-[30px] bg-gray-300  rounded-sm"></div>
-          <div className="h-[100px] w-[30px] bg-gray-300  rounded-sm"></div>
-          <div className="h-[150px] w-[30px] bg-gray-300  rounded-sm"></div>
-          <div className="h-[100px] w-[30px] bg-gray-300  rounded-sm"></div>
-          <div className="h-[130px] w-[30px] bg-gray-300  rounded-sm"></div>
+        <div className="flex items-center w-3/4 h-full  justify-center px-4 gap-8 animate-pulse duration-300 border-b">
+          <div className="w-[140px] h-[140px] rounded-full  bg-gray-300 "></div>
         </div>
       </div>
     );
@@ -54,60 +30,32 @@ const BarChartComponent = ({ data, x, y, loading }) => {
   }
 
   return (
-    <ResponsiveContainer
-      width={"100%"}
-      height="100%"
-      className={"text-xs mt-4 text-gray-800 outline-none"}
-    >
-      <BarChart
-        width={"100%"}
-        height={200}
-        outerRadius={5}
-        data={data}
-        margin={{
-          right: 20,
-          left: -30,
-        }}
-      >
-        <CartesianGrid strokeDasharray="1 1" strokeOpacity={0.3} />
-        <XAxis dataKey={y} tickLine={false} tickMargin={10} />
-        <YAxis fontSize={10} axisLine={false} tickLine={false} />
-        <Tooltip cursor={false} content={<CustomTooltip />} />
-
-        <Bar
-          dataKey={x}
-          fill="#4d44b5"
-          className="outline-none u"
-          radius={4}
-          barSize={30}
-        />
-      </BarChart>
+    <ResponsiveContainer width="100%" height={"100%"} className={"text-xs"}>
+      <PieChart width={400} height={400}>
+        <Tooltip content={<CustomTooltip />} />
+        <Pie data={data} dataKey="totalKelas" nameKey="kelas" />
+        <Legend />
+      </PieChart>
     </ResponsiveContainer>
   );
 };
 
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
+    const fillColor = payload[0].payload.fill;
     return (
-      <div className="p-2 bg-white border flex  gap-4 rounded-md">
-        <p className=" text-xs ">{label}</p>
+      <div className="p-2 h-6  bg-white border flex items-center text-xs gap-4 rounded-md">
+        <p className=" text-xs ">{payload[0].name}</p>
+        <div
+          className={`w-4 h-4 rounded-sm`}
+          style={{ background: fillColor }}
+        ></div>
         <p className="text-xs text-neutral">
-          <span className="ml-2">{payload[0].value} Siswa</span>
+          <span className="ml-2">{payload[0].value} Jumlah</span>
         </p>
       </div>
     );
   }
-};
-
-const PieChartComponent = ({}) => {
-  return (
-    <ResponsiveContainer width="100%" height={"100%"}>
-      <PieChart width={400} height={400}>
-        <Tooltip />
-        <Pie data={data} dataKey="value" nameKey="name" />
-      </PieChart>
-    </ResponsiveContainer>
-  );
 };
 
 const AdminDashboard = () => {
@@ -260,7 +208,9 @@ const AdminDashboard = () => {
             <div>
               <Barchart width={"20"} height={"20"} />
             </div>
-            <span className="text-sm font-semibold">Grafik Siswa</span>
+            <span className="text-sm font-semibold">
+              Grafik Pertambahan Siswa
+            </span>
           </div>
           <div className="h-[200px]">
             <BarChartComponent
@@ -271,24 +221,31 @@ const AdminDashboard = () => {
             />
           </div>
 
-          <p className="text-center text-xs mt-2 ml-1 font-medium ">
-            Pertahun Ajaran
-          </p>
+          {!loading && (
+            <p className="text-center text-xs mt-2 ml-1 font-medium ">
+              Tahun Ajaran
+            </p>
+          )}
         </div>
         <div className="w-full p-4 md:w-1/2 bg-white rounded-lg h-[310px] shadow-lg">
           <div className="border-b pb-4 border-gray-100 flex items-center gap-2">
             <div>
-              <Barchart width={"20"} height={"20"} />
+              <Piechart width={"20"} height={"20"} />
             </div>
-            <span className="text-sm font-semibold">Grafik Siswa</span>
+            <span className="text-sm font-semibold">Grafik Kelas</span>
           </div>
           <div className="h-[200px]">
-            <PieChartComponent />
+            <PieChartComponent
+              data={dataUmum.kelasPerTotal}
+              loading={loading}
+            />
           </div>
 
-          <p className="text-center text-xs mt-2 ml-1 font-medium ">
-            Pertahun Ajaran
-          </p>
+          {!loading && (
+            <p className="text-center text-xs mt-6 ml-1 font-medium ">
+              Total Perkelas
+            </p>
+          )}
         </div>
       </div>
     </section>

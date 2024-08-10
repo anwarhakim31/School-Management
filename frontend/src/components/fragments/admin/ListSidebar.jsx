@@ -93,20 +93,20 @@ const Navlist = [
       />
     ),
   },
-  {
-    id: 7,
-    nama: "Jadwal Belajar",
-    path: "/admin/data-jadwal",
-    icon: (
-      <JadwalIcon
-        height={20}
-        width={20}
-        className={
-          "text-white group-hover:text-neutral duration-300 transition-all"
-        }
-      />
-    ),
-  },
+  // {
+  //   id: 7,
+  //   nama: "Jadwal Belajar",
+  //   path: "/admin/data-jadwal",
+  //   icon: (
+  //     <JadwalIcon
+  //       height={20}
+  //       width={20}
+  //       className={
+  //         "text-white group-hover:text-neutral duration-300 transition-all"
+  //       }
+  //     />
+  //   ),
+  // },
   // {
   //   id: 7,
   //   nama: "Acara",
