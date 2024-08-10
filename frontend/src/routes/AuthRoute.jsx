@@ -7,5 +7,5 @@ export const AuthRoute = ({ children }) => {
 
   const isAuthenticate = !userData;
 
-  return isAuthenticate ? children : <Navigate to={`/guru`} />;
+  return isAuthenticate ? children : <Navigate to={`/${userData?.role}`} />;
 };

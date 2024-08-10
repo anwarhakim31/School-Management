@@ -116,16 +116,10 @@ export const getAuth = async (req, res, next) => {
 
     let user =
       (await Admin.findOne({ _id: userId }).select("-password")) ||
-      (await Guru.findById({ _id: userId })).select("-password");
-
-    console.log(user);
+      (await Guru.findById({ _id: userId }).select("-password"));
 
     if (!user) {
       throw new ResponseError(404, "User tidak ditemukan");
-    } else if (user.role === "guru") {
-      data = await Guru.findOne({ username: ni }).select("-password");
-    } else if (user.role === "siswa") {
-      data = await Siswa.findOne({ username: ni }).select("-password");
     }
 
     res.status(200).json({

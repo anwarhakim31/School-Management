@@ -5,10 +5,12 @@ const HeaderPage = () => {
   const { pathname } = useLocation();
   const [title, setTitle] = useState("");
 
+  console.log(pathname);
+
   useEffect(() => {
-    if (pathname !== "/admin") {
-      const path = pathname.split("/")[2];
-      const name = path.split("-").join(" ");
+    if (pathname !== "/admin" || pathname !== "/guru") {
+      const path = pathname?.split("/")[2];
+      const name = path?.split("-").join(" ");
       setTitle(name);
     } else {
       setTitle("Dashboard");
