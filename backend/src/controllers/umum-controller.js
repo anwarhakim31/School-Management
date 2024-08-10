@@ -4,6 +4,7 @@ import Siswa from "../models/siswa-model.js";
 import Kelas from "../models/kelas-model.js";
 import Guru from "../models/guru-model.js";
 import Mapel from "../models/mapel-model.js";
+import Total from "../models/total-model.js";
 
 export const getUmum = async (req, res, next) => {
   try {
@@ -12,6 +13,24 @@ export const getUmum = async (req, res, next) => {
     const totalGuru = await Guru.countDocuments();
     const totalKelas = await Kelas.countDocuments();
     const totalMapel = await Mapel.countDocuments();
+    const siswaPerAjaran = await Total.aggregate([
+      {
+        $addFields: {
+          startYear: {
+            $toInt: { $arrayElemAt: [{ $split: ["$ajaran", "/"] }, 0] },
+          },
+        },
+      },
+      {
+        $sort: { startYear: 1 },
+      },
+      {
+        $project: {
+          ajaran: 1,
+          totalSiswa: 1,
+        },
+      },
+    ]);
 
     res.status(200).json({
       success: true,
@@ -21,6 +40,7 @@ export const getUmum = async (req, res, next) => {
         totalGuru,
         totalKelas,
         totalMapel,
+        siswaPerAjaran,
       },
     });
   } catch (error) {

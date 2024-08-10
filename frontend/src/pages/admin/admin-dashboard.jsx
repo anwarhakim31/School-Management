@@ -11,6 +11,9 @@ import {
   Legend,
   ResponsiveContainer,
   LabelList,
+  Pie,
+  Cell,
+  PieChart,
 } from "recharts";
 import React, { useEffect, useRef, useState } from "react";
 import SiswaIcon from "../../assets/svg/Teacher.svg?react";
@@ -20,63 +23,89 @@ import MapelIcon from "../../assets/svg/pelajaran.svg?react";
 import AnimasiCounter from "@/components/elements/AnimasiCounter";
 import Barchart from "../../assets/svg/barchart.svg?react";
 
-const salesData = [
-  {
-    name: "Jan",
-    revenue: 2,
-  },
-  {
-    name: "Feb",
-    revenue: 1,
-  },
-  {
-    name: "Mar",
-    revenue: 3,
-  },
-  {
-    name: "Apr",
-    revenue: 4,
-  },
-  {
-    name: "May",
-    revenue: 5,
-  },
-  {
-    name: "Jun",
-    revenue: 6,
-  },
+const data = [
+  { name: "Group A", value: 400 },
+  { name: "Group B", value: 300 },
+  { name: "Group C", value: 300 },
+  { name: "Group D", value: 200 },
 ];
 
-const BarChartComponent = () => {
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#FF6347"];
+
+const BarChartComponent = ({ data, x, y, loading }) => {
+  if (loading) {
+    return (
+      <div className="w-full h-full flex-center">
+        <div className="flex items-end w-3/4  justify-between px-4 gap-8 animate-pulse duration-300 border-b">
+          <div className="h-[150px] w-[30px] bg-gray-300  rounded-sm"></div>
+          <div className="h-[100px] w-[30px] bg-gray-300  rounded-sm"></div>
+          <div className="h-[150px] w-[30px] bg-gray-300  rounded-sm"></div>
+          <div className="h-[100px] w-[30px] bg-gray-300  rounded-sm"></div>
+          <div className="h-[130px] w-[30px] bg-gray-300  rounded-sm"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data || data.length === 0) {
+    return (
+      <p className="text-xs h-full w-full   flex-center">Data tidak ada.</p>
+    );
+  }
+
   return (
     <ResponsiveContainer
       width={"100%"}
-      height="80%"
+      height="100%"
       className={"text-xs mt-4 text-gray-800 outline-none"}
     >
       <BarChart
-        width={200}
-        height={5}
-        accessibilityLayer
+        width={"100%"}
+        height={200}
         outerRadius={5}
-        data={salesData}
+        data={data}
         margin={{
-          right: 50,
+          right: 20,
+          left: -30,
         }}
       >
-        <CartesianGrid strokeDasharray="1 1" strokeOpacity={0.2} />
-        <XAxis dataKey="name" tickLine={false} tickMargin={10} />
+        <CartesianGrid strokeDasharray="1 1" strokeOpacity={0.3} />
+        <XAxis dataKey={y} tickLine={false} tickMargin={10} />
         <YAxis fontSize={10} axisLine={false} tickLine={false} />
-        <Tooltip cursor={false} />
+        <Tooltip cursor={false} content={<CustomTooltip />} />
 
         <Bar
-          dataKey="revenue"
+          dataKey={x}
           fill="#4d44b5"
           className="outline-none u"
           radius={4}
           barSize={30}
         />
       </BarChart>
+    </ResponsiveContainer>
+  );
+};
+
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="p-2 bg-white border flex  gap-4 rounded-md">
+        <p className=" text-xs ">{label}</p>
+        <p className="text-xs text-neutral">
+          <span className="ml-2">{payload[0].value} Siswa</span>
+        </p>
+      </div>
+    );
+  }
+};
+
+const PieChartComponent = ({}) => {
+  return (
+    <ResponsiveContainer width="100%" height={"100%"}>
+      <PieChart width={400} height={400}>
+        <Tooltip />
+        <Pie data={data} dataKey="value" nameKey="name" />
+      </PieChart>
     </ResponsiveContainer>
   );
 };
@@ -106,6 +135,8 @@ const AdminDashboard = () => {
 
     getAjaran();
   }, []);
+
+  console.log(dataUmum);
 
   return (
     <section className="px-6 py-4  ">
@@ -224,19 +255,41 @@ const AdminDashboard = () => {
         </div>
       </div>
       <div className="flex justify-center flex-wrap md:flex-nowrap items-center mt-8 gap-8">
-        <div className="w-full p-4 md:w-1/2 bg-white rounded-lg  shadow-lg">
+        <div className="w-full p-4 md:w-1/2 bg-white rounded-lg h-[310px] shadow-lg">
           <div className="border-b pb-4 border-gray-100 flex items-center gap-2">
             <div>
               <Barchart width={"20"} height={"20"} />
             </div>
             <span className="text-sm font-semibold">Grafik Siswa</span>
           </div>
-          <BarChartComponent />
-          <p className="text-center text-xs mt-2 font-medium ">
+          <div className="h-[200px]">
+            <BarChartComponent
+              loading={loading}
+              data={dataUmum.siswaPerAjaran}
+              y={"ajaran"}
+              x={"totalSiswa"}
+            />
+          </div>
+
+          <p className="text-center text-xs mt-2 ml-1 font-medium ">
             Pertahun Ajaran
           </p>
         </div>
-        <div className="w-full md:w-1/2 bg-white rounded-lg h-[300px] shadow-lg"></div>
+        <div className="w-full p-4 md:w-1/2 bg-white rounded-lg h-[310px] shadow-lg">
+          <div className="border-b pb-4 border-gray-100 flex items-center gap-2">
+            <div>
+              <Barchart width={"20"} height={"20"} />
+            </div>
+            <span className="text-sm font-semibold">Grafik Siswa</span>
+          </div>
+          <div className="h-[200px]">
+            <PieChartComponent />
+          </div>
+
+          <p className="text-center text-xs mt-2 ml-1 font-medium ">
+            Pertahun Ajaran
+          </p>
+        </div>
       </div>
     </section>
   );

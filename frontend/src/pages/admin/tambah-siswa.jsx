@@ -500,7 +500,7 @@ const TambahSiswaPage = () => {
             />
           </div>
           <div className="flex justify-end pt-8 gap-4 ">
-            <Link to={"/admin/data-guru"}>
+            <Link to={"/admin/data-siswa"}>
               <button
                 disabled={loading}
                 type="button"

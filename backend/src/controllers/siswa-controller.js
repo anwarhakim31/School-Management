@@ -284,16 +284,18 @@ export const deleteOneSiswa = async (req, res, next) => {
 
     await Siswa.deleteOne({ _id: id });
 
-    const tahunAjaran = await TahunAjaran.findOne({ status: true }).select(
-      "ajaran"
-    );
+    const ajaran = await TahunAjaran.findOne({ status: true }).select("ajaran");
 
-    if (tahunAjaran) {
-      await Total.findOneAndUpdate(
-        { ajaran: tahunAjaran },
+    if (ajaran) {
+      const data = await Total.findOneAndUpdate(
+        { ajaran: ajaran.ajaran },
         { $inc: { totalSiswa: -1 } },
         { new: true }
       );
+
+      if (data.totalSiswa === 0) {
+        await Total.findByIdAndDelete(data._id);
+      }
     }
 
     res.status(200).json({
@@ -309,6 +311,26 @@ export const deleteOneSiswa = async (req, res, next) => {
 export const deleteManySiswa = async (req, res, next) => {
   try {
     const { dataChecked } = req.body;
+
+    const tahunAjaran = await TahunAjaran.findOne({ status: true });
+    if (tahunAjaran) {
+      const siswaBedasarkanAjaran = await Siswa.find({
+        _id: { $in: dataChecked },
+        tahunMasuk: tahunAjaran.ajaran,
+      }).countDocuments();
+
+      console.log(siswaBedasarkanAjaran);
+
+      const data = await Total.findOneAndUpdate(
+        { ajaran: tahunAjaran.ajaran },
+        { $inc: { totalSiswa: -siswaBedasarkanAjaran } },
+        { new: true }
+      );
+
+      if (data.totalSiswa === 0) {
+        await Total.findByIdAndDelete(data._id);
+      }
+    }
 
     const SiswaList = await Siswa.find({ _id: { $in: dataChecked } });
 
@@ -330,15 +352,6 @@ export const deleteManySiswa = async (req, res, next) => {
           jumlahSiswa: jumlahSiswa,
         });
       }
-    }
-
-    const tahunAjaran = await TahunAjaran.findOne({ status: true });
-
-    if (tahunAjaran) {
-      await Total.findOneAndUpdate(
-        { ajaran: tahunAjaran.ajaran },
-        { $inc: { totalSiswa: -dataChecked.length } }
-      );
     }
 
     res.status(200).json({
