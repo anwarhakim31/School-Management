@@ -8,6 +8,7 @@ import s3 from "../util/aws3.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import Siswa from "../models/siswa-model.js";
 import Kelas from "../models/kelas-model.js";
+import Guru from "../models/guru-model.js";
 
 dotenv.config();
 
@@ -43,7 +44,9 @@ export const loginUser = async (req, res, next) => {
   try {
     const { ni, password } = req.body;
 
-    let user = await Admin.findOne({ username: ni });
+    let user =
+      (await Admin.findOne({ username: ni })) ||
+      (await Guru.findOne({ nip: ni }));
 
     if (!user) {
       throw new ResponseError(404, "NIS/NIK dan Password salah");
@@ -59,13 +62,11 @@ export const loginUser = async (req, res, next) => {
 
     if (user.role === "admin") {
       data = await Admin.findOne({ username: ni }).select("-password");
+    } else if (user.role === "guru") {
+      data = await Guru.findOne({ nip: ni }).select("-password");
+    } else if (user.role === "siswa") {
+      data = await Siswa.findOne({ username: ni }).select("-password");
     }
-
-    //        else if (user.role === "guru") {
-    //      data = await Guru.findOne({ username: ni }).select("-password");
-    //    } else if (user.role === "siswa") {
-    //      data = await Siswa.findOne({ username: ni }).select("-password");
-    //    }
 
     const accessToken = createToken(ni, user.id, user.role);
 
@@ -111,19 +112,21 @@ export const loginUser = async (req, res, next) => {
 export const getAuth = async (req, res, next) => {
   try {
     const userId = req.userId;
-    const refreshToken = req.cookies.Schoolarcy;
+    // const refreshToken = req.cookies.Schoolarcy;
 
-    let user = await Admin.findOne({ _id: userId }).select("-password");
+    let user =
+      (await Admin.findOne({ _id: userId }).select("-password")) ||
+      (await Guru.findById({ _id: userId })).select("-password");
+
+    console.log(user);
 
     if (!user) {
       throw new ResponseError(404, "User tidak ditemukan");
+    } else if (user.role === "guru") {
+      data = await Guru.findOne({ username: ni }).select("-password");
+    } else if (user.role === "siswa") {
+      data = await Siswa.findOne({ username: ni }).select("-password");
     }
-
-    //        else if (user.role === "guru") {
-    //      data = await Guru.findOne({ username: ni }).select("-password");
-    //    } else if (user.role === "siswa") {
-    //      data = await Siswa.findOne({ username: ni }).select("-password");
-    //    }
 
     res.status(200).json({
       success: true,

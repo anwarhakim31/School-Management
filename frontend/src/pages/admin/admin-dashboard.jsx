@@ -1,7 +1,7 @@
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { Tooltip, ResponsiveContainer, Pie, PieChart, Legend } from "recharts";
+
 import React, { useEffect, useRef, useState } from "react";
 import SiswaIcon from "../../assets/svg/Teacher.svg?react";
 import GuruIcon from "../../assets/svg/Student.svg?react";
@@ -11,52 +11,7 @@ import AnimasiCounter from "@/components/elements/AnimasiCounter";
 import Barchart from "../../assets/svg/barchart.svg?react";
 import Piechart from "../../assets/svg/piechart.svg?react";
 import BarChartComponent from "@/components/elements/dashboard-admin/BarChart";
-
-const PieChartComponent = ({ data, loading }) => {
-  if (loading) {
-    return (
-      <div className="w-full h-full flex-center">
-        <div className="flex items-center w-3/4 h-full  justify-center px-4 gap-8 animate-pulse duration-300 border-b">
-          <div className="w-[140px] h-[140px] rounded-full  bg-gray-300 "></div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!data || data.length === 0) {
-    return (
-      <p className="text-xs h-full w-full   flex-center">Data tidak ada.</p>
-    );
-  }
-
-  return (
-    <ResponsiveContainer width="100%" height={"100%"} className={"text-xs"}>
-      <PieChart width={400} height={400}>
-        <Tooltip content={<CustomTooltip />} />
-        <Pie data={data} dataKey="totalKelas" nameKey="kelas" />
-        <Legend />
-      </PieChart>
-    </ResponsiveContainer>
-  );
-};
-
-const CustomTooltip = ({ active, payload }) => {
-  if (active && payload && payload.length) {
-    const fillColor = payload[0].payload.fill;
-    return (
-      <div className="p-2 h-6  bg-white border flex items-center text-xs gap-4 rounded-md">
-        <p className=" text-xs ">{payload[0].name}</p>
-        <div
-          className={`w-4 h-4 rounded-sm`}
-          style={{ background: fillColor }}
-        ></div>
-        <p className="text-xs text-neutral">
-          <span className="ml-2">{payload[0].value} Jumlah</span>
-        </p>
-      </div>
-    );
-  }
-};
+import PieChartComponent from "@/components/elements/dashboard-admin/Piechar";
 
 const AdminDashboard = () => {
   const [dataUmum, setdataUmum] = useState([]);
@@ -243,7 +198,7 @@ const AdminDashboard = () => {
 
           {!loading && (
             <p className="text-center text-xs mt-6 ml-1 font-medium ">
-              Total Perkelas
+              Jumlah Perkelas
             </p>
           )}
         </div>

@@ -1,4 +1,10 @@
-import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Routes,
+  Route,
+  Router,
+} from "react-router-dom";
 
 import LoginPage from "./pages/login";
 import AdminLayout from "./components/layouts/admin/AdminLayout";
@@ -21,6 +27,8 @@ import EditSiswaPage from "./pages/admin/edit-siswa";
 import TambahGuruPage from "./pages/admin/tambah-guru";
 import EditGuruPage from "./pages/admin/edit-guru";
 import DataUmumPage from "./pages/admin/data-umum";
+import GuruLayout from "./components/layouts/guru/GuruLayout";
+import GuruDashboardPage from "./pages/guru/guru-dashboard";
 
 function App() {
   const dispatch = useDispatch();
@@ -176,6 +184,29 @@ function App() {
           />
         </Route>
         {/* admin */}
+
+        {/* <!-- Guru --> */}
+
+        <Route
+          path="/guru"
+          element={
+            <PrivateRoute role={"guru"}>
+              <GuruLayout />
+            </PrivateRoute>
+          }
+        >
+          <Route index element={<Navigate to={"/guru/dashboard"} />} />
+          <Route
+            path={"dashboard"}
+            element={
+              <PrivateRoute role={"guru"}>
+                <GuruDashboardPage />
+              </PrivateRoute>
+            }
+          />
+        </Route>
+
+        {/* <!-- guru --> */}
 
         <Route path="*" element={<Navigate to={"/login"} />} />
       </Routes>

@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const guruSchema = new mongoose.Schema({
+  role: {
+    type: String,
+    default: "guru",
+  },
   nip: { type: String, required: true, unique: true },
   nama: { type: String, required: true },
   password: { type: String, required: true },

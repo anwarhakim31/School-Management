@@ -64,10 +64,15 @@ const LoginPage = () => {
       if (res.status === 200) {
         setSuccess(true);
       }
+      console.log(res);
 
       // timeoutRef.current = setTimeout(() => {
       dispatch(setUserData(res.data.data));
       res.data.data.role === "admin" && navigate("/admin/dasboard");
+      res.data.data.role === "guru" && navigate("/guru/dasboard");
+
+      console.log(res.data.data.role);
+
       // }, 500);
     } catch (error) {
       responseError(error);

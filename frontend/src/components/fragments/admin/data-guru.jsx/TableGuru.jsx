@@ -109,12 +109,12 @@ const TableGuru = ({
                 >
                   Bidang Studi
                 </th>
-                <th
+                {/* <th
                   scope="col"
                   className="px-4 py-4 text-left whitespace-nowrap"
                 >
                   Alamat
-                </th>
+                </th> */}
                 <th scope="col" className="py-4 text-center">
                   Kontak
                 </th>
@@ -194,7 +194,7 @@ const TableGuru = ({
                     >
                       {guru.bidangStudi}
                     </td>
-                    <td
+                    {/* <td
                       scope="row"
                       className="px-4 py-4   overflow-hidden line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap "
                     >
@@ -205,7 +205,7 @@ const TableGuru = ({
                           Data Kosong
                         </span>
                       )}
-                    </td>
+                    </td> */}
 
                     <td
                       scope="row"
