@@ -2,93 +2,110 @@ import DashboardIcon from "../../../assets/svg/dashboard.svg?react";
 import SiswaIcon from "../../../assets/svg/siswa.svg?react";
 import GuruIcon from "../../../assets/svg/guru.svg?react";
 import KelasIcon from "../../../assets/svg/class.svg?react";
-import MapelIcon from "../../../assets/svg/pelajaran.svg?react";
 import { Link, Navigate, NavLink, useNavigate } from "react-router-dom";
-import { ChevronDown, ChevronUp, FileStack } from "lucide-react";
+import { ChevronDown, ChevronUp, FileStack, NotebookPen } from "lucide-react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectedUserData } from "@/store/slices/auth-slice";
 // import KelasSVG from "@/components/base/svg/KelasSVG
-
-const Navlist = [
-  {
-    id: 1,
-    nama: "Dashboard",
-    path: "/admin/dashboard",
-    icon: (
-      <DashboardIcon
-        height={17}
-        width={17}
-        className={
-          "text-white group-hover:text-neutral stroke-[2] duration-300 transition-all"
-        }
-      />
-    ),
-  },
-
-  {
-    id: 2,
-    nama: "Kelas",
-    icon: (
-      <KelasIcon
-        height={20}
-        width={20}
-        className={
-          "text-white group-hover:text-neutral stroke-[0.1] duration-300 transition-all"
-        }
-      />
-    ),
-    dropDown: [
-      {
-        id: 1,
-        nama: "Absen Harian",
-        path: "/guru/absen-harian",
-        icon: (
-          <KelasIcon
-            height={20}
-            width={20}
-            className={
-              "text-white group-hover:text-neutral stroke-[0.1] duration-300 transition-all"
-            }
-          />
-        ),
-      },
-      {
-        id: 2,
-        nama: "Data Siswa",
-        icon: (
-          <KelasIcon
-            height={20}
-            width={20}
-            className={
-              "text-white group-hover:text-neutral stroke-[0.1] duration-300 transition-all"
-            }
-          />
-        ),
-      },
-    ],
-  },
-  {
-    id: 3,
-    nama: "Rekap Absen",
-    path: "/admin/Rekap-Absen",
-    icon: (
-      <DashboardIcon
-        height={17}
-        width={17}
-        className={
-          "text-white group-hover:text-neutral stroke-[2] duration-300 transition-all"
-        }
-      />
-    ),
-  },
-];
 
 const ListSidebar = () => {
   const navigate = useNavigate();
   const [activeDropDown, setActiveDropDown] = useState(null);
+  const userData = useSelector(selectedUserData);
 
   const handleActiveDropDown = (id) => {
     setActiveDropDown(activeDropDown === id ? null : id);
   };
+
+  const Navlist = [
+    {
+      id: 1,
+      nama: "Dashboard",
+      path: "/admin/dashboard",
+      icon: (
+        <DashboardIcon
+          height={17}
+          width={17}
+          className={
+            "text-white group-hover:text-neutral stroke-[2] duration-300 transition-all"
+          }
+        />
+      ),
+    },
+
+    userData.waliKelas && {
+      id: 2,
+      nama: "Wali Kelas",
+      icon: (
+        <KelasIcon
+          height={20}
+          width={20}
+          className={
+            "text-white group-hover:text-neutral stroke-[0.1] duration-300 transition-all"
+          }
+        />
+      ),
+      dropDown: [
+        {
+          id: 1,
+          nama: "Absen Harian",
+          path: "/guru/absen-harian",
+          icon: (
+            <NotebookPen
+              height={20}
+              width={20}
+              className={
+                "text-white group-hover:text-neutral  duration-300 transition-all"
+              }
+            />
+          ),
+        },
+        {
+          id: 2,
+          nama: "Data Siswa",
+          icon: (
+            <SiswaIcon
+              height={20}
+              width={20}
+              className={
+                "text-white group-hover:text-neutral stroke-[0.1] group-hover:fill-neutral duration-300 transition-all"
+              }
+            />
+          ),
+        },
+      ],
+    },
+    {
+      id: 3,
+      nama: "Jadwal Mengajar",
+      path: "/admin/jadwal-mengajar",
+      icon: (
+        <DashboardIcon
+          height={17}
+          width={17}
+          className={
+            "text-white group-hover:text-neutral stroke-[2] duration-300 transition-all"
+          }
+        />
+      ),
+    },
+
+    {
+      id: 4,
+      nama: "Rekap",
+      path: "/admin/Rekap-Absen",
+      icon: (
+        <DashboardIcon
+          height={17}
+          width={17}
+          className={
+            "text-white group-hover:text-neutral stroke-[2] duration-300 transition-all"
+          }
+        />
+      ),
+    },
+  ].filter(Boolean);
 
   return (
     <ul className="w-full py-2 h-[80vh] overflow-auto">
@@ -129,7 +146,7 @@ const ListSidebar = () => {
 
           {list.dropDown && activeDropDown === list._id && (
             <div
-              className="h-[75px] mb-2 "
+              className="h-[75px] my-2 "
               onClick={(e) => e.stopPropagation()}
             >
               {list.dropDown.map((drop) => (
@@ -138,8 +155,8 @@ const ListSidebar = () => {
                     navigate(drop.path);
                     setActiveDropDown(null);
                   }}
-                  key={drop._id}
-                  className="flex items-center gap-2 px-2 group hover:bg-white h-8 my-2 mx-4 w-36 rounded-md"
+                  key={drop.id}
+                  className="flex items-center gap-2 px-2 group hover:bg-white h-8 my-2 mx-3 w-36 rounded-md"
                 >
                   {drop.icon}
                   <span className="text-white    text-sm font-light group-hover:text-neutral group-hover:font-medium ">

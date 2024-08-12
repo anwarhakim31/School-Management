@@ -160,3 +160,22 @@ export const updateKelas = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getWaliKelas = async (req, res, next) => {
+  try {
+    const waliKelas = req.body.id;
+
+    const kelas = await Kelas.findOne({ waliKelas: waliKelas }).populate(
+      "siswa"
+    );
+
+    res.status(200).json({
+      success: true,
+      message: `Berhasil mengambil detail data`,
+      kelas,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
