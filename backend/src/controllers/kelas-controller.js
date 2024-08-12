@@ -163,15 +163,19 @@ export const updateKelas = async (req, res, next) => {
 
 export const getWaliKelas = async (req, res, next) => {
   try {
-    const waliKelas = req.body.id;
+    const waliKelas = req.params.id;
 
     const kelas = await Kelas.findOne({ waliKelas: waliKelas }).populate(
       "siswa"
     );
 
+    if (!kelas) {
+      throw new ResponseError(404, "Kelas dengan walikelas tersebut tidak ada");
+    }
+
     res.status(200).json({
       success: true,
-      message: `Berhasil mengambil detail data`,
+      message: `Berhasil mengambil  data`,
       kelas,
     });
   } catch (error) {

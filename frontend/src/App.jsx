@@ -30,6 +30,7 @@ import DataUmumPage from "./pages/admin/data-umum";
 import GuruLayout from "./components/layouts/guru/GuruLayout";
 import GuruDashboardPage from "./pages/guru/guru-dashboard";
 import AbsenHarianPage from "./pages/guru/absen-harian";
+import DataKelasguruPage from "./pages/guru/data-siswa";
 
 function App() {
   const dispatch = useDispatch();
@@ -210,6 +211,14 @@ function App() {
             element={
               <PrivateRoute role={"guru"}>
                 <AbsenHarianPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={"data-siswa"}
+            element={
+              <PrivateRoute role={"guru"}>
+                <DataKelasguruPage />
               </PrivateRoute>
             }
           />
