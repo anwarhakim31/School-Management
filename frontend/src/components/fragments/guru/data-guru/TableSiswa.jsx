@@ -1,55 +1,25 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  selectedDataDeleteMany,
-  setDataDelete,
-  setDataDeleteMany,
-  setDataEdit,
-} from "@/store/slices/admin-slice";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Edit,
-  Mail,
-  Phone,
-  Trash,
-} from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { setDataDelete, setDataEdit } from "@/store/slices/admin-slice";
+import { Edit, Mail, Phone, Trash } from "lucide-react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-const TableSiswa = ({
-  data,
-  limit,
-  page,
-  totalPage,
-  totalSiswa,
-  handlePagination,
-  handleToggleDeleteOne,
-  setAllCheck,
-  allCheck,
-  loading,
-}) => {
-  const lastOfIndexSiswa = page * limit;
-  const firstOfindexSiswa = lastOfIndexSiswa - limit;
-  const [dataChecked, setDataChecked] = useState([]);
+const TableSiswa = ({ data }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [allCheck, setAllCheck] = useState(false);
+  const [dataChecked, setDataChecked] = useState([]);
 
-  const HandleCopyText = (text) => {
-    navigator.clipboard.writeText(text).then(() => {
-      toast.info("berhasil menyalin data");
-    });
+  const handleDeleteSiswa = (data) => {
+    // handleToggleDeleteOne();
+    dispatch(setDataDelete(data));
   };
 
-  const handleCheckboxChange = (checked, siswa) => {
-    if (checked) {
-      setDataChecked((prev) => [...prev, siswa._id]);
-      dispatch(setDataDeleteMany([...dataChecked, siswa._id]));
-    } else {
-      setDataChecked((prev) => prev.filter((id) => id !== siswa._id));
-      dispatch(setDataDeleteMany(dataChecked.filter((id) => id !== siswa._id)));
-    }
+  const handleEditSiswa = (data) => {
+    dispatch(setDataEdit(data));
+    navigate("/admin/edit-siswa");
   };
 
   const handleCheckboxAll = (checked) => {
@@ -57,21 +27,25 @@ const TableSiswa = ({
 
     if (checked) {
       setDataChecked(data.map((siswa) => siswa._id));
-      dispatch(setDataDeleteMany(data.map((siswa) => siswa._id)));
     } else {
       setDataChecked([]);
-      dispatch(setDataDeleteMany([]));
     }
   };
 
-  const handleDeleteSiswa = (data) => {
-    handleToggleDeleteOne();
-    dispatch(setDataDelete(data));
+  console.log(data.siswa);
+
+  const handleCheckboxChange = (checked, siswa) => {
+    if (checked) {
+      setDataChecked((prev) => [...prev, siswa._id]);
+    } else {
+      setDataChecked((prev) => prev.filter((id) => id !== siswa._id));
+    }
   };
 
-  const handleEditSiswa = (data) => {
-    dispatch(setDataEdit(data));
-    navigate("/admin/edit-siswa");
+  const handleCopytext = ({ text }) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(toast.info("Berhasil menyalin data"));
   };
 
   return (
@@ -115,19 +89,14 @@ const TableSiswa = ({
                 <th scope="col" className="py-4 text-center">
                   Kontak
                 </th>
-                <th
-                  scope="Kelas"
-                  className="text-center px-8 py-4 whitespace-nowrap"
-                >
-                  Kelas
-                </th>
+
                 <th scope="col" className="px-5 py-3">
                   <span className="sr-only">Edit</span>
                 </th>
               </tr>
             </thead>
             <tbody>
-              {data && !loading && data.length === 0 && (
+              {data && data.length === 0 && (
                 <tr>
                   <td
                     colSpan="9"
@@ -141,7 +110,7 @@ const TableSiswa = ({
               )}
               {data &&
                 data.length !== 0 &&
-                data.map((siswa, i) => (
+                data.siswa.map((siswa, i) => (
                   <tr
                     key={siswa.nis}
                     className={` hover:bg-gray-100 border-b  `}
@@ -205,7 +174,7 @@ const TableSiswa = ({
                         <div
                           className="cursor-pointer flex-center  border shadow-md  text-indigo-700 w-[24px] h-[24px] rounded-full"
                           title={siswa.phone}
-                          onClick={() => HandleCopyText(siswa.phone)}
+                          onClick={() => handleCopytext(siswa.phone)}
                         >
                           <Phone strokeWidth={1} width={15} height={15} />
                         </div>
@@ -213,25 +182,14 @@ const TableSiswa = ({
                           <div
                             className="cursor-pointer flex-center border shadow-md  text-indigo-700 w-[24px] h-[24px] rounded-full"
                             title={siswa.email}
-                            onClick={() => HandleCopyText(siswa.email)}
+                            onClick={() => handleCopytext(siswa.email)}
                           >
                             <Mail strokeWidth={1} width={15} height={15} />
                           </div>
                         )}
                       </div>
                     </td>
-                    <td
-                      scope="row"
-                      className=" py-4 px-8 max-w-full text-center text-xs font-normal whitespace-nowrap text-gray-900 "
-                    >
-                      {siswa.kelas ? (
-                        `${siswa.kelas.kelas} ${siswa.kelas.nama}`
-                      ) : (
-                        <span className="text-gray-700 font-bold">
-                          Data Kosong
-                        </span>
-                      )}
-                    </td>
+
                     <td
                       scope="row"
                       className="px-3    border-gray-300  py-4 text-xs font-normal text-gray-900 whitespace-nowrap "
@@ -270,7 +228,7 @@ const TableSiswa = ({
             </tbody>
           </table>
         </div>
-        <Pagination
+        {/* <Pagination
           lastOfIndexSiswa={lastOfIndexSiswa}
           firstOfindexSiswa={firstOfindexSiswa}
           limit={limit}
@@ -279,86 +237,9 @@ const TableSiswa = ({
           data={data}
           totalSiswa={totalSiswa}
           handlePagination={handlePagination}
-        />
+        /> */}
       </div>
     </>
-  );
-};
-
-const Pagination = ({
-  lastOfIndexSiswa,
-  firstOfindexSiswa,
-  limit,
-  data,
-  page,
-  totalSiswa,
-  handlePagination,
-  totalPage,
-}) => {
-  const pageNumber = [];
-
-  for (let i = 1; i <= totalPage; i++) {
-    pageNumber.push(i);
-  }
-
-  const startPage =
-    page === totalPage ? Math.max(1, page - 2) : Math.max(1, page - 1);
-
-  const endPage =
-    page === 1 ? Math.min(totalPage, page + 2) : Math.min(totalPage, page + 1);
-
-  const visiblePage = pageNumber.slice(startPage - 1, endPage);
-
-  return (
-    <div className=" absolute h-9 left-0 bottom-5 border-t pt-4 w-full flex-between px-3">
-      <div className="flex">
-        <p className="text-[10px] sm:text-xs">{`Menampilkan ${
-          totalSiswa === 0 ? 0 : firstOfindexSiswa + 1
-        } - ${
-          page === totalPage
-            ? totalSiswa
-            : totalSiswa === 0
-            ? 0
-            : lastOfIndexSiswa
-        } dari ${totalSiswa} data`}</p>
-      </div>
-      <div className="flex-center space-x-4">
-        <div className="flex gap-2 ">
-          <button
-            onClick={() => handlePagination(page - 1)}
-            className="disabled:cursor-auto bg-neutral text-white rounded-sm disabled:bg-backup"
-            disabled={page === 1}
-          >
-            <ChevronLeft width={20} height={20} />
-          </button>
-
-          {visiblePage.map((number) => (
-            <div
-              key={number}
-              className={`page-item ${page === number ? "" : ""}`}
-            >
-              <button
-                onClick={() => handlePagination(number)}
-                className={`${
-                  number === page &&
-                  "rounded-full border-b shadow border-gray-500"
-                } w-5 text-sm h-5`}
-              >
-                {number}
-              </button>
-            </div>
-          ))}
-
-          <button
-            onClick={() => handlePagination(page + 1)}
-            className="disabled:cursor-auto bg-neutral text-white rounded-sm disabled:bg-backup"
-            disabled={page === pageNumber.length}
-          >
-            <ChevronRight width={20} height={20} />
-          </button>
-        </div>
-      </div>
-    </div>
   );
 };
 

@@ -165,9 +165,9 @@ export const getWaliKelas = async (req, res, next) => {
   try {
     const waliKelas = req.params.id;
 
-    const kelas = await Kelas.findOne({ waliKelas: waliKelas }).populate(
-      "siswa"
-    );
+    const kelas = await Kelas.findOne({ waliKelas: waliKelas }).populate({
+      path: "siswa",
+    });
 
     if (!kelas) {
       throw new ResponseError(404, "Kelas dengan walikelas tersebut tidak ada");

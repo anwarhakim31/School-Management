@@ -215,7 +215,7 @@ function App() {
             }
           />
           <Route
-            path={"data-siswa"}
+            path={"data-kelas"}
             element={
               <PrivateRoute role={"guru"}>
                 <DataKelasguruPage />
