@@ -1,36 +1,53 @@
 import CustomDropdown from "@/components/elements/DropDown";
 import Student from "../../assets/svg/Teacher.svg";
 import TableSiswa from "@/components/fragments/guru/walikelas/TableSiswa";
-import DeleteModal from "@/components/fragments/guru/DeleteModal";
+import DeleteModal from "@/components/fragments/guru/walikelas/DeleteModal";
 import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { Bolt, Search, Trash2 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { Bolt, Filter, Search, Settings, Trash2 } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import AddModal from "@/components/fragments/guru/walikelas/AddModal";
+import DeleteManyModal from "@/components/fragments/guru/walikelas/DeleteManyModal";
+import FilterDropdown from "@/components/elements/DropDownFilter";
+import FilterKelas from "@/components/elements/data-kelas/FilterKelas";
+import FilterSiswa from "@/components/elements/wali-kelas/FilterSiswa";
+
+const selectRow = [7, 14, 21, 28];
 
 const DataKelasguruPage = () => {
-  const [loading, setLoading] = useState(false);
+  const buttonFilterRef = useRef();
+  const FilterRef = useRef();
+  const [loading, setLoading] = useState(true);
   const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
   const [isAddSiswa, setIsAddSiswa] = useState(false);
+  const [isDeleteManySiswa, setIsDeleteManySiswa] = useState(false);
+  const [allCheck, setAllCheck] = useState(false);
+  const [isFilter, setIsFilter] = useState(false);
   const dataChecked = useSelector(selectedDataDeleteMany);
   const userData = useSelector(selectedUserData);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("terbaru");
   const [data, setData] = useState([]);
+  const [dataSiswa, setDataSiswa] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(7);
 
   useEffect(() => {
     const getKelas = async () => {
-      setLoading(true);
       try {
         const res = await axios.get(
           HOST + "/api/kelas/get-wali-kelas/" + userData._id,
           { withCredentials: true }
         );
 
-        setData(res.data.kelas);
+        if (res.status === 200) {
+          setData(res.data.kelas);
+        }
       } catch (error) {
         responseError(error);
       } finally {
@@ -41,7 +58,35 @@ const DataKelasguruPage = () => {
     };
 
     getKelas();
-  }, [isDeleteSiswa, isAddSiswa]);
+  }, [isDeleteSiswa, isAddSiswa, isDeleteManySiswa]);
+
+  useEffect(() => {
+    let datas = data?.siswa?.map((siswa) => siswa);
+
+    if (search) {
+      const splitValue = search.trim().toLocaleLowerCase().split(" ");
+      datas = datas.filter((data) => {
+        return splitValue.every(
+          (key) => data.nama.includes(key) || data.nis.includes(key)
+        );
+      });
+    }
+
+    if (filter === "terlama") {
+      datas.reverse();
+    }
+    if (filter === "a-z") {
+      datas = datas.sort((a, b) => b.nama.localeCompare(a.nama));
+    }
+
+    if (filter === "z-a") {
+      datas = datas.sort((a, b) => a.nama.localeCompare(b.nama));
+    }
+
+    setDataSiswa(datas);
+  }, [data, search, filter]);
+
+  console.log(filter);
 
   const handleToggleDeleteOne = () => {
     setIsDeleteSiswa(!isDeleteSiswa);
@@ -51,59 +96,84 @@ const DataKelasguruPage = () => {
     setIsAddSiswa(!isAddSiswa);
   };
 
+  const handleToggleDeleteMany = () => {
+    setIsDeleteManySiswa(!isDeleteManySiswa);
+  };
+
+  const handleSelectBaris = (value) => {
+    setLimit(value);
+  };
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const handleToggleFilter = () => {
+    setIsFilter(!isFilter);
+  };
+
+  const handleOptionChange = (e) => {
+    setFilter(e.target.value);
+    setIsFilter(false);
+  };
+
   return (
     <section className="px-6 py-4 mb-4 ">
       <div className="border bg-white border-gray-300 p-4 mb-6 md:max-w-[300px]  rounded-md">
-        <div className="flex items-center mb-2 gap-2">
+        <div className="flex items-center mb-4 justify-between">
           <h3 className="text-sm  font-bold">Detail Kelas</h3>
-          <button aria-label="pengaturan kelas">
-            <Bolt width={18} height={18} />
+          <button
+            aria-label="pengaturan kelas"
+            title="Edit Kelas"
+            className="w-6 h-6 rounded-full hover:bg-gray-200 flex-center hover:border"
+          >
+            <Settings width={18} height={18} />
           </button>
         </div>
-        <div className="flex justify-between">
-          <div>
-            <div className="text-xs mt-2 grid grid-cols-2 gap-1">
-              <p className="font-semibold">Kelas </p>
 
-              <p className="truncate">
-                {loading ? (
-                  <span className="w-full h-4 bg-slate-300 block animate-pulse rounded-sm "></span>
-                ) : (
-                  <span>
-                    : {data.kelas} {data.nama}
-                  </span>
-                )}
-              </p>
-            </div>
-          </div>
-          <div>
-            <p className="text-xs mt-2 grid grid-cols-2 gap-1">
-              <span className="font-semibold">Total Siswa</span>
+        <div>
+          <div className="text-xs mt-2 grid grid-cols-3 gap-1">
+            <p className="font-semibold">Kelas </p>
+            <p className="truncate col-span-2">
               {loading ? (
-                <span className="w-9 h-4 bg-slate-300 block animate-pulse rounded-sm "></span>
+                <span className="w-1/2 h-4 bg-slate-300 block animate-pulse rounded-sm "></span>
               ) : (
-                <span>: {data.jumlahSiswa}</span>
+                <span>
+                  : {data.kelas} {data.nama}
+                </span>
               )}
             </p>
           </div>
         </div>
-        <p className="text-xs mt-2 flex gap-1">
-          <span className="font-semibold">Posisi </span>
-          {loading ? (
-            <span className="w-9 h-4 bg-slate-300 block animate-pulse rounded-sm "></span>
-          ) : (
-            <span className="ml-1">: {data.posisi ? data.posisi : ""}</span>
-          )}
-        </p>
+        <div>
+          <p className="text-xs mt-2 grid grid-cols-3 gap-1">
+            <span className="font-semibold">Total Siswa</span>
+            {loading ? (
+              <span className="w-1/2 h-4 col-span-2 bg-slate-300 block animate-pulse rounded-sm "></span>
+            ) : (
+              <span>: {data.jumlahSiswa}</span>
+            )}
+          </p>
+        </div>
+        <div>
+          <p className="text-xs mt-2 grid grid-cols-3 gap-1">
+            <span className="font-semibold">Posisi Kelas</span>
+            {loading ? (
+              <span className="w-1/2 h-4 col-span-2 bg-slate-300 block animate-pulse rounded-sm "></span>
+            ) : (
+              <span>: {data.posisi ? data.posisi : ""}</span>
+            )}
+          </p>
+        </div>
       </div>
       <div className="w-full flex-between gap-6">
         <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
             placeholder="Cari..."
-            // value={search}
-            // disabled={loading}
-            // onChange={handleSearch}
+            value={search}
+            disabled={loading}
+            onChange={handleSearch}
             className="w-full rounded-full disabled:cursor-not-allowed py-1.5 pr-2 pl-10 text-sm border border-gray-400 outline-offset-0 outline-1 outline-neutral"
           />
           <div className="absolute left-4 top-1/2 -translate-y-1/2">
@@ -126,7 +196,7 @@ const DataKelasguruPage = () => {
           <div className="flex items-center gap-4  ">
             <button
               title="Hapus siswa terpilih"
-              // onClick={handleToggleDeleteMany}
+              onClick={handleToggleDeleteMany}
               className={`${
                 dataChecked.length > 0
                   ? "opacity-100"
@@ -137,14 +207,42 @@ const DataKelasguruPage = () => {
             </button>
 
             <CustomDropdown
-            // options={selectRow}
-            // onSelect={handleSelectBaris}
-            // selected={limit}
+              options={selectRow}
+              onSelect={handleSelectBaris}
+              selected={limit}
             />
-            {/* <DropdownFilter
-              handleFilterChange={handleFilterChange}
-              setFilters={setFilters}
-            /> */}
+            <div className="flex gap-2 relative  mr-auto  ">
+              <button
+                onClick={handleToggleFilter}
+                ref={buttonFilterRef}
+                disabled={dataSiswa?.length === 0}
+                className="border border-gray-400 group disabled:cursor-not-allowed bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-md flex-between gap-3"
+              >
+                <Filter
+                  strokeWidth={2}
+                  width={15}
+                  height={15}
+                  className="text-gray-600 group-hover:text-white"
+                />
+              </button>
+              {filter !== "terbaru" && (
+                <button
+                  onClick={() => setFilter("terbaru")}
+                  className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-md flex-between gap-3"
+                >
+                  Clear
+                </button>
+              )}
+              {isFilter && (
+                <FilterSiswa
+                  ref={FilterRef}
+                  filter={filter}
+                  isFilter={isFilter}
+                  handleOptionChange={handleOptionChange}
+                  handleToggleFilter={handleToggleFilter}
+                />
+              )}
+            </div>
           </div>
           <div>
             {/* <ExportExcel
@@ -163,8 +261,13 @@ const DataKelasguruPage = () => {
           </div>
         ) : (
           <TableSiswa
-            data={data}
+            data={dataSiswa}
             handleToggleDeleteOne={handleToggleDeleteOne}
+            allCheck={allCheck}
+            setAllCheck={setAllCheck}
+            limit={limit}
+            page={page}
+            setPage={setPage}
           />
         )}
       </div>
@@ -175,12 +278,12 @@ const DataKelasguruPage = () => {
         />
       )}
       {isAddSiswa && <AddModal onClose={handleToggleAdd} kelas={data} />}
-      {/* {isDeleteManySiswa && (
+      {isDeleteManySiswa && (
         <DeleteManyModal
           onClose={handleToggleDeleteMany}
           setAllCheck={setAllCheck}
         />
-      )} */}
+      )}
     </section>
   );
 };

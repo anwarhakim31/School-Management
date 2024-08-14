@@ -378,28 +378,6 @@ const AddModal = ({ onClose, kelas }) => {
                   {errors.phone && errors.phone.message}
                 </span>
               </div>
-              <div className="">
-                <label
-                  htmlFor="Email"
-                  className="text-xs mb-2 block font-semibold"
-                >
-                  Email
-                </label>
-                <input
-                  type={"email"}
-                  id="Email"
-                  {...register("email", {
-                    pattern: {
-                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: "Format email tidak valid",
-                    },
-                  })}
-                  className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
-                />
-                <span className="text-xs h-4 block mt-1 text-neutral2">
-                  {errors.email && errors.email.message}
-                </span>
-              </div>
             </div>
           </form>
         </div>

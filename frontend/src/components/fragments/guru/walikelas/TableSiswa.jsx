@@ -1,16 +1,42 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { setDataDelete, setDataEdit } from "@/store/slices/admin-slice";
-import { Edit, Mail, Phone, Trash, User } from "lucide-react";
-import React, { useState } from "react";
+import {
+  setDataDelete,
+  setDataDeleteMany,
+  setDataEdit,
+} from "@/store/slices/admin-slice";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Edit,
+  Mail,
+  Phone,
+  Trash,
+  User,
+} from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import profile from "../../../../assets/profile.png";
 
-const TableSiswa = ({ data, handleToggleDeleteOne }) => {
+const TableSiswa = ({
+  data,
+  handleToggleDeleteOne,
+  allCheck,
+  setAllCheck,
+  page,
+  limit,
+  setPage,
+}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [allCheck, setAllCheck] = useState(false);
   const [dataChecked, setDataChecked] = useState([]);
+
+  const lastOfIndexSiswa = page * limit;
+  const firstOfindexSiswa = lastOfIndexSiswa - limit;
+
+  const siswaSlice = data.slice(firstOfindexSiswa, lastOfIndexSiswa);
+  const totalSiswa = data.length;
 
   const handleDeleteSiswa = (data) => {
     handleToggleDeleteOne();
@@ -26,18 +52,21 @@ const TableSiswa = ({ data, handleToggleDeleteOne }) => {
     setAllCheck(!allCheck);
 
     if (checked) {
-      setDataChecked(data.siswa.map((siswa) => siswa._id));
-      dispatch(set);
+      setDataChecked(siswaSlice.map((siswa) => siswa._id));
+      dispatch(setDataDeleteMany(siswaSlice.map((siswa) => siswa._id)));
     } else {
       setDataChecked([]);
+      dispatch(setDataDeleteMany([]));
     }
   };
 
   const handleCheckboxChange = (checked, siswa) => {
     if (checked) {
       setDataChecked((prev) => [...prev, siswa._id]);
+      dispatch(setDataDeleteMany([...dataChecked, siswa._id]));
     } else {
       setDataChecked((prev) => prev.filter((id) => id !== siswa._id));
+      dispatch(setDataDeleteMany(dataChecked.filter((id) => id !== siswa._id)));
     }
   };
 
@@ -45,6 +74,10 @@ const TableSiswa = ({ data, handleToggleDeleteOne }) => {
     navigator.clipboard
       .writeText(text)
       .then(toast.info("Berhasil menyalin data"));
+  };
+
+  const handlePagination = (index) => {
+    setPage(index);
   };
 
   return (
@@ -97,7 +130,7 @@ const TableSiswa = ({ data, handleToggleDeleteOne }) => {
               </tr>
             </thead>
             <tbody>
-              {data.siswa && data.siswa.length === 0 && (
+              {data && data.length === 0 && (
                 <tr>
                   <td
                     colSpan="9"
@@ -109,9 +142,9 @@ const TableSiswa = ({ data, handleToggleDeleteOne }) => {
                   </td>
                 </tr>
               )}
-              {data.siswa &&
-                data.siswa.length !== 0 &&
-                data.siswa.map((siswa, i) => (
+              {data &&
+                data.length !== 0 &&
+                [...siswaSlice].reverse().map((siswa, i) => (
                   <tr
                     key={siswa.nis}
                     className={` hover:bg-gray-100 border-b  `}
@@ -138,16 +171,10 @@ const TableSiswa = ({ data, handleToggleDeleteOne }) => {
                       {siswa.nis}
                     </td>
                     <td scope="row" className="overflow-hidden">
-                      {siswa.photo === "" ? (
-                        <div className="w-8 h-8  rounded-full flex-center bg-purple-200">
-                          <User className="text-gray-500" strokeWidth={1} />
-                        </div>
-                      ) : (
-                        <img
-                          src={siswa.photo}
-                          className="w-8 h-8 object-cover rounded-full bg-purple-200"
-                        />
-                      )}
+                      <img
+                        src={siswa.photo ? siswa.photo : profile}
+                        className="w-8 h-8 object-cover rounded-full  bg-backup"
+                      />
                     </td>
                     <td
                       scope="row"
@@ -241,18 +268,98 @@ const TableSiswa = ({ data, handleToggleDeleteOne }) => {
             </tbody>
           </table>
         </div>
-        {/* <Pagination
+        <Pagination
           lastOfIndexSiswa={lastOfIndexSiswa}
           firstOfindexSiswa={firstOfindexSiswa}
           limit={limit}
           page={page}
-          totalPage={totalPage}
           data={data}
           totalSiswa={totalSiswa}
           handlePagination={handlePagination}
-        /> */}
+        />
       </div>
     </>
+  );
+};
+
+const Pagination = ({
+  lastOfIndexSiswa,
+  firstOfindexSiswa,
+  limit,
+  page,
+  totalSiswa,
+  handlePagination,
+}) => {
+  const pageNumber = [];
+
+  const totalPage = Math.ceil(totalSiswa / limit);
+
+  for (let i = 1; i <= totalPage; i++) {
+    pageNumber.push(i);
+  }
+
+  const startPage =
+    page === totalPage ? Math.max(1, page - 2) : Math.max(1, page - 1);
+
+  const endPage =
+    page === 1 ? Math.min(totalPage, page + 2) : Math.min(totalPage, page + 1);
+
+  const visiblePage = pageNumber.slice(startPage - 1, endPage);
+
+  return (
+    <div className=" absolute h-9 left-0 bottom-5 border-t pt-4 w-full flex-between px-3">
+      <div className="flex">
+        <p className="text-[10px] sm:text-xs">{`Menampilkan ${
+          totalSiswa === 0 ? 0 : firstOfindexSiswa + 1
+        } - ${
+          page === totalPage
+            ? totalSiswa
+            : totalSiswa === 0
+            ? 0
+            : lastOfIndexSiswa
+        } dari ${totalSiswa} data`}</p>
+      </div>
+      <div className="flex-center space-x-4">
+        {totalSiswa === 0 ? (
+          ""
+        ) : (
+          <div className="flex gap-2 ">
+            <button
+              onClick={() => handlePagination(page - 1)}
+              className="disabled:cursor-auto bg-neutral text-white rounded-sm disabled:bg-backup"
+              disabled={page === 1}
+            >
+              <ChevronLeft width={20} height={20} />
+            </button>
+
+            {visiblePage.map((number) => (
+              <div
+                key={number}
+                className={`page-item ${page === number ? "" : ""}`}
+              >
+                <button
+                  onClick={() => handlePagination(number)}
+                  className={`${
+                    number === page &&
+                    "rounded-full border-b shadow border-gray-500"
+                  } w-5 text-sm h-5`}
+                >
+                  {number}
+                </button>
+              </div>
+            ))}
+
+            <button
+              onClick={() => handlePagination(page + 1)}
+              className="disabled:cursor-auto bg-neutral text-white rounded-sm disabled:bg-backup"
+              disabled={page === pageNumber.length}
+            >
+              <ChevronRight width={20} height={20} />
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
