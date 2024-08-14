@@ -98,6 +98,8 @@ export const updateKelas = async (req, res, next) => {
     const { id } = req.params;
     const { nama, kelas, waliKelas } = req.body;
 
+    console.log(id, "IDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+
     const kelasExists = await Kelas.findOne({ nama, kelas, _id: { $ne: id } });
 
     if (kelasExists) {
@@ -157,6 +159,7 @@ export const updateKelas = async (req, res, next) => {
       message: "Kelas berhasil di ubah.",
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

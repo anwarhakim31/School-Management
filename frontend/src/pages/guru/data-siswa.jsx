@@ -4,6 +4,7 @@ import TableSiswa from "@/components/fragments/guru/walikelas/TableSiswa";
 import DeleteModal from "@/components/fragments/guru/walikelas/DeleteModal";
 import {
   selectedDataDeleteMany,
+  setDataDeleteMany,
   setDataEdit,
 } from "@/store/slices/admin-slice";
 import { selectedUserData } from "@/store/slices/auth-slice";
@@ -17,6 +18,7 @@ import AddModal from "@/components/fragments/guru/walikelas/AddModal";
 import DeleteManyModal from "@/components/fragments/guru/walikelas/DeleteManyModal";
 import FilterSiswa from "@/components/elements/wali-kelas/FilterSiswa";
 import EditModal from "@/components/fragments/guru/walikelas/EditModal";
+import EditKelasModal from "@/components/fragments/guru/walikelas/EditKelasModal";
 
 const selectRow = [7, 14, 21, 28];
 
@@ -28,6 +30,7 @@ const DataKelasguruPage = () => {
   const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
   const [isAddSiswa, setIsAddSiswa] = useState(false);
   const [isEditSiswa, setIsEditSiswa] = useState(false);
+  const [isEditKelas, setIsEditKelas] = useState(false);
   const [isDeleteManySiswa, setIsDeleteManySiswa] = useState(false);
   const [allCheck, setAllCheck] = useState(false);
   const [isFilter, setIsFilter] = useState(false);
@@ -41,6 +44,7 @@ const DataKelasguruPage = () => {
   const [limit, setLimit] = useState(7);
 
   useEffect(() => {
+    dispatch(setDataDeleteMany([]));
     const getKelas = async () => {
       try {
         const res = await axios.get(
@@ -127,6 +131,10 @@ const DataKelasguruPage = () => {
     handleToggleEdit();
   };
 
+  const handleToggleEditKelas = () => {
+    setIsEditKelas(!isEditKelas);
+  };
+
   return (
     <section className="px-6 py-4 mb-4 ">
       <div className="border bg-white border-gray-300 p-4 mb-6 md:max-w-[300px]  rounded-md">
@@ -135,6 +143,7 @@ const DataKelasguruPage = () => {
           <button
             aria-label="pengaturan kelas"
             title="Edit Kelas"
+            onClick={handleToggleEditKelas}
             className="w-6 h-6 rounded-full hover:bg-gray-200 flex-center hover:border"
           >
             <Settings width={18} height={18} />
@@ -208,7 +217,7 @@ const DataKelasguruPage = () => {
               title="Hapus siswa terpilih"
               onClick={handleToggleDeleteMany}
               className={`${
-                dataChecked.length > 0 && data
+                dataChecked.length > 0
                   ? "opacity-100"
                   : "opacity-0 pointer-events-none"
               } border block border-gray-300 bg-white  text-gray-500 group rounded-md  hover:border-gray-400    py-1.5 px-2 transition-all duration-300 font-medium hover:text-white  text-xs   flex-between gap-3`}
@@ -295,6 +304,9 @@ const DataKelasguruPage = () => {
           onClose={handleToggleDeleteMany}
           setAllCheck={setAllCheck}
         />
+      )}
+      {isEditKelas && (
+        <EditKelasModal onClose={handleToggleEditKelas} datas={data} />
       )}
     </section>
   );

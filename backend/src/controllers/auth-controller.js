@@ -70,7 +70,7 @@ export const loginUser = async (req, res, next) => {
 
     const accessToken = createToken(ni, user.id, user.role);
 
-    res.cookie("Schoolarcy", accessToken, {
+    res.cookie("Scholarcy", accessToken, {
       maxAge,
       httpOnly: true,
       secure: true,
@@ -210,7 +210,7 @@ export const updateProfile = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
   try {
-    res.clearCookie("Schoolarcy", {
+    res.clearCookie("Scholarcy", {
       httpOnly: true,
       secure: true,
       sameSite: "None",
