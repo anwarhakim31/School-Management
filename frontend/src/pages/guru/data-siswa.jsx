@@ -208,7 +208,7 @@ const DataKelasguruPage = () => {
               title="Hapus siswa terpilih"
               onClick={handleToggleDeleteMany}
               className={`${
-                dataChecked.length > 0
+                dataChecked.length > 0 && data
                   ? "opacity-100"
                   : "opacity-0 pointer-events-none"
               } border block border-gray-300 bg-white  text-gray-500 group rounded-md  hover:border-gray-400    py-1.5 px-2 transition-all duration-300 font-medium hover:text-white  text-xs   flex-between gap-3`}
