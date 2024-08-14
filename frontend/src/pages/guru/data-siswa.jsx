@@ -91,13 +91,14 @@ const DataKelasguruPage = () => {
           </div>
         </div>
 
-        <Link
-          to={"/admin/tambah-siswa"}
+        <button
+          aria-label="tambah siswa"
+          onClick={handleToggleAdd}
           className="flex-between gap-3 min-w-fit bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
         >
           <img src={Student} alt="student" width={15} height={15} />
           Tambah Siswa
-        </Link>
+        </button>
       </div>
 
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-lg">

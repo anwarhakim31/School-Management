@@ -1,5 +1,6 @@
 import HeaderPage from "@/components/elements/HeaderPage";
 import { selectedUserData, setUserData } from "@/store/slices/auth-slice";
+import profile from "../../../assets/profile.png";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
@@ -54,16 +55,7 @@ const HeaderLayout = ({ handleToggleSidebar }) => {
             </span>
           </div>
           <div className="w-10 h-10 bg-backup flex items-center justify-center rounded-full overflow-hidden">
-            {data.foto ? (
-              <img src={data.foto} alt="foto" />
-            ) : (
-              <User
-                color="white"
-                width={35}
-                height={35}
-                className="mt-4 fill-white"
-              />
-            )}
+            <img src={data.foto ? data.foto : profile} alt="foto" />
           </div>
         </div>
         <div className="relative">

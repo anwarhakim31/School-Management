@@ -59,7 +59,7 @@ const ListSidebar = () => {
           path: "/guru/absen-harian",
           icon: (
             <NotebookPen
-              height={20}
+              height={15}
               width={20}
               className={
                 "text-white group-hover:text-neutral  duration-300 transition-all"
