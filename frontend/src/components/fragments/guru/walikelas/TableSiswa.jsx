@@ -27,6 +27,7 @@ const TableSiswa = ({ data, handleToggleDeleteOne }) => {
 
     if (checked) {
       setDataChecked(data.siswa.map((siswa) => siswa._id));
+      dispatch(set);
     } else {
       setDataChecked([]);
     }
@@ -71,7 +72,7 @@ const TableSiswa = ({ data, handleToggleDeleteOne }) => {
                   NIS
                 </th>
                 <th scope="col" className="sr-only"></th>
-                <th scope="col" className="px-4 py-4">
+                <th scope="col" className="pl-1 pr-4  py-4">
                   Nama
                 </th>
                 <th scope="col" className=" py-4 whitespace-nowrap">
@@ -144,7 +145,7 @@ const TableSiswa = ({ data, handleToggleDeleteOne }) => {
                       ) : (
                         <img
                           src={siswa.photo}
-                          className="w-8 h-8  rounded-full bg-purple-200"
+                          className="w-8 h-8 object-cover rounded-full bg-purple-200"
                         />
                       )}
                     </td>

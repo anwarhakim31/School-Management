@@ -41,7 +41,7 @@ const DeleteModal = ({ onClose, title }) => {
       >
         <div className="p-4 border-b">
           <HeaderModal
-            title={"Konfimasi Hapus"}
+            titile={"Konfirmasi Hapus"}
             onClose={onClose}
             className={"font-semibold"}
           />

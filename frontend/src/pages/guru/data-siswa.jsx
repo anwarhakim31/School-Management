@@ -23,6 +23,7 @@ const DataKelasguruPage = () => {
 
   useEffect(() => {
     const getKelas = async () => {
+      setLoading(true);
       try {
         const res = await axios.get(
           HOST + "/api/kelas/get-wali-kelas/" + userData._id,
@@ -32,11 +33,15 @@ const DataKelasguruPage = () => {
         setData(res.data.kelas);
       } catch (error) {
         responseError(error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
       }
     };
 
     getKelas();
-  }, [isDeleteSiswa]);
+  }, [isDeleteSiswa, isAddSiswa]);
 
   const handleToggleDeleteOne = () => {
     setIsDeleteSiswa(!isDeleteSiswa);
@@ -48,7 +53,7 @@ const DataKelasguruPage = () => {
 
   return (
     <section className="px-6 py-4 mb-4 ">
-      <div className="border bg-white border-gray-300 p-4 mb-6 md:max-w-[300px] rounded-md">
+      <div className="border bg-white border-gray-300 p-4 mb-6 md:max-w-[300px]  rounded-md">
         <div className="flex items-center mb-2 gap-2">
           <h3 className="text-sm  font-bold">Detail Kelas</h3>
           <button aria-label="pengaturan kelas">
@@ -57,24 +62,39 @@ const DataKelasguruPage = () => {
         </div>
         <div className="flex justify-between">
           <div>
-            <p className="text-xs mt-2 grid grid-cols-2">
-              <span className="font-semibold">Kelas </span>
-              <span>
-                : {data.kelas} {data.nama}
-              </span>
-            </p>
-            <p className="text-xs mt-2 grid grid-cols-2">
-              <span className="font-semibold">Posisi </span>
-              <span>: {data.posisi ? data.posisi : ""}</span>
-            </p>
+            <div className="text-xs mt-2 grid grid-cols-2 gap-1">
+              <p className="font-semibold">Kelas </p>
+
+              <p className="truncate">
+                {loading ? (
+                  <span className="w-full h-4 bg-slate-300 block animate-pulse rounded-sm "></span>
+                ) : (
+                  <span>
+                    : {data.kelas} {data.nama}
+                  </span>
+                )}
+              </p>
+            </div>
           </div>
           <div>
-            <p className="text-xs mt-2 grid grid-cols-2">
-              <span className="font-semibold">Total Siswa </span>
-              <span> : {data.jumlahSiswa}</span>
+            <p className="text-xs mt-2 grid grid-cols-2 gap-1">
+              <span className="font-semibold">Total Siswa</span>
+              {loading ? (
+                <span className="w-9 h-4 bg-slate-300 block animate-pulse rounded-sm "></span>
+              ) : (
+                <span>: {data.jumlahSiswa}</span>
+              )}
             </p>
           </div>
         </div>
+        <p className="text-xs mt-2 flex gap-1">
+          <span className="font-semibold">Posisi </span>
+          {loading ? (
+            <span className="w-9 h-4 bg-slate-300 block animate-pulse rounded-sm "></span>
+          ) : (
+            <span className="ml-1">: {data.posisi ? data.posisi : ""}</span>
+          )}
+        </p>
       </div>
       <div className="w-full flex-between gap-6">
         <div className="relative flex w-full  md:max-w-[300px]">
@@ -137,7 +157,7 @@ const DataKelasguruPage = () => {
         </div>
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
-            <div className="w-full min-h-[430px] flex-center bg-gray-200 animate-pulse overflow-auto ">
+            <div className="w-full min-h-[430px] flex-center bg-gray-300 animate-pulse overflow-auto ">
               <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
             </div>
           </div>
@@ -154,7 +174,7 @@ const DataKelasguruPage = () => {
           title={"Apakah And yakin ingin menghapus siswa?"}
         />
       )}
-      {isAddSiswa && <AddModal onClose={handleToggleAdd} />}
+      {isAddSiswa && <AddModal onClose={handleToggleAdd} kelas={data} />}
       {/* {isDeleteManySiswa && (
         <DeleteManyModal
           onClose={handleToggleDeleteMany}

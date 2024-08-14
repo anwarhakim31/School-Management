@@ -1,24 +1,101 @@
 import HeaderModal from "@/components/elements/HeaderModal";
 import Modal from "@/components/elements/Modal";
 import user from "../../../../assets/profile.png";
-import React, { useRef, useState } from "react";
-import { LucideTrash2, Plus } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { Plus, X } from "lucide-react";
 import { useForm } from "react-hook-form";
+import responseError from "@/util/services";
+import axios, { all } from "axios";
+import { HOST } from "@/util/constant";
+import { toast } from "sonner";
 
-const AddModal = ({ onClose }) => {
+const AddModal = ({ onClose, kelas }) => {
   const {
     register,
     handleSubmit,
     setValue,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      nis: "",
+      nama: "",
+      tempatLahir: "",
+      jenisKelamin: "",
+      tanggalLahir: "",
+      tahunMasuk: "",
+      agama: "",
+      phone: "",
+      kelas: "",
+      alamat: "",
+    },
+  });
   const [loading, setLoading] = useState(false);
   const [hover, setHover] = useState(false);
   const [foto, setFoto] = useState("");
+  const submitRef = useRef();
   const fotoRef = useRef();
+  const nis = watch("nis");
+  const phone = watch("phone");
 
-  const handleFotoChange = async (e) => {};
+  useEffect(() => {
+    if (kelas) {
+      setValue("kelas", kelas.kelas);
+      setValue("namaKelas", kelas.nama);
+    }
+  }, [kelas]);
+
+  useEffect(() => {
+    const getAjaran = async () => {
+      try {
+        const res = await axios.get(HOST + "/api/ajaran/get-ajaran-aktif", {
+          withCredentials: true,
+        });
+
+        if (res.data.ajaran) {
+          setValue("tahunMasuk", res.data.ajaran.ajaran);
+        }
+      } catch (error) {
+        responseError(error);
+      }
+    };
+
+    getAjaran();
+  }, []);
+
+  const handleFotoChange = async (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const formData = new FormData();
+
+      formData.append("image", file);
+      setLoading(true);
+      try {
+        const res = await axios.post(
+          HOST + "/api/siswa/upload-photo-siswa",
+          formData,
+          { withCredentials: true }
+        );
+
+        if (res.status === 200) {
+          setFoto(res.data.foto);
+          e.target.value = null;
+        }
+      } catch (error) {
+        responseError(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleNumberChange = (e, name) => {
+    const value = e.target.value;
+
+    const cleanedValue = value.replace(/\D/g, "");
+    setValue(name, cleanedValue);
+  };
 
   const handleFotoClick = () => {
     if (foto) {
@@ -28,30 +105,53 @@ const AddModal = ({ onClose }) => {
     }
   };
 
+  const onSubmit = async (data) => {
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        HOST + "/api/siswa/add-siswa",
+        {
+          ...data,
+          photo: foto,
+        },
+        { withCredentials: true }
+      );
+
+      if (res.status === 200) {
+        toast.success(res.data.message);
+        onClose();
+      }
+    } catch (error) {
+      responseError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Modal onClose={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-[700px] max-h-screen xs:max-h-none overflow-auto rounded-lg shadow-md bg-white"
+        className="w-full md:max-w-[700px] max-h-screen sm:max-h-none overflow-auto rounded-lg shadow-md bg-white"
       >
-        <div className="p-4 sticky top-0 bg-white z-20 xs:static border-b">
+        <div className="p-4 sticky top-0 bg-white z-20 sm:static border-b">
           <HeaderModal
             titile={"Tambah Siswa"}
             onClose={onClose}
             className={"font-semibold"}
           />
         </div>
-        <div className="grid grid-cols-1 w-full md:grid-cols-3  gap-4 p-4 ">
+        <div className="grid grid-cols-1 w-full sm:grid-cols-3  gap-4 p-4 ">
           <div className="">
             <div
               onMouseEnter={() => setHover(true)}
               onMouseLeave={() => setHover(false)}
-              className="relative w-[80px] cursor-pointer h-[80px] md:w-[100px] md:h-[100px] rounded-full bg-backup mx-auto overflow-hidden"
+              className="relative cursor-pointer w-[100px] border-2 h-[100px] rounded-full bg-backup mx-auto overflow-hidden"
             >
               <img
                 src={foto ? foto : user}
                 alt="foto"
-                className="w-full h-full  object-cover object-bottom"
+                className="w-full h-full  object-cover object-center"
               />
 
               {hover && (
@@ -60,13 +160,9 @@ const AddModal = ({ onClose }) => {
                   onClick={handleFotoClick}
                 >
                   {foto ? (
-                    <LucideTrash2
-                      width={50}
-                      height={50}
-                      className="text-white"
-                    />
+                    <X width={25} height={50} className="text-white" />
                   ) : (
-                    <Plus width={50} height={50} className="text-white" />
+                    <Plus width={25} height={25} className="text-white" />
                   )}
                 </div>
               )}
@@ -81,14 +177,14 @@ const AddModal = ({ onClose }) => {
                 className="hidden"
               />
             </div>
-            <p className="text-[0.625rem] text-center mt-4 text-neutral2">
+            <p className="text-[0.625rem] text-center mt-4 text-neutral">
               Besar file maksimal 1 MB
             </p>
-            <p className="text-[0.625rem] text-center mt-2 text-neutral2">
+            <p className="text-[0.625rem] text-center mt-2 text-neutral">
               Ekstensi file: jpeg/jpg, png
             </p>
           </div>
-          <div className=" col-span-2 w-full   grid grid-cols-2 gap-4">
+          <form className=" col-span-2 w-full   grid grid-cols-2 gap-4">
             <div>
               <div className="mb-2">
                 <label
@@ -102,7 +198,7 @@ const AddModal = ({ onClose }) => {
                   id="nama"
                   name="nama"
                   {...register("nama", {
-                    required: "Nama tidak boleh kosong.",
+                    required: "Nama diperlukan.",
                     maxLength: {
                       value: 50,
                       message: "Nama maksimal 50 karakter.",
@@ -122,14 +218,13 @@ const AddModal = ({ onClose }) => {
                   NIS <span className="text-red-500">*</span>
                 </label>
                 <input
-                  type={"text"}
+                  type={"number"}
                   id="nis"
                   name="nis"
-                  // value={nis}
+                  value={nis}
                   {...register("nis", {
-                    required: "NIS tidak boleh kosong.",
+                    required: "NIS diperlukan.",
                   })}
-                  // onChange={(e) => handleNumberChange(e, "nis")}
                   className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
                 />
 
@@ -148,7 +243,7 @@ const AddModal = ({ onClose }) => {
                   type={"text"}
                   id="password"
                   {...register("password", {
-                    required: "Password tidak boleh kosong.",
+                    required: "Password diperlukan.",
                     maxLength: {
                       value: 50,
                       message: "Password maksimal 20 karakter.",
@@ -174,7 +269,7 @@ const AddModal = ({ onClose }) => {
                 <select
                   id="Jenis Kelamin"
                   {...register("jenisKelamin", {
-                    required: "Jenis Kelamin tidak boleh kosong.",
+                    required: "Jenis Kelamin diperlukan.",
                   })}
                   className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
                 >
@@ -199,7 +294,7 @@ const AddModal = ({ onClose }) => {
                   type={"text"}
                   id="tempatLahir"
                   {...register("tempatLahir", {
-                    required: "Tempat Lahir tidak boleh kosong.",
+                    required: "Tempat Lahir diperlukan.",
                     maxLength: {
                       value: 50,
                       message: "Tempat Lahir maksimal 20 karakter.",
@@ -223,12 +318,42 @@ const AddModal = ({ onClose }) => {
                   type="date"
                   id="TanggalLahir"
                   {...register("tanggalLahir", {
-                    required: "Tanggal Lahir tidak boleh kosong.",
+                    required: "Tanggal Lahir diperlukan.",
                   })}
                   className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
                 />
                 <span className="text-xs h-4 block mt-1 text-neutral2">
                   {errors.tanggalLahir && errors.tanggalLahir.message}
+                </span>
+              </div>
+              <div className="mb-2">
+                <label
+                  htmlFor="Agama"
+                  className="text-xs mb-2 block font-semibold"
+                >
+                  Agama <span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="Agama"
+                  onChange={(e) => handleNumberChange(e, "agama")}
+                  {...register("agama", {
+                    required: "Agama tidak boleh kosong..",
+                  })}
+                  className="py-1.5 h-8 bg-white border text-gray-500   text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+                >
+                  <option value="" className="">
+                    Pilih agama
+                  </option>
+                  <option value="Islam">Islam</option>
+                  <option value="Kristen Protestan">Kristen Protestan</option>
+                  <option value="Kristen Katolik">Kristen Katolik</option>
+                  <option value="Hindu">Hindu</option>
+                  <option value="Budha">Budha</option>
+                  <option value="Kong Hu Chu">Kong Hu Chu</option>
+                  <option value="Aliran Kepercayaan">Aliran Kepercayaan</option>
+                </select>
+                <span className="text-xs h-4 block mt-1 text-neutral2">
+                  {errors.agama && errors.agama.message}
                 </span>
               </div>
 
@@ -240,14 +365,13 @@ const AddModal = ({ onClose }) => {
                   No. Telepon <span className="text-red-500">*</span>
                 </label>
                 <input
-                  type={"tel"}
+                  type={"number"}
                   id="No. Telepon"
                   name="phone"
-                  //   value={phone}
+                  value={phone}
                   {...register("phone", {
-                    required: "No. Telepon tidak boleh kosong.",
+                    required: "No. Telepon diperlukan.",
                   })}
-                  //   onChange={(e) => handleNumberChange(e, "phone")}
                   className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
                 />
                 <span className="text-xs h-4 block mt-1 text-neutral2">
@@ -277,12 +401,12 @@ const AddModal = ({ onClose }) => {
                 </span>
               </div>
             </div>
-          </div>
+          </form>
         </div>
         <div className="text-end border-t  p-4 space-x-4">
           <button
             aria-label="batal"
-            type="submit"
+            type="button"
             disabled={loading}
             className="btn w-24 h-8.5 bg-gray-100 disabled:bg-gray-200  text-gray-800 border-gray-200 border hover:text-white"
             onClick={() => onClose()}
@@ -292,8 +416,9 @@ const AddModal = ({ onClose }) => {
           <button
             aria-label="ya"
             type="submit"
+            ref={submitRef}
             disabled={loading}
-            // onClick={handleDelete}
+            onClick={handleSubmit(onSubmit)}
             className="btn w-24 h-8.5 disabled:bg-gray-800"
           >
             {loading ? "Loading" : "Simpan"}
