@@ -22,6 +22,7 @@ import profile from "../../../../assets/profile.png";
 const TableSiswa = ({
   data,
   handleToggleDeleteOne,
+  handleEditSiswa,
   allCheck,
   setAllCheck,
   page,
@@ -41,11 +42,6 @@ const TableSiswa = ({
   const handleDeleteSiswa = (data) => {
     handleToggleDeleteOne();
     dispatch(setDataDelete(data));
-  };
-
-  const handleEditSiswa = (data) => {
-    dispatch(setDataEdit(data));
-    navigate("/admin/edit-siswa");
   };
 
   const handleCheckboxAll = (checked) => {

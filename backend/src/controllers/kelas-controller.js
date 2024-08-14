@@ -167,6 +167,11 @@ export const getWaliKelas = async (req, res, next) => {
 
     const kelas = await Kelas.findOne({ waliKelas: waliKelas }).populate({
       path: "siswa",
+      select: "-password",
+      populate: {
+        path: "kelas",
+        select: "nama kelas",
+      },
     });
 
     if (!kelas) {

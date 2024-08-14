@@ -2,29 +2,32 @@ import CustomDropdown from "@/components/elements/DropDown";
 import Student from "../../assets/svg/Teacher.svg";
 import TableSiswa from "@/components/fragments/guru/walikelas/TableSiswa";
 import DeleteModal from "@/components/fragments/guru/walikelas/DeleteModal";
-import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
+import {
+  selectedDataDeleteMany,
+  setDataEdit,
+} from "@/store/slices/admin-slice";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
 import { Bolt, Filter, Search, Settings, Trash2 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import AddModal from "@/components/fragments/guru/walikelas/AddModal";
 import DeleteManyModal from "@/components/fragments/guru/walikelas/DeleteManyModal";
-import FilterDropdown from "@/components/elements/DropDownFilter";
-import FilterKelas from "@/components/elements/data-kelas/FilterKelas";
 import FilterSiswa from "@/components/elements/wali-kelas/FilterSiswa";
+import EditModal from "@/components/fragments/guru/walikelas/EditModal";
 
 const selectRow = [7, 14, 21, 28];
 
 const DataKelasguruPage = () => {
+  const dispatch = useDispatch();
   const buttonFilterRef = useRef();
   const FilterRef = useRef();
   const [loading, setLoading] = useState(true);
   const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
   const [isAddSiswa, setIsAddSiswa] = useState(false);
+  const [isEditSiswa, setIsEditSiswa] = useState(false);
   const [isDeleteManySiswa, setIsDeleteManySiswa] = useState(false);
   const [allCheck, setAllCheck] = useState(false);
   const [isFilter, setIsFilter] = useState(false);
@@ -58,7 +61,7 @@ const DataKelasguruPage = () => {
     };
 
     getKelas();
-  }, [isDeleteSiswa, isAddSiswa, isDeleteManySiswa]);
+  }, [isDeleteSiswa, isAddSiswa, isDeleteManySiswa, isEditSiswa]);
 
   useEffect(() => {
     let datas = data?.siswa?.map((siswa) => siswa);
@@ -85,8 +88,6 @@ const DataKelasguruPage = () => {
 
     setDataSiswa(datas);
   }, [data, search, filter]);
-
-  console.log(filter);
 
   const handleToggleDeleteOne = () => {
     setIsDeleteSiswa(!isDeleteSiswa);
@@ -115,6 +116,15 @@ const DataKelasguruPage = () => {
   const handleOptionChange = (e) => {
     setFilter(e.target.value);
     setIsFilter(false);
+  };
+
+  const handleToggleEdit = () => {
+    setIsEditSiswa(!isEditSiswa);
+  };
+
+  const handleEditSiswa = (data) => {
+    dispatch(setDataEdit(data));
+    handleToggleEdit();
   };
 
   return (
@@ -263,6 +273,7 @@ const DataKelasguruPage = () => {
           <TableSiswa
             data={dataSiswa}
             handleToggleDeleteOne={handleToggleDeleteOne}
+            handleEditSiswa={handleEditSiswa}
             allCheck={allCheck}
             setAllCheck={setAllCheck}
             limit={limit}
@@ -277,6 +288,7 @@ const DataKelasguruPage = () => {
           title={"Apakah And yakin ingin menghapus siswa?"}
         />
       )}
+      {isEditSiswa && <EditModal onClose={handleToggleEdit} kelas={data} />}
       {isAddSiswa && <AddModal onClose={handleToggleAdd} kelas={data} />}
       {isDeleteManySiswa && (
         <DeleteManyModal
