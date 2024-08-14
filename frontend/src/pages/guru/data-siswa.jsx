@@ -1,14 +1,23 @@
-import HeaderBox from "@/components/elements/data-guru/HeaderBox";
-import TableSiswa from "@/components/fragments/guru/data-guru/TableSiswa";
+import CustomDropdown from "@/components/elements/DropDown";
+import Student from "../../assets/svg/Teacher.svg";
+import TableSiswa from "@/components/fragments/guru/walikelas/TableSiswa";
+import DeleteModal from "@/components/fragments/guru/DeleteModal";
+import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
+import { Bolt, Search, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import AddModal from "@/components/fragments/guru/walikelas/AddModal";
 
 const DataKelasguruPage = () => {
   const [loading, setLoading] = useState(false);
+  const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
+  const [isAddSiswa, setIsAddSiswa] = useState(false);
+  const dataChecked = useSelector(selectedDataDeleteMany);
   const userData = useSelector(selectedUserData);
   const [data, setData] = useState([]);
 
@@ -27,54 +36,91 @@ const DataKelasguruPage = () => {
     };
 
     getKelas();
-  }, []);
+  }, [isDeleteSiswa]);
+
+  const handleToggleDeleteOne = () => {
+    setIsDeleteSiswa(!isDeleteSiswa);
+  };
+
+  const handleToggleAdd = () => {
+    setIsAddSiswa(!isAddSiswa);
+  };
 
   return (
     <section className="px-6 py-4 mb-4 ">
-      {/* <HeaderBox dataDetail={dataDetail} loading={loading} /> */}
+      <div className="border bg-white border-gray-300 p-4 mb-6 md:max-w-[300px] rounded-md">
+        <div className="flex items-center mb-2 gap-2">
+          <h3 className="text-sm  font-bold">Detail Kelas</h3>
+          <button aria-label="pengaturan kelas">
+            <Bolt width={18} height={18} />
+          </button>
+        </div>
+        <div className="flex justify-between">
+          <div>
+            <p className="text-xs mt-2 grid grid-cols-2">
+              <span className="font-semibold">Kelas </span>
+              <span>
+                : {data.kelas} {data.nama}
+              </span>
+            </p>
+            <p className="text-xs mt-2 grid grid-cols-2">
+              <span className="font-semibold">Posisi </span>
+              <span>: {data.posisi ? data.posisi : ""}</span>
+            </p>
+          </div>
+          <div>
+            <p className="text-xs mt-2 grid grid-cols-2">
+              <span className="font-semibold">Total Siswa </span>
+              <span> : {data.jumlahSiswa}</span>
+            </p>
+          </div>
+        </div>
+      </div>
       <div className="w-full flex-between gap-6">
         <div className="relative flex w-full  md:max-w-[300px]">
-          {/* <input
+          <input
             type="search"
             placeholder="Cari..."
-            value={search}
-            disabled={loading}
-            onChange={handleSearch}
+            // value={search}
+            // disabled={loading}
+            // onChange={handleSearch}
             className="w-full rounded-full disabled:cursor-not-allowed py-1.5 pr-2 pl-10 text-sm border border-gray-400 outline-offset-0 outline-1 outline-neutral"
           />
           <div className="absolute left-4 top-1/2 -translate-y-1/2">
             <Search height={20} width={20} className="text-gray-400" />
-          </div> */}
+          </div>
         </div>
 
-        {/* <Link
+        <Link
           to={"/admin/tambah-siswa"}
           className="flex-between gap-3 min-w-fit bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
         >
           <img src={Student} alt="student" width={15} height={15} />
           Tambah Siswa
-        </Link> */}
+        </Link>
       </div>
 
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-lg">
         <div className="flex-between px-4 h-14 ">
           <div className="flex items-center gap-4  ">
-            {/* <button
+            <button
               title="Hapus siswa terpilih"
-              onClick={handleToggleDeleteMany}
+              // onClick={handleToggleDeleteMany}
               className={`${
-                dataChecked.length > 0 ? "opacity-100" : "opacity-0"
-              } border block border-gray-300 bg-white text-gray-500 group rounded-md  hover:border-gray-400    py-1.5 px-2 transition-all duration-300 font-medium hover:text-white  text-xs   flex-between gap-3`}
+                dataChecked.length > 0
+                  ? "opacity-100"
+                  : "opacity-0 pointer-events-none"
+              } border block border-gray-300 bg-white  text-gray-500 group rounded-md  hover:border-gray-400    py-1.5 px-2 transition-all duration-300 font-medium hover:text-white  text-xs   flex-between gap-3`}
             >
               <Trash2 width={15} height={15} className=" text-neutral2 " />
-            </button> */}
+            </button>
 
-            {/* <CustomDropdown
-              options={selectRow}
-              onSelect={handleSelectBaris}
-              selected={limit}
+            <CustomDropdown
+            // options={selectRow}
+            // onSelect={handleSelectBaris}
+            // selected={limit}
             />
-            <DropdownFilter
+            {/* <DropdownFilter
               handleFilterChange={handleFilterChange}
               setFilters={setFilters}
             /> */}
@@ -95,11 +141,20 @@ const DataKelasguruPage = () => {
             </div>
           </div>
         ) : (
-          <TableSiswa data={data} />
+          <TableSiswa
+            data={data}
+            handleToggleDeleteOne={handleToggleDeleteOne}
+          />
         )}
       </div>
-      {/* {isDeleteSiswa && <DeleteModal onClose={handleToggleDeleteOne} />}
-      {isDeleteManySiswa && (
+      {isDeleteSiswa && (
+        <DeleteModal
+          onClose={handleToggleDeleteOne}
+          title={"Apakah And yakin ingin menghapus siswa?"}
+        />
+      )}
+      {isAddSiswa && <AddModal onClose={handleToggleAdd} />}
+      {/* {isDeleteManySiswa && (
         <DeleteManyModal
           onClose={handleToggleDeleteMany}
           setAllCheck={setAllCheck}

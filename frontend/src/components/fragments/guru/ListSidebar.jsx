@@ -3,7 +3,13 @@ import SiswaIcon from "../../../assets/svg/siswa.svg?react";
 import GuruIcon from "../../../assets/svg/guru.svg?react";
 import KelasIcon from "../../../assets/svg/class.svg?react";
 import { Link, Navigate, NavLink, useNavigate } from "react-router-dom";
-import { ChevronDown, ChevronUp, FileStack, NotebookPen } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  FileStack,
+  GraduationCap,
+  NotebookPen,
+} from "lucide-react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectedUserData } from "@/store/slices/auth-slice";
@@ -66,11 +72,11 @@ const ListSidebar = () => {
           nama: "Data kelas",
           path: "/guru/data-kelas",
           icon: (
-            <SiswaIcon
+            <GraduationCap
               height={20}
               width={20}
               className={
-                "text-white group-hover:text-neutral stroke-[0.1] group-hover:fill-neutral duration-300 transition-all"
+                "text-white group-hover:text-neutral  duration-300 transition-all"
               }
             />
           ),

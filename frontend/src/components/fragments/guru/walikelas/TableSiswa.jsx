@@ -1,19 +1,19 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { setDataDelete, setDataEdit } from "@/store/slices/admin-slice";
-import { Edit, Mail, Phone, Trash } from "lucide-react";
+import { Edit, Mail, Phone, Trash, User } from "lucide-react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-const TableSiswa = ({ data }) => {
+const TableSiswa = ({ data, handleToggleDeleteOne }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [allCheck, setAllCheck] = useState(false);
   const [dataChecked, setDataChecked] = useState([]);
 
   const handleDeleteSiswa = (data) => {
-    // handleToggleDeleteOne();
+    handleToggleDeleteOne();
     dispatch(setDataDelete(data));
   };
 
@@ -26,13 +26,11 @@ const TableSiswa = ({ data }) => {
     setAllCheck(!allCheck);
 
     if (checked) {
-      setDataChecked(data.map((siswa) => siswa._id));
+      setDataChecked(data.siswa.map((siswa) => siswa._id));
     } else {
       setDataChecked([]);
     }
   };
-
-  console.log(data.siswa);
 
   const handleCheckboxChange = (checked, siswa) => {
     if (checked) {
@@ -42,7 +40,7 @@ const TableSiswa = ({ data }) => {
     }
   };
 
-  const handleCopytext = ({ text }) => {
+  const handleCopytext = (text) => {
     navigator.clipboard
       .writeText(text)
       .then(toast.info("Berhasil menyalin data"));
@@ -68,9 +66,11 @@ const TableSiswa = ({ data }) => {
                     }
                   />
                 </th>
+
                 <th scope="col" className="px-3 py-4">
                   NIS
                 </th>
+                <th scope="col" className="sr-only"></th>
                 <th scope="col" className="px-4 py-4">
                   Nama
                 </th>
@@ -96,7 +96,7 @@ const TableSiswa = ({ data }) => {
               </tr>
             </thead>
             <tbody>
-              {data && data.length === 0 && (
+              {data.siswa && data.siswa.length === 0 && (
                 <tr>
                   <td
                     colSpan="9"
@@ -108,8 +108,8 @@ const TableSiswa = ({ data }) => {
                   </td>
                 </tr>
               )}
-              {data &&
-                data.length !== 0 &&
+              {data.siswa &&
+                data.siswa.length !== 0 &&
                 data.siswa.map((siswa, i) => (
                   <tr
                     key={siswa.nis}
@@ -129,22 +129,34 @@ const TableSiswa = ({ data }) => {
                         }
                       />
                     </td>
+
                     <td
                       scope="row"
                       className="px-3 py-4 text-xs font-normal text-gray-900 whitespace-nowrap "
                     >
                       {siswa.nis}
                     </td>
-
+                    <td scope="row" className="overflow-hidden">
+                      {siswa.photo === "" ? (
+                        <div className="w-8 h-8  rounded-full flex-center bg-purple-200">
+                          <User className="text-gray-500" strokeWidth={1} />
+                        </div>
+                      ) : (
+                        <img
+                          src={siswa.photo}
+                          className="w-8 h-8  rounded-full bg-purple-200"
+                        />
+                      )}
+                    </td>
                     <td
                       scope="row"
-                      className=" px-4 py-5  line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap  "
+                      className="pl-1 pr-4 py-5  line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap  "
                     >
                       {siswa.nama}
                     </td>
                     <td
                       scope="row"
-                      className="py-4 text-xs font-normal text-gray-900 whitespace-nowrap "
+                      className="py-2 text-xs font-normal text-gray-900 whitespace-nowrap "
                     >
                       {siswa.jenisKelamin}
                     </td>
