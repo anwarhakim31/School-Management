@@ -31,6 +31,7 @@ import GuruLayout from "./components/layouts/guru/GuruLayout";
 import GuruDashboardPage from "./pages/guru/guru-dashboard";
 import AbsenHarianPage from "./pages/guru/absen-harian";
 import DataKelasguruPage from "./pages/guru/data-siswa";
+import RekapDataPage from "./pages/guru/rekap-data";
 
 function App() {
   const dispatch = useDispatch();
@@ -219,6 +220,14 @@ function App() {
             element={
               <PrivateRoute role={"guru"}>
                 <DataKelasguruPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={"rekap-data"}
+            element={
+              <PrivateRoute role={"guru"}>
+                <RekapDataPage />
               </PrivateRoute>
             }
           />

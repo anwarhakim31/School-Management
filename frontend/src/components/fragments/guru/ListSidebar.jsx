@@ -22,7 +22,11 @@ const ListSidebar = () => {
 
   const handleActiveDropDown = (id) => {
     setActiveDropDown(activeDropDown === id ? null : id);
+
+    console.log(id);
   };
+
+  console.log(activeDropDown);
 
   const Navlist = [
     {
@@ -101,7 +105,7 @@ const ListSidebar = () => {
     {
       id: 4,
       nama: "Rekap",
-      path: "/admin/Rekap-Absen",
+      path: "/guru/rekap-data",
       icon: (
         <DashboardIcon
           height={17}
@@ -118,7 +122,7 @@ const ListSidebar = () => {
     <ul className="w-full py-2 h-[80vh] overflow-auto">
       {Navlist.map((list) => (
         <li
-          onClick={() => handleActiveDropDown(list._id)}
+          onClick={() => handleActiveDropDown(list.id)}
           key={list.id}
           className="outline-none ml-6 md:ml-4 lg:ml-6 "
         >
@@ -151,7 +155,7 @@ const ListSidebar = () => {
             )}
           </NavLink>
 
-          {list.dropDown && activeDropDown === list._id && (
+          {list.dropDown && activeDropDown === list.id && (
             <div
               className="h-[75px] my-2 "
               onClick={(e) => e.stopPropagation()}

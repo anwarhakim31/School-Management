@@ -153,7 +153,11 @@ const AbsenHarianPage = () => {
                           className={`relative h-6 w-6 flex-center  cursor-pointer rounded-full bg-background border border-gray-300 ${
                             absensiData.find((item) => item._id === siswa._id)
                               ?.status === "hadir"
-                              ? "bg-blue-600 text-white"
+                              ? `${
+                                  alreadyAbsensi
+                                    ? "bg-gray-100"
+                                    : "bg-blue-600 text-white"
+                                }  `
                               : "bg-gray-100"
                           }`}
                         >
