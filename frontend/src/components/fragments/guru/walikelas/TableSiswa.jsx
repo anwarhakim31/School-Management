@@ -36,8 +36,8 @@ const TableSiswa = ({
   const lastOfIndexSiswa = page * limit;
   const firstOfindexSiswa = lastOfIndexSiswa - limit;
 
-  const siswaSlice = data.slice(firstOfindexSiswa, lastOfIndexSiswa);
-  const totalSiswa = data.length;
+  const siswaSlice = data?.slice(firstOfindexSiswa, lastOfIndexSiswa);
+  const totalSiswa = data?.length;
 
   const handleDeleteSiswa = (data) => {
     handleToggleDeleteOne();

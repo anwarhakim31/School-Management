@@ -98,8 +98,6 @@ export const updateKelas = async (req, res, next) => {
     const { id } = req.params;
     const { nama, kelas, waliKelas } = req.body;
 
-    console.log(id, "IDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-
     const kelasExists = await Kelas.findOne({ nama, kelas, _id: { $ne: id } });
 
     if (kelasExists) {
@@ -107,6 +105,8 @@ export const updateKelas = async (req, res, next) => {
     }
 
     const isExist = await Kelas.findById(id);
+
+    console.log(req.body);
 
     if (!waliKelas) {
       if (isExist.waliKelas) {
@@ -127,9 +127,11 @@ export const updateKelas = async (req, res, next) => {
         { runValidators: true, new: true }
       );
     } else {
-      const alreadyWali = await Guru.findOne({ _id: waliKelas });
+      const alreadyWali = await Guru.findOne({ _id: { $ne: waliKelas } });
 
-      if (alreadyWali.waliKelas) {
+      console.log(true);
+
+      if (alreadyWali) {
         throw new ResponseError(404, "Guru sudah sebagai Wali Kelas.");
       }
 

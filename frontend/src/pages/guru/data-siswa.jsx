@@ -19,11 +19,13 @@ import DeleteManyModal from "@/components/fragments/guru/walikelas/DeleteManyMod
 import FilterSiswa from "@/components/elements/wali-kelas/FilterSiswa";
 import EditModal from "@/components/fragments/guru/walikelas/EditModal";
 import EditKelasModal from "@/components/fragments/guru/walikelas/EditKelasModal";
+import { useNavigate } from "react-router-dom";
 
 const selectRow = [7, 14, 21, 28];
 
 const DataKelasguruPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const buttonFilterRef = useRef();
   const FilterRef = useRef();
   const [loading, setLoading] = useState(true);
@@ -66,6 +68,12 @@ const DataKelasguruPage = () => {
 
     getKelas();
   }, [isDeleteSiswa, isAddSiswa, isDeleteManySiswa, isEditSiswa]);
+
+  useEffect(() => {
+    if (!userData.waliKelas) {
+      navigate("/guru/dashboard");
+    }
+  }, []);
 
   useEffect(() => {
     let datas = data?.siswa?.map((siswa) => siswa);
@@ -304,9 +312,6 @@ const DataKelasguruPage = () => {
           onClose={handleToggleDeleteMany}
           setAllCheck={setAllCheck}
         />
-      )}
-      {isEditKelas && (
-        <EditKelasModal onClose={handleToggleEditKelas} datas={data} />
       )}
     </section>
   );
