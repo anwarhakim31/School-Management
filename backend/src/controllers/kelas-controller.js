@@ -106,8 +106,6 @@ export const updateKelas = async (req, res, next) => {
 
     const isExist = await Kelas.findById(id);
 
-    console.log(req.body);
-
     if (!waliKelas) {
       if (isExist.waliKelas) {
         await Guru.findByIdAndUpdate(
@@ -128,8 +126,6 @@ export const updateKelas = async (req, res, next) => {
       );
     } else {
       const alreadyWali = await Guru.findOne({ _id: { $ne: waliKelas } });
-
-      console.log(true);
 
       if (alreadyWali) {
         throw new ResponseError(404, "Guru sudah sebagai Wali Kelas.");

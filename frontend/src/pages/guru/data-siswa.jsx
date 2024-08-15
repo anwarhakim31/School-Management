@@ -18,7 +18,7 @@ import AddModal from "@/components/fragments/guru/walikelas/AddModal";
 import DeleteManyModal from "@/components/fragments/guru/walikelas/DeleteManyModal";
 import FilterSiswa from "@/components/elements/wali-kelas/FilterSiswa";
 import EditModal from "@/components/fragments/guru/walikelas/EditModal";
-import EditKelasModal from "@/components/fragments/guru/walikelas/EditKelasModal";
+
 import { useNavigate } from "react-router-dom";
 
 const selectRow = [7, 14, 21, 28];
@@ -32,7 +32,7 @@ const DataKelasguruPage = () => {
   const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
   const [isAddSiswa, setIsAddSiswa] = useState(false);
   const [isEditSiswa, setIsEditSiswa] = useState(false);
-  const [isEditKelas, setIsEditKelas] = useState(false);
+
   const [isDeleteManySiswa, setIsDeleteManySiswa] = useState(false);
   const [allCheck, setAllCheck] = useState(false);
   const [isFilter, setIsFilter] = useState(false);
@@ -139,23 +139,11 @@ const DataKelasguruPage = () => {
     handleToggleEdit();
   };
 
-  const handleToggleEditKelas = () => {
-    setIsEditKelas(!isEditKelas);
-  };
-
   return (
     <section className="px-6 py-4 mb-4 ">
       <div className="border bg-white border-gray-300 p-4 mb-6 md:max-w-[300px]  rounded-md">
         <div className="flex items-center mb-4 justify-between">
           <h3 className="text-sm  font-bold">Detail Kelas</h3>
-          <button
-            aria-label="pengaturan kelas"
-            title="Edit Kelas"
-            onClick={handleToggleEditKelas}
-            className="w-6 h-6 rounded-full hover:bg-gray-200 flex-center hover:border"
-          >
-            <Settings width={18} height={18} />
-          </button>
         </div>
 
         <div>

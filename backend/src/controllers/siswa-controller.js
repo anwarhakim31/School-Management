@@ -231,14 +231,14 @@ export const editSiswa = async (req, res, next) => {
           { new: true }
         );
 
-        if (updatedClass) {
-          const jumlahSiswa = updatedClass.siswa.length;
-          await Kelas.findByIdAndUpdate(
-            siswa.kelas,
-            { jumlahSiswa },
-            { new: true }
-          );
-        }
+        // if (updatedClass) {
+        //   const jumlahSiswa = updatedClass.siswa.length;
+        //   await Kelas.findByIdAndUpdate(
+        //     siswa.kelas,
+        //     { jumlahSiswa },
+        //     { new: true }
+        //   );
+        // }
       }
 
       delete req.body.kelas;
@@ -248,7 +248,10 @@ export const editSiswa = async (req, res, next) => {
         ...req.body,
       });
 
-      newKelas.siswa.push(siswaUpdate._id);
+      if (!siswa.kelas) {
+        newKelas.siswa.push(siswaUpdate._id);
+      }
+
       newKelas.jumlahSiswa = newKelas.siswa.length;
       await newKelas.save();
     }
