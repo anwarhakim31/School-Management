@@ -62,7 +62,7 @@ const DataKelasguruPage = () => {
       } finally {
         setTimeout(() => {
           setLoading(false);
-        }, 1000);
+        }, 50);
       }
     };
 
@@ -141,7 +141,7 @@ const DataKelasguruPage = () => {
 
   return (
     <section className="px-6 py-4 mb-4 ">
-      <div className="border bg-white border-gray-300 p-4 mb-6 md:max-w-[300px]  rounded-md">
+      <div className="border bg-white border-t-gray-300 border-l-gray-300 p-4 mb-6 md:max-w-[300px] border-r-4 border-b-4 border-neutral  rounded-md">
         <div className="flex items-center mb-4 justify-between">
           <h3 className="text-sm  font-bold">Detail Kelas</h3>
         </div>

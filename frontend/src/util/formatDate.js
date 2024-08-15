@@ -6,3 +6,12 @@ export const formatDate = (isoDateString) => {
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
+
+export const formatIndonesiaDate = (tanggal) => {
+  return tanggal.toLocaleDateString(`id-ID`, {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};

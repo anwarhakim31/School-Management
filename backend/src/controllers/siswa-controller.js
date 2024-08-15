@@ -224,21 +224,21 @@ export const editSiswa = async (req, res, next) => {
         throw new ResponseError(404, "Kelas tidak ditemukan.");
       }
 
-      if (siswa.kelas) {
+      if (siswa.kelas && siswa.kelas !== newKelas._id) {
         const updatedClass = await Kelas.findByIdAndUpdate(
           siswa.kelas,
           { $pull: { siswa: siswa._id } },
           { new: true }
         );
 
-        // if (updatedClass) {
-        //   const jumlahSiswa = updatedClass.siswa.length;
-        //   await Kelas.findByIdAndUpdate(
-        //     siswa.kelas,
-        //     { jumlahSiswa },
-        //     { new: true }
-        //   );
-        // }
+        if (updatedClass) {
+          const jumlahSiswa = updatedClass.siswa.length;
+          await Kelas.findByIdAndUpdate(
+            siswa.kelas,
+            { jumlahSiswa },
+            { new: true }
+          );
+        }
       }
 
       delete req.body.kelas;
@@ -248,7 +248,7 @@ export const editSiswa = async (req, res, next) => {
         ...req.body,
       });
 
-      if (!siswa.kelas) {
+      if (siswa.kelas !== newKelas._id) {
         newKelas.siswa.push(siswaUpdate._id);
       }
 
