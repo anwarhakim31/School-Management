@@ -95,6 +95,8 @@ const AbsenHarianPage = () => {
     }
   };
 
+  console.log(alreadyAbsensi);
+
   return (
     <section className="px-6 py-4 mb-4 ">
       <div className="border bg-white border-t-gray-300 border-l-gray-300 p-4 mb-6 md:max-w-[300px] border-r-4 border-b-4 border-neutral  rounded-md">
@@ -156,7 +158,7 @@ const AbsenHarianPage = () => {
                               ? `${
                                   alreadyAbsensi
                                     ? "bg-gray-100"
-                                    : "bg-blue-600 text-white"
+                                    : "bg-green-500 text-white"
                                 }  `
                               : "bg-gray-100"
                           }`}
@@ -180,7 +182,7 @@ const AbsenHarianPage = () => {
                           className={`relative h-6 w-6 flex-center  cursor-pointer rounded-full bg-background border border-gray-300 ${
                             absensiData.find((item) => item._id === siswa._id)
                               ?.status === "izin"
-                              ? "bg-green-500 text-white"
+                              ? "bg-blue-500 text-white"
                               : "bg-gray-100"
                           }`}
                         >
@@ -252,7 +254,7 @@ const AbsenHarianPage = () => {
           ))
         )}
         {alreadyAbsensi && (
-          <div className="absolute bg-black/5 inset-0 w-full h-full backdrop-blur-sm overflow-hidden flex  justify-between flex-col items-center p-10 ">
+          <div className="absolute bg-black/5 rounded-md inset-0 w-full h-full  overflow-hidden flex  justify-between flex-col items-center p-10 ">
             {[...Array(3)].fill().map((_, i) => (
               <div
                 key={i}

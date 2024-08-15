@@ -9,6 +9,7 @@ import {
   FileStack,
   GraduationCap,
   NotebookPen,
+  NotebookTabs,
 } from "lucide-react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -107,7 +108,7 @@ const ListSidebar = () => {
       nama: "Rekap",
       path: "/guru/rekap-data",
       icon: (
-        <DashboardIcon
+        <NotebookTabs
           height={17}
           width={17}
           className={
