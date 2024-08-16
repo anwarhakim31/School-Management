@@ -224,22 +224,22 @@ const AbsenHarianPage = () => {
                           <p className="text-xs font-medium  ">S</p>
                         </label>
                         <label
-                          htmlFor={`${siswa._id}-alfa`}
+                          htmlFor={`${siswa._id}-alpha`}
                           className={`relative h-6 w-6 flex-center  cursor-pointer rounded-full bg-background border border-gray-300 ${
                             absensiData.find((item) => item._id === siswa._id)
-                              ?.status === "alfa"
+                              ?.status === "alpha"
                               ? "bg-red-500 text-white"
                               : "bg-gray-100"
                           }`}
                         >
                           <input
                             type="radio"
-                            id={`${siswa._id}-alfa`}
+                            id={`${siswa._id}-alpha`}
                             name={`status-${siswa._id}`}
-                            value={"alfa"}
+                            value={"alpha"}
                             checked={
                               absensiData.find((item) => item._id === siswa._id)
-                                ?.status === "alfa"
+                                ?.status === "alpha"
                             }
                             onChange={(e) => handleChangeAbsen(e, siswa._id)}
                             className=" hidden "

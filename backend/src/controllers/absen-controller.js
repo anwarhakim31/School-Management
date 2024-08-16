@@ -137,6 +137,10 @@ export const getRekapAbsensi = async (req, res, next) => {
             izinCount++;
 
             break;
+          case "alpha":
+            alphaCount++;
+
+            break;
         }
       });
 
@@ -151,11 +155,16 @@ export const getRekapAbsensi = async (req, res, next) => {
       });
     }
 
-    // Return data rekap absensi per siswa
+    const { kelas: grade, nama } = kelas._doc;
+
     res.status(200).json({
       success: true,
       jumlahHari,
       rekapAbsensi,
+      kelas: {
+        grade,
+        nama,
+      },
     });
   } catch (error) {
     console.log(error);
