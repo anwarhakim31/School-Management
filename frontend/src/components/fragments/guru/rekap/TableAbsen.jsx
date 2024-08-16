@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import logo from "../../../../assets/Schoolarcy (2).webp";
 
 const formatTable = (status) => {
   switch (status) {
@@ -15,10 +16,10 @@ const formatTable = (status) => {
   }
 };
 
-const TableAbsen = ({ countDay, rekapAbsen, isPrintModalOpen }) => {
+const TableAbsen = ({ countDay, rekapAbsen, isPrintModalOpen, kelas }) => {
   return (
     <>
-      <div className="w-full min-h-[420px] overflow-auto">
+      <div className="w-full min-h-[400px] overflow-auto rounded-md">
         <table className="w-full">
           <thead className="uppercase text-xs bg-neutral text-white">
             <tr>
@@ -109,15 +110,23 @@ const TableAbsen = ({ countDay, rekapAbsen, isPrintModalOpen }) => {
 
       {/* Modal Print */}
       {isPrintModalOpen && (
-        <div className="fixed inset-0 bg-white flex items-center justify-center z-50">
-          <div className="w-full flex-center">
-            <img src="" alt="" />
-          </div>
-
+        <div className="fixed inset-0 bg-white flex items-center justify-center z-[999]">
           <div className="w-full h-full p-8 overflow-auto">
+            <div className="w-full flex-center mb-8">
+              <img src={logo} alt="logo" width={200} height={200} />
+            </div>
             <div className="w-full min-h-[420px]">
               <table className="w-full">
-                <thead className="uppercase text-xs bg-neutral text-white">
+                <thead className="uppercase text-xs bg-gradient-to-r from-[#12a7e3] to-neutral text-white">
+                  <tr>
+                    <th
+                      colSpan={countDay + 5}
+                      scope="col"
+                      className="py-4 border-b"
+                    >
+                      ABSENSI KELAS {kelas.grade} {kelas.nama}
+                    </th>
+                  </tr>
                   <tr>
                     <th
                       scope="col"
@@ -136,7 +145,7 @@ const TableAbsen = ({ countDay, rekapAbsen, isPrintModalOpen }) => {
                     <th
                       scope="col"
                       colSpan={4}
-                      className="px-2 text-center border"
+                      className="px-2 text-center border border-r-0"
                     >
                       Total
                     </th>

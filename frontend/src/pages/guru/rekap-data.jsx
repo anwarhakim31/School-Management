@@ -39,7 +39,9 @@ const RekapDataPage = () => {
       } catch (error) {
         responseError(error);
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
       }
     };
 
@@ -104,12 +106,21 @@ const RekapDataPage = () => {
           </button>
         </div>
       </div>
-      <div className="border broder-gray-300 rounded-md bg-white mt-6">
-        <TableAbsen
-          rekapAbsen={rekapAbsen}
-          countDay={countDay}
-          isPrintModalOpen={isPrintModalOpen}
-        />
+      <div className="relative border broder-gray-300 rounded-md bg-white mt-6 overflow-hidden">
+        {loading ? (
+          <div className="min-h-[400px] bg-backup  animate-pulse  flex-center">
+            <div>
+              <div className="border-4 border-gray-200 border-t-neutral rounded-full w-6 h-6 animate-spin"></div>
+            </div>
+          </div>
+        ) : (
+          <TableAbsen
+            rekapAbsen={rekapAbsen}
+            countDay={countDay}
+            isPrintModalOpen={isPrintModalOpen}
+            kelas={kelas}
+          />
+        )}
       </div>
     </section>
   );

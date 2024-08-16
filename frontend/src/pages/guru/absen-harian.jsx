@@ -33,7 +33,9 @@ const AbsenHarianPage = () => {
             status: "hadir",
           }));
 
-          setAlreadyAbsensi(res.data.alreadyAbsensi);
+          setTimeout(() => {
+            setAlreadyAbsensi(res.data.alreadyAbsensi);
+          }, 500);
 
           setAbsensiData(initialAbsensiData);
         }
@@ -94,8 +96,6 @@ const AbsenHarianPage = () => {
       setLoading(false);
     }
   };
-
-  console.log(alreadyAbsensi);
 
   return (
     <section className="px-6 py-4 mb-4 ">
@@ -254,7 +254,11 @@ const AbsenHarianPage = () => {
           ))
         )}
         {alreadyAbsensi && (
-          <div className="absolute bg-black/5 rounded-md inset-0 w-full h-full  overflow-hidden flex  justify-between flex-col items-center p-10 ">
+          <div
+            className={`${
+              alreadyAbsensi ? "scale-100 opacity-100" : "scale-75 opacity-0"
+            } absolute bg-black/5 rounded-md inset-0 w-full h-full  overflow-hidden flex  justify-between flex-col items-center p-10 transition-all duration-500`}
+          >
             {[...Array(3)].fill().map((_, i) => (
               <div
                 key={i}

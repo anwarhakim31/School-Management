@@ -151,7 +151,7 @@ const DataKelasguruPage = () => {
             <p className="font-semibold">Kelas </p>
             <p className="truncate col-span-2">
               {loading ? (
-                <span className="w-1/2 h-4 bg-slate-300 block animate-pulse rounded-sm "></span>
+                <span className="w-1/2 h-4 bg-backup block animate-pulse rounded-sm "></span>
               ) : (
                 <span>
                   : {data.kelas} {data.nama}
@@ -164,7 +164,7 @@ const DataKelasguruPage = () => {
           <p className="text-xs mt-2 grid grid-cols-3 gap-1">
             <span className="font-semibold">Total Siswa</span>
             {loading ? (
-              <span className="w-1/2 h-4 col-span-2 bg-slate-300 block animate-pulse rounded-sm "></span>
+              <span className="w-1/2 h-4 col-span-2 bg-backup block animate-pulse rounded-sm "></span>
             ) : (
               <span>: {data.jumlahSiswa}</span>
             )}
@@ -174,7 +174,7 @@ const DataKelasguruPage = () => {
           <p className="text-xs mt-2 grid grid-cols-3 gap-1">
             <span className="font-semibold">Posisi Kelas</span>
             {loading ? (
-              <span className="w-1/2 h-4 col-span-2 bg-slate-300 block animate-pulse rounded-sm "></span>
+              <span className="w-1/2 h-4 col-span-2 bg-backup block animate-pulse rounded-sm "></span>
             ) : (
               <span>: {data.posisi ? data.posisi : ""}</span>
             )}
@@ -198,8 +198,9 @@ const DataKelasguruPage = () => {
 
         <button
           aria-label="tambah siswa"
+          disabled={loading}
           onClick={handleToggleAdd}
-          className="flex-between gap-3 min-w-fit bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
+          className="flex-between gap-3 min-w-fit disabled:cursor-not-allowed bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
         >
           <img src={Student} alt="student" width={15} height={15} />
           Tambah Siswa
@@ -270,7 +271,7 @@ const DataKelasguruPage = () => {
         </div>
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
-            <div className="w-full min-h-[430px] flex-center bg-gray-300 animate-pulse overflow-auto ">
+            <div className="w-full min-h-[430px] flex-center bg-backup animate-pulse overflow-auto ">
               <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
             </div>
           </div>

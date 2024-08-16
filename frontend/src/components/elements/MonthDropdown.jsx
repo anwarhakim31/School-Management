@@ -61,7 +61,7 @@ const MonthDropdown = ({ onSelectMonth }) => {
         )}
       </div>
       {isOpen && (
-        <div className="absolute mt-1 w-full bg-white border border-gray-400 rounded shadow">
+        <div className="absolute mt-1 w-full bg-white border z-50 border-gray-400 rounded shadow">
           <ul className="max-h-40 overflow-y-auto">
             {Array.from({ length: 12 }, (_, index) => (
               <li
