@@ -11,7 +11,15 @@ import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { Bolt, Filter, Search, Settings, Trash2 } from "lucide-react";
+import {
+  Bolt,
+  FileDown,
+  Filter,
+  Printer,
+  Search,
+  Settings,
+  Trash2,
+} from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddModal from "@/components/fragments/guru/walikelas/AddModal";
@@ -20,6 +28,8 @@ import FilterSiswa from "@/components/elements/wali-kelas/FilterSiswa";
 import EditModal from "@/components/fragments/guru/walikelas/EditModal";
 
 import { useNavigate } from "react-router-dom";
+import ExelJs from "exceljs";
+import { saveAs } from "file-saver";
 
 const selectRow = [7, 14, 21, 28];
 
@@ -32,10 +42,10 @@ const DataKelasguruPage = () => {
   const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
   const [isAddSiswa, setIsAddSiswa] = useState(false);
   const [isEditSiswa, setIsEditSiswa] = useState(false);
-
   const [isDeleteManySiswa, setIsDeleteManySiswa] = useState(false);
   const [allCheck, setAllCheck] = useState(false);
   const [isFilter, setIsFilter] = useState(false);
+  const [isPrint, setIsPrint] = useState(false);
   const dataChecked = useSelector(selectedDataDeleteMany);
   const userData = useSelector(selectedUserData);
   const [search, setSearch] = useState("");
@@ -138,6 +148,18 @@ const DataKelasguruPage = () => {
     dispatch(setDataEdit(data));
     handleToggleEdit();
   };
+
+  const handlePrintScreen = () => {
+    setIsPrint(true);
+
+    setTimeout(() => {
+      window.print();
+
+      setIsPrint(false);
+    }, 500);
+  };
+
+  console.log(dataSiswa);
 
   return (
     <section className="px-6 py-4 mb-4 ">
@@ -260,13 +282,32 @@ const DataKelasguruPage = () => {
               )}
             </div>
           </div>
-          <div>
-            {/* <ExportExcel
-              columns={columns}
-              data={dataSiswa}
-              namaFile={"Data-Siswa"}
-              loading={loading}
-            /> */}
+          <div className="flex gap-2">
+            <button
+              title="Excel"
+              disabled={loading}
+              className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1.5 rounded-md"
+              onClick={() => exportToExcel(dataSiswa, data.kelas, data.nama)}
+            >
+              <FileDown
+                width={20}
+                height={20}
+                strokeWidth={1}
+                className="group-hover:text-white"
+              />
+            </button>
+            <button
+              title="Print"
+              className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1.5 rounded-md"
+              onClick={handlePrintScreen}
+            >
+              <Printer
+                width={20}
+                height={20}
+                strokeWidth={1}
+                className="group-hover:text-white"
+              />
+            </button>
           </div>
         </div>
         {loading ? (
@@ -285,6 +326,7 @@ const DataKelasguruPage = () => {
             limit={limit}
             page={page}
             setPage={setPage}
+            isPrint={isPrint}
           />
         )}
       </div>
@@ -302,8 +344,194 @@ const DataKelasguruPage = () => {
           setAllCheck={setAllCheck}
         />
       )}
+      {isPrint && (
+        <div className="fixed inset-0 bg-white z-[999999] flex items-start py-2 px-12 ">
+          <div className="w-full  ">
+            <table className="w-full    text-left  text-gray-500 border">
+              <thead className="text-xs text-left  text-white uppercase bg-gradient-to-r from-[#12a7e3] to-neutral">
+                <tr>
+                  <th
+                    scope="col"
+                    colSpan={6}
+                    className="px-3 py-2 text-center border-b border-white"
+                  >
+                    DATA SISWA {data.kelas} {data.nama}
+                  </th>
+                </tr>
+                <tr className="border">
+                  <th scope="col" className="px-3 py-2  border">
+                    NIS
+                  </th>
+
+                  <th scope="col" className="pl-1 pr-4  py-2 border">
+                    Nama
+                  </th>
+                  <th
+                    scope="col"
+                    className=" py-2 whitespace-nowrap border px-1"
+                  >
+                    Jenis Kelamin
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-2 text-center whitespace-nowrap border"
+                  >
+                    Tahun Masuk
+                  </th>
+                  <th scope="col" className="px-2 py-2 border">
+                    Alamat
+                  </th>
+                  <th scope="col" className="py-2 text-center border">
+                    Kontak
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {dataSiswa && dataSiswa.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan="9"
+                      className="px-2 py-2 border-gray-300 text-xs font-medium text-gray-900 h-[350px] whitespace-nowrap"
+                    >
+                      <div className="flex justify-center w-full">
+                        Tidak ada data
+                      </div>
+                    </td>
+                  </tr>
+                )}
+                {dataSiswa &&
+                  dataSiswa.length !== 0 &&
+                  [...dataSiswa].reverse().map((siswa, i) => (
+                    <tr key={siswa.nis} className={` hover:bg-gray-100  `}>
+                      <td
+                        scope="row"
+                        className="px-3 py-1 text-xs font-normal text-gray-900 whitespace-nowrap border"
+                      >
+                        {siswa.nis}
+                      </td>
+                      <td
+                        scope="row"
+                        className="pl-1 pr-4 py-1  line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap  "
+                      >
+                        {siswa.nama}
+                      </td>
+                      <td
+                        scope="row"
+                        className="py-1 text-xs font-normal text-gray-900 whitespace-nowrap border px-1"
+                      >
+                        {siswa.jenisKelamin}
+                      </td>
+                      <td
+                        scope="row"
+                        className=" py-1 px-3 text-xs text-center font-normal text-gray-900 whitespace-nowrap border"
+                      >
+                        {siswa.tahunMasuk}
+                      </td>
+                      <td
+                        scope="row"
+                        className="px-2 py-1   overflow-hidden line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap"
+                      >
+                        {siswa.alamat ? (
+                          `${siswa.alamat}`
+                        ) : (
+                          <span className="text-gray-700 font-bold">
+                            Data Kosong
+                          </span>
+                        )}
+                      </td>
+                      <td
+                        scope="row"
+                        className="py-1 text-center  text-xs font-normal text-gray-900 whitespace-nowrap border"
+                      >
+                        {siswa.phone}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </section>
   );
+};
+
+const exportToExcel = async (data, kelas, nama) => {
+  const workbook = new ExelJs.Workbook();
+  const worksheet = workbook.addWorksheet(`Data Siswa Kelas ${kelas} ${nama}`);
+
+  worksheet.mergeCells("A1:E1"); // Menggabungkan sel A1 hingga D1
+  worksheet.getCell("A1").value = `Data Siswa Kelas ${kelas} ${nama}`; // Menambahkan judul
+  worksheet.getCell("A1").font = { size: 16, bold: true };
+  worksheet.getCell("A1").border = {
+    top: { style: "thin", color: "FFFFFFFF" },
+    left: { style: "thin", color: "FFFFFFFF" },
+    bottom: { style: "thin", color: "FFFFFFFF" },
+    right: { style: "thin", color: "FFFFFFFF" },
+  }; // Mengatur gaya font
+  worksheet.getCell("A1").alignment = {
+    vertical: "middle",
+    horizontal: "center",
+  };
+
+  worksheet.getRow(2).values = [
+    "NIS",
+    "Nama Siswa",
+    "Jenis Kelamin",
+    "Alamat",
+    "Telepon",
+  ]; // Mengatur nilai header kolom
+  worksheet.getRow(2).eachCell((cell, colNumber) => {
+    cell.fill = {
+      type: "pattern",
+      pattern: "solid",
+      fgColor: { argb: "362f7e" }, // Warna Biru
+    };
+    cell.font = { color: { argb: "FFFFFFFF" }, bold: true }; // Teks putih
+    cell.alignment = { vertical: "middle", horizontal: "center" }; // Rata tengah
+    cell.border = {
+      top: { style: "thin", color: "FFFFFFFF" },
+      left: { style: "thin", color: "FFFFFFFF" },
+      bottom: { style: "thin", color: "FFFFFFFF" },
+      right: { style: "thin", color: "FFFFFFFF" },
+    };
+    worksheet.getColumn(colNumber).width =
+      colNumber === 1 ? 20 : colNumber === 2 ? 20 : colNumber === 3 ? 15 : 15;
+  });
+
+  // Styling header
+
+  // Menambahkan data siswa dan status
+  data.forEach((siswa) => {
+    const rowValues = [
+      siswa.nis,
+      siswa.nama,
+      siswa.jenisKelamin,
+      siswa.alamat,
+      siswa.phone,
+    ];
+
+    const row = worksheet.addRow(rowValues);
+
+    // Menambahkan border pada setiap cell di body
+    row.eachCell((cell) => {
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      };
+    });
+
+    // Menambahkan border pada setiap cell di body
+
+    // Styling berdasarkan status untuk setiap cell
+  });
+
+  // Ekspor workbook ke Excel
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: "application/octet-stream" });
+  saveAs(blob, "rekap_absen.xlsx");
 };
 
 export default DataKelasguruPage;

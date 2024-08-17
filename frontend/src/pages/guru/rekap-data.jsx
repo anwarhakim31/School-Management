@@ -6,10 +6,12 @@ import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
 import { FileDownIcon, Printer } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { saveAs } from "file-saver";
 import ExcelJS from "exceljs";
+import ReactToPrint, { useReactToPrint } from "react-to-print";
+import PrintComponent from "@/components/fragments/guru/rekap/PrintModal";
 
 const RekapDataPage = () => {
   const currentYear = new Date().getFullYear();
@@ -22,6 +24,7 @@ const RekapDataPage = () => {
   const [rekapAbsen, setRekapAbsen] = useState([]);
   const [kelas, setkelas] = useState({});
   const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
+  const componentRef = useRef(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -56,14 +59,6 @@ const RekapDataPage = () => {
     setMonth(value);
   };
 
-  const handlePrint = () => {
-    setIsPrintModalOpen(true);
-    setTimeout(() => {
-      window.print();
-      setIsPrintModalOpen(false);
-    }, 500);
-  };
-
   return (
     <section className="px-6 py-4 mb-4 ">
       <div className="border bg-white border-t-gray-300 border-l-gray-300 p-4 mb-6 md:max-w-[300px] border-r-4 border-b-4 border-neutral  rounded-md">
@@ -88,7 +83,14 @@ const RekapDataPage = () => {
           <button
             disabled={loading || rekapAbsen.length === 0}
             onClick={() =>
-              exportToExcel(countDay, rekapAbsen, kelas.grade, kelas.nama)
+              exportToExcel(
+                countDay,
+                rekapAbsen,
+                kelas.grade,
+                kelas.nama,
+                month,
+                year
+              )
             }
             className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
           >
@@ -96,14 +98,18 @@ const RekapDataPage = () => {
             Excel
           </button>
 
-          <button
-            onClick={handlePrint}
-            disabled={loading || rekapAbsen.length === 0}
-            className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
-          >
-            <Printer height={15} width={15} />
-            Print
-          </button>
+          <ReactToPrint
+            trigger={() => (
+              <button
+                disabled={loading || rekapAbsen.length === 0}
+                className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
+              >
+                <Printer height={15} width={15} />
+                Print
+              </button>
+            )}
+            content={() => componentRef.current}
+          />
         </div>
       </div>
       <div className="relative border broder-gray-300 rounded-md bg-white mt-6 overflow-hidden">
@@ -115,12 +121,23 @@ const RekapDataPage = () => {
           </div>
         ) : (
           <TableAbsen
+            month={month}
             rekapAbsen={rekapAbsen}
             countDay={countDay}
             isPrintModalOpen={isPrintModalOpen}
             kelas={kelas}
           />
         )}
+      </div>
+      <div style={{ display: "none" }}>
+        <PrintComponent
+          ref={componentRef}
+          rekapAbsen={rekapAbsen}
+          countDay={countDay}
+          kelas={kelas}
+          month={month}
+          year={year}
+        />
       </div>
     </section>
   );
@@ -145,12 +162,25 @@ const formatStatus = (status) => {
   }
 };
 
-const exportToExcel = async (countDay, rekapAbsen, kelas, nama) => {
+const exportToExcel = async (
+  countDay,
+  rekapAbsen,
+  kelas,
+  nama,
+  month,
+  year
+) => {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Rekap Absen");
 
   // Title Header
-  const header = [`ABSENSI KELAS ${kelas} ${nama}`];
+  const header = [
+    `Absensi Kelas ${kelas} ${nama} ${new Date(
+      year,
+      month + 1,
+      0
+    ).toLocaleString("default", { month: "long" })} ${year}`,
+  ];
   const headerRow = worksheet.addRow(header);
 
   // Merge cells for title header

@@ -117,3 +117,9 @@ input[type="number"] {
   -moz-appearance: none;
   appearance: none;
 }
+
+@media print {
+  body {
+    background: white;
+  }
+}

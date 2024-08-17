@@ -23,11 +23,7 @@ const ListSidebar = () => {
 
   const handleActiveDropDown = (id) => {
     setActiveDropDown(activeDropDown === id ? null : id);
-
-    console.log(id);
   };
-
-  console.log(activeDropDown);
 
   const Navlist = [
     {
@@ -136,8 +132,8 @@ const ListSidebar = () => {
               {list.nama}
             </span>
             {list.dropDown && (
-              <div className="absolute right-10 top-1/2 -translate-y-1/2">
-                {activeDropDown === list._id ? (
+              <div className="absolute right-10 top-1/2 -translate-y-1/2 ">
+                {activeDropDown === list.id ? (
                   <ChevronUp
                     className=" group-hover:text-neutral text-white "
                     strokeWidth={2}
@@ -156,9 +152,11 @@ const ListSidebar = () => {
             )}
           </NavLink>
 
-          {list.dropDown && activeDropDown === list.id && (
+          {list.dropDown && (
             <div
-              className="h-[75px] my-2 "
+              className={`${
+                activeDropDown === list.id ? "max-h-[90px] my-1" : "max-h-0"
+              }   transition-all duration-300 ease-in-out overflow-hidden`}
               onClick={(e) => e.stopPropagation()}
             >
               {list.dropDown.map((drop) => (

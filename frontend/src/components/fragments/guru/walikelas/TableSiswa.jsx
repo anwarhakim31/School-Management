@@ -28,6 +28,7 @@ const TableSiswa = ({
   page,
   limit,
   setPage,
+  isPrint,
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -274,6 +275,135 @@ const TableSiswa = ({
           handlePagination={handlePagination}
         />
       </div>
+
+      {isPrint && (
+        <div className="fixed inset-0 bg-white z-[999999] flex  justify-center p-8">
+          <div className="w-full   overflow-auto ">
+            <table className="w-full    text-left  text-gray-500 border">
+              <thead className="text-xs text-left  text-white uppercase bg-neutral">
+                <tr>
+                  <th
+                    scope="col"
+                    className="px-3 py-4 flex items-center justify-center"
+                  >
+                    <Checkbox
+                      type="checkbox"
+                      checked={allCheck}
+                      onCheckedChange={handleCheckboxAll}
+                      className={
+                        "min-h-4 min-w-3 border-white data-[state=checked]:bg-gray-800"
+                      }
+                    />
+                  </th>
+
+                  <th scope="col" className="px-3 py-4">
+                    NIS
+                  </th>
+
+                  <th scope="col" className="pl-1 pr-4  py-4">
+                    Nama
+                  </th>
+                  <th scope="col" className=" py-4 whitespace-nowrap">
+                    Jenis Kelamin
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-4 text-center whitespace-nowrap"
+                  >
+                    Tahun Masuk
+                  </th>
+                  <th scope="col" className="px-2 py-4">
+                    Alamat
+                  </th>
+                  <th scope="col" className="py-4 text-center">
+                    Kontak
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {data && data.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan="9"
+                      className="px-2 py-4 border-gray-300 text-xs font-medium text-gray-900 h-[350px] whitespace-nowrap"
+                    >
+                      <div className="flex justify-center w-full">
+                        Tidak ada data
+                      </div>
+                    </td>
+                  </tr>
+                )}
+                {data &&
+                  data.length !== 0 &&
+                  [...siswaSlice].reverse().map((siswa, i) => (
+                    <tr
+                      key={siswa.nis}
+                      className={` hover:bg-gray-100 border-b  `}
+                    >
+                      <td scope="row" className="px-3 py-3 relative">
+                        <Checkbox
+                          type="checkbox"
+                          name=""
+                          checked={dataChecked.includes(siswa._id)}
+                          onCheckedChange={(checked) =>
+                            handleCheckboxChange(checked, siswa)
+                          }
+                          id=""
+                          className={
+                            "w-4 h-4 absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2  data-[state=checked]:bg-gray-800"
+                          }
+                        />
+                      </td>
+
+                      <td
+                        scope="row"
+                        className="px-3 py-4 text-xs font-normal text-gray-900 whitespace-nowrap "
+                      >
+                        {siswa.nis}
+                      </td>
+                      <td
+                        scope="row"
+                        className="pl-1 pr-4 py-5  line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap  "
+                      >
+                        {siswa.nama}
+                      </td>
+                      <td
+                        scope="row"
+                        className="py-2 text-xs font-normal text-gray-900 whitespace-nowrap "
+                      >
+                        {siswa.jenisKelamin}
+                      </td>
+                      <td
+                        scope="row"
+                        className=" py-4 px-3 text-xs text-center font-normal text-gray-900 whitespace-nowrap "
+                      >
+                        {siswa.tahunMasuk}
+                      </td>
+                      <td
+                        scope="row"
+                        className="px-2 py-4   overflow-hidden line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap "
+                      >
+                        {siswa.alamat ? (
+                          `${siswa.alamat}`
+                        ) : (
+                          <span className="text-gray-700 font-bold">
+                            Data Kosong
+                          </span>
+                        )}
+                      </td>
+                      <td
+                        scope="row"
+                        className="py-4 text-center  text-xs font-normal text-gray-900 whitespace-nowrap "
+                      >
+                        {siswa.phone}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </>
   );
 };
