@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import profile from "../../assets/profile.png";
-import { Plus, Trash } from "lucide-react";
+import { Plus, Trash, X } from "lucide-react";
 import responseError from "@/util/services";
 import { ALLOWED_FILE_TYPES, HOST, MAX_FILE_SIZE } from "@/util/constant";
 import axios from "axios";
@@ -156,14 +156,14 @@ const TambahSiswaPage = () => {
     <div className=" mx-6 mb-16 bg-white  grid grid-cols-1 rounded-lg py-6 px-6 gap-8 lg:grid-cols-4">
       <div className=" flex justify-start  items-center flex-col">
         <div
-          className="relative cursor-pointer w-[150px] overflow-hidden   h-[150px] rounded-full border  bg-white"
+          className="relative cursor-pointer w-[150px] overflow-hidden   h-[150px] rounded-full border-2  bg-white"
           onMouseEnter={() => setIsHover(true)}
           onMouseLeave={() => setIsHover(false)}
         >
           <img
             src={image ? image : profile}
             alt="foto"
-            className="w-full h-full object-cover bg-gray-300 border-gray-500 rounded-full"
+            className="w-full h-full object-cover bg-backup border-gray-500 rounded-full"
           />
           <input
             type="file"
@@ -174,26 +174,26 @@ const TambahSiswaPage = () => {
             accept=".jpg, .png, .jpeg"
             onChange={handleChangeImage}
           />
-          {!image && (
-            <div className="absolute inset-0 bg-black/30 w-full h-full flex-center">
-              <p></p>
-            </div>
-          )}
+
           {isHover && (
             <div
               className="absolute inset-0 bg-black/30 w-full h-full flex-center"
               onClick={image ? handleDeleteImage : handleClickInputImage}
             >
               {image ? (
-                <Trash color="white" width={20} height={20} />
+                <X color="white" width={25} height={25} />
               ) : (
-                <Plus color="white" width={20} height={20} />
+                <Plus color="white" width={25} height={25} />
               )}
             </div>
           )}
         </div>
-        <p className="text-xs mt-8">Besar file maksimal 1 MB</p>
-        <p className="text-xs mt-2">Ekstensi file: jpeg/jpg, png</p>
+        <p className="text-[0.625rem] text-neutral mt-8">
+          Besar file maksimal 1 MB
+        </p>
+        <p className="text-[0.625rem] text-neutral mt-2">
+          Ekstensi file: jpeg/jpg, png
+        </p>
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -410,25 +410,7 @@ const TambahSiswaPage = () => {
               {errors.phone && errors.phone.message}
             </span>
           </div>
-          <div className="mb-2">
-            <label htmlFor="Email" className="text-xs mb-2 block font-semibold">
-              Email
-            </label>
-            <input
-              type={"email"}
-              id="Email"
-              {...register("email", {
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Format email tidak valid",
-                },
-              })}
-              className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
-            />
-            <span className="text-xs h-4 block mt-1 text-neutral2">
-              {errors.email && errors.email.message}
-            </span>
-          </div>
+
           <div className="mb-2">
             <label htmlFor="kelas" className="text-xs mb-2 block font-semibold">
               Kelas

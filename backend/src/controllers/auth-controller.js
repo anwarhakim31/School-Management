@@ -206,7 +206,9 @@ export const updateProfile = async (req, res, next) => {
         id,
         { $set: update },
         { new: true, runValidators: true }
-      ).select("-password");
+      )
+        .select("-password")
+        .populate("waliKelas");
     }
 
     res.status(200).json({

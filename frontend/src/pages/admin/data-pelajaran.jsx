@@ -115,7 +115,7 @@ const DataPelajaranPage = () => {
 
   return (
     <section className="px-6 py-4  ">
-      <div className="w-full flex-between flex-wrap gap-6">
+      <div className="w-full flex-between flex-wrap mt-8 gap-6">
         <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
@@ -162,6 +162,7 @@ const DataPelajaranPage = () => {
         <button
           aria-label="tambah mapel"
           onClick={handleToggleAdd}
+          disabled={loading}
           className="bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md flex-between gap-3"
         >
           <MapelIcon width={15} height={15} className="" />
@@ -170,7 +171,7 @@ const DataPelajaranPage = () => {
       </div>
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-md">
         {loading ? (
-          <div className="block w-full relative bg-gray-200 animate-pulse shadow-md pb-[3.5rem]">
+          <div className="block w-full relative bg-backup animate-pulse shadow-md pb-[3.5rem]">
             <div className="w-full flex-center min-h-[420px] overflow-x-auto rounded-md">
               <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
             </div>

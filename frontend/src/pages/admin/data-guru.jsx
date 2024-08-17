@@ -182,6 +182,7 @@ const DataGuruPage = () => {
 
         <Link
           to={"/admin/tambah-guru"}
+          disabled={loading}
           className="flex-between gap-3 min-w-fit bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
         >
           <img src={guru} alt="guru" width={15} height={15} />
@@ -194,6 +195,7 @@ const DataGuruPage = () => {
           <div className="flex items-center gap-4  ">
             <button
               title="Hapus siswa terpilih"
+              disabled={loading}
               onClick={handleToggleDeleteMany}
               className={`${
                 dataChecked.length > 0 ? "opacity-100" : "opacity-0"
@@ -223,7 +225,7 @@ const DataGuruPage = () => {
         </div>
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
-            <div className="w-full min-h-[430px] flex-center bg-gray-200 animate-pulse overflow-auto ">
+            <div className="w-full min-h-[430px] flex-center bg-backup animate-pulse overflow-auto ">
               <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
             </div>
           </div>

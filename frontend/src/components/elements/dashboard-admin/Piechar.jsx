@@ -5,7 +5,7 @@ const PieChartComponent = ({ data, loading }) => {
     return (
       <div className="w-full h-full flex-center">
         <div className="flex items-center w-3/4 h-full  justify-center px-4 gap-8 animate-pulse duration-300 border-b">
-          <div className="w-[140px] h-[140px] rounded-full  bg-gray-300 "></div>
+          <div className="w-[140px] h-[140px] rounded-full  bg-backup "></div>
         </div>
       </div>
     );

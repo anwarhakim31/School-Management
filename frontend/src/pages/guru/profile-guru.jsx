@@ -151,7 +151,7 @@ const ProfileGuruPage = () => {
 
   return (
     <section className="mx-6 mb-10">
-      <div className="flex-between my-4">
+      <div className="flex-between mt-4   bg-white  p-4 rounded-tl-lg rounded-tr-lg">
         <div>
           <h1 className="text-neutral mb-1 font-semibold">Data Pribadi Anda</h1>
           <p className="text-xs font-medium text-gray-500">
@@ -181,7 +181,7 @@ const ProfileGuruPage = () => {
                 disabled={loading}
                 type="button"
                 onClick={() => setIsNoEdit(true)}
-                className="btn  w-28 bg-white border border-neutral text-gray-800 hover:text-white disabled:cursor-not-allowed    -gray-500"
+                className="btn  w-28 bg-white border border-neutral text-gray-800  hover:text-white disabled:cursor-not-allowed    -gray-500"
               >
                 {loading ? "Loading" : "Batal"}
               </button>
@@ -198,7 +198,7 @@ const ProfileGuruPage = () => {
           )}
         </div>
       </div>
-      <div className="    grid  bg-white grid-cols-1 rounded-lg py-6 px-6 gap-8 lg:grid-cols-4">
+      <div className="    grid  bg-white grid-cols-1 rounded-bl-lg rounded-br-lg  py-12 px-6 gap-8 lg:grid-cols-4">
         <div className=" flex justify-start  items-center flex-col">
           <h3 className="mb-2 text-xs font-semibold">Foto Profile </h3>
           <div
@@ -386,7 +386,7 @@ const ProfileGuruPage = () => {
                 {errors.tempatLahir && errors.tempatLahir.message}
               </span>
             </div>
-            <div className="mb-2">
+            <div className="mb-2 sm:mb-0 ">
               <label
                 htmlFor="TanggalLahir"
                 className="text-xs mb-2 block font-semibold"
@@ -518,7 +518,7 @@ const ProfileGuruPage = () => {
                 {errors.bidangStudi && errors.bidangStudi.message}
               </span>
             </div>
-            <div className="mb-2">
+            <div className="">
               <label
                 htmlFor="waliKelas"
                 className="text-xs mb-2 block font-semibold"

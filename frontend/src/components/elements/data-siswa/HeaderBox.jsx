@@ -25,7 +25,7 @@ const HeaderBox = ({ dataDetail, loading }) => {
         </div>
         <div className="flex-center w-8 h-8">
           {loading ? (
-            <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-gray-500 animate-spin"></div>
+            <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
           ) : (
             <h3 className="text-lg font-semibold text-sky-500">
               {dataDetail.jumlahSiswa}
@@ -53,7 +53,7 @@ const HeaderBox = ({ dataDetail, loading }) => {
         </div>
         <div className="flex-center w-8 h-8">
           {loading ? (
-            <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-gray-500 animate-spin"></div>
+            <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
           ) : (
             <h3 className="text-lg font-semibold text-purple-600">
               {dataDetail.lk}
@@ -81,7 +81,7 @@ const HeaderBox = ({ dataDetail, loading }) => {
         </div>
         <div className="flex-center w-8 h-8">
           {loading ? (
-            <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-gray-500 animate-spin"></div>
+            <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
           ) : (
             <h3 className="text-lg font-semibold text-rose-600">
               {dataDetail.pr}

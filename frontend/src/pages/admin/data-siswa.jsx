@@ -207,10 +207,11 @@ const DataSiswaPage = () => {
           <div className="flex items-center gap-4  ">
             <button
               title="Hapus siswa terpilih"
+              disabled={loading}
               onClick={handleToggleDeleteMany}
               className={`${
                 dataChecked.length > 0 ? "opacity-100" : "opacity-0"
-              } border block border-gray-300 bg-white text-gray-500 group rounded-md  hover:border-gray-400    py-1.5 px-2 transition-all duration-300 font-medium hover:text-white  text-xs   flex-between gap-3`}
+              } border block border-gray-300 bg-white text-gray-500 group rounded-md disabled:cursor-not-allowed  hover:border-gray-400    py-1.5 px-2 transition-all duration-300 font-medium hover:text-white  text-xs   flex-between gap-3`}
             >
               <Trash2 width={15} height={15} className=" text-neutral2 " />
             </button>
@@ -236,7 +237,7 @@ const DataSiswaPage = () => {
         </div>
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
-            <div className="w-full min-h-[430px] flex-center bg-gray-200 animate-pulse overflow-auto ">
+            <div className="w-full min-h-[430px] flex-center bg-backup animate-pulse overflow-auto ">
               <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
             </div>
           </div>

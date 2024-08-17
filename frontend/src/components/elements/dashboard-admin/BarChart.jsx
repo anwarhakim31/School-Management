@@ -12,11 +12,11 @@ const BarChartComponent = ({ data, x, y, loading }) => {
     return (
       <div className="w-full h-full flex-center">
         <div className="flex items-end w-3/4 h-full  justify-between px-4 gap-8 animate-pulse duration-300 border-b">
-          <div className="h-[150px] w-[30px] bg-gray-300  rounded-sm"></div>
-          <div className="h-[100px] w-[30px] bg-gray-300  rounded-sm"></div>
-          <div className="h-[150px] w-[30px] bg-gray-300  rounded-sm"></div>
-          <div className="h-[100px] w-[30px] bg-gray-300  rounded-sm"></div>
-          <div className="h-[130px] w-[30px] bg-gray-300  rounded-sm"></div>
+          <div className="h-[150px] w-[30px] bg-backup  rounded-sm"></div>
+          <div className="h-[100px] w-[30px] bg-backup  rounded-sm"></div>
+          <div className="h-[150px] w-[30px] bg-backup  rounded-sm"></div>
+          <div className="h-[100px] w-[30px] bg-backup  rounded-sm"></div>
+          <div className="h-[130px] w-[30px] bg-backup  rounded-sm"></div>
         </div>
       </div>
     );
