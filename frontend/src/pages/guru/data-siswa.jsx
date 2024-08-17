@@ -30,6 +30,8 @@ import EditModal from "@/components/fragments/guru/walikelas/EditModal";
 import { useNavigate } from "react-router-dom";
 import ExelJs from "exceljs";
 import { saveAs } from "file-saver";
+import ReactToPrint from "react-to-print";
+import PrintComponent from "@/components/fragments/guru/walikelas/PrintModal";
 
 const selectRow = [7, 14, 21, 28];
 
@@ -38,6 +40,7 @@ const DataKelasguruPage = () => {
   const navigate = useNavigate();
   const buttonFilterRef = useRef();
   const FilterRef = useRef();
+  const componentRef = useRef();
   const [loading, setLoading] = useState(true);
   const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
   const [isAddSiswa, setIsAddSiswa] = useState(false);
@@ -296,18 +299,23 @@ const DataKelasguruPage = () => {
                 className="group-hover:text-white"
               />
             </button>
-            <button
-              title="Print"
-              className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1.5 rounded-md"
-              onClick={handlePrintScreen}
-            >
-              <Printer
-                width={20}
-                height={20}
-                strokeWidth={1}
-                className="group-hover:text-white"
-              />
-            </button>
+            <ReactToPrint
+              trigger={() => (
+                <button
+                  title="Print"
+                  className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1.5 rounded-md"
+                  onClick={handlePrintScreen}
+                >
+                  <Printer
+                    width={20}
+                    height={20}
+                    strokeWidth={1}
+                    className="group-hover:text-white"
+                  />
+                </button>
+              )}
+              content={() => componentRef.current}
+            />
           </div>
         </div>
         {loading ? (
@@ -344,114 +352,9 @@ const DataKelasguruPage = () => {
           setAllCheck={setAllCheck}
         />
       )}
-      {isPrint && (
-        <div className="fixed inset-0 bg-white z-[999999] flex items-start py-2 px-12 ">
-          <div className="w-full  ">
-            <table className="w-full    text-left  text-gray-500 border">
-              <thead className="text-xs text-left  text-white uppercase bg-gradient-to-r from-[#12a7e3] to-neutral">
-                <tr>
-                  <th
-                    scope="col"
-                    colSpan={6}
-                    className="px-3 py-2 text-center border-b border-white"
-                  >
-                    DATA SISWA {data.kelas} {data.nama}
-                  </th>
-                </tr>
-                <tr className="border">
-                  <th scope="col" className="px-3 py-2  border">
-                    NIS
-                  </th>
-
-                  <th scope="col" className="pl-1 pr-4  py-2 border">
-                    Nama
-                  </th>
-                  <th
-                    scope="col"
-                    className=" py-2 whitespace-nowrap border px-1"
-                  >
-                    Jenis Kelamin
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-2 text-center whitespace-nowrap border"
-                  >
-                    Tahun Masuk
-                  </th>
-                  <th scope="col" className="px-2 py-2 border">
-                    Alamat
-                  </th>
-                  <th scope="col" className="py-2 text-center border">
-                    Kontak
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {dataSiswa && dataSiswa.length === 0 && (
-                  <tr>
-                    <td
-                      colSpan="9"
-                      className="px-2 py-2 border-gray-300 text-xs font-medium text-gray-900 h-[350px] whitespace-nowrap"
-                    >
-                      <div className="flex justify-center w-full">
-                        Tidak ada data
-                      </div>
-                    </td>
-                  </tr>
-                )}
-                {dataSiswa &&
-                  dataSiswa.length !== 0 &&
-                  [...dataSiswa].reverse().map((siswa, i) => (
-                    <tr key={siswa.nis} className={` hover:bg-gray-100  `}>
-                      <td
-                        scope="row"
-                        className="px-3 py-1 text-xs font-normal text-gray-900 whitespace-nowrap border"
-                      >
-                        {siswa.nis}
-                      </td>
-                      <td
-                        scope="row"
-                        className="pl-1 pr-4 py-1  line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap  "
-                      >
-                        {siswa.nama}
-                      </td>
-                      <td
-                        scope="row"
-                        className="py-1 text-xs font-normal text-gray-900 whitespace-nowrap border px-1"
-                      >
-                        {siswa.jenisKelamin}
-                      </td>
-                      <td
-                        scope="row"
-                        className=" py-1 px-3 text-xs text-center font-normal text-gray-900 whitespace-nowrap border"
-                      >
-                        {siswa.tahunMasuk}
-                      </td>
-                      <td
-                        scope="row"
-                        className="px-2 py-1   overflow-hidden line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap"
-                      >
-                        {siswa.alamat ? (
-                          `${siswa.alamat}`
-                        ) : (
-                          <span className="text-gray-700 font-bold">
-                            Data Kosong
-                          </span>
-                        )}
-                      </td>
-                      <td
-                        scope="row"
-                        className="py-1 text-center  text-xs font-normal text-gray-900 whitespace-nowrap border"
-                      >
-                        {siswa.phone}
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
+      <div style={{ display: "none" }}>
+        <PrintComponent ref={componentRef} dataSiswa={dataSiswa} data={data} />
+      </div>
     </section>
   );
 };

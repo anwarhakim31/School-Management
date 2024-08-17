@@ -23,7 +23,7 @@ const RekapDataPage = () => {
   const [countDay, setCountDay] = useState(0);
   const [rekapAbsen, setRekapAbsen] = useState([]);
   const [kelas, setkelas] = useState({});
-  const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
+
   const componentRef = useRef(null);
 
   useEffect(() => {
@@ -124,7 +124,6 @@ const RekapDataPage = () => {
             month={month}
             rekapAbsen={rekapAbsen}
             countDay={countDay}
-            isPrintModalOpen={isPrintModalOpen}
             kelas={kelas}
           />
         )}
@@ -243,6 +242,7 @@ const exportToExcel = async (
   // Menggunakan warna dan border pada header
   headerStyle(worksheet.getRow(1), "362f7e"); // Warna abu-abu netral untuk header 1
   headerStyle(worksheet.getRow(2), "362f7e"); // Warna abu-abu netral untuk header 2
+  headerStyle(worksheet.getRow(3), "362f7e"); // Warna abu-abu netral untuk header 2
 
   // Menambahkan data siswa dan status
   rekapAbsen.forEach((siswa) => {
