@@ -22,7 +22,7 @@ const AbsenHarianPage = () => {
     const getData = async () => {
       try {
         const res = await axios.get(
-          HOST + `/api/absen/${userData.waliKelas}/siswa`,
+          HOST + `/api/absen/${userData.waliKelas._id}/siswa`,
           { withCredentials: true, params: { guruId: userData._id } }
         );
 

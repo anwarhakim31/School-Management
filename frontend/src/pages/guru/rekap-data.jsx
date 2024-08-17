@@ -30,7 +30,7 @@ const RekapDataPage = () => {
     const getData = async () => {
       try {
         const res = await axios.get(
-          HOST + "/api/absen/" + userData.waliKelas + "/rekap-absen",
+          HOST + "/api/absen/" + userData.waliKelas._id + "/rekap-absen",
           { withCredentials: true, params: { month, year } }
         );
 
