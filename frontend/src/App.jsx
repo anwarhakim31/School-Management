@@ -26,13 +26,13 @@ import TambahSiswaPage from "./pages/admin/tambah-siswa";
 import EditSiswaPage from "./pages/admin/edit-siswa";
 import TambahGuruPage from "./pages/admin/tambah-guru";
 import EditGuruPage from "./pages/admin/edit-guru";
-import DataUmumPage from "./pages/admin/data-umum";
 import GuruLayout from "./components/layouts/guru/GuruLayout";
 import GuruDashboardPage from "./pages/guru/guru-dashboard";
 import AbsenHarianPage from "./pages/guru/absen-harian";
 import DataKelasguruPage from "./pages/guru/data-siswa";
 import RekapDataPage from "./pages/guru/rekap-data";
 import ProfileGuruPage from "./pages/guru/profile-guru";
+import MasterDataPage from "./pages/admin/master-data";
 
 function App() {
   const dispatch = useDispatch();
@@ -96,10 +96,10 @@ function App() {
             }
           />
           <Route
-            path="data-umum"
+            path="master-data"
             element={
               <PrivateRoute role={"admin"}>
-                <DataUmumPage />
+                <MasterDataPage />
               </PrivateRoute>
             }
           />

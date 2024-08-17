@@ -11,7 +11,7 @@ const TableUmum = ({ data, handleToggleDelete, handleEditAjaran, loading }) => {
   const lastIndexajaran = perPage * currentPage;
   const firstIndexajaran = lastIndexajaran - perPage;
 
-  const dataSlice = data.slice(firstIndexajaran, lastIndexajaran);
+  const dataSlice = data?.slice(firstIndexajaran, lastIndexajaran);
 
   const handleDeleteajaran = (ajaran) => {
     dispatch(setDataDelete(ajaran));

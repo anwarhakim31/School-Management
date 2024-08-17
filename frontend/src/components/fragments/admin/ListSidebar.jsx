@@ -7,7 +7,7 @@ import JadwalIcon from "../../../assets/svg/jadwal.svg?react";
 // import DataIcon from "../../../assets/svg/data.svg?react";
 import AcaraIcon from "../../../assets/svg/acara.svg?react";
 import { Link, NavLink } from "react-router-dom";
-import { FileStack } from "lucide-react";
+import { FileStack, MonitorCog } from "lucide-react";
 // import KelasSVG from "@/components/base/svg/KelasSVG
 
 const Navlist = [
@@ -27,10 +27,10 @@ const Navlist = [
   },
   {
     id: 2,
-    nama: "Data Umum",
-    path: "/admin/data-umum",
+    nama: "Master Data",
+    path: "/admin/master-data",
     icon: (
-      <FileStack
+      <MonitorCog
         height={17}
         width={17}
         className={
