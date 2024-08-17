@@ -63,7 +63,9 @@ export const loginUser = async (req, res, next) => {
     if (user.role === "admin") {
       data = await Admin.findOne({ username: ni }).select("-password");
     } else if (user.role === "guru") {
-      data = await Guru.findOne({ nip: ni }).select("-password");
+      data = await Guru.findOne({ nip: ni })
+        .select("-password")
+        .populate({ path: "waliKelas", select: "kelas nama  " });
     } else if (user.role === "siswa") {
       data = await Siswa.findOne({ username: ni }).select("-password");
     }
@@ -116,7 +118,9 @@ export const getAuth = async (req, res, next) => {
 
     let user =
       (await Admin.findOne({ _id: userId }).select("-password")) ||
-      (await Guru.findById({ _id: userId }).select("-password"));
+      (await Guru.findById({ _id: userId })
+        .select("-password")
+        .populate({ path: "waliKelas", select: "kelas nama" }));
 
     if (!user) {
       throw new ResponseError(404, "User tidak ditemukan");
@@ -190,12 +194,20 @@ export const updateProfile = async (req, res, next) => {
 
     let updatedUser;
 
-    if (role === "admin")
+    if (role === "admin") {
       updatedUser = await Admin.findByIdAndUpdate(
         id,
         { $set: update },
         { runValidators: true, new: true }
       ).select("-password");
+    } else if (role === "guru") {
+      delete req.body.waliKelas;
+      updatedUser = await Guru.findByIdAndUpdate(
+        id,
+        { $set: update },
+        { new: true, runValidators: true }
+      ).select("-password");
+    }
 
     res.status(200).json({
       success: true,

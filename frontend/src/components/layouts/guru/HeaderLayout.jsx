@@ -4,17 +4,16 @@ import profile from "../../../assets/profile.png";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { Edit2Icon, Flag, LogOut, Menu, Settings, User } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const HeaderLayout = ({ handleToggleSidebar }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const settingRef = useRef();
+
   const buttonRef = useRef();
-  const [isSetting, setIsSetting] = useState(false);
   const data = useSelector(selectedUserData);
 
   const handleLogout = async () => {
@@ -34,7 +33,7 @@ const HeaderLayout = ({ handleToggleSidebar }) => {
 
   return (
     <header className="w-full p-6 flex justify-between items-center">
-      <div className="flex-center gap-4">
+      <div className="flex-center gap-4 ">
         <button
           aria-label="toggle sidebar"
           onClick={handleToggleSidebar}
@@ -50,7 +49,7 @@ const HeaderLayout = ({ handleToggleSidebar }) => {
             <h5 className="hidden sm:block text-sm text-text font-semibold">
               {data.nama ? data.nama : data.username}
             </h5>
-            <span className="text-xs hidden sm:block leading-2 text-right font-medium ">
+            <span className="text-xs hidden sm:block leading-2 text-right font-medium capitalize">
               {data.role}
             </span>
           </div>
@@ -58,7 +57,11 @@ const HeaderLayout = ({ handleToggleSidebar }) => {
             to={"/guru/profile"}
             className="w-10 h-10 bg-backup flex items-center justify-center rounded-full overflow-hidden"
           >
-            <img src={data.foto ? data.foto : profile} alt="foto" />
+            <img
+              src={data.photo ? data.photo : profile}
+              alt="foto"
+              className="w-full h-full object-cover"
+            />
           </Link>
         </div>
         <div className="relative">
@@ -66,31 +69,10 @@ const HeaderLayout = ({ handleToggleSidebar }) => {
             ref={buttonRef}
             className="bg-white border hover:border-neutral transition-all duration-300 w-10 h-10 p-2 rounded-full flex items-center justify-center cursor-pointer"
             aria-label="menu"
-            onClick={() => {
-              setIsSetting((prev) => !prev);
-            }}
+            onClick={handleLogout}
           >
-            <Settings className=" stroke-[1.5]" width={25} height={25} />
+            <LogOut className=" stroke-[1.5]" width={20} height={20} />
           </button>
-          {isSetting && (
-            <div
-              ref={settingRef}
-              role="menu"
-              className="absolute rounded-md z-20 top-14 right-2.5 w-[170px] rounded-tr-none  before:absolute before:w-2.5 before:h-2.5 before:-top-1.5 before:right-0.5  bg-white shadow-lg border border-gray-300 before:bg-backup   before:border-gray-300  before:border-t  before:border-r before:-rotate-45 "
-            >
-              <ul>
-                <li
-                  className="flex gap-2 justify-between items-center cursor-pointer rounded-md p-2 group hover:bg-gray-100"
-                  onClick={handleLogout}
-                >
-                  <LogOut className="bg-neutral2 text-white w-7 h-7  rounded-sm p-2" />
-                  <p className="text-xs font-medium group-hover:text-neutral">
-                    Logout
-                  </p>
-                </li>
-              </ul>
-            </div>
-          )}
         </div>
       </div>
     </header>
