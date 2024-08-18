@@ -6,8 +6,17 @@ import MapelIcon from "../../../assets/svg/pelajaran.svg?react";
 import JadwalIcon from "../../../assets/svg/jadwal.svg?react";
 // import DataIcon from "../../../assets/svg/data.svg?react";
 import AcaraIcon from "../../../assets/svg/acara.svg?react";
-import { Link, NavLink } from "react-router-dom";
-import { FileStack, MonitorCog } from "lucide-react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import {
+  ChevronDown,
+  ChevronUp,
+  FileStack,
+  MonitorCog,
+  NotebookPen,
+  NotebookTabs,
+  NotebookText,
+} from "lucide-react";
+import { useState } from "react";
 // import KelasSVG from "@/components/base/svg/KelasSVG
 
 const Navlist = [
@@ -93,20 +102,48 @@ const Navlist = [
       />
     ),
   },
-  // {
-  //   id: 7,
-  //   nama: "Jadwal Belajar",
-  //   path: "/admin/data-jadwal",
-  //   icon: (
-  //     <JadwalIcon
-  //       height={20}
-  //       width={20}
-  //       className={
-  //         "text-white group-hover:text-neutral duration-300 transition-all"
-  //       }
-  //     />
-  //   ),
-  // },
+  {
+    id: 7,
+    nama: "Rekap Data",
+    icon: (
+      <NotebookTabs
+        height={20}
+        width={20}
+        className={
+          "text-white group-hover:text-neutral duration-300 transition-all"
+        }
+      />
+    ),
+    dropDown: [
+      {
+        id: 1,
+        nama: "Absensi",
+        path: "/admin/rekap-absensi-siswa",
+        icon: (
+          <NotebookPen
+            height={20}
+            width={20}
+            className={
+              "text-white group-hover:text-neutral duration-300 transition-all"
+            }
+          />
+        ),
+      },
+      {
+        id: 2,
+        nama: "Nilai",
+        icon: (
+          <NotebookText
+            height={20}
+            width={20}
+            className={
+              "text-white group-hover:text-neutral duration-300 transition-all"
+            }
+          />
+        ),
+      },
+    ],
+  },
   // {
   //   id: 7,
   //   nama: "Acara",
@@ -124,19 +161,78 @@ const Navlist = [
 ];
 
 const ListSidebar = () => {
+  const navigate = useNavigate();
+  const [activeDropDown, setActiveDropDown] = useState(null);
+
+  const handleDropdown = (index) => {
+    if (activeDropDown === index) {
+      setActiveDropDown(null);
+    } else {
+      setActiveDropDown(index);
+    }
+  };
+
   return (
     <ul className="w-full py-2 h-[80vh] overflow-auto">
       {Navlist.map((list) => (
-        <li key={list.id} className="outline-none ml-6 md:ml-4 lg:ml-6 ">
+        <li
+          onClick={() => handleDropdown(list.id)}
+          key={list.id}
+          className="relative outline-none ml-6 md:ml-4 lg:ml-6 "
+        >
           <NavLink
             to={list.path}
-            className="flex justify-start  outline-white z-10 pl-4 items-center py-3  gap-3 group hover:bg-background cursor-pointer rounded-tl-full rounded-bl-full "
+            className="relative flex justify-start  outline-white z-10 pl-4 items-center py-3  gap-3 group hover:bg-background cursor-pointer rounded-tl-full rounded-bl-full "
           >
             {list.icon}
             <span className="text-white   mt-0.5 text-sm font-light group-hover:text-neutral group-hover:font-medium ">
               {list.nama}
             </span>
+            {list.dropDown && (
+              <div className="absolute right-10 top-1/2 -translate-y-1/2 ">
+                {activeDropDown === list.id ? (
+                  <ChevronUp
+                    className=" group-hover:text-neutral text-white "
+                    strokeWidth={2}
+                    width={20}
+                    height={20}
+                  />
+                ) : (
+                  <ChevronDown
+                    className=" group-hover:text-neutral text-white "
+                    strokeWidth={2}
+                    width={20}
+                    height={20}
+                  />
+                )}
+              </div>
+            )}
           </NavLink>
+
+          {list.dropDown && (
+            <div
+              className={`${
+                activeDropDown === list.id ? "max-h-[90px] my-1" : "max-h-0"
+              }   transition-all duration-300 ease-in-out overflow-hidden`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {list.dropDown.map((drop) => (
+                <button
+                  onClick={() => {
+                    navigate(drop.path);
+                    setActiveDropDown(null);
+                  }}
+                  key={drop.id}
+                  className="flex items-center gap-2 px-2 group hover:bg-white h-8 my-2 mx-3 w-36 rounded-md"
+                >
+                  {drop.icon}
+                  <span className="text-white    text-sm font-light group-hover:text-neutral group-hover:font-medium ">
+                    {drop.nama}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
         </li>
       ))}
     </ul>

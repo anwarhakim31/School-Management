@@ -33,6 +33,7 @@ import DataKelasguruPage from "./pages/guru/data-siswa";
 import RekapDataPage from "./pages/guru/rekap-data";
 import ProfileGuruPage from "./pages/guru/profile-guru";
 import MasterDataPage from "./pages/admin/master-data";
+import RekapAbsensiPage from "./pages/admin/rekap-absensi";
 
 function App() {
   const dispatch = useDispatch();
@@ -183,6 +184,14 @@ function App() {
             element={
               <PrivateRoute role={"admin"}>
                 <DataAcaraPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="rekap-absensi-siswa"
+            element={
+              <PrivateRoute role={"admin"}>
+                <RekapAbsensiPage />
               </PrivateRoute>
             }
           />
