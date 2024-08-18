@@ -91,6 +91,7 @@ const AddModal = ({ onClose }) => {
             <button
               aria-label="simpan kelas"
               type="submit"
+              disabled={loading}
               className="btn w-24 h-8.5"
             >
               {loading ? "Loading" : "Simpan"}

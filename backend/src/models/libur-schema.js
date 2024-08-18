@@ -14,6 +14,18 @@ const liburSchema = new mongoose.Schema({
       },
     },
   ],
+  nasional: [
+    {
+      tanggal: {
+        type: Date,
+        required: true,
+      },
+      keterangan: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
 const Libur = mongoose.model("Libur", liburSchema);

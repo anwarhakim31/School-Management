@@ -1,7 +1,15 @@
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { Check, Filter, Plus, Search, X } from "lucide-react";
+import {
+  CalendarCog,
+  CalendarPlus,
+  Check,
+  Filter,
+  Plus,
+  Search,
+  X,
+} from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import ClassIcon from "../../assets/svg/class.svg?react";
 import TableUmum from "@/components/fragments/admin/master-data/TableUmum";
@@ -9,12 +17,14 @@ import { toast } from "sonner";
 import DeleteModal from "@/components/fragments/admin/master-data/DeleteModal";
 import TableMingguan from "@/components/fragments/admin/master-data/TableMingguan";
 import TabelNasionsal from "@/components/fragments/admin/master-data/TabelNasionsal";
+import AddModalNasional from "@/components/fragments/admin/master-data/AddModalNasional";
 
 const MasterDataPage = () => {
   const [dataAjaran, setDataAjaran] = useState([]);
   const [dataLibur, setDataLibur] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isAddajaran, setIsAddAjaran] = useState(false);
+  const [isAddNasional, setIsAddNasional] = useState(false);
   const [isDeleteajaran, setIsDeleteajaran] = useState(false);
   const [ajaran, setAjaran] = useState("");
   const [trigger, setTrigger] = useState(1);
@@ -58,7 +68,7 @@ const MasterDataPage = () => {
 
     getLibur();
     getAjaran();
-  }, [isAddajaran, isDeleteajaran, trigger]);
+  }, [isAddajaran, isDeleteajaran, trigger, isAddNasional]);
 
   const handleAddAjaran = async () => {
     setLoading(true);
@@ -108,6 +118,10 @@ const MasterDataPage = () => {
     setIsDeleteajaran(!isDeleteajaran);
   };
 
+  const handleToggleAddNasional = () => {
+    setIsAddNasional(!isAddNasional);
+  };
+
   return (
     <section className="px-6 py-8  ">
       <div className="w-full">
@@ -155,7 +169,7 @@ const MasterDataPage = () => {
               onClick={handleToggleAdd}
               className="bg-neutral hover:bg-indigo-800  min-w-fit transition-all w-fit duration-300 text-white py-2.5 text-xs px-4 rounded-md flex-between gap-3"
             >
-              <ClassIcon width={15} height={15} className=" " /> Tambah Ajaran
+              <CalendarCog width={15} height={15} className=" " /> Tambah Ajaran
             </button>
           </div>
         </div>
@@ -204,10 +218,10 @@ const MasterDataPage = () => {
           </h1>
           <button
             aria-label="tambah ajaran"
-            onClick={handleToggleAdd}
+            onClick={handleToggleAddNasional}
             className="bg-neutral hover:bg-indigo-800  min-w-fit transition-all w-fit duration-300 text-white py-2.5 text-xs px-4 rounded-md flex-between gap-3"
           >
-            <ClassIcon width={15} height={15} className=" " /> Tambah Ajaran
+            <CalendarPlus width={15} height={15} className=" " /> Tambah Libur
           </button>
         </div>
         <div className="relative bg-white w-full   border  overflow-hidden  rounded-md">
@@ -218,12 +232,13 @@ const MasterDataPage = () => {
               </div>
             </div>
           ) : (
-            <TabelNasionsal />
+            <TabelNasionsal libur={dataLibur?.nasional} />
           )}
         </div>
       </div>
 
       {isDeleteajaran && <DeleteModal onClose={handleToggleDelete} />}
+      {isAddNasional && <AddModalNasional onClose={handleToggleAddNasional} />}
     </section>
   );
 };

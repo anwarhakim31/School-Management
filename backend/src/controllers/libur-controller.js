@@ -30,7 +30,7 @@ export const togglePerpekan = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: "Berhasil mengupdate libur perpekan",
+      message: "Berhasil mengubah libur perpekan",
       libur,
     });
   } catch (error) {
@@ -46,6 +46,42 @@ export const getLibur = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Berhasil mengambil hari libur",
+      libur,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const liburNasional = async (req, res, next) => {
+  try {
+    const { tanggal, keterangan } = req.body.data;
+
+    let libur = (await Libur.findOne()) || [];
+
+    if (!libur) {
+      libur = Libur({
+        tanggal,
+        keterangan,
+      });
+    } else {
+      const isExist = await libur.nasional.findIndex(
+        (day) => day.tanggal === tanggal
+      );
+
+      if (isExist !== -1) {
+        throw new ResponseError(400, "Libur pada tanggal yang sama sudah ada.");
+      }
+
+      libur.nasional.push({ tanggal, keterangan });
+    }
+
+    await libur.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil menambah hari libur nasional.",
       libur,
     });
   } catch (error) {

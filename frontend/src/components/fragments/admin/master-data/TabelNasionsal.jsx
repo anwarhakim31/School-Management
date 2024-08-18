@@ -1,8 +1,9 @@
+import { formatDate } from "@/util/formatDate";
 import React from "react";
 
-const TabelNasionsal = () => {
+const TabelNasionsal = ({ libur }) => {
   return (
-    <div className="w-full  min-h-[150px] overflow-x-auto rounded-md">
+    <div className="w-full  min-h-[250px] overflow-x-auto rounded-md">
       <table className="text-center w-full text-gray-500 table-a">
         <thead className="text-xs uppercase text-white bg-neutral">
           <tr>
@@ -15,7 +16,22 @@ const TabelNasionsal = () => {
             <th className="opacity-0">Edit</th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+          {libur &&
+            libur.map((free) => (
+              <tr key={free.tanggal} className="border-b hover:bg-gray-200">
+                <td scope="row" className="w-12 py-4 ">
+                  {formatDate(free.tanggal)}
+                </td>
+                <td scope="row" className="w-12 py-4 ">
+                  {free.keterangan}
+                </td>
+                <td scope="row" className="w-12 py-4 ">
+                  <button></button>
+                </td>
+              </tr>
+            ))}
+        </tbody>
       </table>
     </div>
   );
