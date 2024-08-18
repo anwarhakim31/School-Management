@@ -12,6 +12,7 @@ import guruRouter from "../routes/guru-router.js";
 import ajaranRouter from "../routes/tahunAjaran-router.js";
 import umumRouter from "../routes/umum-router.js";
 import absenRouter from "../routes/absen-router.js";
+import liburRouter from "../routes/libur-router.js";
 
 export const app = express();
 
@@ -34,5 +35,6 @@ app.use("/api/guru", guruRouter);
 app.use("/api/ajaran", ajaranRouter);
 app.use("/api/umum", umumRouter);
 app.use("/api/absen", absenRouter);
+app.use("/api/libur", liburRouter);
 
 app.use(errorMiddleware);

@@ -8,9 +8,11 @@ import TableUmum from "@/components/fragments/admin/master-data/TableUmum";
 import { toast } from "sonner";
 import DeleteModal from "@/components/fragments/admin/master-data/DeleteModal";
 import TableMingguan from "@/components/fragments/admin/master-data/TableMingguan";
+import TabelNasionsal from "@/components/fragments/admin/master-data/TabelNasionsal";
 
 const MasterDataPage = () => {
   const [dataAjaran, setDataAjaran] = useState([]);
+  const [dataLibur, setDataLibur] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isAddajaran, setIsAddAjaran] = useState(false);
   const [isDeleteajaran, setIsDeleteajaran] = useState(false);
@@ -36,6 +38,25 @@ const MasterDataPage = () => {
       }
     };
 
+    const getLibur = async () => {
+      try {
+        const res = await axios.get(HOST + "/api/libur/get-libur", {
+          withCredentials: true,
+        });
+
+        if (res.status === 200) {
+          setDataLibur(res.data.libur);
+        }
+      } catch (error) {
+        responseError(error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
+      }
+    };
+
+    getLibur();
     getAjaran();
   }, [isAddajaran, isDeleteajaran, trigger]);
 
@@ -88,7 +109,7 @@ const MasterDataPage = () => {
   };
 
   return (
-    <section className="px-6 py-4  ">
+    <section className="px-6 py-8  ">
       <div className="w-full">
         <div className="w-full flex-between  py-4 px-2 rounded-md mt-12  gap-6 border bg-white">
           <h1 className=" font-semibold text-sm  text-neutral">
@@ -156,14 +177,14 @@ const MasterDataPage = () => {
         </div>
       </div>
       <div className="w-full mt-8">
-        <div className="w-full   py-4 px-2 rounded-md  gap-6 border bg-white">
-          <h1 className="text-center  font-bold text-base text-gray-500 boder-b">
-            Data Libur
+        <div className="w-full   py-4 px-2 rounded-md  gap-6 border border-b-0 bg-white">
+          <h1 className="font-bold text-sm text-gray-800 ">
+            Data Libur Kegiatan
           </h1>
         </div>
-        <div className="w-full flex-between  py-4 px-2    gap-6 border bg-white">
+        <div className="w-full flex-between  pt-10 pb-4 px-2    gap-6 border bg-white">
           <h1 className=" font-semibold text-sm  text-neutral">
-            Libur Mingguan
+            Libur Perpekan
           </h1>
         </div>
         <div className="relative bg-white w-full   border  overflow-hidden  rounded-md">
@@ -174,7 +195,30 @@ const MasterDataPage = () => {
               </div>
             </div>
           ) : (
-            <TableMingguan />
+            <TableMingguan libur={dataLibur?.perpekan} />
+          )}
+        </div>
+        <div className="w-full flex-between pt-10 pb-4  py-4 px-2  mt  gap-6 border bg-white">
+          <h1 className=" font-semibold text-sm  text-neutral">
+            Libur Nasional
+          </h1>
+          <button
+            aria-label="tambah ajaran"
+            onClick={handleToggleAdd}
+            className="bg-neutral hover:bg-indigo-800  min-w-fit transition-all w-fit duration-300 text-white py-2.5 text-xs px-4 rounded-md flex-between gap-3"
+          >
+            <ClassIcon width={15} height={15} className=" " /> Tambah Ajaran
+          </button>
+        </div>
+        <div className="relative bg-white w-full   border  overflow-hidden  rounded-md">
+          {loading ? (
+            <div className="block w-full relative bg-gray-200 animate-pulse shadow-md pb-[3.5rem]">
+              <div className="w-full flex-center min-h-[231px] overflow-x-auto rounded-md">
+                <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
+              </div>
+            </div>
+          ) : (
+            <TabelNasionsal />
           )}
         </div>
       </div>
