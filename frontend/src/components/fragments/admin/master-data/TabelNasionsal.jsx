@@ -27,7 +27,7 @@ const TabelNasionsal = ({ libur, loading, handleToggleDeleteNasional }) => {
   }, [dataSlice]);
   return (
     <>
-      <div className="w-full  min-h-[250px] overflow-x-auto rounded-md">
+      <div className="w-full  min-h-[292px] overflow-x-auto rounded-md">
         <table className="text-center w-full text-gray-500 table-a">
           <thead className="text-xs uppercase text-white bg-neutral">
             <tr>

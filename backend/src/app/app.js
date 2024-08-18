@@ -10,9 +10,9 @@ import kelasRouter from "../routes/kelas-router.js";
 import MapelRouter from "../routes/mapel-router.js";
 import guruRouter from "../routes/guru-router.js";
 import ajaranRouter from "../routes/tahunAjaran-router.js";
-import umumRouter from "../routes/umum-router.js";
 import absenRouter from "../routes/absen-router.js";
 import liburRouter from "../routes/libur-router.js";
+import masterRouter from "../routes/master-router.js";
 
 export const app = express();
 
@@ -33,7 +33,7 @@ app.use("/api/kelas", kelasRouter);
 app.use("/api/mapel", MapelRouter);
 app.use("/api/guru", guruRouter);
 app.use("/api/ajaran", ajaranRouter);
-app.use("/api/umum", umumRouter);
+app.use("/api/master", masterRouter);
 app.use("/api/absen", absenRouter);
 app.use("/api/libur", liburRouter);
 

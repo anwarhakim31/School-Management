@@ -20,7 +20,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const getAjaran = async () => {
       try {
-        const res = await axios.get(HOST + "/api/umum/get-umum", {
+        const res = await axios.get(HOST + "/api/master/get-master", {
           withCredentials: true,
         });
 
@@ -32,7 +32,7 @@ const AdminDashboard = () => {
       } finally {
         setTimeout(() => {
           setLoading(false);
-        }, 100);
+        }, 50);
       }
     };
 

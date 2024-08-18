@@ -209,6 +209,11 @@ export const updateGuru = async (req, res, next) => {
       throw new ResponseError(404, "Guru tidak ditemukan.");
     }
 
+    if (req.body.password) {
+      const salt = await genSalt();
+      req.body.password = await hash(req.body.password, salt);
+    }
+
     if (!kelas && !namaKelas) {
       delete req.body.namaKelas;
       delete req.body.kelas;

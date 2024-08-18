@@ -4,7 +4,7 @@ import React from "react";
 const HeaderModal = ({ titile, onClose, className }) => {
   return (
     <div className="flex-between">
-      <h5 className={`${className} text-gray-700 text-base`}>{titile}</h5>
+      <h5 className={`${className} text-gray-700 text-sm`}>{titile}</h5>
       <button
         onClick={onClose}
         aria-label="close modal"

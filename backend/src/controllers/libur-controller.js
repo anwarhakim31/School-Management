@@ -1,5 +1,5 @@
 import ResponseError from "../error/response-error.js";
-import Libur from "../models/libur-schema.js";
+import Libur from "../models/libur-model.js";
 
 export const togglePerpekan = async (req, res, next) => {
   try {
