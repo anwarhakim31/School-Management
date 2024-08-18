@@ -1,6 +1,6 @@
 import React from "react";
 import { setDataDelete, setDataEdit } from "@/store/slices/admin-slice";
-import { ChevronLeft, ChevronRight, Edit, Trash2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Edit, Trash, Trash2 } from "lucide-react";
 import { space } from "postcss/lib/list";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -13,7 +13,7 @@ const TablePelajaran = ({
 }) => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 7;
+  const perPage = 5;
 
   const lastIndexmapel = perPage * currentPage;
   const firstIndexmapel = lastIndexmapel - perPage;
@@ -39,7 +39,7 @@ const TablePelajaran = ({
 
   return (
     <div className="block w-full relative  shadow-md pb-[3.5rem]">
-      <div className="w-full  min-h-[420px] overflow-x-auto rounded-md">
+      <div className="w-full  min-h-[340px] overflow-x-auto rounded-md">
         <table className="text-center w-full text-gray-500 table-a">
           <thead className="text-xs uppercase text-white bg-neutral">
             <tr>
@@ -106,25 +106,25 @@ const TablePelajaran = ({
                       <button
                         title="Edit"
                         onClick={() => handleEditmapel(mapel)}
-                        className="w-[20px] h-[20px]  flex-center"
+                        className="w-[25px] h-[25px] border-2 rounded-md  border-gray-300 group hover:border-neutral1 flex-center transition-all duration-300"
                       >
                         <Edit
-                          width={18}
+                          width={15}
                           strokeWidth={1}
-                          height={18}
-                          className="text-gray-800  hover:text-neutral1 transition-all duration-300"
+                          height={15}
+                          className="text-gray-800  group-hover:text-neutral1 transition-all duration-300"
                         />
                       </button>
                       <button
                         title="Hapus"
-                        className="w-[20px] h-[20px]  flex-center"
+                        className="w-[25px] h-[25px] border-2 rounded-md  border-gray-300 group hover:border-neutral2 flex-center transition-all duration-300"
                         onClick={() => handleDeletemapel(mapel)}
                       >
-                        <Trash2
-                          width={18}
+                        <Trash
+                          width={15}
                           strokeWidth={1}
-                          height={18}
-                          className="text-gray-800 hover:text-neutral2  transition-all duration-300"
+                          height={15}
+                          className="text-gray-800 group-hover:text-neutral2  transition-all duration-300"
                         />
                       </button>
                     </div>
@@ -175,8 +175,6 @@ const Pagination = ({
     currentPage === 1
       ? Math.min(totalPage, currentPage + 2)
       : Math.min(totalPage, currentPage + 1);
-
-  console.log(totalPage);
 
   const visiblePage = pageNumber.slice(startPage - 1, endPage);
 

@@ -237,7 +237,7 @@ const DataSiswaPage = () => {
         </div>
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
-            <div className="w-full min-h-[430px] flex-center bg-backup animate-pulse overflow-auto ">
+            <div className="w-full min-h-[455px] flex-center bg-backup animate-pulse overflow-auto ">
               <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
             </div>
           </div>

@@ -1,16 +1,16 @@
 export const color = [
-  "#4f46e5", // Deep Blue
-  "#f56565", // Vivid Red
-  "#facc15", // Bright Yellow
-  "#34d399", // Bright Green
-  "#c084fc", // Light Purple
-  "#f97316", // Bright Orange
-  "#0ea5e9", // Bright Cyan
-  "#d1ea2c", // Vivid Lime
-  "#ef4444", // Red
-  "#3b82f6", // Blue
-  "#14b8a6", // Teal
-  "#ec4899", // Pink
+  "#4f46e5", // Biru gelap
+  "#d1ea2c", // Merah
+  "#faff00", // Kuning stabilo
+  "#22c55e", // Hijau cerah
+  "#a855f7", // Ungu
+  "#ff6600", // Oranye stabilo
+  "#ff00ff", // Cyan stabilo
+  "#e53e3e", // Hijau limau
+  "#00ff00", // Ungu stabiloe53e3e
+  "#3b82f6", // Biru medium
+  "#00e5ff", // Hijau stabilo
+  "#ec4899", // Pink terang
 ];
 
 export const getColor = (number) => {

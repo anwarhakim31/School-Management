@@ -95,9 +95,9 @@ const TabelNasionsal = ({ libur, loading, handleToggleDeleteNasional }) => {
                         onClick={() => handleDeleteNasional(free.tanggal)}
                       >
                         <Trash
-                          width={20}
+                          width={18}
                           strokeWidth={1}
-                          height={20}
+                          height={18}
                           className="text-gray-800  group-hover:text-neutral2  transition-all duration-300"
                         />
                       </button>

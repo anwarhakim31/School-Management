@@ -79,7 +79,7 @@ const TableMingguan = ({ loading, libur }) => {
                 htmlFor="sabtu"
                 className={`${
                   isSabtu ? "bg-blue-500" : "bg-backup"
-                } relative border w-12 h-6 flex center rounded-full  border-gray-500 duration-300 transition-all`}
+                } relative border w-10 h-5 flex center rounded-full  border-gray-500 duration-300 transition-all`}
               >
                 <input
                   type="checkbox"
@@ -92,8 +92,8 @@ const TableMingguan = ({ loading, libur }) => {
                 />
                 <div
                   className={`${
-                    isSabtu ? "translate-x-6" : "translate-x-0.5"
-                  } pointer-events-none absolute  top-1/2 -translate-y-1/2 bg-white border-gray-700 rounded-full w-5 h-5 duration-300 transition-all ease-in-out `}
+                    isSabtu ? "translate-x-5" : "translate-x-0.5"
+                  } pointer-events-none absolute  top-1/2 -translate-y-1/2 bg-white border-gray-700 rounded-full w-4 h-4 duration-300 transition-all ease-in-out `}
                 ></div>
               </label>
             </td>
@@ -115,7 +115,7 @@ const TableMingguan = ({ loading, libur }) => {
                 htmlFor="minggu"
                 className={`${
                   isMinggu ? "bg-blue-500" : "bg-backup"
-                } relative border w-12 h-6 flex center rounded-full  border-gray-500 duration-300 transition-all`}
+                } relative border w-10 h-5 flex center rounded-full  border-gray-500 duration-300 transition-all`}
               >
                 <input
                   type="checkbox"
@@ -128,8 +128,8 @@ const TableMingguan = ({ loading, libur }) => {
                 />
                 <div
                   className={`${
-                    isMinggu ? "translate-x-6" : "translate-x-0.5"
-                  } pointer-events-none absolute  top-1/2 -translate-y-1/2 bg-white border-gray-700 rounded-full w-5 h-5 duration-300 transition-all ease-in-out `}
+                    isMinggu ? "translate-x-5" : "translate-x-0.5"
+                  } pointer-events-none absolute  top-1/2 -translate-y-1/2 bg-white border-gray-700 rounded-full w-4 h-4 duration-300 transition-all ease-in-out `}
                 ></div>
               </label>
             </td>
