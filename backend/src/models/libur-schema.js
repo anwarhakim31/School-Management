@@ -5,7 +5,7 @@ const liburSchema = new mongoose.Schema({
     {
       hari: {
         type: String,
-        enum: ["sabtu", "minggu"],
+        enum: ["Saturday", "Sunday"],
         required: true,
       },
       status: {

@@ -10,7 +10,7 @@ const TableMingguan = ({ loading, libur }) => {
   const [isMinggu, setIsMinggu] = useState(false);
 
   const handleToggleSwitch = async (hari, status) => {
-    hari === "sabtu" ? setIsSabtu(!isSabtu) : setIsMinggu(!isMinggu);
+    hari === "Saturday" ? setIsSabtu(!isSabtu) : setIsMinggu(!isMinggu);
 
     try {
       const res = await axios.post(
@@ -88,7 +88,7 @@ const TableMingguan = ({ loading, libur }) => {
                   value={isSabtu}
                   className="w-full h-full opacity-0 cursor-pointer"
                   checked={isSabtu}
-                  onChange={() => handleToggleSwitch("sabtu", !isSabtu)}
+                  onChange={() => handleToggleSwitch("Saturday", !isSabtu)}
                 />
                 <div
                   className={`${
@@ -112,7 +112,7 @@ const TableMingguan = ({ loading, libur }) => {
             </td>
             <td scope="row" className="py-4 w-12">
               <label
-                htmlFor="sabtu"
+                htmlFor="minggu"
                 className={`${
                   isMinggu ? "bg-blue-500" : "bg-backup"
                 } relative border w-12 h-6 flex center rounded-full  border-gray-500 duration-300 transition-all`}
@@ -121,10 +121,10 @@ const TableMingguan = ({ loading, libur }) => {
                   type="checkbox"
                   name=""
                   value={isMinggu}
-                  id="sabtu"
+                  id="minggu"
                   className="w-full h-full opacity-0 cursor-pointer"
                   checked={isMinggu}
-                  onChange={() => handleToggleSwitch("minggu", !isMinggu)}
+                  onChange={() => handleToggleSwitch("Sunday", !isMinggu)}
                 />
                 <div
                   className={`${

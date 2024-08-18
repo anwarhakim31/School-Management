@@ -17,6 +17,7 @@ const AddModalNasional = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
+    setLoading(true);
     try {
       const res = await axios.post(
         HOST + "/api/libur/add-nasional",

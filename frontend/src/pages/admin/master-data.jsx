@@ -18,6 +18,7 @@ import DeleteModal from "@/components/fragments/admin/master-data/DeleteModal";
 import TableMingguan from "@/components/fragments/admin/master-data/TableMingguan";
 import TabelNasionsal from "@/components/fragments/admin/master-data/TabelNasionsal";
 import AddModalNasional from "@/components/fragments/admin/master-data/AddModalNasional";
+import DeleteModalNasional from "@/components/fragments/admin/master-data/DeleteModalNasional";
 
 const MasterDataPage = () => {
   const [dataAjaran, setDataAjaran] = useState([]);
@@ -26,6 +27,7 @@ const MasterDataPage = () => {
   const [isAddajaran, setIsAddAjaran] = useState(false);
   const [isAddNasional, setIsAddNasional] = useState(false);
   const [isDeleteajaran, setIsDeleteajaran] = useState(false);
+  const [isDeleteNasional, setIsDeleteNasional] = useState(false);
   const [ajaran, setAjaran] = useState("");
   const [trigger, setTrigger] = useState(1);
 
@@ -68,7 +70,7 @@ const MasterDataPage = () => {
 
     getLibur();
     getAjaran();
-  }, [isAddajaran, isDeleteajaran, trigger, isAddNasional]);
+  }, [isAddajaran, isDeleteajaran, trigger, isAddNasional, isDeleteNasional]);
 
   const handleAddAjaran = async () => {
     setLoading(true);
@@ -122,6 +124,10 @@ const MasterDataPage = () => {
     setIsAddNasional(!isAddNasional);
   };
 
+  const handleToggleDeleteNasional = () => {
+    setIsDeleteNasional(!isDeleteNasional);
+  };
+
   return (
     <section className="px-6 py-8  ">
       <div className="w-full">
@@ -140,8 +146,7 @@ const MasterDataPage = () => {
               >
                 <input
                   type="text"
-                  name=""
-                  id=""
+                  placeholder="2000/2001"
                   value={ajaran}
                   onChange={(e) => setAjaran(e.target.value)}
                   maxLength={10}
@@ -150,11 +155,13 @@ const MasterDataPage = () => {
                 <div className="flex gap-2 absolute right-1">
                   <button
                     onClick={handleAddAjaran}
+                    disabled={loading}
                     className="space-x-2 w-4 h-4 rounded-full flex-center bg-neutral1 text-white"
                   >
                     <Check width={12} height={12} />
                   </button>
                   <button
+                    disabled={loading}
                     onClick={handleToggleAdd}
                     className=" w-4 h-4 rounded-full flex-center bg-neutral2 text-white"
                   >
@@ -166,6 +173,7 @@ const MasterDataPage = () => {
 
             <button
               aria-label="tambah ajaran"
+              disabled={loading || isAddajaran}
               onClick={handleToggleAdd}
               className="bg-neutral hover:bg-indigo-800  min-w-fit transition-all w-fit duration-300 text-white py-2.5 text-xs px-4 rounded-md flex-between gap-3"
             >
@@ -196,8 +204,8 @@ const MasterDataPage = () => {
             Data Libur Kegiatan
           </h1>
         </div>
-        <div className="w-full flex-between  pt-10 pb-4 px-2    gap-6 border bg-white">
-          <h1 className=" font-semibold text-sm  text-neutral">
+        <div className="w-full flex-between  pt-5 pb-4 px-2    gap-6 border bg-white">
+          <h1 className=" font-semibold text-sm  text-neutral w-36 text-center py-1 rounded-full border bg-gray-100 border-gray-300">
             Libur Perpekan
           </h1>
         </div>
@@ -209,11 +217,11 @@ const MasterDataPage = () => {
               </div>
             </div>
           ) : (
-            <TableMingguan libur={dataLibur?.perpekan} />
+            <TableMingguan libur={dataLibur?.perpekan} loading={loading} />
           )}
         </div>
         <div className="w-full flex-between pt-10 pb-4  py-4 px-2  mt  gap-6 border bg-white">
-          <h1 className=" font-semibold text-sm  text-neutral">
+          <h1 className=" font-semibold text-sm  text-neutral w-36 text-center py-1 rounded-full border bg-gray-100 border-gray-300">
             Libur Nasional
           </h1>
           <button
@@ -232,13 +240,20 @@ const MasterDataPage = () => {
               </div>
             </div>
           ) : (
-            <TabelNasionsal libur={dataLibur?.nasional} />
+            <TabelNasionsal
+              libur={dataLibur?.nasional}
+              loading={loading}
+              handleToggleDeleteNasional={handleToggleDeleteNasional}
+            />
           )}
         </div>
       </div>
 
       {isDeleteajaran && <DeleteModal onClose={handleToggleDelete} />}
       {isAddNasional && <AddModalNasional onClose={handleToggleAddNasional} />}
+      {isDeleteNasional && (
+        <DeleteModalNasional onClose={handleToggleDeleteNasional} />
+      )}
     </section>
   );
 };

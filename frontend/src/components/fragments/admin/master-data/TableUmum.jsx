@@ -1,5 +1,5 @@
 import { setDataDelete } from "@/store/slices/admin-slice";
-import { ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Trash, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -45,7 +45,7 @@ const TableUmum = ({ data, handleToggleDelete, handleEditAjaran, loading }) => {
               <tr className="w-full h-full">
                 <td
                   colSpan="7"
-                  className="px-2 py-4  border-gray-300 text-xs text-gray800 whitespace-nowrap h-[220px]"
+                  className="px-2 py-4  border-gray-300 text-xs text-gray800 whitespace-nowrap h-[180px]"
                 >
                   <div className="flex flex-col items-center justify-center">
                     <span className="w-8 h-8 block mb-2 animate-spin rounded-full border-4 border-t-gray-800 border-gray-300"></span>
@@ -58,7 +58,7 @@ const TableUmum = ({ data, handleToggleDelete, handleEditAjaran, loading }) => {
               <tr className="w-full h-full">
                 <td
                   colSpan="10"
-                  className="px-2 py-4  border-gray-300 text-xs text-gray-900 whitespace-nowrap h-[220px]"
+                  className="px-2 py-4  border-gray-300 text-xs text-gray-900 whitespace-nowrap h-[180px]"
                 >
                   Tidak ada data
                 </td>
@@ -101,14 +101,14 @@ const TableUmum = ({ data, handleToggleDelete, handleEditAjaran, loading }) => {
                     <div className="flex-center gap-4">
                       <button
                         title="Hapus"
-                        className="w-[20px] h-[20px]  flex-center"
+                        className="w-[30px] h-[30px] border-2 border-gray-300 hover:border-neutral2 group rounded-md transition-all duration-300  flex-center"
                         onClick={() => handleDeleteajaran(ajaran)}
                       >
-                        <Trash2
+                        <Trash
                           width={18}
                           strokeWidth={1}
                           height={18}
-                          className="text-gray-800 hover:text-neutral2  transition-all duration-300"
+                          className="text-gray-800  group-hover:text-neutral2  transition-all duration-300"
                         />
                       </button>
                     </div>
