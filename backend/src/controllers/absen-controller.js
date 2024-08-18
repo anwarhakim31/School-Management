@@ -2,6 +2,7 @@ import { formatTanggalIndonesia } from "../data/formatTanggalIndonesia.js";
 import ResponseError from "../error/response-error.js";
 import Absensi from "../models/Absensi-model.js";
 import Kelas from "../models/kelas-model.js";
+import Libur from "../models/libur-model.js";
 
 export const getAbsenKelas = async (req, res, next) => {
   try {
@@ -16,6 +17,28 @@ export const getAbsenKelas = async (req, res, next) => {
 
     const today = new Date();
 
+    const formatHari = today.toLocaleString("en-US", { weekday: "long" });
+
+    const libur = await Libur.findOne({
+      $or: [
+        {
+          perpekan: {
+            $elemMatch: {
+              hari: formatHari,
+              status: true,
+            },
+          },
+        },
+        {
+          nasional: {
+            $elemMatch: {
+              tanggal: new Date().toISOString().split("T")[0],
+            },
+          },
+        },
+      ],
+    });
+
     const existingAbsensi = await Absensi.findOne({
       kelas: kelasId,
       guru: guruId,
@@ -25,9 +48,12 @@ export const getAbsenKelas = async (req, res, next) => {
       },
     });
 
-    res
-      .status(200)
-      .json({ success: true, kelas, alreadyAbsensi: !!existingAbsensi });
+    res.status(200).json({
+      success: true,
+      kelas,
+      alreadyAbsensi: !!existingAbsensi,
+      hariLibur: !!libur,
+    });
   } catch (error) {
     next(error);
   }
@@ -39,6 +65,32 @@ export const postAbsenKelas = async (req, res, next) => {
     const { guruId, absensiData } = req.body;
 
     const today = new Date();
+
+    const formatHari = today.toLocaleString("default", { weekday: "long" });
+
+    const libur = await Libur.findOne({
+      $or: [
+        {
+          perpekan: {
+            $elemMatch: {
+              hari: formatHari,
+              status: true,
+            },
+          },
+        },
+        {
+          nasional: {
+            $elemMatch: {
+              tanggal: new Date().toISOString().split("T")[0],
+            },
+          },
+        },
+      ],
+    });
+
+    if (libur) {
+      throw new ResponseError(400, "Saat ini libur sekolah");
+    }
 
     const existingAbsensi = await Absensi.findOne({
       guru: guruId,
@@ -72,6 +124,7 @@ export const postAbsenKelas = async (req, res, next) => {
       message: `Absensi berhasil disimpan pada ${formattedDate}`,
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

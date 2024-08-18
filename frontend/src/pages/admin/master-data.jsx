@@ -201,7 +201,7 @@ const MasterDataPage = () => {
       <div className="w-full mt-8">
         <div className="w-full   py-4 px-2 rounded-md  gap-6 border border-b-0 bg-white">
           <h1 className="font-bold text-sm text-gray-800 ">
-            Data Libur Kegiatan
+            Data Libur Sekolah
           </h1>
         </div>
         <div className="w-full flex-between  pt-5 pb-4 px-2    gap-6 border bg-white">

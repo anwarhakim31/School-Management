@@ -6,7 +6,7 @@ export const color = [
   "#c084fc", // Light Purple
   "#f97316", // Bright Orange
   "#0ea5e9", // Bright Cyan
-  "#eab308", // Vivid Lime
+  "#d1ea2c", // Vivid Lime
   "#ef4444", // Red
   "#3b82f6", // Blue
   "#14b8a6", // Teal

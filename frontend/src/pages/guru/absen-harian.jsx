@@ -11,8 +11,11 @@ import { toast } from "sonner";
 const AbsenHarianPage = () => {
   const userData = useSelector(selectedUserData);
   const [loading, setLoading] = useState(true);
+  const [loading2, setLoading2] = useState(false);
   const [alreadyAbsensi, setAlreadyAbsensi] = useState(false);
+  const [hariLibur, setHariLibur] = useState(false);
   const [trigger, setTrigger] = useState(false);
+  const [delay, setDelay] = useState(false);
   const [data, setData] = useState([]);
   const [absensiData, setAbsensiData] = useState([]);
 
@@ -33,11 +36,12 @@ const AbsenHarianPage = () => {
             status: "hadir",
           }));
 
-          setTimeout(() => {
-            setAlreadyAbsensi(res.data.alreadyAbsensi);
-          }, 500);
+          setAlreadyAbsensi(res.data.alreadyAbsensi);
+          setHariLibur(res.data.hariLibur);
 
-          setAbsensiData(initialAbsensiData);
+          if (!alreadyAbsensi && !hariLibur) {
+            setAbsensiData(initialAbsensiData);
+          }
         }
       } catch (error) {
         responseError(error);
@@ -48,6 +52,14 @@ const AbsenHarianPage = () => {
 
     getData();
   }, [userData, trigger]);
+
+  useEffect(() => {
+    const timeOut = setTimeout(() => {
+      setDelay(true);
+    }, 300);
+
+    return () => clearTimeout(timeOut);
+  }, [hariLibur, alreadyAbsensi]);
 
   const groupAlpahabet = (data) => {
     return data?.reduce((group, item) => {
@@ -77,10 +89,10 @@ const AbsenHarianPage = () => {
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
+    setLoading2(true);
     try {
       const res = await axios.post(
-        HOST + `/api/absen/${userData.waliKelas}/absensi`,
+        HOST + `/api/absen/${userData.waliKelas._id}/absensi`,
         { absensiData, guruId: userData._id },
         { withCredentials: true }
       );
@@ -93,7 +105,7 @@ const AbsenHarianPage = () => {
     } catch (error) {
       responseError(error);
     } finally {
-      setLoading(false);
+      setLoading2(false);
     }
   };
 
@@ -114,7 +126,7 @@ const AbsenHarianPage = () => {
           <>
             <h2 className="my-2 font-bold text-neutral">A</h2>
             <div className="grid grid-cols-4 sm:grid-cols-12 xl:grid-cols-10 gap-4 md:gap-6">
-              {[...Array(10)].fill().map((_, i) => (
+              {[...Array(15)].fill().map((_, i) => (
                 <div
                   key={i}
                   className="col-span-full xs:col-span-2 sm:col-span-4 min-h-52 p-4 bg-white/50 duration-700 animate-pulse border border-gray-300 rounded-md md:col-span-3 xl:col-span-2 flex flex-col items-center flex-between"
@@ -156,7 +168,7 @@ const AbsenHarianPage = () => {
                             absensiData.find((item) => item._id === siswa._id)
                               ?.status === "hadir"
                               ? `${
-                                  alreadyAbsensi
+                                  alreadyAbsensi || hariLibur
                                     ? "bg-gray-100"
                                     : "bg-green-500 text-white"
                                 }  `
@@ -254,23 +266,45 @@ const AbsenHarianPage = () => {
           ))
         )}
         {alreadyAbsensi && (
-          <div
-            className={`${
-              alreadyAbsensi ? "scale-100 opacity-100" : "scale-75 opacity-0"
-            } absolute bg-black/5 rounded-md inset-0 w-full h-full  overflow-hidden flex  justify-between flex-col items-center p-10 transition-all duration-500`}
-          >
-            {[...Array(3)].fill().map((_, i) => (
-              <div
-                key={i}
-                className={`${i === 0 && "mr-auto"} ${
-                  i === 2 && "ml-auto"
-                } border-t-4 rounded-lg -rotate-12 border-blue-600 border-b-4 p-4`}
-              >
-                <p className="font-bold text-blue-600">
-                  Sudah Absensi Hari Ini
-                </p>
-              </div>
-            ))}
+          <div className="absolute w-full h-full transition-all  inset-0">
+            <div
+              className={`${
+                delay ? "scale-100 opacity-100" : "scale-90 opacity-0"
+              } absolute bg-black/5 rounded-md inset-0 w-full h-full  overflow-hidden flex  justify-between flex-col items-center p-10 transition-all duration-300`}
+            >
+              {[...Array(3)].fill().map((_, i) => (
+                <div
+                  key={i}
+                  className={`${i === 0 && "mr-auto"} ${
+                    i === 2 && "ml-auto"
+                  } border-t-4 rounded-lg -rotate-12 border-blue-600 border-b-4 p-4`}
+                >
+                  <p className="font-bold text-blue-600">
+                    Sudah Absensi Hari Ini
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {hariLibur && (
+          <div className="absolute w-full h-full transition-all  inset-0">
+            <div
+              className={`${
+                delay ? "scale-100 opacity-100" : "scale-90 opacity-0"
+              } absolute bg-black/5 rounded-md inset-0 w-full h-full  overflow-hidden flex  justify-between flex-col items-center p-10 transition-all duration-500`}
+            >
+              {[...Array(3)].fill().map((_, i) => (
+                <div
+                  key={i}
+                  className={`${i === 0 && "mr-auto"} ${
+                    i === 2 && "ml-auto"
+                  } border-t-4 rounded-lg -rotate-12 border-blue-600 border-b-4 p-4`}
+                >
+                  <p className="font-bold text-blue-600">Hari Libur Sekolah</p>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -279,7 +313,7 @@ const AbsenHarianPage = () => {
         <button
           onClick={handleSubmit}
           className="w-full sm:max-w-[200px] h-10 disabled:cursor-not-allowed disabled:bg-indigo-400 bg-neutral hover:bg-indigo-700 text-white mt-8 text-sm rounded-md"
-          disabled={loading || alreadyAbsensi}
+          disabled={loading2 || alreadyAbsensi || hariLibur}
         >
           Simpan
         </button>
