@@ -212,8 +212,10 @@ const ListSidebar = () => {
           {list.dropDown && (
             <div
               className={`${
-                activeDropDown === list.id ? "max-h-[90px] my-1" : "max-h-0"
-              }   transition-all duration-300 ease-in-out overflow-hidden`}
+                activeDropDown === list.id
+                  ? "max-h-[90px] my-1 "
+                  : "max-h-0 opacity-0"
+              }   transition-all duration-300 ease-in-out overflow-hidden  rounded-xl w-fit `}
               onClick={(e) => e.stopPropagation()}
             >
               {list.dropDown.map((drop) => (
