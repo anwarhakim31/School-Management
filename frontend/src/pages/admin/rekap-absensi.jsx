@@ -23,7 +23,8 @@ const RekapAbsensiPage = () => {
   const [month, setMonth] = useState(currentMonth);
   const [countDay, setCountDay] = useState(0);
   const [rekapAbsen, setRekapAbsen] = useState([]);
-  const [kelas, setkelas] = useState({});
+  const [kelas, setkelas] = useState(0);
+  const [namaKelas, setNamaKelas] = useState("");
   const componentRef = useRef(null);
 
   //   useEffect(() => {
@@ -59,11 +60,44 @@ const RekapAbsensiPage = () => {
     setMonth(value);
   };
 
+  const handleToggleMenu = () => {
+    setIsActive(!isActive);
+  };
+
+  const onSelectKelas = (value) => {
+    setkelas(value);
+  };
+
   return (
     <section className="px-6 py-4 mb-4 ">
       <div className="flex-between bg-white p-4 border shadow-md rounded-md">
-        <div className="relative block ">
-          <button className="flex-center w-8 h-8 rounded-full border p-1 bg-gray-100 hover:bg-gray-200 border-neutral">
+        <div className="hidden md:flex gap-4">
+          <div className="flex justify-start flex-wrap md:flex-nowrap   gap-4">
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-semibold text-gray-700">Tahun</p>
+              <YearDropdown onSelectYear={handleSelectYeay} />
+            </div>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-semibold text-gray-700">Bulan</p>
+              <MonthDropdown onSelectMonth={handleSelectMonth} />
+            </div>
+          </div>
+          <div className="flex justify-start flex-wrap md:flex-nowrap  gap-4">
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-semibold text-gray-700">Kelas</p>
+              <KelasDropdown onSelectKelas={onSelectKelas} />
+            </div>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-semibold text-gray-700">Bulan</p>
+              <MonthDropdown onSelectMonth={handleSelectMonth} />
+            </div>
+          </div>
+        </div>
+        <div className="flex-center md:hidden relative block ">
+          <button
+            onClick={handleToggleMenu}
+            className="flex-center  w-8 h-8 rounded-full border p-1 bg-gray-100 hover:bg-gray-200 border-neutral"
+          >
             <EllipsisVerticalIcon
               width={15}
               height={15}
@@ -87,7 +121,7 @@ const RekapAbsensiPage = () => {
                 <div className="flex justify-start flex-wrap  gap-4">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-semibold text-gray-700">Kelas</p>
-                    <KelasDropdown onSelectYear={handleSelectYeay} />
+                    <KelasDropdown onSelectKelas={onSelectKelas} />
                   </div>
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-semibold text-gray-700">Bulan</p>

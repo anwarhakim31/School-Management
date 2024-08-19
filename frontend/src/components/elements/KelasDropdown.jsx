@@ -6,7 +6,8 @@ import React, { useEffect, useRef, useState } from "react";
 const KelasDropdown = ({ onSelectKelas }) => {
   const dropdownRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
-  const [dataKelas, setDataKelas] = useState();
+  const [dataKelas, setDataKelas] = useState([]);
+  const [kelas, setKelas] = useState([]);
   const [selectedKelas, setSelectedKelas] = useState(0);
 
   useEffect(() => {
@@ -17,7 +18,7 @@ const KelasDropdown = ({ onSelectKelas }) => {
         });
 
         if (res.status === 200) {
-          setDataKelas(res.status.kelas);
+          setDataKelas(res.data.kelas);
         }
       } catch (error) {
         reportError(error);
@@ -25,11 +26,32 @@ const KelasDropdown = ({ onSelectKelas }) => {
     };
 
     getKelas();
-  });
+  }, []);
 
-  console.log(dataKelas);
+  useEffect(() => {
+    if (dataKelas) {
+      const seen = {};
+      const uniqueKleas = [];
 
-  const handleInputClick = () => {};
+      for (const kelass of dataKelas) {
+        if (!seen[kelass.kelas]) {
+          seen[kelass.kelas] = true;
+          uniqueKleas.push(kelass.kelas);
+        }
+      }
+      setKelas(uniqueKleas);
+    }
+  }, [dataKelas]);
+
+  const handleInputClick = () => {
+    setIsOpen((prev) => setIsOpen(!prev));
+  };
+
+  const handleSelectKelas = (value) => {
+    setSelectedKelas(value);
+    onSelectKelas(value);
+    handleInputClick();
+  };
 
   return (
     <div ref={dropdownRef} className="relative w-28">
@@ -46,21 +68,22 @@ const KelasDropdown = ({ onSelectKelas }) => {
           <ChevronDown width={15} height={15} />
         )}
       </div>
-      {/* {isOpen && (
+      {isOpen && (
         <div className="absolute mt-1 w-full bg-white border z-50 border-gray-400 rounded shadow">
           <ul className="max-h-40 overflow-y-auto">
-            {Array.from({ length: 12 }, (_, index) => (
-              <li
-                key={index}
-                onClick={() => handleMonthSelect(index)}
-                className="px-4 py-2 text-xs hover:bg-gray-200 cursor-pointer"
-              >
-                {getMonthName(index)}
-              </li>
-            ))}
+            {kelas &&
+              kelas.map((kel) => (
+                <li
+                  key={kel}
+                  onClick={() => handleSelectKelas(kel)}
+                  className="px-4 py-2 text-xs hover:bg-gray-200 cursor-pointer"
+                >
+                  {kel}
+                </li>
+              ))}
           </ul>
         </div>
-      )} */}
+      )}
     </div>
   );
 };
