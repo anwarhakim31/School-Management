@@ -59,7 +59,7 @@ export const editMapel = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: "Berhasil mengedit kelas.",
+      message: "Berhasil mengubah data mata pelajaran.",
     });
   } catch (error) {
     next(error);

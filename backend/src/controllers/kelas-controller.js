@@ -154,7 +154,7 @@ export const updateKelas = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: "Kelas berhasil di ubah.",
+      message: "Berhasil mengubah data kelas.",
     });
   } catch (error) {
     console.log(error);

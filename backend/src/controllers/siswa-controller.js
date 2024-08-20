@@ -256,7 +256,9 @@ export const editSiswa = async (req, res, next) => {
       await newKelas.save();
     }
 
-    res.status(200).json({ success: true, message: "Berhasil edit siswa" });
+    res
+      .status(200)
+      .json({ success: true, message: "Berhasil mengubah data siswa" });
   } catch (error) {
     console.log(error);
     next(error);

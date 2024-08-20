@@ -59,6 +59,8 @@ const NamaKelasDropdown = ({ onSelectIdKelas, kelas }) => {
     return () => document.removeEventListener("mousedown", handleclickOutSide);
   }, [isOpen]);
 
+  console.log(kelas);
+
   return (
     <div ref={dropdownRef} className="relative w-28">
       <input
@@ -85,16 +87,15 @@ const NamaKelasDropdown = ({ onSelectIdKelas, kelas }) => {
       {isOpen && kelas !== 0 && (
         <div className="absolute mt-1 max-w-28 overflow-hidden  w-full bg-white border z-50 border-gray-400 rounded shadow">
           <ul className="max-h-40 overflow-y-auto">
-            {kelas &&
-              namaKelas.map((kel) => (
-                <li
-                  key={kel._id}
-                  onClick={() => handleSelectKelas(kel.nama, kel._id)}
-                  className="px-4 py-2 text-center text-xs hover:bg-gray-200 cursor-pointer"
-                >
-                  {kel.nama}
-                </li>
-              ))}
+            {namaKelas.map((kel) => (
+              <li
+                key={kel._id}
+                onClick={() => handleSelectKelas(kel.nama, kel._id)}
+                className="px-4 py-2 text-center text-xs hover:bg-gray-200 cursor-pointer"
+              >
+                {kel.nama}
+              </li>
+            ))}
           </ul>
         </div>
       )}

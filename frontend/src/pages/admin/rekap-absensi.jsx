@@ -30,6 +30,10 @@ const RekapAbsensiPage = () => {
 
   useEffect(() => {
     const getData = async () => {
+      if (kelas) {
+        setLoading(true);
+      }
+
       try {
         const res = await axios.get(
           HOST + "/api/absen/" + idKelas + "/rekap-absen",
@@ -42,7 +46,6 @@ const RekapAbsensiPage = () => {
         if (res.status === 200) {
           setCountDay(res.data.jumlahHari);
           setRekapAbsen(res.data.rekapAbsensi);
-          setkelas(res.data.kelas);
         }
       } catch (error) {
         responseError(error);
@@ -57,6 +60,10 @@ const RekapAbsensiPage = () => {
       getData();
     }
   }, [year, month, idKelas]);
+
+  useEffect(() => {
+    setLoading(true);
+  }, [kelas]);
 
   const handleSelectYeay = (value) => {
     setYear(value);
@@ -80,76 +87,90 @@ const RekapAbsensiPage = () => {
 
   return (
     <section className="px-6 py-4 mb-4 ">
-      <div className="flex-between bg-white p-4 border shadow-md rounded-md">
-        <div className="hidden md:flex gap-4">
-          <div className="flex justify-start flex-wrap md:flex-nowrap   gap-4">
-            <div className="flex items-center gap-2">
-              <p className="text-sm font-semibold text-gray-700">Tahun</p>
-              <YearDropdown onSelectYear={handleSelectYeay} />
+      <div className=" bg-white p-4 border shadow-md rounded-md">
+        <h3 className="text-sm font-semibold mb-4 text-neutral">
+          Pilih Rekap absensi siswa pada setiap kelas.
+        </h3>
+        <div className="flex-between">
+          <div className="hidden md:flex gap-4">
+            <div className="flex justify-start flex-wrap md:flex-nowrap   gap-4">
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-semibold text-gray-700">Tahun</p>
+                <YearDropdown onSelectYear={handleSelectYeay} />
+              </div>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-semibold text-gray-700">Bulan</p>
+                <MonthDropdown onSelectMonth={handleSelectMonth} />
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <p className="text-sm font-semibold text-gray-700">Bulan</p>
-              <MonthDropdown onSelectMonth={handleSelectMonth} />
+            <div className="flex justify-start flex-wrap md:flex-nowrap  gap-4">
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-semibold text-gray-700">Kelas</p>
+                <KelasDropdown onSelectKelas={onSelectKelas} />
+              </div>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-semibold text-gray-700">
+                  Nama Kelas
+                </p>
+                <NamaKelasDropdown
+                  onSelectIdKelas={onSelectIdKelas}
+                  kelas={kelas}
+                />
+              </div>
             </div>
           </div>
-          <div className="flex justify-start flex-wrap md:flex-nowrap  gap-4">
-            <div className="flex items-center gap-2">
-              <p className="text-sm font-semibold text-gray-700">Kelas</p>
-              <KelasDropdown onSelectKelas={onSelectKelas} />
-            </div>
-            <div className="flex items-center gap-2">
-              <p className="text-sm font-semibold text-gray-700">Nama Kelas</p>
-              <NamaKelasDropdown
-                onSelectIdKelas={onSelectIdKelas}
-                kelas={kelas}
+          <div className="flex-center md:hidden relative block ">
+            <button
+              onClick={handleToggleMenu}
+              className="flex-center  w-8 h-8 rounded-full border p-1 bg-gray-100 hover:bg-gray-200 border-neutral"
+            >
+              <EllipsisVerticalIcon
+                width={15}
+                height={15}
+                className="text-gray-800"
               />
-            </div>
-          </div>
-        </div>
-        <div className="flex-center md:hidden relative block ">
-          <button
-            onClick={handleToggleMenu}
-            className="flex-center  w-8 h-8 rounded-full border p-1 bg-gray-100 hover:bg-gray-200 border-neutral"
-          >
-            <EllipsisVerticalIcon
-              width={15}
-              height={15}
-              className="text-gray-800"
-            />
-          </button>
+            </button>
 
-          {isActive && (
-            <div className="absolute bg-white z-10 p-4 rounded-md shadow-md border mt-1">
-              <div className="grid gap-4">
-                <div className="flex justify-start flex-wrap   gap-4">
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-semibold text-gray-700">Tahun</p>
-                    <YearDropdown onSelectYear={handleSelectYeay} />
+            {isActive && (
+              <div className="absolute bg-white z-10 p-4 rounded-md shadow-md border mt-1">
+                <div className="grid gap-4">
+                  <div className="flex justify-start flex-wrap   gap-4">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-semibold text-gray-700">
+                        Tahun
+                      </p>
+                      <YearDropdown onSelectYear={handleSelectYeay} />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-semibold text-gray-700">
+                        Bulan
+                      </p>
+                      <MonthDropdown onSelectMonth={handleSelectMonth} />
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-semibold text-gray-700">Bulan</p>
-                    <MonthDropdown onSelectMonth={handleSelectMonth} />
-                  </div>
-                </div>
-                <div className="flex justify-start flex-wrap  gap-4">
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-semibold text-gray-700">Kelas</p>
-                    <KelasDropdown onSelectKelas={onSelectKelas} />
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-semibold text-gray-700">Nama</p>
-                    <NamaKelasDropdown
-                      onSelectIdKelas={onSelectIdKelas}
-                      kelas={kelas}
-                    />
+                  <div className="flex justify-start flex-wrap  gap-4">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-semibold text-gray-700">
+                        Kelas
+                      </p>
+                      <KelasDropdown onSelectKelas={onSelectKelas} />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-semibold text-gray-700">
+                        Nama
+                      </p>
+                      <NamaKelasDropdown
+                        onSelectIdKelas={onSelectIdKelas}
+                        kelas={kelas}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
-        {/* <div className="flex items-center justify-end flex-wrap gap-4">
+          {/* <div className="flex items-center justify-end flex-wrap gap-4">
           <button
             disabled={loading || rekapAbsen.length === 0}
             onClick={() =>
@@ -181,10 +202,11 @@ const RekapAbsensiPage = () => {
             content={() => componentRef.current}
           />
         </div> */}
+        </div>
       </div>
-      <div className="relative border broder-gray-300 rounded-md bg-white mt-4 overflow-hidden">
+      <div className="relative border broder-gray-300 rounded-md bg-white mt-10 overflow-hidden">
         {loading ? (
-          <div className="min-h-[400px] bg-backup  animate-pulse  flex-center">
+          <div className="min-h-[calc(80vh-140px)] bg-backup  animate-pulse  flex-center">
             <div>
               <div className="border-4 border-gray-200 border-t-neutral rounded-full w-6 h-6 animate-spin"></div>
             </div>

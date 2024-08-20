@@ -23,9 +23,10 @@ const TableAbsen = ({
   kelas,
   month,
 }) => {
+  console.log(rekapAbsen);
   return (
     <>
-      <div className="w-full min-h-[400px] overflow-auto rounded-md">
+      <div className="w-full min-h-[calc(80vh-140px)] overflow-auto rounded-md">
         <table className="w-full rounded-md ">
           <thead className="uppercase text-xs bg-neutral text-white">
             <tr>
@@ -60,7 +61,19 @@ const TableAbsen = ({
             </tr>
           </thead>
           <tbody>
-            {rekapAbsen &&
+            {rekapAbsen.length === 0 && (
+              <tr>
+                <td
+                  colSpan={`${countDay + 4}`}
+                  className="px-2 py-4 border-gray-300 text-xs font-medium text-gray-900 h-[350px] whitespace-nowrap"
+                >
+                  <p className="flex-center w-full text-sm">
+                    Kelas Tidak Memiliki Siswa.
+                  </p>
+                </td>
+              </tr>
+            )}
+            {rekapAbsen.length > 0 &&
               rekapAbsen.map((siswa, i) => (
                 <tr key={i} className="hover:bg-gray-100">
                   <td
