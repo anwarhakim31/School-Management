@@ -3,12 +3,12 @@ import axios from "axios";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
-const KelasDropdown = ({ onSelectKelas }) => {
+const NamaKelasDropdown = ({ onSelectIdKelas, kelas }) => {
   const dropdownRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
   const [dataKelas, setDataKelas] = useState([]);
-  const [kelas, setKelas] = useState([]);
-  const [selectedKelas, setSelectedKelas] = useState(0);
+  const [namaKelas, setNamaKelas] = useState([]);
+  const [selectedNamaKelas, setSelectedNamaKelas] = useState("");
 
   useEffect(() => {
     const getKelas = async () => {
@@ -29,28 +29,21 @@ const KelasDropdown = ({ onSelectKelas }) => {
   }, []);
 
   useEffect(() => {
-    if (dataKelas) {
-      const seen = {};
-      const uniqueKleas = [];
+    if (kelas) {
+      const filter = dataKelas.filter((kel) => kel.kelas === kelas);
 
-      for (const kelass of dataKelas) {
-        if (!seen[kelass.kelas]) {
-          seen[kelass.kelas] = true;
-          uniqueKleas.push(kelass.kelas);
-        }
-      }
-      setKelas(uniqueKleas);
+      setNamaKelas(filter);
     }
-  }, [dataKelas]);
+  }, [kelas]);
 
   const handleInputClick = (event) => {
     event.stopPropagation();
     setIsOpen(!isOpen);
   };
 
-  const handleSelectKelas = (value) => {
-    setSelectedKelas(value);
-    onSelectKelas(value);
+  const handleSelectKelas = (value, id) => {
+    setSelectedNamaKelas(value);
+    onSelectIdKelas(id);
     setIsOpen(false);
   };
 
@@ -71,7 +64,15 @@ const KelasDropdown = ({ onSelectKelas }) => {
       <input
         className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
         readOnly
-        value={selectedKelas ? selectedKelas : "Pilih Kelas"}
+        disabled={kelas === 0}
+        value={
+          kelas === 0
+            ? "Pilih Kelas terlebih Dulu"
+            : !selectedNamaKelas ||
+              namaKelas.some((kel) => kel.nama !== selectedNamaKelas)
+            ? "Pilih Nama Kelas"
+            : selectedNamaKelas
+        }
         onClick={handleInputClick}
       />
       <div className="absolute pointer-events-none right-2 top-2.5">
@@ -81,17 +82,17 @@ const KelasDropdown = ({ onSelectKelas }) => {
           <ChevronDown width={15} height={15} />
         )}
       </div>
-      {isOpen && (
-        <div className="absolute mt-1   w-full bg-white border z-50 border-gray-400 rounded shadow">
+      {isOpen && kelas !== 0 && (
+        <div className="absolute mt-1 max-w-28 overflow-hidden  w-full bg-white border z-50 border-gray-400 rounded shadow">
           <ul className="max-h-40 overflow-y-auto">
             {kelas &&
-              kelas.map((kel) => (
+              namaKelas.map((kel) => (
                 <li
-                  key={kel}
-                  onClick={() => handleSelectKelas(kel)}
+                  key={kel._id}
+                  onClick={() => handleSelectKelas(kel.nama, kel._id)}
                   className="px-4 py-2 text-center text-xs hover:bg-gray-200 cursor-pointer"
                 >
-                  {kel}
+                  {kel.nama}
                 </li>
               ))}
           </ul>
@@ -101,4 +102,4 @@ const KelasDropdown = ({ onSelectKelas }) => {
   );
 };
 
-export default KelasDropdown;
+export default NamaKelasDropdown;

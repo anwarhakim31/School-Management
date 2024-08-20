@@ -13,6 +13,7 @@ import ExcelJS from "exceljs";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
 import PrintComponent from "@/components/fragments/guru/rekap/PrintModal";
 import KelasDropdown from "@/components/elements/KelasDropdown";
+import NamaKelasDropdown from "@/components/elements/NamaKelasDropdown";
 
 const RekapAbsensiPage = () => {
   const currentYear = new Date().getFullYear();
@@ -24,33 +25,38 @@ const RekapAbsensiPage = () => {
   const [countDay, setCountDay] = useState(0);
   const [rekapAbsen, setRekapAbsen] = useState([]);
   const [kelas, setkelas] = useState(0);
-  const [namaKelas, setNamaKelas] = useState("");
+  const [idKelas, setIdKelas] = useState("");
   const componentRef = useRef(null);
 
-  //   useEffect(() => {
-  //     const getData = async () => {
-  //       try {
-  //         const res = await axios.get(
-  //           HOST + "/api/absen/" + userData.waliKelas._id + "/rekap-absen",
-  //           { withCredentials: true, params: { month, year } }
-  //         );
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const res = await axios.get(
+          HOST + "/api/absen/" + idKelas + "/rekap-absen",
+          {
+            withCredentials: true,
+            params: { month, year },
+          }
+        );
 
-  //         if (res.status === 200) {
-  //           setCountDay(res.data.jumlahHari);
-  //           setRekapAbsen(res.data.rekapAbsensi);
-  //           setkelas(res.data.kelas);
-  //         }
-  //       } catch (error) {
-  //         responseError(error);
-  //       } finally {
-  //         setTimeout(() => {
-  //           setLoading(false);
-  //         }, 50);
-  //       }
-  //     };
+        if (res.status === 200) {
+          setCountDay(res.data.jumlahHari);
+          setRekapAbsen(res.data.rekapAbsensi);
+          setkelas(res.data.kelas);
+        }
+      } catch (error) {
+        responseError(error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
+      }
+    };
 
-  //     getData();
-  //   }, [year, month]);
+    if (idKelas) {
+      getData();
+    }
+  }, [year, month, idKelas]);
 
   const handleSelectYeay = (value) => {
     setYear(value);
@@ -66,6 +72,10 @@ const RekapAbsensiPage = () => {
 
   const onSelectKelas = (value) => {
     setkelas(value);
+  };
+
+  const onSelectIdKelas = (value) => {
+    setIdKelas(value);
   };
 
   return (
@@ -88,8 +98,11 @@ const RekapAbsensiPage = () => {
               <KelasDropdown onSelectKelas={onSelectKelas} />
             </div>
             <div className="flex items-center gap-2">
-              <p className="text-sm font-semibold text-gray-700">Bulan</p>
-              <MonthDropdown onSelectMonth={handleSelectMonth} />
+              <p className="text-sm font-semibold text-gray-700">Nama Kelas</p>
+              <NamaKelasDropdown
+                onSelectIdKelas={onSelectIdKelas}
+                kelas={kelas}
+              />
             </div>
           </div>
         </div>
@@ -124,8 +137,11 @@ const RekapAbsensiPage = () => {
                     <KelasDropdown onSelectKelas={onSelectKelas} />
                   </div>
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-semibold text-gray-700">Bulan</p>
-                    <MonthDropdown onSelectMonth={handleSelectMonth} />
+                    <p className="text-sm font-semibold text-gray-700">Nama</p>
+                    <NamaKelasDropdown
+                      onSelectIdKelas={onSelectIdKelas}
+                      kelas={kelas}
+                    />
                   </div>
                 </div>
               </div>
