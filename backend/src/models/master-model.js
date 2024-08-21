@@ -30,7 +30,6 @@ const MasterSchema = new mongoose.Schema({
   tahunAjaran: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "TahunAjaran",
-    required: true,
   },
 });
 

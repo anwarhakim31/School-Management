@@ -5,6 +5,7 @@ import Mapel from "../models/mapel-model.js";
 import Total from "../models/total-model.js";
 import { color, getColor } from "../data/color.js";
 import Master from "../models/master-model.js";
+import ResponseError from "../error/response-error.js";
 
 export const getMaster = async (req, res, next) => {
   try {
@@ -78,11 +79,11 @@ export const getMaster = async (req, res, next) => {
   }
 };
 
-export const getSemester = async (req, res, next) => {
+export const getAkademik = async (req, res, next) => {
   try {
-    const semester = await Master.findOne();
+    const akademik = await Master.findOne();
 
-    if (!semester) {
+    if (!akademik) {
       const masterSemester = new Master({
         semester: [
           {
@@ -96,11 +97,51 @@ export const getSemester = async (req, res, next) => {
         ],
       });
       await masterSemester.save();
+      res.status(200).json({
+        success: true,
+        message: "Berhasil mengambil data akademik.",
+        akademik: masterSemester,
+      });
     }
 
     res.status(200).json({
       success: true,
-      message: "Berhasil mengambil data Umum.",
+      message: "Berhasil mengambil data akademik.",
+      akademik,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const toggleSemester = async (req, res, next) => {
+  try {
+    const { keterangan } = req.body;
+
+    const master = await Master.findOne();
+
+    if (!master) {
+      throw new ResponseError(404, "Data master tidak ditemukan.");
+    }
+
+    const selectedSemester = master.semester.find(
+      (sem) => sem.keterangan === keterangan
+    );
+    const notSelectSemester = master.semester.find(
+      (sem) => sem.keterangan !== keterangan
+    );
+
+    if (selectedSemester && selectedSemester.status === true) {
+      selectedSemester.status = false;
+      notSelectSemester.status = true;
+    } else {
+      selectedSemester.status = true;
+      notSelectSemester.status = false;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Berhasil mengubah status semester`,
     });
   } catch (error) {
     next(error);

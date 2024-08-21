@@ -24,6 +24,7 @@ import TableSemester from "@/components/fragments/admin/master-data/TableSemeste
 const MasterDataPage = () => {
   const [dataAjaran, setDataAjaran] = useState([]);
   const [dataLibur, setDataLibur] = useState([]);
+  const [dataAkademik, setDataAkademik] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isAddajaran, setIsAddAjaran] = useState(false);
   const [isAddNasional, setIsAddNasional] = useState(false);
@@ -69,8 +70,28 @@ const MasterDataPage = () => {
       }
     };
 
+    const getAkademik = async () => {
+      try {
+        const res = await axios.get(HOST + "/api/master/get-akademik", {
+          withCredentials: true,
+        });
+
+        if (res.status === 200) {
+          setDataAkademik(res.data.akademik);
+          console.log(res.data);
+        }
+      } catch (error) {
+        responseError(error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
+      }
+    };
+
     getLibur();
     getAjaran();
+    getAkademik();
   }, [isAddajaran, isDeleteajaran, trigger, isAddNasional, isDeleteNasional]);
 
   const handleAddAjaran = async () => {
@@ -148,7 +169,10 @@ const MasterDataPage = () => {
               </div>
             </div>
           ) : (
-            <TableSemester libur={dataLibur?.perpekan} loading={loading} />
+            <TableSemester
+              semester={dataAkademik?.semester}
+              loading={loading}
+            />
           )}
         </div>
         <div className="w-full flex-between  py-4 px-2 rounded-md   gap-6 border bg-white">
