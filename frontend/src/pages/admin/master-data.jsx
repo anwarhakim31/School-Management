@@ -151,8 +151,6 @@ const MasterDataPage = () => {
     setIsDeleteNasional(!isDeleteNasional);
   };
 
-  console.log(dataAkademik);
-
   return (
     <section className="px-6 py-8  ">
       <div className="w-full">
@@ -271,7 +269,7 @@ const MasterDataPage = () => {
             Sistem Libur Sekolah
           </h1>
         </div>
-        <div className="w-full flex-between  pt-5 pb-4 px-2    gap-6 border bg-white">
+        <div className="w-full flex-between  pt-8 pb-4 px-2    gap-6 border bg-white">
           <h1 className=" font-semibold text-xs  text-neutral w-36 text-center py-1 rounded-full border bg-gray-100 border-gray-300">
             Libur Perpekan
           </h1>

@@ -104,6 +104,20 @@ const Navlist = [
   },
   {
     id: 7,
+    nama: "Jadwal",
+    path: "/admin/data-jadwal",
+    icon: (
+      <AcaraIcon
+        height={20}
+        width={20}
+        className={
+          "text-white group-hover:text-neutral duration-300 transition-all"
+        }
+      />
+    ),
+  },
+  {
+    id: 8,
     nama: "Rekap Data",
     icon: (
       <NotebookTabs
@@ -114,6 +128,7 @@ const Navlist = [
         }
       />
     ),
+
     dropDown: [
       {
         id: 1,
@@ -144,20 +159,6 @@ const Navlist = [
       },
     ],
   },
-  // {
-  //   id: 7,
-  //   nama: "Acara",
-  //   path: "/admin/data-acara",
-  //   icon: (
-  //     <AcaraIcon
-  //       height={20}
-  //       width={20}
-  //       className={
-  //         "text-white group-hover:text-neutral duration-300 transition-all"
-  //       }
-  //     />
-  //   ),
-  // },
 ];
 
 const ListSidebar = () => {
