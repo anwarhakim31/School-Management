@@ -19,6 +19,7 @@ import TableMingguan from "@/components/fragments/admin/master-data/TableMinggua
 import TabelNasionsal from "@/components/fragments/admin/master-data/TabelNasionsal";
 import AddModalNasional from "@/components/fragments/admin/master-data/AddModalNasional";
 import DeleteModalNasional from "@/components/fragments/admin/master-data/DeleteModalNasional";
+import TableSemester from "@/components/fragments/admin/master-data/TableSemester";
 
 const MasterDataPage = () => {
   const [dataAjaran, setDataAjaran] = useState([]);
@@ -131,9 +132,28 @@ const MasterDataPage = () => {
   return (
     <section className="px-6 py-8  ">
       <div className="w-full">
-        <div className="w-full flex-between  py-4 px-2 rounded-md mt-12  gap-6 border bg-white">
-          <h1 className=" font-semibold text-sm  text-neutral">
-            Data Tahun Ajaran
+        <div className="w-full   py-4 px-2 rounded-md mt-12 gap-6 border border-b-0 bg-white">
+          <h1 className="font-bold text-sm text-gray-800 ">Sistem Akademik</h1>
+        </div>
+        <div className="w-full flex-between  pt-5 pb-4 px-2    gap-6 border bg-white">
+          <h1 className=" font-semibold text-sm  text-neutral w-36 text-center py-1 rounded-full border bg-gray-100 border-gray-300">
+            Semester
+          </h1>
+        </div>
+        <div className="relative bg-white w-full   border  overflow-hidden  rounded-md">
+          {loading ? (
+            <div className="block w-full relative bg-gray-200 animate-pulse shadow-md pb-[3.5rem]">
+              <div className="w-full flex-center min-h-[231px] overflow-x-auto rounded-md">
+                <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
+              </div>
+            </div>
+          ) : (
+            <TableSemester libur={dataLibur?.perpekan} loading={loading} />
+          )}
+        </div>
+        <div className="w-full flex-between  py-4 px-2 rounded-md   gap-6 border bg-white">
+          <h1 className=" font-semibold text-sm  text-neutral w-36 text-center py-1 rounded-full border bg-gray-100 border-gray-300">
+            Tahun Ajaran
           </h1>
           <div className="flex-center ml-auto gap-2">
             {isAddajaran && (
@@ -201,7 +221,7 @@ const MasterDataPage = () => {
       <div className="w-full mt-8">
         <div className="w-full   py-4 px-2 rounded-md  gap-6 border border-b-0 bg-white">
           <h1 className="font-bold text-sm text-gray-800 ">
-            Data Libur Sekolah
+            Sistem Libur Sekolah
           </h1>
         </div>
         <div className="w-full flex-between  pt-5 pb-4 px-2    gap-6 border bg-white">

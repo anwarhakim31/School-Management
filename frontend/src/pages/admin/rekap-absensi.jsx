@@ -16,6 +16,7 @@ import KelasDropdown from "@/components/elements/KelasDropdown";
 import NamaKelasDropdown from "@/components/elements/NamaKelasDropdown";
 
 const RekapAbsensiPage = () => {
+  const menuRef = useRef();
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
   const [isActive, setIsActive] = useState(false);
@@ -26,6 +27,7 @@ const RekapAbsensiPage = () => {
   const [rekapAbsen, setRekapAbsen] = useState([]);
   const [kelas, setkelas] = useState(0);
   const [idKelas, setIdKelas] = useState("");
+  const [detailKelas, setDetailKelas] = useState({});
   const componentRef = useRef(null);
 
   useEffect(() => {
@@ -46,6 +48,7 @@ const RekapAbsensiPage = () => {
         if (res.status === 200) {
           setCountDay(res.data.jumlahHari);
           setRekapAbsen(res.data.rekapAbsensi);
+          setDetailKelas(res.data.kelas);
         }
       } catch (error) {
         responseError(error);
@@ -65,6 +68,18 @@ const RekapAbsensiPage = () => {
     setLoading(true);
   }, [kelas]);
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setIsActive(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isActive]);
+
   const handleSelectYeay = (value) => {
     setYear(value);
   };
@@ -73,7 +88,8 @@ const RekapAbsensiPage = () => {
     setMonth(value);
   };
 
-  const handleToggleMenu = () => {
+  const handleToggleMenu = (e) => {
+    e.stopPropagation();
     setIsActive(!isActive);
   };
 
@@ -119,7 +135,7 @@ const RekapAbsensiPage = () => {
               </div>
             </div>
           </div>
-          <div className="flex-center md:hidden relative block ">
+          <div ref={menuRef} className="flex-center md:hidden relative block ">
             <button
               onClick={handleToggleMenu}
               className="flex-center  w-8 h-8 rounded-full border p-1 bg-gray-100 hover:bg-gray-200 border-neutral"
@@ -170,43 +186,43 @@ const RekapAbsensiPage = () => {
             )}
           </div>
 
-          {/* <div className="flex items-center justify-end flex-wrap gap-4">
-          <button
-            disabled={loading || rekapAbsen.length === 0}
-            onClick={() =>
-              exportToExcel(
-                countDay,
-                rekapAbsen,
-                kelas.grade,
-                kelas.nama,
-                month,
-                year
-              )
-            }
-            className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
-          >
-            <FileDownIcon height={15} width={15} />
-            Excel
-          </button>
+          <div className="flex items-center justify-end flex-wrap gap-4">
+            <button
+              disabled={loading || rekapAbsen.length === 0}
+              onClick={() =>
+                exportToExcel(
+                  countDay,
+                  rekapAbsen,
+                  detailKelas.grade,
+                  detailKelas.nama,
+                  month,
+                  year
+                )
+              }
+              className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
+            >
+              <FileDownIcon height={15} width={15} />
+              Excel
+            </button>
 
-          <ReactToPrint
-            trigger={() => (
-              <button
-                disabled={loading || rekapAbsen.length === 0}
-                className="rounded-md py-2  border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
-              >
-                <Printer height={15} width={15} />
-                Print
-              </button>
-            )}
-            content={() => componentRef.current}
-          />
-        </div> */}
+            <ReactToPrint
+              trigger={() => (
+                <button
+                  disabled={loading || rekapAbsen.length === 0}
+                  className="rounded-md py-2  border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
+                >
+                  <Printer height={15} width={15} />
+                  Print
+                </button>
+              )}
+              content={() => componentRef.current}
+            />
+          </div>
         </div>
       </div>
       <div className="relative border broder-gray-300 rounded-md bg-white mt-10 overflow-hidden">
         {loading ? (
-          <div className="min-h-[calc(80vh-140px)] bg-backup  animate-pulse  flex-center">
+          <div className="min-h-[calc(80vh-140px)] bg-backup border border-gray-400 rounded-md  animate-pulse  flex-center">
             <div>
               <div className="border-4 border-gray-200 border-t-neutral rounded-full w-6 h-6 animate-spin"></div>
             </div>
@@ -225,7 +241,7 @@ const RekapAbsensiPage = () => {
           ref={componentRef}
           rekapAbsen={rekapAbsen}
           countDay={countDay}
-          kelas={kelas}
+          kelas={detailKelas}
           month={month}
           year={year}
         />
@@ -270,7 +286,7 @@ const exportToExcel = async (
       year,
       month + 1,
       0
-    ).toLocaleString("default", { month: "long" })} ${year}`,
+    ).toLocaleString("id-ID", { month: "long" })} ${year}`,
   ];
   const headerRow = worksheet.addRow(header);
 

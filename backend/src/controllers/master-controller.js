@@ -1,10 +1,10 @@
-import TahunAjaran from "../models/tahunAjaran-model.js";
 import Siswa from "../models/siswa-model.js";
 import Kelas from "../models/kelas-model.js";
 import Guru from "../models/guru-model.js";
 import Mapel from "../models/mapel-model.js";
 import Total from "../models/total-model.js";
 import { color, getColor } from "../data/color.js";
+import Master from "../models/master-model.js";
 
 export const getMaster = async (req, res, next) => {
   try {
@@ -72,6 +72,35 @@ export const getMaster = async (req, res, next) => {
         siswaPerAjaran,
         kelasPerTotal,
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getSemester = async (req, res, next) => {
+  try {
+    const semester = await Master.findOne();
+
+    if (!semester) {
+      const masterSemester = new Master({
+        semester: [
+          {
+            keterangan: "semester 1",
+            status: true,
+          },
+          {
+            keterangan: "semester 2",
+            status: false,
+          },
+        ],
+      });
+      await masterSemester.save();
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengambil data Umum.",
     });
   } catch (error) {
     next(error);

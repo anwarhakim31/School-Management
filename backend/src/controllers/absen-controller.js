@@ -170,7 +170,7 @@ export const getRekapAbsensi = async (req, res, next) => {
       let hadirCount = 0;
       let sakitCount = 0;
       let izinCount = 0;
-      let alphaCount = 0; // Inisialisasi ke alpha untuk seluruh hari dalam sebulan
+      let alphaCount = 0;
 
       absenSiswa.forEach((absen) => {
         const tanggalAbsensi = new Date(absen.tanggal).getDate();

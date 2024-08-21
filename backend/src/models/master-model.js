@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const UmumSchema = new mongoose.Schema({
+const MasterSchema = new mongoose.Schema({
   startTime: {
     type: String,
     required: true,
@@ -11,12 +11,22 @@ const UmumSchema = new mongoose.Schema({
     required: true,
     default: "15:00",
   },
-  semester: {
-    type: String,
-    enum: ["ganjil", "genap"],
-    default: "ganjil",
-    required: true,
-  },
+  semester: [
+    {
+      keterangan: {
+        type: String,
+        enum: ["semester 1", "semester 2"],
+        required: true,
+      },
+      status: {
+        type: Boolean,
+        required: true,
+        default: function () {
+          return this.semester.length === 0;
+        },
+      },
+    },
+  ],
   tahunAjaran: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "TahunAjaran",
@@ -24,6 +34,17 @@ const UmumSchema = new mongoose.Schema({
   },
 });
 
-const Umum = mongoose.model("umum", UmumSchema);
+MasterSchema.pre("save", function (next) {
+  const activeSemesters = this.semester.filter((sem) => sem.status === true);
 
-export default Umum;
+  // Ensure only one semester is active
+  if (activeSemesters.length > 1) {
+    next(new Error("Only one semester can be active at a time."));
+  } else {
+    next();
+  }
+});
+
+const Master = mongoose.model("Master", MasterSchema);
+
+export default Master;

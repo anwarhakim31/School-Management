@@ -33,7 +33,7 @@ const PrintComponent = React.forwardRef(
                     scope="col"
                     className="py-4 border-b"
                   >
-                    ABSENSI KELAS {kelas.grade} {kelas.nama}{" "}
+                    ABSENSI KELAS {kelas?.grade} {kelas?.nama}{" "}
                     {new Date(year, month + 1, 0).toLocaleString("default", {
                       month: "long",
                     })}{" "}
