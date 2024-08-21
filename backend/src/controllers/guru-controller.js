@@ -67,7 +67,7 @@ export const getAllGuru = async (req, res, next) => {
     const search = req.query.search || "";
 
     const searchRegex = new RegExp(search.trim(), "i");
-    const { jenisKelamin, kelasNama } = req.query;
+    const { jenisKelamin, kelasNama, bidangStudi } = req.query;
 
     const filterQuery = {
       $or: [
@@ -82,6 +82,10 @@ export const getAllGuru = async (req, res, next) => {
 
     if (jenisKelamin) {
       filterQuery.jenisKelamin = jenisKelamin;
+    }
+
+    if (bidangStudi) {
+      filterQuery.bidangStudi = bidangStudi;
     }
 
     const guru = await Guru.find(filterQuery)

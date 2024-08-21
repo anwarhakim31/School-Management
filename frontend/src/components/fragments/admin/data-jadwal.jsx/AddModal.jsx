@@ -59,6 +59,10 @@ const AddModal = ({ onClose, kelas }) => {
     setValue("bidangStudi", value);
   };
 
+  const onSelectGuru = (value) => {
+    setValue("guru", value);
+  };
+
   return (
     <Modal onClose={onClose}>
       <div
@@ -101,7 +105,7 @@ const AddModal = ({ onClose, kelas }) => {
             <DropdownGuru
               htmlFor={"guru"}
               bidangStudi={bidangStudi}
-              //   onSelectMapel={onSelectMapel}
+              onSelectGuru={onSelectGuru}
               //   register={register}
             />
             <span className="text-xs h-4 text-neutral2 block">

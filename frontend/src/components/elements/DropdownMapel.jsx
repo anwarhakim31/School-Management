@@ -3,7 +3,7 @@ import responseError from "@/util/services";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 
-const DropdownMapel = ({ htmlFor, onSelectMapel, register }) => {
+const DropdownMapel = ({ onSelectMapel, register }) => {
   const mapelRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [dataMapel, setDataMapel] = useState([]);
@@ -32,7 +32,7 @@ const DropdownMapel = ({ htmlFor, onSelectMapel, register }) => {
   }, []);
 
   useEffect(() => {
-    const handleClickOutside = () => {
+    const handleClickOutside = (e) => {
       if (mapelRef.current && !mapelRef.current.contains(e.target)) {
         setIsOpen(false);
       }
@@ -43,9 +43,9 @@ const DropdownMapel = ({ htmlFor, onSelectMapel, register }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  const handleSelectMapel = (kode, nama, id) => {
+  const handleSelectMapel = (kode, nama) => {
     setSelectedMapel({ kode, nama });
-    onSelectMapel(id);
+    onSelectMapel(nama);
     setIsOpen(false);
   };
 
@@ -53,7 +53,6 @@ const DropdownMapel = ({ htmlFor, onSelectMapel, register }) => {
     <div ref={mapelRef} className="relative w-full">
       <input
         type="text"
-        id={htmlFor}
         value={
           !selectedMapel
             ? "Pilih bidang studi"
@@ -71,7 +70,7 @@ const DropdownMapel = ({ htmlFor, onSelectMapel, register }) => {
               dataMapel.map((mp) => (
                 <li
                   key={mp._id}
-                  onClick={() => handleSelectMapel(mp.kode, mp.nama, mp._id)}
+                  onClick={() => handleSelectMapel(mp.kode, mp.nama)}
                   className="px-4 py-2 grid grid-cols-6 text-xs hover:bg-gray-200 cursor-pointer"
                 >
                   <p className="">{mp.kode}</p>
