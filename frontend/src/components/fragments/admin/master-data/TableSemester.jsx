@@ -23,7 +23,7 @@ const TableSemester = ({ loading, semester }) => {
       );
 
       if (res.status === 200) {
-        toast.success("Berhasil mengaktifkan");
+        toast.success(res.data.message);
       }
     } catch (error) {
       responseError(error);
@@ -44,9 +44,7 @@ const TableSemester = ({ loading, semester }) => {
       <table className="text-center w-full text-gray-500 table-a">
         <thead className="text-xs uppercase text-white bg-neutral">
           <tr>
-            <th scope="col" className="px-2 py-4">
-              Keterangan
-            </th>
+            <th scope="col" className="px-2 py-4 opacity-0"></th>
             <th scope="col" className="px-3 py-4">
               Status
             </th>

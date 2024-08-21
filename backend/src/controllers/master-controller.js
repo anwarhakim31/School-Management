@@ -139,10 +139,54 @@ export const toggleSemester = async (req, res, next) => {
       notSelectSemester.status = false;
     }
 
+    await master.save();
+
     res.status(200).json({
       success: true,
       message: `Berhasil mengubah status semester`,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateJam = async (req, res, next) => {
+  try {
+    const { end, start } = req.body;
+
+    const master = await Master.findOne();
+
+    if (!master) {
+      throw new ResponseError(404, "Data master tidak ditemukan");
+    }
+
+    if (start >= end) {
+      throw new ResponseError(
+        400,
+        "Waktu mulai tidak bisa lebih dari waktu selesai"
+      );
+    }
+
+    if (end <= start) {
+      throw new ResponseError(
+        400,
+        "Waktu Selesai tidak bisa kurang dari waktu mulai"
+      );
+    }
+
+    const update = await Master.findOneAndUpdate(
+      {},
+      { endTime: end, startTime: start },
+      { new: true }
+    );
+
+    res
+      .status(200)
+      .json({
+        success: 200,
+        message: "berhasil mengupdate jam pembelajaran",
+        update,
+      });
   } catch (error) {
     next(error);
   }
