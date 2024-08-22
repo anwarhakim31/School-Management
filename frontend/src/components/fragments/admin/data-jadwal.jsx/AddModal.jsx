@@ -10,6 +10,7 @@ import { HOST } from "@/util/constant";
 import { toast } from "sonner";
 import DropdownMapel from "@/components/elements/DropdownMapel";
 import DropdownGuru from "@/components/elements/DropdownGuru";
+import DayDropdown from "@/components/elements/DayDropdown";
 
 const AddModal = ({ onClose, kelas }) => {
   const {
@@ -22,6 +23,9 @@ const AddModal = ({ onClose, kelas }) => {
     defaultValues: {
       bidangStudi: "",
       guru: "",
+      hari: "",
+      start: "",
+      end: "",
     },
   });
   const [loading, setLoading] = useState(false);
@@ -56,11 +60,15 @@ const AddModal = ({ onClose, kelas }) => {
   };
 
   const onSelectMapel = (value) => {
-    setValue("bidangStudi", value);
+    setValue("bidangStudi", value, { shouldValidate: true });
   };
 
   const onSelectGuru = (value) => {
-    setValue("guru", value);
+    setValue("guru", value, { shouldValidate: true });
+  };
+
+  const onSelectDay = (value) => {
+    setValue("hari", value, { shouldValidate: true });
   };
 
   return (
@@ -98,7 +106,7 @@ const AddModal = ({ onClose, kelas }) => {
           <div className="px-4">
             <label
               htmlFor="guru"
-              className="text-xs mb-2 block font-semibold text-gray-700"
+              className="text-xs w-fit mb-2 block font-semibold text-gray-700"
             >
               Guru
             </label>
@@ -106,11 +114,41 @@ const AddModal = ({ onClose, kelas }) => {
               htmlFor={"guru"}
               bidangStudi={bidangStudi}
               onSelectGuru={onSelectGuru}
-              //   register={register}
             />
             <span className="text-xs h-4 text-neutral2 block">
               {errors.guru && errors.guru.message}
             </span>
+          </div>
+          <div className="px-4">
+            <label
+              htmlFor="hari"
+              className="text-xs w-fit mb-2 block font-semibold text-gray-700"
+            >
+              Hari
+            </label>
+            <DayDropdown onSelectDay={onSelectDay} />
+            <span className="text-xs h-4 text-neutral2 block">
+              {errors.hari && errors.hari.message}
+            </span>
+          </div>
+          <div className="px-4">
+            <label
+              htmlFor="hari"
+              className="text-xs w-fit mb-2 block font-semibold text-gray-700"
+            >
+              Jam Pembelajaran
+            </label>
+            <div className="flex-between gap-4">
+              <div className="flex gap-2 text-xs">
+                <span>Mulai :</span>
+                <div>
+                  <input type="text" name="" id="" />
+                  <span className="text-xs h-4 text-neutral2 block">
+                    {errors.start && errors.start.message}
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="text-end border-t mt-4 p-4 space-x-4">

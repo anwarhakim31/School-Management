@@ -2,12 +2,15 @@ import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import { data } from "autoprefixer";
 import axios from "axios";
+import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
-const DropdownGuru = ({ onSelectGuru, bidangStudi }) => {
+const DropdownGuru = ({ htmlFor, onSelectGuru, bidangStudi }) => {
   const guruRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState("");
   const [dataGuru, setDataGuru] = useState([]);
+  const [dataSearch, setDataSearch] = useState([]);
   const [selectedGuru, setSelectedGuru] = useState("");
 
   const handleInputClick = (e) => {
@@ -52,6 +55,19 @@ const DropdownGuru = ({ onSelectGuru, bidangStudi }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
+  useEffect(() => {
+    let clone = [...dataGuru];
+
+    if (search) {
+      const split = search.trim().toLocaleLowerCase().split(" ");
+      clone = clone.filter((data) =>
+        split.every((key) => data.nama.toLocaleLowerCase().includes(key))
+      );
+    }
+
+    setDataSearch(clone);
+  }, [dataGuru, search]);
+
   const handleSelectMapel = (nama) => {
     setSelectedGuru(nama);
     onSelectGuru(nama);
@@ -67,12 +83,38 @@ const DropdownGuru = ({ onSelectGuru, bidangStudi }) => {
         onClick={handleInputClick}
         className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
       />
+      <div className="absolute pointer-events-none right-2 top-2.5">
+        {isOpen ? (
+          <ChevronUp width={15} height={15} />
+        ) : (
+          <ChevronDown width={15} height={15} />
+        )}
+      </div>
 
       {isOpen && dataGuru?.length > 0 && (
         <div className="absolute mt-1  w-full bg-white border z-50 border-gray-400 rounded shadow">
           <ul className="max-h-25 overflow-y-auto">
+            <li className=" relative  text-xs hover:bg-gray-200 cursor-pointer">
+              <input
+                type="search"
+                placeholder="Cari nama Bidang Studi..."
+                value={search}
+                className="block mb-2 w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-8 py-2 pr-8 rounded shadow leading-tight focus:outline-none  "
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <Search
+                className="absolute top-1/2 -translate-y-1/2 left-2"
+                width={15}
+                height={15}
+              />
+            </li>
+            {dataSearch.length === 0 && (
+              <li className="   text-xs hover:bg-gray-200 text-center py-2">
+                <p>Data Guru tidak ditemukan.</p>
+              </li>
+            )}
             {dataGuru &&
-              dataGuru.map((guru) => (
+              dataSearch.map((guru) => (
                 <li
                   key={guru._id}
                   onClick={() => handleSelectMapel(guru.nama)}
