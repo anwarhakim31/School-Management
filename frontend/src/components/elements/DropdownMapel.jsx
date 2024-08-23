@@ -4,7 +4,7 @@ import axios from "axios";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
-const DropdownMapel = ({ onSelectMapel, register }) => {
+const DropdownMapel = ({ onChange, value }) => {
   const mapelRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -59,9 +59,9 @@ const DropdownMapel = ({ onSelectMapel, register }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  const handleSelectMapel = (kode, nama) => {
+  const handleSelectMapel = (kode, nama, id) => {
     setSelectedMapel({ kode, nama });
-    onSelectMapel(nama);
+    onChange({ nama, id });
     setIsOpen(false);
   };
 
@@ -112,7 +112,7 @@ const DropdownMapel = ({ onSelectMapel, register }) => {
               dataSearch.map((mp) => (
                 <li
                   key={mp._id}
-                  onClick={() => handleSelectMapel(mp.kode, mp.nama)}
+                  onClick={() => handleSelectMapel(mp.kode, mp.nama, mp._id)}
                   className="px-4 py-2 grid grid-cols-6 text-xs hover:bg-gray-200 cursor-pointer"
                 >
                   <p className="">{mp.kode}</p>

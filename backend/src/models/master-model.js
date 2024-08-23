@@ -38,7 +38,7 @@ MasterSchema.pre("save", function (next) {
 
   // Ensure only one semester is active
   if (activeSemesters.length > 1) {
-    next(new Error("Only one semester can be active at a time."));
+    next(new Error("Hanya satu semester yang bisa aktif."));
   } else {
     next();
   }

@@ -44,13 +44,13 @@ const DayDropdown = ({ onSelectDay }) => {
   };
 
   return (
-    <div ref={dayRef} className="relative w-full">
+    <div ref={dayRef} className="relative  ">
       <input
         type="text"
         value={!selectedHari ? "Pilih Hari" : selectedHari}
         readOnly
         onClick={handleInputClick}
-        className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
+        className="block w-28 text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
       />
       <div className="absolute pointer-events-none right-2 top-2.5">
         {isOpen ? (

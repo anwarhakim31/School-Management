@@ -13,6 +13,7 @@ import ajaranRouter from "../routes/tahunAjaran-router.js";
 import absenRouter from "../routes/absen-router.js";
 import liburRouter from "../routes/libur-router.js";
 import masterRouter from "../routes/master-router.js";
+import jadwalRouter from "../routes/jadwal-router.js";
 
 export const app = express();
 
@@ -36,5 +37,6 @@ app.use("/api/ajaran", ajaranRouter);
 app.use("/api/master", masterRouter);
 app.use("/api/absen", absenRouter);
 app.use("/api/libur", liburRouter);
+app.use("/api/jadwal", jadwalRouter);
 
 app.use(errorMiddleware);

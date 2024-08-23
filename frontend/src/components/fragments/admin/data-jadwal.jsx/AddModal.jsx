@@ -3,7 +3,7 @@ import Modal from "@/components/elements/Modal";
 import user from "../../../../assets/profile.png";
 import React, { useEffect, useRef, useState } from "react";
 import { Plus, X } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import responseError from "@/util/services";
 import axios, { all } from "axios";
 import { HOST } from "@/util/constant";
@@ -11,9 +11,12 @@ import { toast } from "sonner";
 import DropdownMapel from "@/components/elements/DropdownMapel";
 import DropdownGuru from "@/components/elements/DropdownGuru";
 import DayDropdown from "@/components/elements/DayDropdown";
+import KelasDropdown from "@/components/elements/KelasDropdown";
+import NamaKelasDropdown from "@/components/elements/NamaKelasDropdown";
 
-const AddModal = ({ onClose, kelas }) => {
+const AddModal = ({ onClose }) => {
   const {
+    control,
     register,
     handleSubmit,
     setValue,
@@ -23,32 +26,36 @@ const AddModal = ({ onClose, kelas }) => {
     defaultValues: {
       bidangStudi: "",
       guru: "",
+      kelas: "",
+      namaKelas: "",
       hari: "",
-      start: "",
-      end: "",
+      start: undefined,
+      end: undefined,
+      jumlahPertemuan: "",
     },
   });
   const [loading, setLoading] = useState(false);
-  const [hover, setHover] = useState(false);
-  const [foto, setFoto] = useState("");
-  const submitRef = useRef();
-  const fotoRef = useRef();
-  const nis = watch("nis");
   const bidangStudi = watch("bidangStudi");
+  const kelas = watch("kelas");
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
       const res = await axios.post(
-        HOST + "/api/siswa/add-siswa",
+        HOST + "/api/jadwal/add-jadwal",
         {
-          ...data,
-          photo: foto,
+          guru: data.guru,
+          kelas: data.namaKelas,
+          bidangStudi: data.bidangStudi.id,
+          mulai: data.start,
+          selesai: data.end,
+          hari: data.hari,
+          jumlahPertemuan: data.jumlahPertemuan,
         },
         { withCredentials: true }
       );
 
-      if (res.status === 200) {
+      if (res.status === 201) {
         toast.success(res.data.message);
         onClose();
       }
@@ -59,23 +66,23 @@ const AddModal = ({ onClose, kelas }) => {
     }
   };
 
-  const onSelectMapel = (value) => {
-    setValue("bidangStudi", value, { shouldValidate: true });
-  };
-
-  const onSelectGuru = (value) => {
-    setValue("guru", value, { shouldValidate: true });
-  };
-
   const onSelectDay = (value) => {
-    setValue("hari", value, { shouldValidate: true });
+    setValue("hari", value);
+  };
+
+  const onSelectKelas = (value) => {
+    setValue("kelas", value);
+  };
+
+  const onSelectIdKelas = (value) => {
+    setValue("namaKelas", value);
   };
 
   return (
     <Modal onClose={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full md:max-w-[450px] max-h-screen sm:max-h-none overflow-auto rounded-lg shadow-md bg-white"
+        className="w-full md:max-w-[470px] max-h-screen sm:max-h-none overflow-auto rounded-lg shadow-md bg-white"
       >
         <div className="p-4 sticky top-0 bg-white z-20 sm:static border-b">
           <HeaderModal
@@ -85,70 +92,165 @@ const AddModal = ({ onClose, kelas }) => {
           />
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4 ">
-          <div className="px-4">
+          <div className="px-4 mb-2 ">
             <label
               htmlFor="mapel"
               className="text-xs mb-2 block font-semibold text-gray-700"
             >
-              Mata Pelajaran
+              Bidang Studi
             </label>
-            <DropdownMapel
-              htmlFor={"mapel"}
-              onSelectMapel={onSelectMapel}
-              register={register}
-              name={"bidangStudi"}
-              errors={errors}
+            <Controller
+              name="bidangStudi"
+              control={control}
+              rules={{ required: "Bidang studi diperlukan." }}
+              render={({ field: { onChange, value } }) => (
+                <DropdownMapel value={value} onChange={onChange} />
+              )}
             />
             <span className="text-xs h-4 text-neutral2 block">
               {errors.bidangStudi && errors.bidangStudi.message}
             </span>
           </div>
-          <div className="px-4">
+          <div className="px-4 mb-2">
             <label
               htmlFor="guru"
               className="text-xs w-fit mb-2 block font-semibold text-gray-700"
             >
               Guru
             </label>
-            <DropdownGuru
-              htmlFor={"guru"}
-              bidangStudi={bidangStudi}
-              onSelectGuru={onSelectGuru}
+            <Controller
+              name="guru"
+              control={control}
+              rules={{ required: "Guru diperlukan." }}
+              render={({ field: { onChange, value } }) => (
+                <DropdownGuru
+                  bidangStudi={bidangStudi.nama}
+                  onChange={onChange}
+                  value={value}
+                />
+              )}
             />
+
             <span className="text-xs h-4 text-neutral2 block">
               {errors.guru && errors.guru.message}
             </span>
           </div>
-          <div className="px-4">
-            <label
-              htmlFor="hari"
-              className="text-xs w-fit mb-2 block font-semibold text-gray-700"
-            >
-              Hari
-            </label>
-            <DayDropdown onSelectDay={onSelectDay} />
-            <span className="text-xs h-4 text-neutral2 block">
-              {errors.hari && errors.hari.message}
-            </span>
+          <div className={`flex justify-between gap-2`}>
+            <div className="px-4 mb-2">
+              <label
+                htmlFor="hari"
+                className="text-xs w-fit mb-2 block font-semibold text-gray-700"
+              >
+                Kelas
+              </label>
+              <KelasDropdown
+                {...register("kelas", {
+                  required: "kelas diperlukan.",
+                })}
+                onSelectKelas={onSelectKelas}
+              />
+              <span className="text-xs h-4 text-neutral2 block">
+                {errors.kelas && errors.kelas.message}
+              </span>
+            </div>
+
+            <div className="px-4 mb-2">
+              <label
+                htmlFor="hari"
+                className="text-xs w-fit mb-2 block font-semibold text-gray-700"
+              >
+                Nama Kelas
+              </label>
+              <NamaKelasDropdown
+                onSelectIdKelas={onSelectIdKelas}
+                kelas={kelas}
+                {...register("namaKelas", {
+                  required: "Nama Kelas diperlukan.",
+                })}
+              />
+              <span className="text-xs h-4 text-neutral2 block">
+                {errors.namaKelas && errors.namaKelas.message}
+              </span>
+            </div>
+
+            <div className="px-4 mb-2">
+              <label
+                htmlFor="hari"
+                className="text-xs w-fit mb-2 block font-semibold text-gray-700"
+              >
+                Hari
+              </label>
+              <DayDropdown
+                onSelectDay={onSelectDay}
+                {...register("hari", {
+                  required: "Hari diperlukan.",
+                })}
+              />
+              <span className="text-xs h-4 text-neutral2 block">
+                {errors.hari && errors.hari.message}
+              </span>
+            </div>
           </div>
-          <div className="px-4">
+
+          <div className="px-4 mb-2">
             <label
               htmlFor="hari"
               className="text-xs w-fit mb-2 block font-semibold text-gray-700"
             >
               Jam Pembelajaran
             </label>
-            <div className="flex-between gap-4">
-              <div className="flex gap-2 text-xs">
-                <span>Mulai :</span>
-                <div>
-                  <input type="text" name="" id="" />
+            <div className="flex-between gap-4 w-full">
+              <div className=" gap-2 text-xs w-full">
+                <span className="block mb-3">Mulai</span>
+                <div className="w-full">
+                  <input
+                    type="time"
+                    {...register("start", {
+                      required: "Jam mulai diperlukan.",
+                    })}
+                    className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-2 py-1 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline"
+                  />
                   <span className="text-xs h-4 text-neutral2 block">
                     {errors.start && errors.start.message}
                   </span>
                 </div>
               </div>
+              <div className=" gap-2 text-xs w-full">
+                <span className="block mb-3">Selesai</span>
+                <div className="w-full">
+                  <input
+                    type="time"
+                    {...register("end", {
+                      required: "jam selesai diperlukan.",
+                    })}
+                    className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-2 py-1 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "
+                  />
+                  <span className="text-xs h-4 text-neutral2 block">
+                    {errors.end && errors.end.message}
+                  </span>
+                </div>
+              </div>
             </div>
+          </div>
+
+          <div className="px-4 pb-2">
+            <label
+              htmlFor="jumlah pertemuan"
+              className="text-xs w-fit mb-2 block font-semibold text-gray-700"
+            >
+              Jumlah Pertemuan
+            </label>
+            <input
+              {...register("jumlahPertemuan", {
+                required: "Jumlah pertemuan diperlukan.",
+              })}
+              type="number"
+              placeholder="Masukkan jumlah pertemuan"
+              className=" w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-2 py-2 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "
+            />
+            <span className="text-xs h-4 text-neutral2 block">
+              {errors.jumlahPertemuan && errors.jumlahPertemuan.message}
+            </span>
           </div>
 
           <div className="text-end border-t mt-4 p-4 space-x-4">

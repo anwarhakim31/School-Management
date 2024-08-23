@@ -1,0 +1,39 @@
+import mongoose from "mongoose";
+
+const jadwalSchema = new mongoose.Schema({
+  bidangStudi: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "Mapel",
+  },
+  guru: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "Guru",
+  },
+  kelas: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "kelas",
+  },
+  hari: {
+    type: String,
+    required: true,
+  },
+  mulai: {
+    type: String,
+    required: true,
+  },
+  selesai: {
+    type: String,
+    required: true,
+  },
+  jumlahPertemuan: {
+    type: Number,
+    required: true,
+  },
+});
+
+const Jadwal = mongoose.model("Jadwal", jadwalSchema);
+
+export default Jadwal;

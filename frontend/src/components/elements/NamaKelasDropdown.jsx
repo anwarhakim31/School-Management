@@ -66,7 +66,7 @@ const NamaKelasDropdown = ({ onSelectIdKelas, kelas }) => {
       <input
         className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
         readOnly
-        disabled={kelas === 0}
+        disabled={kelas === 0 || !kelas}
         value={
           kelas === 0
             ? "Pilih Kelas terlebih Dulu"
@@ -91,7 +91,7 @@ const NamaKelasDropdown = ({ onSelectIdKelas, kelas }) => {
               <li
                 key={kel._id}
                 onClick={() => handleSelectKelas(kel.nama, kel._id)}
-                className="px-4 py-2 text-center text-xs hover:bg-gray-200 cursor-pointer"
+                className="px-4 py-2 truncate text-center text-xs hover:bg-gray-200 cursor-pointer"
               >
                 {kel.nama}
               </li>
