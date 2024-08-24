@@ -10,7 +10,7 @@ const TableMingguan = ({ loading, libur }) => {
   const [isMinggu, setIsMinggu] = useState(false);
 
   const handleToggleSwitch = async (hari, status) => {
-    hari === "Saturday" ? setIsSabtu(!isSabtu) : setIsMinggu(!isMinggu);
+    hari === "Sabtu" ? setIsSabtu(!isSabtu) : setIsMinggu(!isMinggu);
 
     try {
       const res = await axios.post(
@@ -88,7 +88,7 @@ const TableMingguan = ({ loading, libur }) => {
                   value={isSabtu}
                   className="w-full h-full opacity-0 cursor-pointer"
                   checked={isSabtu}
-                  onChange={() => handleToggleSwitch("Saturday", !isSabtu)}
+                  onChange={() => handleToggleSwitch("Sabtu", !isSabtu)}
                 />
                 <div
                   className={`${
@@ -124,7 +124,7 @@ const TableMingguan = ({ loading, libur }) => {
                   id="minggu"
                   className="w-full h-full opacity-0 cursor-pointer"
                   checked={isMinggu}
-                  onChange={() => handleToggleSwitch("Sunday", !isMinggu)}
+                  onChange={() => handleToggleSwitch("Minggu", !isMinggu)}
                 />
                 <div
                   className={`${

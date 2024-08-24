@@ -37,9 +37,9 @@ const DayDropdown = ({ onSelectDay }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  const handleSelectMapel = (nama, index) => {
+  const handleSelectDay = (nama) => {
     setSelectedHari(nama);
-    onSelectDay(index);
+    onSelectDay(nama);
     setIsOpen(false);
   };
 
@@ -66,7 +66,7 @@ const DayDropdown = ({ onSelectDay }) => {
             {daysOfWeek.map((day, i) => (
               <li
                 key={i}
-                onClick={() => handleSelectMapel(day, i)}
+                onClick={() => handleSelectDay(day, i)}
                 className="px-4 py-2 text-xs hover:bg-gray-200 cursor-pointer"
               >
                 <p className="">{day}</p>

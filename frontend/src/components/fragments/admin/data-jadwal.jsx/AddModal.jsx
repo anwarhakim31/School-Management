@@ -67,6 +67,7 @@ const AddModal = ({ onClose }) => {
   };
 
   const onSelectDay = (value) => {
+    console.log(value);
     setValue("hari", value);
   };
 
@@ -82,7 +83,7 @@ const AddModal = ({ onClose }) => {
     <Modal onClose={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full md:max-w-[470px] max-h-screen sm:max-h-none overflow-auto rounded-lg shadow-md bg-white"
+        className="w-full sm:max-w-[470px] max-h-screen sm:max-h-none overflow-auto rounded-lg shadow-md bg-white"
       >
         <div className="p-4 sticky top-0 bg-white z-20 sm:static border-b">
           <HeaderModal
@@ -135,7 +136,9 @@ const AddModal = ({ onClose }) => {
               {errors.guru && errors.guru.message}
             </span>
           </div>
-          <div className={`flex justify-between gap-2`}>
+          <div
+            className={`flex justify-between flex-wrap sm:flex-nowrap gap-2`}
+          >
             <div className="px-4 mb-2">
               <label
                 htmlFor="hari"

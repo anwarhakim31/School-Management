@@ -1,5 +1,6 @@
 import ResponseError from "../error/response-error.js";
 import Jadwal from "../models/jadwal-model.js";
+import Libur from "../models/libur-model.js";
 import Master from "../models/master-model.js";
 
 export const addJadwal = async (req, res, next) => {
@@ -9,35 +10,35 @@ export const addJadwal = async (req, res, next) => {
 
     const master = await Master.findOne();
 
-    if (mulai < master.start) {
+    if (mulai < master.startTime) {
       throw new ResponseError(
         400,
         "Jam mulai pembelajaran tidak bisa sebelum waktu mulai masuk sekolah."
       );
     }
 
-    if (mulai > master.end) {
+    if (mulai > master.endTime) {
       throw new ResponseError(
         400,
         "Jam mulai pembelajaran tidak bisa setelah waktu selesai sekolah."
       );
     }
 
-    if (selesai > master.end) {
+    if (selesai > master.endTime) {
       throw new ResponseError(
         400,
         "Jam selesai pembelajaran tidak bisa setelah waktu selesai sekolah."
       );
     }
 
-    if (selesai <= mulai) {
+    if (selesai <= master.startTime) {
       throw new ResponseError(
         400,
         "Jam selesai pembelajaran tidak bisa sebelum atau sama dengan jam mulai."
       );
     }
 
-    if (mulai > selesai) {
+    if (mulai > master.endTime) {
       throw new ResponseError(
         400,
         "Jam mulai pembelajaran tidak boleh melebihi jam selesai."
@@ -80,6 +81,17 @@ export const addJadwal = async (req, res, next) => {
 
     if (jumlahPertemuan <= 0) {
       throw new ResponseError(400, "Jumlah pertemuan harus lebih dari 0.");
+    }
+
+    const libur = await Libur.findOne();
+
+    const weekendHoliday = libur.perpekan.find((p) => p.hari === hari);
+
+    if (weekendHoliday && weekendHoliday.status) {
+      throw new ResponseError(
+        400,
+        "Hari yang yang di atur merupakan libur  pekan"
+      );
     }
 
     const jadwal = new Jadwal({
@@ -125,6 +137,21 @@ export const getJadwal = async (req, res, next) => {
       message: "Berhasil mengambil jadwal",
       jadwal,
     });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const deleteJadwal = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    await Jadwal.findByIdAndDelete(id);
+
+    res
+      .status(200)
+      .json({ success: true, message: "Berhasil menghapus jadwal." });
   } catch (error) {
     console.log(error);
     next(error);

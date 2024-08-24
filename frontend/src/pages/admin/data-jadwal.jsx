@@ -1,4 +1,3 @@
-import DeleteModal from "@/components/fragments/admin/data-pelajaran/DeleteModal";
 import EditModal from "@/components/fragments/admin/data-pelajaran/EditModal";
 import TablePelajaran from "@/components/fragments/admin/data-pelajaran/TablePelajaran";
 import { HOST } from "@/util/constant";
@@ -6,14 +5,16 @@ import responseError from "@/util/services";
 import axios from "axios";
 import { Filter, Plus, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-import MapelIcon from "../../assets/svg/pelajaran.svg?react";
 import AddModal from "@/components/fragments/admin/data-jadwal.jsx/AddModal";
 import AcaraIcon from "../../assets/svg/acara.svg?react";
 import TableJadwal from "@/components/fragments/admin/data-jadwal.jsx/TableJadwal";
+import DeleteModal from "@/components/fragments/admin/data-jadwal.jsx/DeleteModal";
 
 const DataJadwalPage = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isAddJadwal, setIsAddJadwal] = useState(false);
+  const [isDeleteJadwal, setIsDeleteJadwal] = useState(false);
+  const [isEditJadwal, setIsEditJadwal] = useState(false);
   const [dataJadwal, setDataJadwal] = useState([]);
 
   useEffect(() => {
@@ -29,13 +30,24 @@ const DataJadwalPage = () => {
         }
       } catch (error) {
         responseError(error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
       }
     };
     getJadwal();
-  }, []);
+  }, [isAddJadwal, isDeleteJadwal]);
 
   const handleToggleAdd = () => {
     setIsAddJadwal(!isAddJadwal);
+  };
+
+  const handleToggleDelete = () => {
+    setIsDeleteJadwal(!isDeleteJadwal);
+  };
+  const handleToggleEdit = () => {
+    setIsEditKelas(!isEditKelas);
   };
 
   return (
@@ -104,16 +116,16 @@ const DataJadwalPage = () => {
         ) : (
           <TableJadwal
             data={dataJadwal}
-            // handleToggleDelete={handleToggleDelete}
+            handleToggleDelete={handleToggleDelete}
             // handleToggleEdit={handleToggleEdit}
             loading={loading}
           />
         )}
       </div>
       {isAddJadwal && <AddModal onClose={handleToggleAdd} />}
-      {/* {isDeleteMapel && <DeleteModal onClose={handleToggleDelete} />}
+      {isDeleteJadwal && <DeleteModal onClose={handleToggleDelete} />}
 
-      {isEditMapel && <EditModal onClose={handleToggleEdit} />} */}
+      {/* {isEditMapel && <EditModal onClose={handleToggleEdit} />} */}
     </section>
   );
 };

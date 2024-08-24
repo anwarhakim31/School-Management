@@ -44,7 +44,7 @@ const TableJadwal = ({
         <table className=" w-full text-gray-500 table-a">
           <thead className="text-xs uppercase text-white bg-neutral">
             <tr>
-              <th scope="col" className="px-4 text-left py-4">
+              <th scope="col" className="px-4 text-left py-4 whitespace-nowrap">
                 Bidang Studi
               </th>
               <th scope="col" className="px-5 text-left py-4">
@@ -53,7 +53,7 @@ const TableJadwal = ({
               <th scope="col" className="px-4 text-left py-4">
                 kelas
               </th>
-              <th scope="col" className="px-2 py-4">
+              <th scope="col" className="px-2 py-4 whitespace-nowrap">
                 Jumlah pertemuan
               </th>
               <th scope="col" className="px-2  py-4">
@@ -83,10 +83,10 @@ const TableJadwal = ({
             {dataSlice && !loading && dataSlice.length === 0 && (
               <tr className="w-full h-full">
                 <td
-                  colSpan="10"
+                  colSpan="7"
                   className="px-2 py-4  border-gray-300 text-xs text-gray-900 whitespace-nowrap h-[350px]"
                 >
-                  Tidak ada data
+                  <p className="text-center">Tidak ada data.</p>
                 </td>
               </tr>
             )}
@@ -103,7 +103,7 @@ const TableJadwal = ({
                     scope="row"
                     className="px-4    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
                   >
-                    {jadwal.bidangStudi.nama}
+                    {jadwal.bidangStudi.kode} {jadwal.bidangStudi.nama}
                   </td>
                   <td
                     scope="row"
@@ -127,9 +127,7 @@ const TableJadwal = ({
                     scope="row"
                     className="px-2  text-center  border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
                   >
-                    {new Intl.DateTimeFormat("id-ID", {
-                      weekday: "long",
-                    }).format(jadwal.hari)}
+                    {jadwal.hari}
                   </td>
                   <td
                     scope="row"

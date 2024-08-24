@@ -154,7 +154,7 @@ const MasterDataPage = () => {
   return (
     <section className="px-6 py-8  ">
       <div className="w-full">
-        <div className="w-full   py-4 px-2 rounded-md mt-12 gap-6 border border-b-0 bg-white">
+        <div className="w-full   py-4 px-2 rounded-md  gap-6 border border-b-0 bg-white">
           <h1 className="font-bold text-sm text-gray-800 ">Sistem Akademik</h1>
         </div>
         <div className="w-full flex-between  pt-8 pb-4 px-2    gap-6 border bg-white">
