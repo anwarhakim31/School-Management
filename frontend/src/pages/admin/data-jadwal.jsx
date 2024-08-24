@@ -9,9 +9,30 @@ import React, { useEffect, useRef, useState } from "react";
 import MapelIcon from "../../assets/svg/pelajaran.svg?react";
 import AddModal from "@/components/fragments/admin/data-jadwal.jsx/AddModal";
 import AcaraIcon from "../../assets/svg/acara.svg?react";
+import TableJadwal from "@/components/fragments/admin/data-jadwal.jsx/TableJadwal";
 
 const DataJadwalPage = () => {
+  const [loading, setLoading] = useState(false);
   const [isAddJadwal, setIsAddJadwal] = useState(false);
+  const [dataJadwal, setDataJadwal] = useState([]);
+
+  useEffect(() => {
+    const getJadwal = async () => {
+      try {
+        const res = await axios.get(HOST + "/api/jadwal/get-jadwal", {
+          withCredentials: true,
+        });
+
+        console.log(res);
+        if (res.status === 200) {
+          setDataJadwal(res.data.jadwal);
+        }
+      } catch (error) {
+        responseError(error);
+      }
+    };
+    getJadwal();
+  }, []);
 
   const handleToggleAdd = () => {
     setIsAddJadwal(!isAddJadwal);
@@ -74,20 +95,20 @@ const DataJadwalPage = () => {
         </button>
       </div>
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-md">
-        {/* {loading ? (
+        {loading ? (
           <div className="block w-full relative bg-backup animate-pulse shadow-md pb-[3.5rem]">
             <div className="w-full flex-center min-h-[340px] overflow-x-auto rounded-md">
               <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
             </div>
           </div>
         ) : (
-          <TablePelajaran
-            data={dataFilter}
-            handleToggleDelete={handleToggleDelete}
-            handleToggleEdit={handleToggleEdit}
+          <TableJadwal
+            data={dataJadwal}
+            // handleToggleDelete={handleToggleDelete}
+            // handleToggleEdit={handleToggleEdit}
             loading={loading}
           />
-        )} */}
+        )}
       </div>
       {isAddJadwal && <AddModal onClose={handleToggleAdd} />}
       {/* {isDeleteMapel && <DeleteModal onClose={handleToggleDelete} />}

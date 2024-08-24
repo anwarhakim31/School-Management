@@ -107,11 +107,22 @@ export const addJadwal = async (req, res, next) => {
 
 export const getJadwal = async (req, res, next) => {
   try {
-    const jadwal = await Jadwal.find();
+    const jadwal = await Jadwal.find()
+      .populate({
+        path: "bidangStudi",
+      })
+      .populate({
+        path: "guru",
+        select: "nama",
+      })
+      .populate({
+        path: "kelas",
+        select: "nama kelas",
+      });
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
-      message: "Jadwal berhasil ditambahkan",
+      message: "Berhasil mengambil jadwal",
       jadwal,
     });
   } catch (error) {

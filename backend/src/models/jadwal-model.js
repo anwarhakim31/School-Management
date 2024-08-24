@@ -14,7 +14,7 @@ const jadwalSchema = new mongoose.Schema({
   kelas: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "kelas",
+    ref: "Kelas",
   },
   hari: {
     type: String,
