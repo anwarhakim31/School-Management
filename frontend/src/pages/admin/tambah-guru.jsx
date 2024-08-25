@@ -117,9 +117,9 @@ const TambahGuruPage = () => {
     if (kelass === "") {
       setValue("namaKelas", "");
     } else {
-      setValue("namaKelas", kelasNama[0]?.nama);
+      setValue("namaKelas", kelasNama.length > 0 ? kelasNama[0]?.nama : "");
     }
-  }, [kelass]);
+  }, [kelass, kelasNama, setValue]);
 
   const handleNumberChange = (e, name) => {
     const value = e.target.value;
@@ -366,7 +366,6 @@ const TambahGuruPage = () => {
               </label>
               <select
                 id="bidangstudi"
-                onChange={(e) => handleNumberChange(e, "agama")}
                 {...register("bidangStudi", {
                   required: "Bidang Studi tidak boleh kosong.",
                 })}
@@ -378,7 +377,7 @@ const TambahGuruPage = () => {
                 {mapel &&
                   mapel.map((pel) => {
                     return (
-                      <option key={pel._id} value={pel.nama}>
+                      <option key={pel._id} value={pel._id}>
                         {pel.nama}
                       </option>
                     );

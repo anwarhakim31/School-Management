@@ -1,5 +1,3 @@
-import EditModal from "@/components/fragments/admin/data-pelajaran/EditModal";
-import TablePelajaran from "@/components/fragments/admin/data-pelajaran/TablePelajaran";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
@@ -9,6 +7,7 @@ import AddModal from "@/components/fragments/admin/data-jadwal.jsx/AddModal";
 import AcaraIcon from "../../assets/svg/acara.svg?react";
 import TableJadwal from "@/components/fragments/admin/data-jadwal.jsx/TableJadwal";
 import DeleteModal from "@/components/fragments/admin/data-jadwal.jsx/DeleteModal";
+import EditModal from "@/components/fragments/admin/data-jadwal.jsx/EditModal";
 
 const DataJadwalPage = () => {
   const [loading, setLoading] = useState(true);
@@ -24,7 +23,6 @@ const DataJadwalPage = () => {
           withCredentials: true,
         });
 
-        console.log(res);
         if (res.status === 200) {
           setDataJadwal(res.data.jadwal);
         }
@@ -37,7 +35,7 @@ const DataJadwalPage = () => {
       }
     };
     getJadwal();
-  }, [isAddJadwal, isDeleteJadwal]);
+  }, [isAddJadwal, isDeleteJadwal, isEditJadwal]);
 
   const handleToggleAdd = () => {
     setIsAddJadwal(!isAddJadwal);
@@ -47,7 +45,7 @@ const DataJadwalPage = () => {
     setIsDeleteJadwal(!isDeleteJadwal);
   };
   const handleToggleEdit = () => {
-    setIsEditKelas(!isEditKelas);
+    setIsEditJadwal(!isEditJadwal);
   };
 
   return (
@@ -117,7 +115,7 @@ const DataJadwalPage = () => {
           <TableJadwal
             data={dataJadwal}
             handleToggleDelete={handleToggleDelete}
-            // handleToggleEdit={handleToggleEdit}
+            handleToggleEdit={handleToggleEdit}
             loading={loading}
           />
         )}
@@ -125,7 +123,7 @@ const DataJadwalPage = () => {
       {isAddJadwal && <AddModal onClose={handleToggleAdd} />}
       {isDeleteJadwal && <DeleteModal onClose={handleToggleDelete} />}
 
-      {/* {isEditMapel && <EditModal onClose={handleToggleEdit} />} */}
+      {isEditJadwal && <EditModal onClose={handleToggleEdit} />}
     </section>
   );
 };

@@ -162,6 +162,8 @@ const DataGuruPage = () => {
     }));
   };
 
+  console.log(dataGuru);
+
   return (
     <section className="px-6 py-4 mb-4 ">
       <HeaderBox dataDetail={dataDetail} loading={loading} />
@@ -230,18 +232,19 @@ const DataGuruPage = () => {
             </div>
           </div>
         ) : (
-          <TableGuru
-            data={dataGuru}
-            page={page}
-            limit={pagination.page}
-            totalGuru={pagination.totalGuru}
-            totalPage={pagination.totalPage}
-            handlePagination={handlePagination}
-            handleToggleDeleteOne={handleToggleDeleteOne}
-            setAllCheck={setAllCheck}
-            allCheck={allCheck}
-            loading={loading}
-          />
+          ""
+          // <TableGuru
+          //   data={dataGuru}
+          //   page={page}
+          //   limit={pagination.page}
+          //   totalGuru={pagination.totalGuru}
+          //   totalPage={pagination.totalPage}
+          //   handlePagination={handlePagination}
+          //   handleToggleDeleteOne={handleToggleDeleteOne}
+          //   setAllCheck={setAllCheck}
+          //   allCheck={allCheck}
+          //   loading={loading}
+          // />
         )}
       </div>
       {isDeleteSiswa && <DeleteModal onClose={handleToggleDeleteOne} />}

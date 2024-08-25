@@ -40,7 +40,7 @@ const EditGuruPage = () => {
       bidangStudi: "",
       status: "",
       phone: "",
-      waliKelas: "",
+      kelas: "",
       alamat: "",
     },
   });
@@ -439,7 +439,6 @@ const EditGuruPage = () => {
               </label>
               <select
                 id="bidangstudi"
-                onChange={(e) => handleNumberChange(e, "agama")}
                 {...register("bidangStudi", {
                   required: "Agama tidak boleh kosong..",
                 })}
@@ -451,7 +450,7 @@ const EditGuruPage = () => {
                 {mapel &&
                   mapel.map((pel) => {
                     return (
-                      <option key={pel._id} value={pel.nama}>
+                      <option key={pel._id} value={pel._id}>
                         {pel.nama}
                       </option>
                     );

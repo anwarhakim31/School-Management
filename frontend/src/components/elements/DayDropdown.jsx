@@ -1,14 +1,23 @@
+import { selectedDataEdit } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import { data } from "autoprefixer";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
-const DayDropdown = ({ onSelectDay }) => {
+const DayDropdown = ({ onChange, value }) => {
+  const dataEdit = useSelector(selectedDataEdit);
   const dayRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedHari, setSelectedHari] = useState("");
+  const [selectedHari, setSelectedHari] = useState(value || "");
+
+  useEffect(() => {
+    if (dataEdit) {
+      setSelectedHari(dataEdit.hari);
+    }
+  }, [dataEdit]);
 
   const daysOfWeek = [
     "Minggu",
@@ -39,7 +48,7 @@ const DayDropdown = ({ onSelectDay }) => {
 
   const handleSelectDay = (nama) => {
     setSelectedHari(nama);
-    onSelectDay(nama);
+    onChange(nama);
     setIsOpen(false);
   };
 

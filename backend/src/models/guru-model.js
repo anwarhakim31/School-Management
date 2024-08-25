@@ -16,8 +16,16 @@ const guruSchema = new mongoose.Schema({
     required: true,
   },
   phone: { type: String, required: true },
-  bidangStudi: { type: String, required: true },
-  waliKelas: { type: String, required: false, ref: "Kelas" },
+  bidangStudi: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    ref: "Mapel",
+  },
+  waliKelas: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    ref: "Kelas",
+  },
   status: {
     type: Boolean,
     enum: [true, false],

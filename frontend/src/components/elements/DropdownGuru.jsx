@@ -1,22 +1,40 @@
+import { selectedDataEdit } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import { data } from "autoprefixer";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 const DropdownGuru = ({ onChange, bidangStudi, value }) => {
+  const dataEdit = useSelector(selectedDataEdit);
   const guruRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [dataGuru, setDataGuru] = useState([]);
   const [dataSearch, setDataSearch] = useState([]);
-  const [selectedGuru, setSelectedGuru] = useState("");
+  const [selectedGuru, setSelectedGuru] = useState({});
 
   const handleInputClick = (e) => {
     e.preventDefault();
     setIsOpen(!isOpen);
   };
+
+  useEffect(() => {
+    if (dataEdit) {
+      setSelectedGuru({ nama: dataEdit.guru.nama, id: dataEdit.guru._id });
+    }
+  }, [dataEdit]);
+
+  useEffect(() => {
+    if (bidangStudi !== dataEdit?.bidangStudi?.nama) {
+      onChange(undefined);
+    } else {
+      const datas = dataGuru?.find((d) => d._id === selectedGuru.id);
+      onChange(datas?._id);
+    }
+  }, [bidangStudi, dataGuru]);
 
   useEffect(() => {
     const getGuru = async () => {
@@ -38,10 +56,6 @@ const DropdownGuru = ({ onChange, bidangStudi, value }) => {
       getGuru();
     }
   }, [bidangStudi]);
-
-  useEffect(() => {
-    !dataGuru.some((data) => data.nama === selectedGuru) && setSelectedGuru("");
-  }, [dataGuru]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -69,7 +83,7 @@ const DropdownGuru = ({ onChange, bidangStudi, value }) => {
   }, [dataGuru, search]);
 
   const handleSelectMapel = (nama, id) => {
-    setSelectedGuru(nama);
+    setSelectedGuru({ nama, id });
     onChange(id);
     setIsOpen(false);
   };
@@ -78,7 +92,13 @@ const DropdownGuru = ({ onChange, bidangStudi, value }) => {
     <div ref={guruRef} className="relative w-full">
       <input
         type="text"
-        value={!selectedGuru ? "Pilih Guru" : selectedGuru}
+        value={
+          !selectedGuru
+            ? "Pilih Guru"
+            : !dataGuru.some((data) => data.nama === selectedGuru.nama)
+            ? "Pilih Guru"
+            : selectedGuru.nama
+        }
         readOnly
         onClick={handleInputClick}
         className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"

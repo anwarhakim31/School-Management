@@ -1,10 +1,15 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import AsideLayout from "./AsideLayout";
 import HeaderLayout from "./HeaderLayout";
 import { useEffect, useRef, useState } from "react";
 import SideProfile from "@/components/fragments/admin/SideProfile";
+import { setDataDeleteMany } from "@/store/slices/admin-slice";
+import { useDispatch } from "react-redux";
 
 const AdminLayout = () => {
+  const { pathname } = useLocation();
+  const dispatch = useDispatch();
+
   const [isEdit, setIsEdit] = useState(false);
   const [isSidebar, setIsSidebar] = useState(false);
   const editProfileRef = useRef();
@@ -46,6 +51,12 @@ const AdminLayout = () => {
 
     return () => document.removeEventListener("mousedown", handleClickOutSide);
   }, [isSidebar]);
+
+  useEffect(() => {
+    if (pathname) {
+      dispatch(setDataDeleteMany([]));
+    }
+  }, [pathname]);
 
   return (
     <main className="w-screen overflow-hidden h-screen flex ">

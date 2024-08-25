@@ -1,4 +1,5 @@
 import ResponseError from "../error/response-error.js";
+import Jadwal from "../models/jadwal-model.js";
 import Mapel from "../models/mapel-model.js";
 
 export const addMapel = async (req, res, next) => {
@@ -77,6 +78,8 @@ export const deleteMapel = async (req, res, next) => {
     }
 
     await Mapel.findByIdAndDelete(id);
+
+    await Jadwal.deleteOne({ bidangStudi: id });
 
     res.status(200).json({
       success: true,

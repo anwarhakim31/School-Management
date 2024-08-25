@@ -1,14 +1,23 @@
+import { selectedDataEdit } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import axios from "axios";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
-const KelasDropdown = ({ onSelectKelas }) => {
+const KelasDropdown = ({ onChange, value }) => {
+  const dataEdit = useSelector(selectedDataEdit);
   const dropdownRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
   const [dataKelas, setDataKelas] = useState([]);
   const [kelas, setKelas] = useState([]);
   const [selectedKelas, setSelectedKelas] = useState(0);
+
+  useEffect(() => {
+    if (dataEdit) {
+      setSelectedKelas(dataEdit.kelas.kelas);
+    }
+  }, [dataEdit]);
 
   useEffect(() => {
     const getKelas = async () => {
@@ -50,7 +59,7 @@ const KelasDropdown = ({ onSelectKelas }) => {
 
   const handleSelectKelas = (value) => {
     setSelectedKelas(value);
-    onSelectKelas(value);
+    onChange(value);
     setIsOpen(false);
   };
 

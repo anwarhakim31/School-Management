@@ -1,21 +1,33 @@
+import { selectedDataEdit } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 const DropdownMapel = ({ onChange, value }) => {
+  const dataEdit = useSelector(selectedDataEdit);
   const mapelRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [dataMapel, setDataMapel] = useState([]);
   const [dataSearch, setDataSearch] = useState([]);
-  const [selectedMapel, setSelectedMapel] = useState(undefined);
+  const [selectedMapel, setSelectedMapel] = useState("");
 
   const handleInputClick = (e) => {
     e.preventDefault();
     setIsOpen(!isOpen);
   };
+
+  useEffect(() => {
+    if (dataEdit) {
+      setSelectedMapel({
+        kode: dataEdit.bidangStudi.kode,
+        nama: dataEdit.bidangStudi.nama,
+      });
+    }
+  }, [dataEdit]);
 
   useEffect(() => {
     const getMapel = async () => {

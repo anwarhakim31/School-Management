@@ -1,5 +1,6 @@
 import ResponseError from "../error/response-error.js";
 import Guru from "../models/guru-model.js";
+import Jadwal from "../models/jadwal-model.js";
 import Kelas from "../models/kelas-model.js";
 import Siswa from "../models/siswa-model.js";
 
@@ -83,6 +84,7 @@ export const deleteKelas = async (req, res, next) => {
     }
 
     await Kelas.findByIdAndDelete(id);
+    await Jadwal.deleteOne({ kelas: id });
 
     res.status(200).json({
       success: true,

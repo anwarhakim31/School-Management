@@ -25,10 +25,13 @@ const TambahSiswaPage = () => {
   const [loading, setLoading] = useState(false);
   const nis = watch("nis", "");
   const phone = watch("phone", "");
-  const selectedValue = watch("kelas");
+  const kelass = watch("kelas");
+  const namaKelas = watch("namaKelas");
   const tahunMasuk = watch("tahunMasuk", "");
 
   const PhotoRef = useRef();
+
+  console.log(namaKelas);
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -52,6 +55,14 @@ const TambahSiswaPage = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (kelass === "") {
+      setValue("namaKelas", "");
+    } else {
+      setValue("namaKelas", kelasNama.length > 0 ? kelasNama[0]?.nama : "");
+    }
+  }, [kelass, kelasNama, setValue]);
 
   useEffect(() => {
     const getKelas = async () => {
@@ -99,12 +110,12 @@ const TambahSiswaPage = () => {
 
     const nama = kelasDB
       .filter((kel) => {
-        return kel.kelas === Number(selectedValue);
+        return kel.kelas === Number(kelass);
       })
       .sort((a, b) => a.nama.localeCompare(b.nama));
 
     setKelasName(nama);
-  }, [kelasDB, selectedValue]);
+  }, [kelasDB, kelass]);
 
   const handleNumberChange = (e, name) => {
     const value = e.target.value;
@@ -462,18 +473,15 @@ const TambahSiswaPage = () => {
                     className="py-1.5 h-8 bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
                   >
                     {kelasNama &&
-                      kelasNama.map((kel) => {
+                      kelasNama.map((kel, i) => {
                         return (
-                          <>
-                            <option
-                              key={kel._id}
-                              value={kel.nama}
-                              className="rounded-md"
-                            >
-                              {kel.nama}
-                            </option>
-                            ;
-                          </>
+                          <option
+                            key={kel._id}
+                            value={kel.nama}
+                            className="rounded-md"
+                          >
+                            {kel.nama}
+                          </option>
                         );
                       })}
                   </select>

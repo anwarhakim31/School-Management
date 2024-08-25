@@ -147,11 +147,32 @@ export const deleteJadwal = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    await Jadwal.findByIdAndDelete(id);
+    await Jadwal.findByIdAndDelete(id, { new: true });
 
     res
       .status(200)
       .json({ success: true, message: "Berhasil menghapus jadwal." });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const editJadwal = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { bidangStudi, guru, kelas, hari, mulai, selesai, jumlahPertemuan } =
+      req.body;
+
+    await Jadwal.findByIdAndUpdate(
+      id,
+      { bidangStudi, guru, kelas, hari, mulai, selesai, jumlahPertemuan },
+      { new: true, runValidators: true }
+    );
+
+    res
+      .status(200)
+      .json({ success: true, message: "Berhasil mengubah jadwal." });
   } catch (error) {
     console.log(error);
     next(error);

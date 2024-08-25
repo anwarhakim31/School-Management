@@ -1,14 +1,26 @@
+import { selectedDataEdit } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import axios from "axios";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
-const NamaKelasDropdown = ({ onSelectIdKelas, kelas }) => {
+const NamaKelasDropdown = ({ onChange, kelas, value }) => {
+  const dataEdit = useSelector(selectedDataEdit);
   const dropdownRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
   const [dataKelas, setDataKelas] = useState([]);
   const [namaKelas, setNamaKelas] = useState([]);
   const [selectedNamaKelas, setSelectedNamaKelas] = useState("");
+
+  useEffect(() => {
+    if (dataEdit) {
+      setSelectedNamaKelas({
+        nama: dataEdit.kelas.nama,
+        id: dataEdit.kelas._id,
+      });
+    }
+  }, [dataEdit]);
 
   useEffect(() => {
     const getKelas = async () => {
@@ -36,14 +48,24 @@ const NamaKelasDropdown = ({ onSelectIdKelas, kelas }) => {
     }
   }, [kelas]);
 
+  useEffect(() => {
+    if (kelas !== dataEdit?.kelas?.kelas) {
+      onChange(undefined);
+    } else {
+      const datas = dataKelas?.find((d) => d._id === selectedNamaKelas.id);
+
+      onChange(datas?._id);
+    }
+  }, [kelas, dataKelas]);
+
   const handleInputClick = (event) => {
     event.stopPropagation();
     setIsOpen(!isOpen);
   };
 
   const handleSelectKelas = (value, id) => {
-    setSelectedNamaKelas(value);
-    onSelectIdKelas(id);
+    setSelectedNamaKelas({ nama: value, id });
+    onChange(id);
     setIsOpen(false);
   };
 
@@ -59,8 +81,6 @@ const NamaKelasDropdown = ({ onSelectIdKelas, kelas }) => {
     return () => document.removeEventListener("mousedown", handleclickOutSide);
   }, [isOpen]);
 
-  console.log(kelas);
-
   return (
     <div ref={dropdownRef} className="relative w-28">
       <input
@@ -70,10 +90,10 @@ const NamaKelasDropdown = ({ onSelectIdKelas, kelas }) => {
         value={
           kelas === 0
             ? "Pilih Kelas terlebih Dulu"
-            : !selectedNamaKelas ||
-              namaKelas.some((kel) => kel.nama !== selectedNamaKelas)
+            : !selectedNamaKelas.nama ||
+              namaKelas.some((kel) => kel.nama !== selectedNamaKelas.nama)
             ? "Pilih Nama Kelas"
-            : selectedNamaKelas
+            : selectedNamaKelas.nama
         }
         onClick={handleInputClick}
       />

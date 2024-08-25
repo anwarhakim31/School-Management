@@ -13,8 +13,11 @@ import DropdownGuru from "@/components/elements/DropdownGuru";
 import DayDropdown from "@/components/elements/DayDropdown";
 import KelasDropdown from "@/components/elements/KelasDropdown";
 import NamaKelasDropdown from "@/components/elements/NamaKelasDropdown";
+import { useDispatch, useSelector } from "react-redux";
+import { selectedDataEdit, setDataEdit } from "@/store/slices/admin-slice";
+import { data } from "autoprefixer";
 
-const AddModal = ({ onClose }) => {
+const EditModal = ({ onClose }) => {
   const {
     control,
     register,
@@ -29,20 +32,40 @@ const AddModal = ({ onClose }) => {
       kelas: "",
       namaKelas: "",
       hari: "",
-      start: undefined,
-      end: undefined,
+      start: "",
+      end: "",
       jumlahPertemuan: "",
     },
   });
+  const dispatch = useDispatch();
+  const dataJadwal = useSelector(selectedDataEdit);
   const [loading, setLoading] = useState(false);
   const bidangStudi = watch("bidangStudi");
   const kelas = watch("kelas");
 
+  useEffect(() => {
+    if (dataJadwal) {
+      setValue("bidangStudi", {
+        nama: dataJadwal?.bidangStudi?.nama,
+        id: dataJadwal?.bidangStudi?._id,
+      });
+      setValue("guru", dataJadwal.guru._id);
+      setValue("jumlahPertemuan", dataJadwal.jumlahPertemuan);
+      setValue("kelas", dataJadwal.kelas.kelas);
+      setValue("namaKelas", dataJadwal.kelas._id);
+      setValue("hari", dataJadwal.hari);
+      setValue("start", dataJadwal.mulai);
+      setValue("end", dataJadwal.selesai);
+    }
+  }, [dataJadwal]);
+
   const onSubmit = async (data) => {
     setLoading(true);
+
+    console.log(data);
     try {
-      const res = await axios.post(
-        HOST + "/api/jadwal/add-jadwal",
+      const res = await axios.put(
+        HOST + "/api/jadwal/edit-jadwal/" + dataJadwal._id,
         {
           guru: data.guru,
           kelas: data.namaKelas,
@@ -55,9 +78,10 @@ const AddModal = ({ onClose }) => {
         { withCredentials: true }
       );
 
-      if (res.status === 201) {
+      if (res.status === 200) {
         toast.success(res.data.message);
         onClose();
+        dispatch(setDataEdit(undefined));
       }
     } catch (error) {
       responseError(error);
@@ -66,8 +90,13 @@ const AddModal = ({ onClose }) => {
     }
   };
 
+  const onClose2 = () => {
+    onClose();
+    dispatch(setDataEdit(undefined));
+  };
+
   return (
-    <Modal onClose={onClose}>
+    <Modal onClose={onClose2}>
       <div
         onClick={(e) => e.stopPropagation()}
         className="w-full sm:max-w-[470px] max-h-screen sm:max-h-none overflow-auto rounded-lg shadow-md bg-white"
@@ -75,7 +104,7 @@ const AddModal = ({ onClose }) => {
         <div className="p-4 sticky top-0 bg-white z-20 sm:static border-b">
           <HeaderModal
             titile={"Tambah Jadwal"}
-            onClose={onClose}
+            onClose={onClose2}
             className={"font-semibold"}
           />
         </div>
@@ -149,7 +178,7 @@ const AddModal = ({ onClose }) => {
             <div className="px-4 mb-2">
               <label
                 htmlFor="hari"
-                className="text-xs w-fit mb-2 block font-semibold text-gray-700"
+                className="text-xs flex-1 w-fit mb-2 block font-semibold text-gray-700"
               >
                 Nama Kelas
               </label>
@@ -268,4 +297,4 @@ const AddModal = ({ onClose }) => {
   );
 };
 
-export default AddModal;
+export default EditModal;

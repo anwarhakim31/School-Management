@@ -1,5 +1,6 @@
 import ResponseError from "../error/response-error.js";
 import Guru from "../models/guru-model.js";
+import Jadwal from "../models/jadwal-model.js";
 import Kelas from "../models/kelas-model.js";
 import { hash, genSalt } from "bcrypt";
 
@@ -10,7 +11,7 @@ export const addGuru = async (req, res, next) => {
     const isExist = await Guru.findOne({ nip });
 
     if (isExist) {
-      throw new Response(400, "Nip Sudah digunakan.");
+      throw new ResponseError(400, "Nip Sudah digunakan.");
     }
 
     const salt = await genSalt();
@@ -55,6 +56,7 @@ export const addGuru = async (req, res, next) => {
       message: "Berhasil menambah guru.",
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
@@ -93,6 +95,7 @@ export const getAllGuru = async (req, res, next) => {
       .skip(skip)
       .limit(limit)
       .populate({ path: "waliKelas", select: "nama kelas" })
+      .populate({ path: "bidangStudi", select: "nama" })
       .exec();
 
     const totalGuru = await Guru.countDocuments(filterQuery);
@@ -167,6 +170,8 @@ export const deleteOneGuru = async (req, res, next) => {
 
     await Guru.findByIdAndDelete({ _id: id });
 
+    await Jadwal.deleteOne({ guru: id });
+
     res.status(200).json({
       success: true,
       message: "Berhasil menghapus guru.",
@@ -191,6 +196,7 @@ export const deleteManyGuru = async (req, res, next) => {
           { $unset: { waliKelas: null } }
         );
       }
+      await Jadwal.deleteOne({ guru: guru._id });
     }
 
     res.status(200).json({
@@ -205,7 +211,8 @@ export const deleteManyGuru = async (req, res, next) => {
 export const updateGuru = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const { kelas, namaKelas } = req.body;
+    const { kelas, namaKelas, bidangStudi } = req.body;
+    delete req.body.waliKelas;
 
     const guru = await Guru.findById(id);
 
@@ -217,6 +224,8 @@ export const updateGuru = async (req, res, next) => {
       const salt = await genSalt();
       req.body.password = await hash(req.body.password, salt);
     }
+
+    let updated;
 
     if (!kelas && !namaKelas) {
       delete req.body.namaKelas;
@@ -232,7 +241,11 @@ export const updateGuru = async (req, res, next) => {
         );
       }
 
-      await guru.save();
+      updated = await Guru.findByIdAndUpdate(
+        id,
+        { ...req.body },
+        { new: true }
+      );
     } else {
       if (guru.waliKelas) {
         await Kelas.findByIdAndUpdate(
@@ -255,11 +268,16 @@ export const updateGuru = async (req, res, next) => {
         { waliKelas: guru._id }
       );
 
-      await Guru.findByIdAndUpdate(
+      updated = await Guru.findByIdAndUpdate(
         { _id: id },
-        { ...req.body, waliKelas: newKelas._id }
+        { ...req.body, waliKelas: newKelas._id },
+        { new: true }
       );
     }
+
+    console.log(updated);
+
+    // await Jadwal.findOneAndUpdate({ guru: id }, { bidangStudi });
 
     res.status(200).json({
       success: true,
