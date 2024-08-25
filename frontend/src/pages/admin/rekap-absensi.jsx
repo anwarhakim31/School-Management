@@ -122,16 +122,13 @@ const RekapAbsensiPage = () => {
             <div className="flex justify-start flex-wrap md:flex-nowrap  gap-4">
               <div className="flex items-center gap-2">
                 <p className="text-sm font-semibold text-gray-700">Kelas</p>
-                <KelasDropdown onSelectKelas={onSelectKelas} />
+                <KelasDropdown onChange={onSelectKelas} />
               </div>
               <div className="flex items-center gap-2">
                 <p className="text-sm font-semibold text-gray-700">
                   Nama Kelas
                 </p>
-                <NamaKelasDropdown
-                  onSelectIdKelas={onSelectIdKelas}
-                  kelas={kelas}
-                />
+                <NamaKelasDropdown onChange={onSelectIdKelas} kelas={kelas} />
               </div>
             </div>
           </div>

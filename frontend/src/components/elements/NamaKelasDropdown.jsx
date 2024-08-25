@@ -15,10 +15,13 @@ const NamaKelasDropdown = ({ onChange, kelas, value }) => {
 
   useEffect(() => {
     if (dataEdit) {
-      setSelectedNamaKelas({
-        nama: dataEdit.kelas.nama,
-        id: dataEdit.kelas._id,
-      });
+      setTimeout(() => {
+        setSelectedNamaKelas({
+          nama: dataEdit.kelas.nama,
+          id: dataEdit.kelas._id,
+        });
+        onChange(dataEdit.kelas._id);
+      }, 100);
     }
   }, [dataEdit]);
 
@@ -49,14 +52,11 @@ const NamaKelasDropdown = ({ onChange, kelas, value }) => {
   }, [kelas]);
 
   useEffect(() => {
-    if (kelas !== dataEdit?.kelas?.kelas) {
-      onChange(undefined);
-    } else {
-      const datas = dataKelas?.find((d) => d._id === selectedNamaKelas.id);
-
-      onChange(datas?._id);
+    if (kelas) {
+      onChange("");
+      setSelectedNamaKelas("");
     }
-  }, [kelas, dataKelas]);
+  }, [kelas]);
 
   const handleInputClick = (event) => {
     event.stopPropagation();

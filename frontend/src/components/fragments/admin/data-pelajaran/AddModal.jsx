@@ -57,6 +57,7 @@ const AddModal = ({ onClose }) => {
             <input
               type="text"
               name="kode"
+              autoFocus
               {...register("kode", {
                 required: "Kode tidak boleh kosong.",
               })}

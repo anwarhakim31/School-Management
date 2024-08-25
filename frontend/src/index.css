@@ -123,3 +123,11 @@ input[type="number"] {
     background: white;
   }
 }
+.bg-blue-500 {
+  background-color: blue !important;
+}
+
+.col-span-1 {
+  height: 20px; /* Ensure the height is set */
+  border: 1px solid red; /* Add border for visibility */
+}

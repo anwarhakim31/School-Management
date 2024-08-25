@@ -14,7 +14,7 @@ const DropdownGuru = ({ onChange, bidangStudi, value }) => {
   const [search, setSearch] = useState("");
   const [dataGuru, setDataGuru] = useState([]);
   const [dataSearch, setDataSearch] = useState([]);
-  const [selectedGuru, setSelectedGuru] = useState({});
+  const [selectedGuru, setSelectedGuru] = useState("");
 
   const handleInputClick = (e) => {
     e.preventDefault();
@@ -23,20 +23,19 @@ const DropdownGuru = ({ onChange, bidangStudi, value }) => {
 
   useEffect(() => {
     if (dataEdit) {
-      setSelectedGuru({ nama: dataEdit.guru.nama, id: dataEdit.guru._id });
+      setTimeout(() => {
+        setSelectedGuru({ nama: dataEdit.guru.nama, id: dataEdit.guru._id });
+        onChange(dataEdit.guru._id);
+      }, 100);
     }
   }, [dataEdit]);
 
   useEffect(() => {
-    if (bidangStudi !== dataEdit?.bidangStudi?.nama) {
-      onChange(undefined);
-    } else {
-      const datas = dataGuru?.find((d) => d._id === selectedGuru.id);
-      onChange(datas?._id);
+    if (bidangStudi) {
+      setSelectedGuru("");
+      onChange("");
     }
-  }, [bidangStudi, dataGuru]);
-
-  console.log(bidangStudi);
+  }, [bidangStudi]);
 
   useEffect(() => {
     const getGuru = async () => {
@@ -90,17 +89,13 @@ const DropdownGuru = ({ onChange, bidangStudi, value }) => {
     setIsOpen(false);
   };
 
+  console.log(selectedGuru);
+
   return (
     <div ref={guruRef} className="relative w-full">
       <input
         type="text"
-        value={
-          !selectedGuru
-            ? "Pilih Guru"
-            : !dataGuru.some((data) => data.nama === selectedGuru.nama)
-            ? "Pilih Guru"
-            : selectedGuru.nama
-        }
+        value={!selectedGuru ? "Pilih Guru" : selectedGuru.nama}
         readOnly
         onClick={handleInputClick}
         className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"

@@ -15,7 +15,6 @@ import KelasDropdown from "@/components/elements/KelasDropdown";
 import NamaKelasDropdown from "@/components/elements/NamaKelasDropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { selectedDataEdit, setDataEdit } from "@/store/slices/admin-slice";
-import { data } from "autoprefixer";
 
 const EditModal = ({ onClose }) => {
   const {
@@ -62,7 +61,6 @@ const EditModal = ({ onClose }) => {
   const onSubmit = async (data) => {
     setLoading(true);
 
-    console.log(data);
     try {
       const res = await axios.put(
         HOST + "/api/jadwal/edit-jadwal/" + dataJadwal._id,
@@ -94,8 +92,6 @@ const EditModal = ({ onClose }) => {
     onClose();
     dispatch(setDataEdit(undefined));
   };
-
-  console.log(bidangStudi);
 
   return (
     <Modal onClose={onClose2}>
@@ -154,9 +150,7 @@ const EditModal = ({ onClose }) => {
               {errors.guru && errors.guru.message}
             </span>
           </div>
-          <div
-            className={`flex justify-between flex-wrap sm:flex-nowrap gap-2`}
-          >
+          <div className={`flex justify-center flex-wrap sm:flex-nowrap gap-2`}>
             <div className="px-4 mb-2">
               <label
                 htmlFor="hari"
@@ -177,10 +171,10 @@ const EditModal = ({ onClose }) => {
               </span>
             </div>
 
-            <div className="px-4 mb-2">
+            <div className="px-4 flex-1 mb-2">
               <label
                 htmlFor="hari"
-                className="text-xs flex-1 w-fit mb-2 block font-semibold text-gray-700"
+                className="text-xs  w-fit mb-2 block font-semibold text-gray-700"
               >
                 Nama Kelas
               </label>
