@@ -1,0 +1,112 @@
+import React from "react";
+
+// Sample schedule data
+export const schedules = [
+  { day: "Monday", start: "07:00", end: "08:00" },
+  { day: "Monday", start: "13:30", end: "14:30" },
+  { day: "Tuesday", start: "10:00", end: "12:00" },
+  { day: "Wednesday", start: "09:00", end: "11:30" },
+  { day: "Thursday", start: "07:00", end: "10:00" },
+  { day: "Friday", start: "12:00", end: "15:00" },
+  { day: "Saturday", start: "08:00", end: "09:30" },
+  { day: "Sunday", start: "13:00", end: "15:00" },
+  // Add more schedules here
+];
+
+// Total working minutes per day (8 hours = 480 minutes)
+const totalDailyMinutes = 8 * 60; // From 07:00 to 15:00
+
+// Function to calculate the percentage width based on start and end times
+const calculatePercentage = (start, end) => {
+  const [startHour, startMinute] = start.split(":").map(Number);
+  const [endHour, endMinute] = end.split(":").map(Number);
+  const startTime = startHour * 60 + startMinute;
+  const endTime = endHour * 60 + endMinute;
+  const totalMinutes = endTime - startTime;
+  return (totalMinutes / totalDailyMinutes) * 100; // Convert to percentage
+};
+
+// Function to calculate the 'left' position in percentage
+const calculateLeft = (start) => {
+  const [startHour, startMinute] = start.split(":").map(Number);
+  const startTime = startHour * 60 + startMinute;
+  return ((startTime - 420) / totalDailyMinutes) * 100; // 420 = 07:00 in minutes
+};
+
+const GuruDashboardPage = () => {
+  const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+
+  const timeSlots = [
+    "07:00",
+    "08:00",
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+  ];
+
+  return (
+    <div className="w-full max-w-full px-4 py-8">
+      <div className="overflow-x-auto">
+        {/* Time Grid */}
+        <div className="grid grid-cols-9 min-w-[600px]">
+          <div className="bg-gray-100"></div>
+          {timeSlots.map((slot, index) => (
+            <div
+              key={index}
+              className="text-center font-medium text-gray-700 bg-gray-100 border border-gray-200 p-2"
+            >
+              {slot}
+            </div>
+          ))}
+        </div>
+
+        {/* Schedule Rows */}
+        {days.map((day) => (
+          <div key={day} className="grid grid-cols-9 min-w-[600px] h-16">
+            <div className="flex items-center justify-center font-medium text-gray-700 bg-gray-100 border border-gray-200 p-2">
+              {day}
+            </div>
+            <div className="relative col-span-8 border border-gray-200">
+              {schedules
+                .filter((schedule) => schedule.day === day)
+                .map((schedule, idx) => {
+                  const width = calculatePercentage(
+                    schedule.start,
+                    schedule.end
+                  );
+                  const left = calculateLeft(schedule.start);
+
+                  return (
+                    <div
+                      key={idx}
+                      className="absolute top-2 bottom-2 bg-blue-500 rounded-md text-white text-xs flex items-center justify-center shadow-md"
+                      style={{
+                        width: `${width}%`,
+                        left: `${left}%`,
+                      }}
+                    >
+                      {`${schedule.start} - ${schedule.end}`}
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default GuruDashboardPage;
