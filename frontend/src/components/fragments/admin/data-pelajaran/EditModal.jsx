@@ -1,12 +1,12 @@
 import HeaderModal from "@/components/elements/HeaderModal";
 import Modal from "@/components/elements/Modal";
-import { selectedDataEdit } from "@/store/slices/admin-slice";
+import { selectedDataEdit, setDataEdit } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 
 const EditModal = ({ onClose }) => {
@@ -16,6 +16,7 @@ const EditModal = ({ onClose }) => {
     setValue,
     formState: { errors },
   } = useForm();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const editData = useSelector(selectedDataEdit);
 
@@ -40,6 +41,7 @@ const EditModal = ({ onClose }) => {
       );
       if (res.status === 200) {
         toast.success(res.data.message);
+        dispatch(setDataEdit(undefined));
         onClose();
       }
     } catch (error) {

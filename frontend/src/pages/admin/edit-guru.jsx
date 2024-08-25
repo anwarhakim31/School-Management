@@ -119,6 +119,8 @@ const EditGuruPage = () => {
           setValue("password", undefined);
         } else if (data === "photo") {
           setPhoto(editData[data]);
+        } else if (data === "bidangStudi") {
+          setValue("bidangStudi", editData[data]._id);
         } else {
           setValue(data, editData[data]);
         }
@@ -126,13 +128,15 @@ const EditGuruPage = () => {
     }
   }, [editData, kelasDB]);
 
+  console.log(bidangStudi);
+
   useEffect(() => {
     setValue("namaKelas", "");
   }, [selectKelas]);
 
   useEffect(() => {
     if (!editData) {
-      navigate("/admin/data-siswa");
+      navigate("/admin/data-guru");
     }
   }, []);
 
@@ -440,7 +444,7 @@ const EditGuruPage = () => {
               <select
                 id="bidangstudi"
                 {...register("bidangStudi", {
-                  required: "Agama tidak boleh kosong..",
+                  required: "Bidang Studi tidak boleh kosong..",
                 })}
                 className="py-1.5 h-8 bg-white border text-gray-500   text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
               >

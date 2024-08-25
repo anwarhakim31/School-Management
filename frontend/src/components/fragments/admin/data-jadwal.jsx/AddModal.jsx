@@ -66,6 +66,8 @@ const AddModal = ({ onClose }) => {
     }
   };
 
+  console.log(bidangStudi);
+
   return (
     <Modal onClose={onClose}>
       <div
@@ -112,7 +114,7 @@ const AddModal = ({ onClose }) => {
               rules={{ required: "Guru diperlukan." }}
               render={({ field: { onChange, value } }) => (
                 <DropdownGuru
-                  bidangStudi={bidangStudi.nama}
+                  bidangStudi={bidangStudi.id}
                   onChange={onChange}
                   value={value}
                 />

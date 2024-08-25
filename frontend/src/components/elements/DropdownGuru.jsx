@@ -36,6 +36,8 @@ const DropdownGuru = ({ onChange, bidangStudi, value }) => {
     }
   }, [bidangStudi, dataGuru]);
 
+  console.log(bidangStudi);
+
   useEffect(() => {
     const getGuru = async () => {
       try {

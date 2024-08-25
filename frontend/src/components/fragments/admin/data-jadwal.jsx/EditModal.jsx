@@ -95,6 +95,8 @@ const EditModal = ({ onClose }) => {
     dispatch(setDataEdit(undefined));
   };
 
+  console.log(bidangStudi);
+
   return (
     <Modal onClose={onClose2}>
       <div
@@ -141,7 +143,7 @@ const EditModal = ({ onClose }) => {
               rules={{ required: "Guru diperlukan." }}
               render={({ field: { onChange, value } }) => (
                 <DropdownGuru
-                  bidangStudi={bidangStudi.nama}
+                  bidangStudi={bidangStudi.id}
                   onChange={onChange}
                   value={value}
                 />

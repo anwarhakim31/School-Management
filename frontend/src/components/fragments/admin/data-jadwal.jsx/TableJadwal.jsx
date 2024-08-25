@@ -44,10 +44,13 @@ const TableJadwal = ({
         <table className=" w-full text-gray-500 table-a">
           <thead className="text-xs uppercase text-white bg-neutral">
             <tr>
-              <th scope="col" className="px-4 text-left py-4 whitespace-nowrap">
+              <th
+                scope="col"
+                className="px-10 text-left py-4 whitespace-nowrap"
+              >
                 Bidang Studi
               </th>
-              <th scope="col" className="px-5 text-left py-4">
+              <th scope="col" className="px-10 text-left py-4">
                 Guru
               </th>
               <th scope="col" className="px-4 text-left py-4">
@@ -56,10 +59,10 @@ const TableJadwal = ({
               <th scope="col" className="px-2 py-4 whitespace-nowrap">
                 Jumlah pertemuan
               </th>
-              <th scope="col" className="px-2  py-4">
+              <th scope="col" className="px-10  py-4">
                 Hari
               </th>
-              <th scope="col" className="px-2 py-4">
+              <th scope="col" className="px-10 py-4">
                 waktu
               </th>
 
@@ -101,13 +104,13 @@ const TableJadwal = ({
                 >
                   <td
                     scope="row"
-                    className="px-4    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
+                    className="px-10   border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
                   >
                     {jadwal.bidangStudi.kode} {jadwal.bidangStudi.nama}
                   </td>
                   <td
                     scope="row"
-                    className="px-5    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
+                    className="px-10    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
                   >
                     {jadwal.guru.nama}
                   </td>
@@ -125,13 +128,13 @@ const TableJadwal = ({
                   </td>
                   <td
                     scope="row"
-                    className="px-2  text-center  border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
+                    className="px-10 text-center  border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
                   >
                     {jadwal.hari}
                   </td>
                   <td
                     scope="row"
-                    className="px-2  text-center  border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
+                    className="px-10  text-center  border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
                   >
                     {jadwal.mulai} - {jadwal.selesai}
                   </td>

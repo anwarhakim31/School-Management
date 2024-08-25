@@ -192,20 +192,14 @@ const TableGuru = ({
                       scope="row"
                       className="py-4 px-4 text-xs font-normal text-gray-900 whitespace-nowrap "
                     >
-                      {guru.bidangStudi}
-                    </td>
-                    {/* <td
-                      scope="row"
-                      className="px-4 py-4   overflow-hidden line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap "
-                    >
-                      {guru.alamat ? (
-                        `${guru.alamat}`
+                      {guru?.bidangStudi?.nama ? (
+                        guru.bidangStudi.nama
                       ) : (
                         <span className="text-gray-700 font-bold">
                           Data Kosong
                         </span>
                       )}
-                    </td> */}
+                    </td>
 
                     <td
                       scope="row"

@@ -232,19 +232,18 @@ const DataGuruPage = () => {
             </div>
           </div>
         ) : (
-          ""
-          // <TableGuru
-          //   data={dataGuru}
-          //   page={page}
-          //   limit={pagination.page}
-          //   totalGuru={pagination.totalGuru}
-          //   totalPage={pagination.totalPage}
-          //   handlePagination={handlePagination}
-          //   handleToggleDeleteOne={handleToggleDeleteOne}
-          //   setAllCheck={setAllCheck}
-          //   allCheck={allCheck}
-          //   loading={loading}
-          // />
+          <TableGuru
+            data={dataGuru}
+            page={page}
+            limit={pagination.page}
+            totalGuru={pagination.totalGuru}
+            totalPage={pagination.totalPage}
+            handlePagination={handlePagination}
+            handleToggleDeleteOne={handleToggleDeleteOne}
+            setAllCheck={setAllCheck}
+            allCheck={allCheck}
+            loading={loading}
+          />
         )}
       </div>
       {isDeleteSiswa && <DeleteModal onClose={handleToggleDeleteOne} />}

@@ -1,6 +1,7 @@
 import ResponseError from "../error/response-error.js";
 import Jadwal from "../models/jadwal-model.js";
 import Mapel from "../models/mapel-model.js";
+import Guru from "../models/guru-model.js";
 
 export const addMapel = async (req, res, next) => {
   try {
@@ -79,13 +80,35 @@ export const deleteMapel = async (req, res, next) => {
 
     await Mapel.findByIdAndDelete(id);
 
-    await Jadwal.deleteOne({ bidangStudi: id });
+    const jadwalList = await Jadwal.find({ bidangStudi: id });
+
+    for (const jadwall of jadwalList) {
+      if (!jadwall._id) {
+        throw new ResponseError(404, "Jadwal tidak ditemukan");
+      }
+
+      await Jadwal.findOneAndDelete({ _id: jadwall._id });
+    }
+
+    const guruList = await Guru.find({ bidangStudi: id });
+
+    for (const gurus of guruList) {
+      if (!gurus._id) {
+        throw new ResponseError(404, "Guru tidak ditemukan");
+      }
+
+      await Guru.findByIdAndUpdate(
+        { _id: gurus._id },
+        { $unset: { bidangStudi: 1 } }
+      );
+    }
 
     res.status(200).json({
       success: true,
       message: "Berhasil menghapus mata pelajaran.",
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
