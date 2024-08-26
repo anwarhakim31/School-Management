@@ -20,31 +20,9 @@ const AddModal = ({ onClose }) => {
     defaultValues: { waliKelas: "", kelas: "", nama: "", posisi: "" },
   });
   const [loading, setLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [guru, setGuru] = useState([]);
-  const [waliKelas, setWaliKelas] = useState("Tidak memiliki Wali Kelas");
 
-  const handleChangeKelas = (e, name) => {
-    const value = e.target.value;
-
-    const cleanedValue = value.replace(/\D/g, "");
-
-    setValue(name, cleanedValue);
-  };
-
-  const handleToggleSelect = () => {
-    setIsOpen(false);
-  };
-
-  const handleWaliKelasSelection = (nama, id) => {
-    if (nama === "") {
-      setWaliKelas("Tidak memiliki Wali Kelas");
-    } else {
-      setWaliKelas(nama);
-    }
-
-    setValue("waliKelas", id);
-    setIsOpen(false);
+  const handleChangeWaliKelas = (value) => {
+    setValue("waliKelas", value);
   };
 
   const onSubmit = async (data) => {
@@ -65,26 +43,6 @@ const AddModal = ({ onClose }) => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    const guru = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get(HOST + "/api/guru/get-guru", {
-          withCredentials: true,
-        });
-
-        if (res.status === 200) {
-          setGuru(res.data.guru);
-        }
-      } catch (error) {
-        responseError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    guru();
-  }, []);
 
   return (
     <Modal onClose={onClose}>
@@ -110,7 +68,7 @@ const AddModal = ({ onClose }) => {
                 Kelas
               </label>
               <input
-                type="text"
+                type="number"
                 name="kelas"
                 min={1}
                 {...register("kelas", {
@@ -124,7 +82,6 @@ const AddModal = ({ onClose }) => {
                     message: "Maksimal kelas 12",
                   },
                 })}
-                onChange={(e) => handleChangeKelas(e, "kelas")}
                 className="w-full border text-xs px-2 py-1.5 rounded-md  outline-neutral border-gray-500"
               />
               <span className="text-xs h-4 text-neutral2 block">
@@ -162,44 +119,13 @@ const AddModal = ({ onClose }) => {
             >
               Wali Kelas
             </label>
-            <div
-              className="w-full relative  text-xs  rounded-md "
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-            >
-              <input
-                type="text"
-                id="wali"
-                onClick={(e) => {
-                  setIsOpen(true);
-                }}
-                value={waliKelas}
-                readOnly
-                className="px-2 py-1.5 w-full  border  rounded-md  outline-neutral select-none cursor-pointer border-gray-500"
-              />
-              <div className="absolute top-2 right-2 ">
-                {isOpen ? (
-                  <ChevronUp width={15} height={15} />
-                ) : (
-                  <ChevronDown width={15} height={15} />
-                )}
-              </div>
-              {isOpen && (
-                <CustomSelectOption
-                  handleSelect={handleWaliKelasSelection}
-                  onClose={handleToggleSelect}
-                  data={guru}
-                  def={"Tidak memiliki Wali Kelas"}
-                  isOpen={isOpen}
-                />
-              )}
-            </div>
 
+            <CustomSelectOption onChange={handleChangeWaliKelas} />
             <span className="text-xs font-medium h-4 mt-1 block">
               (opsional)
             </span>
           </div>
+
           <div className=" px-6">
             <label
               htmlFor="nama"

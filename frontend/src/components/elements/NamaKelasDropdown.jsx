@@ -5,7 +5,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
-const NamaKelasDropdown = ({ onChange, kelas, value }) => {
+const NamaKelasDropdown = ({ onChange, kelas, onChange2, value }) => {
   const dataEdit = useSelector(selectedDataEdit);
   const dropdownRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
@@ -49,11 +49,13 @@ const NamaKelasDropdown = ({ onChange, kelas, value }) => {
 
       setNamaKelas(filter);
     }
-  }, [kelas]);
+  }, [dataKelas, kelas]);
 
   useEffect(() => {
     if (kelas) {
-      onChange("");
+      if (onChange) {
+        onChange("");
+      }
       setSelectedNamaKelas("");
     }
   }, [kelas]);
@@ -65,7 +67,14 @@ const NamaKelasDropdown = ({ onChange, kelas, value }) => {
 
   const handleSelectKelas = (value, id) => {
     setSelectedNamaKelas({ nama: value, id });
-    onChange(id);
+
+    if (onChange) {
+      onChange(id);
+    }
+
+    if (onChange2) {
+      onChange2(value);
+    }
     setIsOpen(false);
   };
 
@@ -88,10 +97,9 @@ const NamaKelasDropdown = ({ onChange, kelas, value }) => {
         readOnly
         disabled={kelas === 0 || !kelas}
         value={
-          kelas === 0
+          kelas === ""
             ? "Pilih Kelas terlebih Dulu"
-            : !selectedNamaKelas.nama ||
-              namaKelas.some((kel) => kel.nama !== selectedNamaKelas.nama)
+            : !selectedNamaKelas.nama
             ? "Pilih Nama Kelas"
             : selectedNamaKelas.nama
         }

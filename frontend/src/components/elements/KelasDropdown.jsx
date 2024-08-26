@@ -17,7 +17,10 @@ const KelasDropdown = ({ onChange, value }) => {
     if (dataEdit) {
       setSelectedKelas(dataEdit.kelas.kelas);
     }
-  }, [dataEdit]);
+    if (value) {
+      setSelectedKelas(value);
+    }
+  }, [dataEdit, value]);
 
   useEffect(() => {
     const getKelas = async () => {

@@ -20,13 +20,13 @@ const DayDropdown = ({ onChange, value }) => {
   }, [dataEdit]);
 
   const daysOfWeek = [
-    "Minggu",
     "Senin",
     "Selasa",
     "Rabu",
     "Kamis",
     "Jumat",
     "Sabtu",
+    "Minggu",
   ];
 
   const handleInputClick = (e) => {

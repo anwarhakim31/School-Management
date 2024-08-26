@@ -89,8 +89,6 @@ const DropdownGuru = ({ onChange, bidangStudi, value }) => {
     setIsOpen(false);
   };
 
-  console.log(selectedGuru);
-
   return (
     <div ref={guruRef} className="relative w-full">
       <input

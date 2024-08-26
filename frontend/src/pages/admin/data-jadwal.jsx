@@ -1,22 +1,23 @@
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { Filter, Plus, Search } from "lucide-react";
+import { File, Filter, Plus, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import AddModal from "@/components/fragments/admin/data-jadwal.jsx/AddModal";
 import AcaraIcon from "../../assets/svg/acara.svg?react";
 import TableJadwal from "@/components/fragments/admin/data-jadwal.jsx/TableJadwal";
 import DeleteModal from "@/components/fragments/admin/data-jadwal.jsx/DeleteModal";
 import EditModal from "@/components/fragments/admin/data-jadwal.jsx/EditModal";
+import DropDownFilter2 from "@/components/elements/DropDownFilter2";
 
 const DataJadwalPage = () => {
   const [loading, setLoading] = useState(true);
   const [isAddJadwal, setIsAddJadwal] = useState(false);
   const [isDeleteJadwal, setIsDeleteJadwal] = useState(false);
   const [isEditJadwal, setIsEditJadwal] = useState(false);
-  const [isFilter, setIs] = useState(false);
   const [dataJadwal, setDataJadwal] = useState([]);
   const [dataFilter, setDataFilter] = useState([]);
+  const [filter, setFilter] = useState({ hari: "", kelas: "", namaKelas: "" });
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -56,8 +57,24 @@ const DataJadwalPage = () => {
       );
     }
 
+    if (filter.hari) {
+      clone = clone.filter((jadwal) => jadwal.hari.includes(filter.hari));
+    }
+
+    if (filter.kelas) {
+      clone = clone.filter((jadwal) => jadwal.kelas.kelas === filter.kelas);
+    }
+
+    if (filter.namaKelas) {
+      clone = clone.filter((jadwal) =>
+        jadwal.kelas.nama.includes(filter.namaKelas)
+      );
+    }
+
     setDataFilter(clone);
-  }, [dataJadwal, search]);
+  }, [dataJadwal, search, filter]);
+
+  console.log(dataJadwal);
 
   const handleToggleAdd = () => {
     setIsAddJadwal(!isAddJadwal);
@@ -70,8 +87,8 @@ const DataJadwalPage = () => {
     setIsEditJadwal(!isEditJadwal);
   };
 
-  const handleToggleFilter = () => {
-    setIsFilter(!isFilter);
+  const handleFilterChange = (name, value) => {
+    setFilter({ ...filter, [name]: value });
   };
 
   return (
@@ -89,41 +106,17 @@ const DataJadwalPage = () => {
             <Search height={20} width={20} className="text-gray-400" />
           </button>
         </div>
-        <div className="flex gap-2 relative  mr-auto  ">
-          <button
-            onClick={handleToggleFilter}
-            ref={buttonFilterRef}
-            disabled={dataFilter.length === 0}
-            className="border border-gray-400 group disabled:cursor-not-allowed bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-md flex-between gap-3"
-          >
-            <Filter
-              width={15}
-              height={15}
-              className="text-gray-600 group-hover:text-white"
-            />
-          </button>
-          {/* {option !== "terbaru" && (
-            <button
-              onClick={() => setOption("terbaru")}
-              className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-lg flex-between gap-3"
-            >
-              Clear
-            </button>
-          )}
-
-          {isFilter && (
-            <FilterMapel
-              option={option}
-              handleOptionChange={handleOptionChange}
-              onClose={handleToggleFilter}
-              ref={filterRef}
-            />
-          )} */}
+        <div className="mr-auto">
+          <DropDownFilter2
+            handleFilterChange={handleFilterChange}
+            setFilter={setFilter}
+          />
         </div>
+
         <button
-          aria-label="tambah jawa;"
+          aria-label="tambah jawdwal"
           onClick={handleToggleAdd}
-          // disabled={loading}
+          disabled={loading}
           className="bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md flex-between gap-3"
         >
           <AcaraIcon width={15} height={15} className="" />

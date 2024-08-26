@@ -5,7 +5,7 @@ import { selectedDataEdit, setDataEdit } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { ChevronDown, ChevronUp } from "lucide-react";
+
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,17 +16,16 @@ const EditModal = ({ onClose }) => {
     register,
     handleSubmit,
     setValue,
-
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: { waliKelas: "", kelas: "", nama: "", posisi: "" },
   });
   const dataEdit = useSelector(selectedDataEdit);
   const dispatch = useDispatch();
-  const [isOpen, setIsOpen] = useState(false);
-  const [guru, setGuru] = useState([]);
+  const waliKelas = watch("waliKelas");
+
   const [loading, setLoading] = useState(false);
-  const [waliKelas, setWaliKelas] = useState("Tidak memiliki Wali Kelas");
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -50,26 +49,6 @@ const EditModal = ({ onClose }) => {
   };
 
   useEffect(() => {
-    const guru = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get(HOST + "/api/guru/get-guru", {
-          withCredentials: true,
-        });
-
-        if (res.status === 200) {
-          setGuru(res.data.guru);
-        }
-      } catch (error) {
-        responseError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    guru();
-  }, []);
-
-  useEffect(() => {
     if (dataEdit) {
       setValue("kelas", dataEdit.kelas || "");
       setValue("nama", dataEdit.nama || "");
@@ -77,28 +56,14 @@ const EditModal = ({ onClose }) => {
 
       if (dataEdit.waliKelas) {
         setValue("waliKelas", dataEdit.waliKelas._id || "");
-        setWaliKelas(dataEdit.waliKelas.nama || "");
-      } else {
-        setWaliKelas("Tidak memeliki Wali Kelas.");
       }
     }
-  }, [dataEdit, guru]);
+  }, [dataEdit]);
 
-  const handleWaliKelasSelection = (nama, id) => {
-    if (nama === "") {
-      setWaliKelas("Tidak memiliki Wali Kelas");
-    } else {
-      setWaliKelas(nama);
-    }
-
-    setValue("waliKelas", id);
-
-    setIsOpen(false);
+  const handleChangeWaliKelas = (value) => {
+    setValue("waliKelas", value);
   };
 
-  const handleToggleSelect = () => {
-    setIsOpen(false);
-  };
   return (
     <Modal onClose={onClose}>
       <div
@@ -174,39 +139,10 @@ const EditModal = ({ onClose }) => {
             >
               Wali Kelas
             </label>
-            <div
-              className="w-full relative  text-xs  rounded-md "
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-            >
-              <input
-                type="text"
-                id="wali"
-                onClick={() => {
-                  setIsOpen(true);
-                }}
-                value={waliKelas}
-                readOnly
-                className="px-2 py-1.5 w-full  border  rounded-md  outline-neutral select-none cursor-pointer border-gray-500"
-              />
-              <div className="absolute top-2 right-2 ">
-                {isOpen ? (
-                  <ChevronUp width={15} height={15} />
-                ) : (
-                  <ChevronDown width={15} height={15} />
-                )}
-              </div>
-              {isOpen && (
-                <CustomSelectOption
-                  handleSelect={handleWaliKelasSelection}
-                  onClose={handleToggleSelect}
-                  data={guru}
-                  def={"Tidak memiliki Wali Kelas"}
-                  isOpen={isOpen}
-                />
-              )}
-            </div>
+            <CustomSelectOption
+              onChange={handleChangeWaliKelas}
+              wali={waliKelas}
+            />
 
             <span className="text-xs font-medium h-4 mt-1 block">
               (opsional)
