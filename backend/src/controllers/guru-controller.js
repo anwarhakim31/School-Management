@@ -277,8 +277,6 @@ export const updateGuru = async (req, res, next) => {
 
     console.log(updated);
 
-    // await Jadwal.findOneAndUpdate({ guru: id }, { bidangStudi });
-
     res.status(200).json({
       success: true,
       message: "Berhasil mengubah data guru.",
@@ -288,22 +286,30 @@ export const updateGuru = async (req, res, next) => {
   }
 };
 
-export const getDetailGuru = async (req, res, next) => {
+export const getDashboard = async (req, res, next) => {
   try {
     const id = req.userId;
 
-    const Guru = await findById(id).populate("Siswa ")
-    
+    const guru = await Guru.findById(id)
+      .populate({ path: "waliKelas", select: "siswa kelas nama" })
+      .populate({ path: "bidangStudi", select: "nama" });
 
+    const jadwalList = await Jadwal.find({ guru: id });
 
+    let jumlahPertemuan = 0;
 
+    for (const jadwal of jadwalList) {
+      jumlahPertemuan += jadwal.jumlahPertemuan;
+    }
 
     res.status(200).json({
       success: true,
-      message: "Berhasil menghapus guru terpilih.",
+      message: "Berhasil mengambil detail guru.",
       detail: {
-        bidangStudi:guru.
-      }
+        bidangStudi: guru.bidangStudi.nama,
+        totalMurid: guru.waliKelas.siswa.length,
+        jumlahPertemuan,
+      },
     });
   } catch (error) {
     next(error);

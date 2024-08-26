@@ -5,6 +5,7 @@ import {
   deleteManyGuru,
   deleteOneGuru,
   getAllGuru,
+  getDashboard,
   getDetail,
   getGuru,
   updateGuru,
@@ -16,6 +17,7 @@ guruRouter.post("/add-guru", verifyToken, addGuru);
 guruRouter.get("/get-guru", verifyToken, getGuru);
 guruRouter.get("/get-detail-guru", verifyToken, getDetail);
 guruRouter.get("/get-all-guru", verifyToken, getAllGuru);
+guruRouter.get("/get-dashboard", verifyToken, getDashboard);
 guruRouter.delete("/delete-one-guru/:id", verifyToken, deleteOneGuru);
 guruRouter.delete("/delete-many-guru", verifyToken, deleteManyGuru);
 guruRouter.put("/edit-guru/:id", verifyToken, updateGuru);

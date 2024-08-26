@@ -12,13 +12,14 @@ import { Presentation } from "lucide-react";
 import { useSelector } from "react-redux";
 import { selectedUserData } from "@/store/slices/auth-slice";
 
+import AnimasiCounter from "@/components/elements/AnimasiCounter";
+
 const GuruDashboardPage = () => {
   const userData = useSelector(selectedUserData);
   const [loading, setLoading] = useState(true);
   const [dataJadwal, setDataJadwal] = useState([]);
+  const [dataGuru, setDataGuru] = useState({});
   const [durasi, setDurasi] = useState(0);
-
-  console.log(userData);
 
   useEffect(() => {
     const getJadwal = async () => {
@@ -40,8 +41,29 @@ const GuruDashboardPage = () => {
       }
     };
 
+    const getDetail = async () => {
+      try {
+        const res = await axios.get(HOST + "/api/guru/get-dashboard", {
+          withCredentials: true,
+        });
+
+        if (res.status === 200) {
+          setDataGuru(res.data.detail);
+        }
+      } catch (error) {
+        responseError(error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
+      }
+    };
+
     getJadwal();
+    getDetail();
   }, []);
+
+  console.log(dataGuru);
 
   return (
     <section className="px-6 py-4">
@@ -66,12 +88,10 @@ const GuruDashboardPage = () => {
           </div>
           <div className="h-8 flex-1 flex-center">
             {loading ? (
-              <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-white rounded-full border-t-neutral animate-spin"></div>
+              <div className=" flex-center h-6 w-2/3 m-auto bg-backup rounded-sm border-t-backup animata-pulse duration-300"></div>
             ) : (
-              <h1 className=" flex-1 flex-center  text-white font-semibold text-3xl h-12 ">
-                {/* {dataUmum && (
-                  <AnimasiCounter targetNumber={dataUmum.totalSiswa} />
-                )} */}
+              <h1 className=" flex-1 flex-center  text-white font-semibold text-2xl h-12 truncate">
+                {dataGuru && dataGuru.bidangStudi}
               </h1>
             )}
           </div>
@@ -99,9 +119,9 @@ const GuruDashboardPage = () => {
               <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-white rounded-full border-t-gray-500 animate-spin"></div>
             ) : (
               <h1 className=" flex-1 flex-center  text-white font-semibold text-3xl h-12 ">
-                {/* {dataUmum && (
-                  <AnimasiCounter targetNumber={dataUmum.totalGuru} />
-                )} */}
+                {dataGuru && (
+                  <AnimasiCounter targetNumber={dataGuru.jumlahPertemuan} />
+                )}
               </h1>
             )}
           </div>
@@ -126,13 +146,19 @@ const GuruDashboardPage = () => {
           </div>
           <div className="h-8 flex-1 flex-center">
             {loading ? (
-              <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-white rounded-full border-t-gray-500 animate-spin"></div>
+              <div className=" flex-center w-full flex-col gap-3  animate-pulse duration-300">
+                <div className="w-6 h-4 bg-backup rounded-sm"></div>
+                <div className="w-1/2 h-4 bg-backup rounded-sm"></div>
+              </div>
             ) : (
-              <h1 className=" flex-1 flex-center  text-white font-semibold text-3xl h-12 ">
-                {/* {dataUmum && (
-                  <AnimasiCounter targetNumber={dataUmum.totalKelas} />
-                )} */}
-              </h1>
+              <div className=" flex-center flex-col text-white font-semibold  h-12 ">
+                <h1 className="text-2xl">
+                  {userData.waliKelas && userData.waliKelas.kelas}
+                </h1>
+                <span className="block">
+                  {userData.waliKelas && userData.waliKelas.nama}
+                </span>
+              </div>
             )}
           </div>
         </div>
@@ -159,9 +185,9 @@ const GuruDashboardPage = () => {
               <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-white rounded-full border-t-gray-500 animate-spin"></div>
             ) : (
               <h1 className=" flex-1 flex-center  text-white font-semibold text-3xl h-12 ">
-                {/* {dataUmum && (
-                  <AnimasiCounter targetNumber={dataUmum.totalMapel} />
-                )} */}
+                {dataGuru && (
+                  <AnimasiCounter targetNumber={dataGuru.totalMurid} />
+                )}
               </h1>
             )}
           </div>
