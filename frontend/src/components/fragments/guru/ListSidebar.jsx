@@ -29,7 +29,7 @@ const ListSidebar = () => {
     {
       id: 1,
       nama: "Dashboard",
-      path: "/admin/dashboard",
+      path: "/guru/dashboard",
       icon: (
         <DashboardIcon
           height={17}
@@ -87,7 +87,7 @@ const ListSidebar = () => {
     {
       id: 3,
       nama: "Jadwal Mengajar",
-      path: "/admin/jadwal-mengajar",
+      path: "/guru/jadwal-mengajar",
       icon: (
         <DashboardIcon
           height={17}

@@ -178,3 +178,62 @@ export const editJadwal = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getJadwalGuru = async (req, res, next) => {
+  try {
+    const id = req.userId;
+
+    const jadwal = await Jadwal.find({ guru: id })
+      .populate({
+        path: "bidangStudi",
+      })
+      .populate({
+        path: "kelas",
+        select: "nama kelas",
+      });
+
+    const schedules = jadwal.map((item) => {
+      return {
+        ...item.toObject(),
+        class: `${item.kelas.kelas} ${item.kelas.nama}`,
+      };
+    });
+
+    let durasiSekolah = await Master.findOne();
+
+    if (!durasiSekolah) {
+      throw new ResponseError(
+        404,
+        "Durasi Sekolah tidak ditemukan di master data"
+      );
+    }
+
+    const waktuKeTanggal = (waktu) => {
+      const [jam, menit] = waktu.split(":").map(Number);
+      const tanggal = new Date();
+      tanggal.setHours(jam);
+      tanggal.setMinutes(menit);
+      tanggal.setSeconds(0);
+      tanggal.setMilliseconds(0);
+
+      return tanggal;
+    };
+
+    const mulai = waktuKeTanggal(durasiSekolah.startTime);
+    const selesai = waktuKeTanggal(durasiSekolah.endTime);
+
+    const selisihMiliDetik = selesai - mulai;
+
+    const selisihDetik = Math.floor(selisihMiliDetik / (1000 * 60));
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengambil jadwal",
+      schedules,
+      durasi: selisihDetik,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
