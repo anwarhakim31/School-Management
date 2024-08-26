@@ -86,7 +86,7 @@ const ListSidebar = () => {
     },
     {
       id: 3,
-      nama: "Jadwal Mengajar",
+      nama: "Nilai",
       path: "/guru/jadwal-mengajar",
       icon: (
         <DashboardIcon

@@ -235,6 +235,7 @@ function App() {
               </PrivateRoute>
             }
           />
+
           <Route
             path={"profile"}
             element={

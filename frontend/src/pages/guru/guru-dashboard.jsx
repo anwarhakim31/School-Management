@@ -88,7 +88,7 @@ const GuruDashboardPage = () => {
           </div>
           <div className="h-8 flex-1 flex-center">
             {loading ? (
-              <div className=" flex-center h-6 w-2/3 m-auto bg-backup rounded-sm border-t-backup animata-pulse duration-300"></div>
+              <div className=" flex-center h-6 w-2/3 m-auto bg-backup rounded-sm border-t-backup animate-pulse duration-500"></div>
             ) : (
               <h1 className=" flex-1 flex-center  text-white font-semibold text-2xl h-12 truncate">
                 {dataGuru && dataGuru.bidangStudi}
@@ -126,72 +126,76 @@ const GuruDashboardPage = () => {
             )}
           </div>
         </div>
-        <div
-          className="min-h-[125px] flex flex-col rounded-lg p-4 shadow-md"
-          style={{
-            background: "linear-gradient(to right top,#c94f60,#fe967d)",
-          }}
-        >
-          <div className="flex gap-2 border-b pb-2 items-center border-gray-50/50">
-            <div className="bg-rose-500 p-1 rounded-lg">
-              <ClassIcon
-                width={"20"}
-                height={"20"}
-                className={" stroke-white stroke-[1] text-white"}
-              />
-            </div>
-            <h3 className="text-sm font-semibold text-white line-clamp-1 ">
-              Wali Kelas
-            </h3>
-          </div>
-          <div className="h-8 flex-1 flex-center">
-            {loading ? (
-              <div className=" flex-center w-full flex-col gap-3  animate-pulse duration-300">
-                <div className="w-6 h-4 bg-backup rounded-sm"></div>
-                <div className="w-1/2 h-4 bg-backup rounded-sm"></div>
+        {userData.waliKelas && (
+          <div
+            className="min-h-[125px] flex flex-col rounded-lg p-4 shadow-md"
+            style={{
+              background: "linear-gradient(to right top,#c94f60,#fe967d)",
+            }}
+          >
+            <div className="flex gap-2 border-b pb-2 items-center border-gray-50/50">
+              <div className="bg-rose-500 p-1 rounded-lg">
+                <ClassIcon
+                  width={"20"}
+                  height={"20"}
+                  className={" stroke-white stroke-[1] text-white"}
+                />
               </div>
-            ) : (
-              <div className=" flex-center flex-col text-white font-semibold  h-12 ">
-                <h1 className="text-2xl">
-                  {userData.waliKelas && userData.waliKelas.kelas}
+              <h3 className="text-sm font-semibold text-white line-clamp-1 ">
+                Wali Kelas
+              </h3>
+            </div>
+            <div className="h-8 flex-1 flex-center">
+              {loading ? (
+                <div className=" flex-center w-full flex-col gap-3  animate-pulse duration-500">
+                  <div className="w-6 h-4 bg-backup rounded-sm"></div>
+                  <div className="w-1/2 h-4 bg-backup rounded-sm"></div>
+                </div>
+              ) : (
+                <div className=" flex-center flex-col text-white font-semibold  h-12 ">
+                  <h1 className="text-2xl">
+                    {userData.waliKelas && userData.waliKelas.kelas}
+                  </h1>
+                  <span className="block">
+                    {userData.waliKelas && userData.waliKelas.nama}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        {userData.waliKelas && (
+          <div
+            className="min-h-[125px] flex flex-col rounded-lg p-4 shadow-md"
+            style={{
+              background: "linear-gradient(to right top, #4f46e5, #54aff7)",
+            }}
+          >
+            <div className="flex gap-2 border-b pb-2 items-center border-gray-50/50">
+              <div className="bg-indigo-600 p-1 rounded-lg">
+                <SiswaIcon
+                  width={"20"}
+                  height={"20"}
+                  className={" text-white stroke-[1]"}
+                />
+              </div>
+              <h3 className="text-sm font-semibold text-white line-clamp-1  ">
+                Total Wali Murid
+              </h3>
+            </div>
+            <div className="h-8 flex-1 flex-center">
+              {loading ? (
+                <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-white rounded-full border-t-gray-500 animate-spin"></div>
+              ) : (
+                <h1 className=" flex-1 flex-center  text-white font-semibold text-3xl h-12 ">
+                  {dataGuru && (
+                    <AnimasiCounter targetNumber={dataGuru.totalMurid} />
+                  )}
                 </h1>
-                <span className="block">
-                  {userData.waliKelas && userData.waliKelas.nama}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-        <div
-          className="min-h-[125px] flex flex-col rounded-lg p-4 shadow-md"
-          style={{
-            background: "linear-gradient(to right top, #4f46e5, #54aff7)",
-          }}
-        >
-          <div className="flex gap-2 border-b pb-2 items-center border-gray-50/50">
-            <div className="bg-indigo-600 p-1 rounded-lg">
-              <SiswaIcon
-                width={"20"}
-                height={"20"}
-                className={" text-white stroke-[1]"}
-              />
+              )}
             </div>
-            <h3 className="text-sm font-semibold text-white line-clamp-1  ">
-              Total Wali Murid
-            </h3>
           </div>
-          <div className="h-8 flex-1 flex-center">
-            {loading ? (
-              <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-white rounded-full border-t-gray-500 animate-spin"></div>
-            ) : (
-              <h1 className=" flex-1 flex-center  text-white font-semibold text-3xl h-12 ">
-                {dataGuru && (
-                  <AnimasiCounter targetNumber={dataGuru.totalMurid} />
-                )}
-              </h1>
-            )}
-          </div>
-        </div>
+        )}
       </div>
       <div className="w-full mt-8 px-4 py-4 bg-white rounded-lg shadow-lg">
         <div className="border-b pb-4 border-gray-100 flex items-center gap-2 mb-4">

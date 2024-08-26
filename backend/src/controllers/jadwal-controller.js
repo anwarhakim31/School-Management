@@ -173,6 +173,34 @@ export const getJadwal = async (req, res, next) => {
   }
 };
 
+export const getJadwalMengajar = async (req, res, next) => {
+  try {
+    const id = req.userId;
+
+    const jadwal = await Jadwal.find({ guru: id })
+      .populate({
+        path: "bidangStudi",
+      })
+      .populate({
+        path: "guru",
+        select: "nama",
+      })
+      .populate({
+        path: "kelas",
+        select: "nama kelas",
+      });
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengambil jadwal",
+      jadwal,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 export const deleteJadwal = async (req, res, next) => {
   try {
     const { id } = req.params;

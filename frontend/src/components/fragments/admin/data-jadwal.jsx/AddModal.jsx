@@ -1,8 +1,6 @@
 import HeaderModal from "@/components/elements/HeaderModal";
 import Modal from "@/components/elements/Modal";
-import user from "../../../../assets/profile.png";
 import React, { useEffect, useRef, useState } from "react";
-import { Plus, X } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import responseError from "@/util/services";
 import axios, { all } from "axios";

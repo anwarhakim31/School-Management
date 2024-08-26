@@ -14,7 +14,10 @@ const DataJadwalPage = () => {
   const [isAddJadwal, setIsAddJadwal] = useState(false);
   const [isDeleteJadwal, setIsDeleteJadwal] = useState(false);
   const [isEditJadwal, setIsEditJadwal] = useState(false);
+  const [isFilter, setIs] = useState(false);
   const [dataJadwal, setDataJadwal] = useState([]);
+  const [dataFilter, setDataFilter] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const getJadwal = async () => {
@@ -37,6 +40,25 @@ const DataJadwalPage = () => {
     getJadwal();
   }, [isAddJadwal, isDeleteJadwal, isEditJadwal]);
 
+  useEffect(() => {
+    let clone = [...dataJadwal];
+
+    if (search) {
+      const splitValue = search.trim().toLocaleLowerCase().split(" ");
+
+      clone = clone.filter((jadwal) =>
+        splitValue.every(
+          (key) =>
+            jadwal.guru.nama.toLocaleLowerCase().includes(key) ||
+            jadwal.bidangStudi.nama.toLocaleLowerCase().includes(key) ||
+            jadwal.bidangStudi.kode.toLocaleLowerCase().includes(key)
+        )
+      );
+    }
+
+    setDataFilter(clone);
+  }, [dataJadwal, search]);
+
   const handleToggleAdd = () => {
     setIsAddJadwal(!isAddJadwal);
   };
@@ -48,6 +70,10 @@ const DataJadwalPage = () => {
     setIsEditJadwal(!isEditJadwal);
   };
 
+  const handleToggleFilter = () => {
+    setIsFilter(!isFilter);
+  };
+
   return (
     <section className="px-6 py-4  ">
       <div className="w-full flex-between flex-wrap mt-8 gap-6">
@@ -55,8 +81,8 @@ const DataJadwalPage = () => {
           <input
             type="search"
             placeholder="Cari Nama "
-            // value={search}
-            // onChange={(e) => setSearch(e.target.value)}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="w-full rounded-full py-1.5 pr-2 pl-10 text-sm border border-gray-400 outline-offset-1 outline-1 outline-neutral"
           />
           <button className="absolute left-4 top-1/2 -translate-y-1/2">
@@ -65,9 +91,9 @@ const DataJadwalPage = () => {
         </div>
         <div className="flex gap-2 relative  mr-auto  ">
           <button
-            // onClick={handleToggleFilter}
-            // ref={buttonFilterRef}
-            // disabled={dataFilter.length === 0}
+            onClick={handleToggleFilter}
+            ref={buttonFilterRef}
+            disabled={dataFilter.length === 0}
             className="border border-gray-400 group disabled:cursor-not-allowed bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-md flex-between gap-3"
           >
             <Filter
@@ -113,7 +139,7 @@ const DataJadwalPage = () => {
           </div>
         ) : (
           <TableJadwal
-            data={dataJadwal}
+            data={dataFilter}
             handleToggleDelete={handleToggleDelete}
             handleToggleEdit={handleToggleEdit}
             loading={loading}
