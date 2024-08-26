@@ -97,7 +97,7 @@ const DataJadwalPage = () => {
         <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
-            placeholder="Cari Nama "
+            placeholder="Cari... "
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full rounded-full py-1.5 pr-2 pl-10 text-sm border border-gray-400 outline-offset-1 outline-1 outline-neutral"

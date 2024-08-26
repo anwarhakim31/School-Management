@@ -5,11 +5,12 @@ import { useEffect, useRef, useState } from "react";
 import SideProfile from "@/components/fragments/admin/SideProfile";
 import { setDataDeleteMany } from "@/store/slices/admin-slice";
 import { useDispatch } from "react-redux";
+import ButtonScrollTop from "@/components/elements/ButtonScrollTop";
 
 const AdminLayout = () => {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
-
+  const scrollContainerRef = useRef(null);
   const [isEdit, setIsEdit] = useState(false);
   const [isSidebar, setIsSidebar] = useState(false);
   const editProfileRef = useRef();
@@ -70,7 +71,10 @@ const AdminLayout = () => {
       </aside>
 
       <div className="flex  flex-1 overflow-hidden">
-        <div className="flex flex-col flex-1 overflow-auto">
+        <div
+          ref={scrollContainerRef}
+          className="flex flex-col flex-1 overflow-auto"
+        >
           <HeaderLayout
             setIsEdit={setIsEdit}
             handleToggleSidebar={handleToggleSidebar}
@@ -82,6 +86,7 @@ const AdminLayout = () => {
           )}
         </div>
       </div>
+      <ButtonScrollTop scrollContainerRef={scrollContainerRef} />
     </main>
   );
 };
