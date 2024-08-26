@@ -49,42 +49,6 @@ const GantChart = ({ schedules }) => {
           <div className="flex items-center justify-center font-medium  text-gray-700  border-gray-100 p-2">
             <p className="text-[0.625rem]">{day}</p>
           </div>
-          <div className="relative   sm:col-span-9 border border-gray-100 h-14    sm:h-10">
-            {schedules
-              .filter((schedule) => schedule.hari === day)
-              .map((schedule, idx) => {
-                const width = calculatePercentage(
-                  schedule.mulai,
-                  schedule.selesai
-                );
-                const left = calculateLeft(schedule.mulai);
-                const color = getClassColor(schedule.kelas.kelas);
-
-                return (
-                  <div
-                    key={idx}
-                    className="absolute top-1 bottom-1 text-center  rounded-sm flex flex-col items-center justify-center shadow-md"
-                    style={{
-                      width: `${width}%`,
-                      left: `${left}%`,
-                      backgroundColor: color,
-                      color: "#FFFFFF",
-                      fontSize: "0.625rem",
-                      padding: "2px 5px",
-                    }}
-                  >
-                    <p className="text-[0.5rem]">Kelas {schedule.class}</p>
-                    <p className="text-[0.5rem] flex flex-nowrap gap-1 ">
-                      {schedule.mulai} <span> - </span> {schedule.selesai}
-                    </p>
-                    {/* <span className="sm:hidden">
-                        {schedule.start} <br />
-                        <br /> {schedule.end}
-                      </span> */}
-                  </div>
-                );
-              })}
-          </div>
         </div>
       ))}
     </div>

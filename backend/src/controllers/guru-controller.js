@@ -287,3 +287,25 @@ export const updateGuru = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getDetailGuru = async (req, res, next) => {
+  try {
+    const id = req.userId;
+
+    const Guru = await findById(id).populate("Siswa ")
+    
+
+
+
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil menghapus guru terpilih.",
+      detail: {
+        bidangStudi:guru.
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};

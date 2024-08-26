@@ -101,7 +101,7 @@ const EditModal = ({ onClose }) => {
       >
         <div className="p-4 sticky top-0 bg-white z-20 sm:static border-b">
           <HeaderModal
-            titile={"Tambah Jadwal"}
+            titile={"Ubah Jadwal"}
             onClose={onClose2}
             className={"font-semibold"}
           />

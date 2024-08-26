@@ -6,6 +6,7 @@ import Total from "../models/total-model.js";
 import { color, getColor } from "../data/color.js";
 import Master from "../models/master-model.js";
 import ResponseError from "../error/response-error.js";
+import Jadwal from "../models/jadwal-model.js";
 
 export const getMaster = async (req, res, next) => {
   try {
@@ -180,13 +181,17 @@ export const updateJam = async (req, res, next) => {
       { new: true }
     );
 
-    res
-      .status(200)
-      .json({
-        success: 200,
-        message: "berhasil mengupdate jam pembelajaran",
-        update,
-      });
+    const jadwalList = await Jadwal.find({ mulai: { $lte: update.startTime } });
+
+    for (const jadwal of jadwalList) {
+      await Jadwal.findByIdAndUpdate(jadwal.id, { mulai: update.startTime });
+    }
+
+    res.status(200).json({
+      success: 200,
+      message: "berhasil mengupdate jam pembelajaran",
+      update,
+    });
   } catch (error) {
     next(error);
   }
