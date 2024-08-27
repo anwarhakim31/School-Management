@@ -64,7 +64,7 @@ const RekapDataPage = () => {
       <div className="border bg-white border-t-gray-300 border-l-gray-300 p-4 mb-6 md:max-w-[300px] border-r-4 border-b-4 border-neutral  rounded-md">
         <div className="space-y-2 ">
           <h3 className="text-sm  font-semibold text-gray-800">
-            Kelas {kelas.grade} {kelas.nama}
+            Kelas {userData.waliKelas.kelas} {userData.waliKelas.nama}
           </h3>
         </div>
       </div>

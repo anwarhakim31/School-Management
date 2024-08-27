@@ -28,7 +28,7 @@ const AddModal = ({ onClose }) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      bidangStudi: "",
+      mataPelajaran: "",
       siswa: "",
       kategori: "Ujian",
       nilai: "",
@@ -42,15 +42,14 @@ const AddModal = ({ onClose }) => {
     setLoading(true);
     try {
       const res = await axios.post(
-        HOST + "/api/jadwal/add-jadwal",
+        HOST + "/api/nilai/add-nilai",
         {
-          guru: data.guru,
-          kelas: data.namaKelas,
-          bidangStudi: data.bidangStudi.id,
-          mulai: data.start,
-          selesai: data.end,
-          hari: data.hari,
-          jumlahPertemuan: data.jumlahPertemuan,
+          siswa: data.siswa,
+          mataPelajaran: data.mataPelajaran,
+          kategori: data.kategori,
+          nilai: data.nilai,
+          semester: data.semester,
+          tahunAjaran: data.tahunAjaran,
         },
         { withCredentials: true }
       );
@@ -219,7 +218,9 @@ const AddModal = ({ onClose }) => {
               <input
                 type="text"
                 name="tahunAjaran"
-                {...register("tahunAjaran")}
+                {...register("tahunAjaran", {
+                  required: "Tahun Ajaran di perlukan.",
+                })}
                 readOnly
                 disabled
                 className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "

@@ -75,7 +75,7 @@ const DropdownMapel = ({ onChange, value, url }) => {
 
   const handleSelectMapel = (kode, nama, id) => {
     setSelectedMapel({ kode, nama });
-    onChange({ nama, id });
+    onChange(id);
     setIsOpen(false);
   };
 

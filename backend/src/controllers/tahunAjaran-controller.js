@@ -11,6 +11,10 @@ export const addAjaran = async (req, res, next) => {
       throw new ResponseError(400, "Tahun Ajaran yang sama sudah ada");
     }
 
+    if (!ajaran.includes("/")) {
+      throw new ResponseError(400, "Format Tahun ajaran tidak sesuai");
+    }
+
     await TahunAjaran.updateMany({ status: false });
 
     const newAjaran = new TahunAjaran({ ajaran });
