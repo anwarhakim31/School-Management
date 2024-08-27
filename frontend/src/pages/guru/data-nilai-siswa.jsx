@@ -1,22 +1,29 @@
+import CustomDropdown from "@/components/elements/DropDown";
 import AddModal from "@/components/fragments/guru/data-nilai/AddModal";
+import DeleteManyModal from "@/components/fragments/guru/data-nilai/DeleteManyModal";
 import DeleteModal from "@/components/fragments/guru/data-nilai/DeleteModal";
 import EditModal from "@/components/fragments/guru/data-nilai/EditModal";
 import TableNilai from "@/components/fragments/guru/data-nilai/Table-Nilai";
+import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { Search } from "lucide-react";
+import { Filter, Search, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
+const selectRow = [7, 14, 21, 28];
+
 const DataNilaiSiswaPage = () => {
   const userData = useSelector(selectedUserData);
+  const dataChecked = useSelector(selectedDataDeleteMany);
   const [loading, setLoading] = useState(true);
   const [allCheck, setAllCheck] = useState(false);
   const [isAddNilai, setIsAddNilai] = useState(false);
   const [isEditNilai, setIsEditNilai] = useState(false);
   const [isDeleteNilai, setIsDeleteNilai] = useState(false);
+  const [isDeleteManySiswa, setIsDeleteManySiswa] = useState(false);
   const [dataNilai, setDataNilai] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(7);
@@ -42,7 +49,7 @@ const DataNilaiSiswaPage = () => {
     };
 
     getKelas();
-  }, [isAddNilai, isDeleteNilai, isEditNilai]);
+  }, [isAddNilai, isDeleteNilai, isEditNilai, isDeleteManySiswa]);
 
   const handleToggleAdd = () => {
     setIsAddNilai(!isAddNilai);
@@ -53,6 +60,13 @@ const DataNilaiSiswaPage = () => {
   };
   const handleToggleDeleteOne = () => {
     setIsDeleteNilai(!isDeleteNilai);
+  };
+  const handleToggleDeleteMany = () => {
+    setIsDeleteManySiswa(!isDeleteManySiswa);
+  };
+
+  const handleSelectBaris = (value) => {
+    setLimit(value);
   };
 
   return (
@@ -124,7 +138,7 @@ const DataNilaiSiswaPage = () => {
       </div>
 
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-lg">
-        {/* <div className="flex-between px-4 h-14 ">
+        <div className="flex-between px-4 h-14 ">
           <div className="flex items-center gap-4  ">
             <button
               title="Hapus siswa terpilih"
@@ -145,9 +159,9 @@ const DataNilaiSiswaPage = () => {
             />
             <div className="flex gap-2 relative  mr-auto  ">
               <button
-                onClick={handleToggleFilter}
-                ref={buttonFilterRef}
-                disabled={dataSiswa?.length === 0}
+                // onClick={handleToggleFilter}
+                // ref={buttonFilterRef}
+                // disabled={dataSiswa?.length === 0}
                 className="border border-gray-400 group disabled:cursor-not-allowed bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-md flex-between gap-3"
               >
                 <Filter
@@ -157,26 +171,9 @@ const DataNilaiSiswaPage = () => {
                   className="text-gray-600 group-hover:text-white"
                 />
               </button>
-              {filter !== "terbaru" && (
-                <button
-                  onClick={() => setFilter("terbaru")}
-                  className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-md flex-between gap-3"
-                >
-                  Clear
-                </button>
-              )}
-              {isFilter && (
-                <FilterSiswa
-                  ref={FilterRef}
-                  filter={filter}
-                  isFilter={isFilter}
-                  handleOptionChange={handleOptionChange}
-                  handleToggleFilter={handleToggleFilter}
-                />
-              )}
             </div>
           </div>
-          <div className="flex gap-2">
+          {/* <div className="flex gap-2">
             <button
               title="Excel"
               disabled={loading}
@@ -207,8 +204,8 @@ const DataNilaiSiswaPage = () => {
               )}
               content={() => componentRef.current}
             />
-          </div>
-        </div> */}
+          </div> */}
+        </div>
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
             <div className="w-full min-h-[430px] flex-center bg-backup animate-pulse overflow-auto ">
@@ -237,13 +234,13 @@ const DataNilaiSiswaPage = () => {
       )}
       {isEditNilai && <EditModal onClose={handleEditNilai} />}
       {isAddNilai && <AddModal onClose={handleToggleAdd} />}
-      {/* {isDeleteManySiswa && (
+      {isDeleteManySiswa && (
         <DeleteManyModal
           onClose={handleToggleDeleteMany}
           setAllCheck={setAllCheck}
         />
       )}
-      <div style={{ display: "none" }}>
+      {/* <div style={{ display: "none" }}>
         <PrintComponent ref={componentRef} dataSiswa={dataSiswa} data={data} />
       </div> */}
     </section>

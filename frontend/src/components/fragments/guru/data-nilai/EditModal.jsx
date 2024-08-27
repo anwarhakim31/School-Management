@@ -69,6 +69,7 @@ const EditModal = ({ onClose }) => {
       );
       if (res.status === 200) {
         toast.success(res.data.message);
+        dispatch(setDataEdit(undefined));
         onClose();
       }
     } catch (error) {

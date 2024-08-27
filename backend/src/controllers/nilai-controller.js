@@ -66,6 +66,21 @@ export const deleteOneNilai = async (req, res, next) => {
   }
 };
 
+export const deleteManyNilai = async (req, res, next) => {
+  try {
+    const { dataChecked } = req.body;
+
+    await Nilai.deleteMany({ _id: { $in: dataChecked } });
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil menghapus nilai siswa",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const updateNilai = async (req, res, next) => {
   try {
     const { id } = req.params;
