@@ -8,7 +8,7 @@ const nilaiSchema = new mongoose.Schema({
   },
   mataPelajaran: {
     type: mongoose.Schema.ObjectId,
-    required: false,
+    required: true,
     ref: "Mapel",
   },
   kategori: {
@@ -16,7 +16,7 @@ const nilaiSchema = new mongoose.Schema({
     required: true,
   },
   nilai: {
-    type: String,
+    type: Number,
     required: true,
   },
   semester: {
@@ -26,6 +26,10 @@ const nilaiSchema = new mongoose.Schema({
   tahunAjaran: {
     type: String,
     required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 

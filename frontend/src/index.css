@@ -87,12 +87,12 @@
 }
 
 *::-webkit-scrollbar {
-  width: 0.5rem;
+  width: 0.4rem;
   height: 0.5rem;
 }
 
 *::-webkit-scrollbar-thumb {
-  background: #4d44b5;
+  background: #482c7c;
   border-radius: 0.1rem;
 }
 

@@ -1,14 +1,47 @@
 import AddModal from "@/components/fragments/guru/data-nilai/AddModal";
+import DeleteModal from "@/components/fragments/guru/data-nilai/DeleteModal";
+import TableNilai from "@/components/fragments/guru/data-nilai/Table-Nilai";
 import { selectedUserData } from "@/store/slices/auth-slice";
+import { HOST } from "@/util/constant";
+import responseError from "@/util/services";
+import axios from "axios";
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const DataNilaiSiswaPage = () => {
   const userData = useSelector(selectedUserData);
+  const [loading, setLoading] = useState(true);
+  const [allCheck, setAllCheck] = useState(false);
   const [isAddNilai, setIsAddNilai] = useState(false);
   const [isEditNilai, setIsEditNilai] = useState(false);
   const [isDeleteNilai, setIsDeleteNilai] = useState(false);
+  const [dataNilai, setDataNilai] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(7);
+
+  useEffect(() => {
+    const getKelas = async () => {
+      try {
+        const res = await axios.get(
+          HOST + "/api/nilai/all-siswa/" + userData._id,
+          { withCredentials: true }
+        );
+
+        if (res.status === 200) {
+          setDataNilai(res.data.nilai);
+        }
+      } catch (error) {
+        responseError(error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
+      }
+    };
+
+    getKelas();
+  }, [isAddNilai, isDeleteNilai, isEditNilai]);
 
   const handleToggleAdd = () => {
     setIsAddNilai(!isAddNilai);
@@ -17,7 +50,7 @@ const DataNilaiSiswaPage = () => {
   const handleToggleEdit = () => {
     setIsEditNilai(!isEditNilai);
   };
-  const handleToggleDelte = () => {
+  const handleToggleDeleteOne = () => {
     setIsDeleteNilai(!isDeleteNilai);
   };
 
@@ -174,7 +207,7 @@ const DataNilaiSiswaPage = () => {
               content={() => componentRef.current}
             />
           </div>
-        </div>
+        </div> */}
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
             <div className="w-full min-h-[430px] flex-center bg-backup animate-pulse overflow-auto ">
@@ -182,26 +215,26 @@ const DataNilaiSiswaPage = () => {
             </div>
           </div>
         ) : (
-          <TableSiswa
-            data={dataSiswa}
+          <TableNilai
+            data={dataNilai}
             handleToggleDeleteOne={handleToggleDeleteOne}
-            handleEditSiswa={handleEditSiswa}
+            // handleEditSiswa={handleEditSiswa}
             allCheck={allCheck}
             setAllCheck={setAllCheck}
             limit={limit}
             page={page}
             setPage={setPage}
-            isPrint={isPrint}
+            // isPrint={isPrint}
           />
-        )} */}
+        )}
       </div>
-      {/* {isDeleteSiswa && (
+      {isDeleteNilai && (
         <DeleteModal
           onClose={handleToggleDeleteOne}
-          title={"Apakah And yakin ingin menghapus siswa?"}
+          title={"Apakah And yakin ingin menghapus nilai?"}
         />
       )}
-      {isEditSiswa && <EditModal onClose={handleToggleEdit} kelas={data} />} */}
+      {/* {isEditSiswa && <EditModal onClose={handleToggleEdit} kelas={data} />} */}
       {isAddNilai && <AddModal onClose={handleToggleAdd} />}
       {/* {isDeleteManySiswa && (
         <DeleteManyModal

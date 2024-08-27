@@ -156,7 +156,7 @@ const AddModal = ({ onClose }) => {
               {errors.siswa && errors.siswa.message}
             </span>
           </div>
-          <div className="flex w-full gap-2">
+          <div className="flex w-full ">
             <div className="px-4 mb-2 w-full">
               <label
                 htmlFor="kategori"
@@ -206,7 +206,7 @@ const AddModal = ({ onClose }) => {
               </span>
             </div>
           </div>
-          <div className="flex w-full gap-2">
+          <div className="flex w-full ">
             <div className="px-4 mb-2 w-full">
               <label
                 htmlFor="tahunAjaran"
