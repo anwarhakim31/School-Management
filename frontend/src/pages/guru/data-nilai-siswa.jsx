@@ -1,5 +1,6 @@
 import AddModal from "@/components/fragments/guru/data-nilai/AddModal";
 import DeleteModal from "@/components/fragments/guru/data-nilai/DeleteModal";
+import EditModal from "@/components/fragments/guru/data-nilai/EditModal";
 import TableNilai from "@/components/fragments/guru/data-nilai/Table-Nilai";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
@@ -47,7 +48,7 @@ const DataNilaiSiswaPage = () => {
     setIsAddNilai(!isAddNilai);
   };
 
-  const handleToggleEdit = () => {
+  const handleEditNilai = () => {
     setIsEditNilai(!isEditNilai);
   };
   const handleToggleDeleteOne = () => {
@@ -218,7 +219,7 @@ const DataNilaiSiswaPage = () => {
           <TableNilai
             data={dataNilai}
             handleToggleDeleteOne={handleToggleDeleteOne}
-            // handleEditSiswa={handleEditSiswa}
+            handleEditNilai={handleEditNilai}
             allCheck={allCheck}
             setAllCheck={setAllCheck}
             limit={limit}
@@ -234,7 +235,7 @@ const DataNilaiSiswaPage = () => {
           title={"Apakah And yakin ingin menghapus nilai?"}
         />
       )}
-      {/* {isEditSiswa && <EditModal onClose={handleToggleEdit} kelas={data} />} */}
+      {isEditNilai && <EditModal onClose={handleEditNilai} />}
       {isAddNilai && <AddModal onClose={handleToggleAdd} />}
       {/* {isDeleteManySiswa && (
         <DeleteManyModal

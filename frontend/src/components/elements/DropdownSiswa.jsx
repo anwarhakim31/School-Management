@@ -21,21 +21,11 @@ const DropdownSiswa = ({ onChange, value, url }) => {
     setIsOpen(!isOpen);
   };
 
-  // useEffect(() => {
-  //   if (dataEdit) {
-  //     setTimeout(() => {
-  //       setSelectedsiswa({ nama: dataEdit.siswa.nama, id: dataEdit.siswa._id });
-  //       onChange(dataEdit.siswa._id);
-  //     }, 100);
-  //   }
-  // }, [dataEdit]);
-
-  // useEffect(() => {
-  //   if (siswa) {
-  //     setSelectedsiswa("");
-  //     onChange("");
-  //   }
-  // }, [siswa]);
+  useEffect(() => {
+    if (dataEdit) {
+      setSelectedSiswa(dataEdit.siswa.nama);
+    }
+  }, [dataEdit]);
 
   useEffect(() => {
     const getSiswa = async () => {
@@ -81,7 +71,7 @@ const DropdownSiswa = ({ onChange, value, url }) => {
   }, [dataSiswa, search]);
 
   const handleSelectSiswa = (nama, id) => {
-    setSelectedSiswa({ nama, id });
+    setSelectedSiswa(nama);
     onChange(id);
     setIsOpen(false);
   };
@@ -90,7 +80,7 @@ const DropdownSiswa = ({ onChange, value, url }) => {
     <div ref={siswaRef} className="relative w-full">
       <input
         type="text"
-        value={!selectedSiswa ? "Pilih siswa" : selectedSiswa.nama}
+        value={!selectedSiswa ? "Pilih siswa" : selectedSiswa}
         readOnly
         onClick={handleInputClick}
         className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"

@@ -20,14 +20,14 @@ const DropdownMapel = ({ onChange, value, url }) => {
     setIsOpen(!isOpen);
   };
 
-  // useEffect(() => {
-  //   if (dataEdit) {
-  //     setSelectedMapel({
-  //       kode: dataEdit.bidangStudi.kode,
-  //       nama: dataEdit.bidangStudi.nama,
-  //     });
-  //   }
-  // }, [dataEdit]);
+  useEffect(() => {
+    if (dataEdit) {
+      setSelectedMapel({
+        kode: dataEdit.mataPelajaran.kode,
+        nama: dataEdit.mataPelajaran.nama,
+      });
+    }
+  }, [dataEdit]);
 
   useEffect(() => {
     const getMapel = async () => {

@@ -22,7 +22,7 @@ import profile from "../../../../assets/profile.png";
 const TableNilai = ({
   data,
   handleToggleDeleteOne,
-  handleEditnilai,
+  handleEditNilai,
   allCheck,
   setAllCheck,
   page,
@@ -43,6 +43,11 @@ const TableNilai = ({
   const handleDeletenilai = (data) => {
     handleToggleDeleteOne();
     dispatch(setDataDelete(data));
+  };
+
+  const handleToggleEdit = (data) => {
+    handleEditNilai();
+    dispatch(setDataEdit(data));
   };
 
   const handleCheckboxAll = (checked) => {
@@ -139,7 +144,7 @@ const TableNilai = ({
                 data.length !== 0 &&
                 [...nilaiSlice].reverse().map((nilai, i) => (
                   <tr
-                    key={nilai.nis}
+                    key={nilai._id}
                     className={` hover:bg-gray-100 border-b  `}
                   >
                     <td scope="row" className="px-3 py-3 relative">
@@ -202,7 +207,7 @@ const TableNilai = ({
                       <div className="flex-center gap-4">
                         <button
                           title="Edit"
-                          onClick={() => handleEditnilai(nilai)}
+                          onClick={() => handleToggleEdit(nilai)}
                           className="w-[20px] h-[20px]  flex-center"
                         >
                           <Edit

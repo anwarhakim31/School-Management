@@ -277,9 +277,9 @@ const AbsenHarianPage = () => {
                   key={i}
                   className={`${i === 0 && "mr-auto"} ${
                     i === 2 && "ml-auto"
-                  } border-t-4 rounded-lg -rotate-12 border-blue-600 border-b-4 p-4`}
+                  } border-t-4 rounded-lg -rotate-12 border-[#895fc3] border-b-4 p-4`}
                 >
-                  <p className="font-bold text-blue-600">
+                  <p className="font-bold text-[#895fc3]">
                     Sudah Absensi Hari Ini
                   </p>
                 </div>
@@ -299,9 +299,9 @@ const AbsenHarianPage = () => {
                   key={i}
                   className={`${i === 0 && "mr-auto"} ${
                     i === 2 && "ml-auto"
-                  } border-t-4 rounded-lg -rotate-12 border-blue-600 border-b-4 p-4`}
+                  } border-t-4 rounded-lg -rotate-12 border-[#895fc3] border-b-4 p-4`}
                 >
-                  <p className="font-bold text-blue-600">Hari Libur Sekolah</p>
+                  <p className="font-bold text-[#895fc3]">Hari Libur Sekolah</p>
                 </div>
               ))}
             </div>
@@ -312,7 +312,7 @@ const AbsenHarianPage = () => {
       <div className="w-full flex justify-end">
         <button
           onClick={handleSubmit}
-          className="w-full sm:max-w-[200px] h-10 disabled:cursor-not-allowed disabled:bg-indigo-400 bg-neutral hover:bg-indigo-700 text-white mt-8 text-sm rounded-md"
+          className="w-full sm:max-w-[200px] h-10 disabled:cursor-not-allowed disabled:bg-purple-500 bg-neutral hover:bg-[#895fc3] text-white mt-8 text-sm rounded-md"
           disabled={loading2 || alreadyAbsensi || hariLibur}
         >
           Simpan

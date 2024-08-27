@@ -41,8 +41,6 @@ export const getNilaiKelas = async (req, res, next) => {
       })
       .populate("mataPelajaran");
 
-    console.log(nilai);
-
     res.status(200).json({
       success: true,
       message: "Berhasil mengambil semua nilai siswa",
@@ -62,6 +60,22 @@ export const deleteOneNilai = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Berhasil menghapus nilai siswa",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateNilai = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+
+    await Nilai.findByIdAndUpdate(id, { ...data });
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengubah nilai siswa",
     });
   } catch (error) {
     next(error);
