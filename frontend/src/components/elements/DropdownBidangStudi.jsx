@@ -6,7 +6,7 @@ import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
-const DropdownMapel = ({ onChange, value, url }) => {
+const DropdownBidangStudi = ({ onChange, value }) => {
   const dataEdit = useSelector(selectedDataEdit);
   const mapelRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -20,19 +20,19 @@ const DropdownMapel = ({ onChange, value, url }) => {
     setIsOpen(!isOpen);
   };
 
-  // useEffect(() => {
-  //   if (dataEdit) {
-  //     setSelectedMapel({
-  //       kode: dataEdit.bidangStudi.kode,
-  //       nama: dataEdit.bidangStudi.nama,
-  //     });
-  //   }
-  // }, [dataEdit]);
+  useEffect(() => {
+    if (dataEdit) {
+      setSelectedMapel({
+        kode: dataEdit.bidangStudi.kode,
+        nama: dataEdit.bidangStudi.nama,
+      });
+    }
+  }, [dataEdit]);
 
   useEffect(() => {
     const getMapel = async () => {
       try {
-        const res = await axios.get(HOST + url, {
+        const res = await axios.get(HOST + "/api/mapel/get-mapel", {
           withCredentials: true,
         });
 
@@ -44,7 +44,7 @@ const DropdownMapel = ({ onChange, value, url }) => {
       }
     };
     getMapel();
-  }, [url]);
+  }, []);
 
   useEffect(() => {
     if (dataMapel) {
@@ -85,7 +85,7 @@ const DropdownMapel = ({ onChange, value, url }) => {
         type="text"
         value={
           !selectedMapel
-            ? "Pilih Mata Pelajaran"
+            ? "Pilih bidang studi"
             : `${selectedMapel.kode}      ${selectedMapel.nama}`
         }
         readOnly
@@ -103,10 +103,10 @@ const DropdownMapel = ({ onChange, value, url }) => {
       {isOpen && (
         <div className="absolute mt-1  w-full bg-white border z-50 border-gray-400 rounded shadow">
           <ul className="max-h-28 overflow-y-auto">
-            <li className="sticky top-0   text-xs hover:bg-gray-200 cursor-pointer">
+            <li className="sticky top-0    text-xs hover:bg-gray-200 cursor-pointer">
               <input
                 type="search"
-                placeholder="Cari nama Mata Pelajaran..."
+                placeholder="Cari nama Bidang Studi..."
                 value={search}
                 className="block mb-2 w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-8 py-2 pr-8 rounded shadow leading-tight focus:outline-none  "
                 onChange={(e) => setSearch(e.target.value)}
@@ -119,7 +119,7 @@ const DropdownMapel = ({ onChange, value, url }) => {
             </li>
             {dataSearch.length === 0 && (
               <li className="   text-xs hover:bg-gray-200 text-center py-2">
-                <p>Data Mata Pelajaran tidak ditemukan.</p>
+                <p>Data Bidang Studi tidak ditemukan.</p>
               </li>
             )}
             {dataMapel &&
@@ -140,4 +140,4 @@ const DropdownMapel = ({ onChange, value, url }) => {
   );
 };
 
-export default DropdownMapel;
+export default DropdownBidangStudi;

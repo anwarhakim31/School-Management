@@ -6,13 +6,13 @@ import responseError from "@/util/services";
 import axios, { all } from "axios";
 import { HOST } from "@/util/constant";
 import { toast } from "sonner";
-import DropdownMapel from "@/components/elements/DropdownMapel";
 import DropdownGuru from "@/components/elements/DropdownGuru";
 import DayDropdown from "@/components/elements/DayDropdown";
 import KelasDropdown from "@/components/elements/KelasDropdown";
 import NamaKelasDropdown from "@/components/elements/NamaKelasDropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { selectedDataEdit, setDataEdit } from "@/store/slices/admin-slice";
+import DropdownBidangStudi from "@/components/elements/DropdownBidangStudi";
 
 const EditModal = ({ onClose }) => {
   const {
@@ -117,11 +117,7 @@ const EditModal = ({ onClose }) => {
               control={control}
               rules={{ required: "Bidang studi diperlukan." }}
               render={({ field: { onChange, value } }) => (
-                <DropdownMapel
-                  value={value}
-                  onChange={onChange}
-                  url={"/api/mapel/get-mapel"}
-                />
+                <DropdownBidangStudi value={value} onChange={onChange} />
               )}
             />
             <span className="text-xs h-4 text-neutral2 block">

@@ -13,6 +13,8 @@ import KelasDropdown from "@/components/elements/KelasDropdown";
 import NamaKelasDropdown from "@/components/elements/NamaKelasDropdown";
 import { useSelector } from "react-redux";
 import { selectedUserData } from "@/store/slices/auth-slice";
+import DropdownSiswa from "@/components/elements/DropdownSiswa";
+import DropdownCategoryNilai from "@/components/elements/DropdownCategoryNilai";
 
 const AddModal = ({ onClose }) => {
   const userData = useSelector(selectedUserData);
@@ -27,18 +29,14 @@ const AddModal = ({ onClose }) => {
   } = useForm({
     defaultValues: {
       bidangStudi: "",
-      guru: "",
-      kelas: "",
-      namaKelas: "",
-      hari: "",
-      start: undefined,
-      end: undefined,
-      jumlahPertemuan: "",
+      siswa: "",
+      kategori: "Ujian",
+      nilai: "",
+      semester: "",
+      tahunAjaran: "",
     },
   });
   const [loading, setLoading] = useState(false);
-  const bidangStudi = watch("bidangStudi");
-  const kelas = watch("kelas");
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -68,13 +66,41 @@ const AddModal = ({ onClose }) => {
     }
   };
 
-  console.log(userData.waliKelas);
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true);
+      try {
+        const [resAjaran, resSemester] = await Promise.all([
+          axios.get(HOST + "/api/ajaran/get-ajaran-aktif", {
+            withCredentials: true,
+          }),
+          axios.get(HOST + "/api/master/get-semester", {
+            withCredentials: true,
+          }),
+        ]);
+
+        if (resAjaran.status === 200) {
+          setValue("tahunAjaran", resAjaran.data.ajaran.ajaran);
+        }
+
+        if (resSemester.status === 200) {
+          setValue("semester", resSemester.data.semester.keterangan);
+        }
+      } catch (error) {
+        responseError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getData();
+  }, []);
 
   return (
     <Modal onClose={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-[470px] max-h-screen sm:max-h-none overflow-auto rounded-lg shadow-md bg-white"
+        className="w-full sm:max-w-[400px] max-h-screen sm:max-h-none overflow-auto rounded-lg shadow-md bg-white"
       >
         <div className="p-4 sticky top-0 bg-white z-20 sm:static border-b">
           <HeaderModal
@@ -86,15 +112,15 @@ const AddModal = ({ onClose }) => {
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4 ">
           <div className="px-4 mb-2 ">
             <label
-              htmlFor="mapel"
+              htmlFor="mataPelajaran"
               className="text-xs mb-2 block font-semibold text-gray-700"
             >
-              Bidang Studi
+              Mata Pelajaran
             </label>
             <Controller
-              name="bidangStudi"
+              name="mataPelajaran"
               control={control}
-              rules={{ required: "Bidang studi diperlukan." }}
+              rules={{ required: "Mata Pelajaran diperlukan." }}
               render={({ field: { onChange, value } }) => (
                 <DropdownMapel
                   value={value}
@@ -104,37 +130,129 @@ const AddModal = ({ onClose }) => {
               )}
             />
             <span className="text-xs h-4 text-neutral2 block">
-              {errors.bidangStudi && errors.bidangStudi.message}
+              {errors.mataPelajaran && errors.mataPelajaran.message}
             </span>
           </div>
           <div className="px-4 mb-2">
             <label
-              htmlFor="guru"
+              htmlFor="siswa"
               className="text-xs w-fit mb-2 block font-semibold text-gray-700"
             >
-              Guru
+              Siswa
             </label>
             <Controller
-              name="guru"
+              name="siswa"
               control={control}
-              rules={{ required: "Guru diperlukan." }}
+              rules={{ required: "Siswa diperlukan." }}
               render={({ field: { onChange, value } }) => (
-                <DropdownGuru
-                  bidangStudi={bidangStudi.id}
+                <DropdownSiswa
                   onChange={onChange}
                   value={value}
+                  url={`/api/siswa/get-siswa/kelas/${userData.waliKelas._id}`}
                 />
               )}
             />
 
             <span className="text-xs h-4 text-neutral2 block">
-              {errors.guru && errors.guru.message}
+              {errors.siswa && errors.siswa.message}
             </span>
           </div>
+          <div className="flex w-full gap-2">
+            <div className="px-4 mb-2 w-full">
+              <label
+                htmlFor="kategori"
+                className="text-xs w-fit mb-2 block font-semibold text-gray-700"
+              >
+                Kategori Nilai
+              </label>
+              <Controller
+                name="kategori"
+                control={control}
+                rules={{ required: "Kategori Nilai Diperlukan." }}
+                render={({ field: { onChange } }) => (
+                  <DropdownCategoryNilai onChange={onChange} />
+                )}
+              />
 
+              <span className="text-xs h-4 text-neutral2 block">
+                {errors.kategori && errors.kategori.message}
+              </span>
+            </div>
+            <div className="px-4 mb-2 w-full">
+              <label
+                htmlFor="nilai"
+                className="text-xs w-fit mb-2 block font-semibold text-gray-700"
+              >
+                Nilai
+              </label>
+              <input
+                type="number"
+                name=""
+                className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "
+                id="nilai"
+                {...register("nilai", {
+                  required: "Nilai diperlukan.",
+                  min: {
+                    value: 0,
+                    message: "Nilai tidak kurang dari 0",
+                  },
+                  max: {
+                    value: 100,
+                    message: "Nilai tidak lebih dari 100",
+                  },
+                })}
+              />
+              <span className="text-xs h-4 text-neutral2 block">
+                {errors.nilai && errors.nilai.message}
+              </span>
+            </div>
+          </div>
+          <div className="flex w-full gap-2">
+            <div className="px-4 mb-2 w-full">
+              <label
+                htmlFor="tahunAjaran"
+                className="text-xs w-fit mb-2 block font-semibold text-gray-700"
+              >
+                Tahun Ajaran
+              </label>
+
+              <input
+                type="text"
+                name="tahunAjaran"
+                {...register("tahunAjaran")}
+                readOnly
+                disabled
+                className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "
+                id="tahunAjaran"
+              />
+              <span className="text-xs h-4 text-neutral2 block">
+                {errors.tahunAjaran && errors.tahunAjaran.message}
+              </span>
+            </div>
+            <div className="px-4 mb-2 w-full">
+              <label
+                htmlFor="semester"
+                className="text-xs w-fit mb-2 block font-semibold text-gray-700"
+              >
+                Semester
+              </label>
+              <input
+                type="text"
+                name="semester"
+                readOnly
+                disabled
+                {...register("semester")}
+                className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "
+                id="nilai"
+              />
+              <span className="text-xs h-4 text-neutral2 block">
+                {errors.semester && errors.semester.message}
+              </span>
+            </div>
+          </div>
           <div className="text-end border-t mt-4 p-4 space-x-4">
             <button
-              aria-label="simpan kelas"
+              aria-label="simpan nilai"
               type="submit"
               disabled={loading}
               className="btn w-24 h-8.5"

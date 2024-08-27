@@ -71,8 +71,8 @@ const ListSidebar = () => {
         },
         {
           id: 2,
-          nama: "Data Murid",
-          path: "/guru/data-murid",
+          nama: "Data Siswa",
+          path: "/guru/data-siswa",
           icon: (
             <GraduationCap
               height={20}

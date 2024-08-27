@@ -180,7 +180,7 @@ const GuruDashboardPage = () => {
                 />
               </div>
               <h3 className="text-sm font-semibold text-white line-clamp-1  ">
-                Total Wali Murid
+                Total Siswa
               </h3>
             </div>
             <div className="h-8 flex-1 flex-center">

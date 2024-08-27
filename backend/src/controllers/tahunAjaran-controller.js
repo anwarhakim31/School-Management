@@ -5,8 +5,6 @@ export const addAjaran = async (req, res, next) => {
   try {
     const { ajaran } = req.body;
 
-    console.log(req.body);
-
     const isExist = await TahunAjaran.findOne({ ajaran });
 
     if (isExist) {

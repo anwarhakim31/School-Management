@@ -1,19 +1,20 @@
 import { selectedDataEdit } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
+import { data } from "autoprefixer";
 import axios from "axios";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
-const DropdownMapel = ({ onChange, value, url }) => {
+const DropdownSiswa = ({ onChange, value, url }) => {
   const dataEdit = useSelector(selectedDataEdit);
-  const mapelRef = useRef(null);
+  const siswaRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [dataMapel, setDataMapel] = useState([]);
+  const [dataSiswa, setdataSiswa] = useState([]);
   const [dataSearch, setDataSearch] = useState([]);
-  const [selectedMapel, setSelectedMapel] = useState("");
+  const [selectedSiswa, setSelectedSiswa] = useState("");
 
   const handleInputClick = (e) => {
     e.preventDefault();
@@ -22,48 +23,41 @@ const DropdownMapel = ({ onChange, value, url }) => {
 
   // useEffect(() => {
   //   if (dataEdit) {
-  //     setSelectedMapel({
-  //       kode: dataEdit.bidangStudi.kode,
-  //       nama: dataEdit.bidangStudi.nama,
-  //     });
+  //     setTimeout(() => {
+  //       setSelectedsiswa({ nama: dataEdit.siswa.nama, id: dataEdit.siswa._id });
+  //       onChange(dataEdit.siswa._id);
+  //     }, 100);
   //   }
   // }, [dataEdit]);
 
+  // useEffect(() => {
+  //   if (siswa) {
+  //     setSelectedsiswa("");
+  //     onChange("");
+  //   }
+  // }, [siswa]);
+
   useEffect(() => {
-    const getMapel = async () => {
+    const getSiswa = async () => {
       try {
         const res = await axios.get(HOST + url, {
           withCredentials: true,
         });
 
         if (res.status === 200) {
-          setDataMapel(res.data.mapel);
+          setdataSiswa(res.data.siswa);
         }
       } catch (error) {
         responseError(error);
       }
     };
-    getMapel();
+
+    getSiswa();
   }, [url]);
 
   useEffect(() => {
-    if (dataMapel) {
-      let clone = [...dataMapel];
-
-      if (search) {
-        const split = search.trim().toLocaleLowerCase().split(" ");
-        clone = clone.filter((data) =>
-          split.every((key) => data.nama.toLocaleLowerCase().includes(key))
-        );
-      }
-
-      setDataSearch(clone);
-    }
-  }, [dataMapel, search]);
-
-  useEffect(() => {
     const handleClickOutside = (e) => {
-      if (mapelRef.current && !mapelRef.current.contains(e.target)) {
+      if (siswaRef.current && !siswaRef.current.contains(e.target)) {
         setIsOpen(false);
       }
     };
@@ -73,21 +67,30 @@ const DropdownMapel = ({ onChange, value, url }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  const handleSelectMapel = (kode, nama, id) => {
-    setSelectedMapel({ kode, nama });
-    onChange({ nama, id });
+  useEffect(() => {
+    let clone = [...dataSiswa];
+
+    if (search) {
+      const split = search.trim().toLocaleLowerCase().split(" ");
+      clone = clone.filter((data) =>
+        split.every((key) => data.nama.toLocaleLowerCase().includes(key))
+      );
+    }
+
+    setDataSearch(clone);
+  }, [dataSiswa, search]);
+
+  const handleSelectSiswa = (nama, id) => {
+    setSelectedSiswa({ nama, id });
+    onChange(id);
     setIsOpen(false);
   };
 
   return (
-    <div ref={mapelRef} className="relative w-full">
+    <div ref={siswaRef} className="relative w-full">
       <input
         type="text"
-        value={
-          !selectedMapel
-            ? "Pilih Mata Pelajaran"
-            : `${selectedMapel.kode}      ${selectedMapel.nama}`
-        }
+        value={!selectedSiswa ? "Pilih siswa" : selectedSiswa.nama}
         readOnly
         onClick={handleInputClick}
         className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
@@ -100,13 +103,13 @@ const DropdownMapel = ({ onChange, value, url }) => {
         )}
       </div>
 
-      {isOpen && (
+      {isOpen && dataSiswa?.length > 0 && (
         <div className="absolute mt-1  w-full bg-white border z-50 border-gray-400 rounded shadow">
           <ul className="max-h-28 overflow-y-auto">
-            <li className="sticky top-0   text-xs hover:bg-gray-200 cursor-pointer">
+            <li className=" sticky top-0   text-xs hover:bg-gray-200 cursor-pointer">
               <input
                 type="search"
-                placeholder="Cari nama Mata Pelajaran..."
+                placeholder="Cari nama siswa..."
                 value={search}
                 className="block mb-2 w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-8 py-2 pr-8 rounded shadow leading-tight focus:outline-none  "
                 onChange={(e) => setSearch(e.target.value)}
@@ -119,18 +122,17 @@ const DropdownMapel = ({ onChange, value, url }) => {
             </li>
             {dataSearch.length === 0 && (
               <li className="   text-xs hover:bg-gray-200 text-center py-2">
-                <p>Data Mata Pelajaran tidak ditemukan.</p>
+                <p>Data Siswa tidak ditemukan.</p>
               </li>
             )}
-            {dataMapel &&
-              dataSearch.map((mp) => (
+            {dataSiswa &&
+              dataSearch.map((siswa) => (
                 <li
-                  key={mp._id}
-                  onClick={() => handleSelectMapel(mp.kode, mp.nama, mp._id)}
-                  className="px-4 py-2 grid grid-cols-6 text-xs hover:bg-gray-200 cursor-pointer"
+                  key={siswa._id}
+                  onClick={() => handleSelectSiswa(siswa.nama, siswa._id)}
+                  className="px-4 py-2 text-xs hover:bg-gray-200 cursor-pointer"
                 >
-                  <p className="">{mp.kode}</p>
-                  <p className="col-span-5">{mp.nama}</p>
+                  <p className="">{siswa.nama}</p>
                 </li>
               ))}
           </ul>
@@ -140,4 +142,4 @@ const DropdownMapel = ({ onChange, value, url }) => {
   );
 };
 
-export default DropdownMapel;
+export default DropdownSiswa;

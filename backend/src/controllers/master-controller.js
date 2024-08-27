@@ -98,6 +98,7 @@ export const getAkademik = async (req, res, next) => {
         ],
       });
       await masterSemester.save();
+
       res.status(200).json({
         success: true,
         message: "Berhasil mengambil data akademik.",
@@ -188,9 +189,25 @@ export const updateJam = async (req, res, next) => {
     }
 
     res.status(200).json({
-      success: 200,
+      success: true,
       message: "berhasil mengupdate jam pembelajaran",
       update,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getSemester = async (req, res, next) => {
+  try {
+    const master = await Master.findOne();
+
+    const aktif = master.semester.find((data) => data.status === true);
+
+    res.status(200).json({
+      success: true,
+      message: "berhasil mengambil semester aktif",
+      semester: aktif,
     });
   } catch (error) {
     next(error);

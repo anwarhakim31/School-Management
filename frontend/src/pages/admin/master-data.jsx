@@ -35,64 +35,36 @@ const MasterDataPage = () => {
   const [trigger, setTrigger] = useState(1);
 
   useEffect(() => {
-    const getAjaran = async () => {
+    const getData = async () => {
       try {
-        const res = await axios.get(HOST + "/api/ajaran/get-ajaran", {
-          withCredentials: true,
-        });
+        const [ajaranRes, liburRes, akademikRes] = await Promise.all([
+          axios.get(HOST + "/api/ajaran/get-ajaran", { withCredentials: true }),
+          axios.get(HOST + "/api/libur/get-libur", { withCredentials: true }),
+          axios.get(HOST + "/api/master/get-akademik", {
+            withCredentials: true,
+          }),
+        ]);
 
-        if (res.status === 200) {
-          setDataAjaran(res.data.ajaran);
+        if (ajaranRes.status === 200) {
+          setDataAjaran(ajaranRes.data.ajaran);
+        }
+
+        if (liburRes.status === 200) {
+          setDataLibur(liburRes.data.libur);
+        }
+
+        if (akademikRes.status === 200) {
+          setDataAkademik(akademikRes.data.akademik);
+          console.log(akademikRes.data);
         }
       } catch (error) {
         responseError(error);
       } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 50);
+        setLoading(false);
       }
     };
 
-    const getLibur = async () => {
-      try {
-        const res = await axios.get(HOST + "/api/libur/get-libur", {
-          withCredentials: true,
-        });
-
-        if (res.status === 200) {
-          setDataLibur(res.data.libur);
-        }
-      } catch (error) {
-        responseError(error);
-      } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 50);
-      }
-    };
-
-    const getAkademik = async () => {
-      try {
-        const res = await axios.get(HOST + "/api/master/get-akademik", {
-          withCredentials: true,
-        });
-
-        if (res.status === 200) {
-          setDataAkademik(res.data.akademik);
-          console.log(res.data);
-        }
-      } catch (error) {
-        responseError(error);
-      } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 50);
-      }
-    };
-
-    getLibur();
-    getAjaran();
-    getAkademik();
+    getData();
   }, [isAddajaran, isDeleteajaran, trigger, isAddNasional, isDeleteNasional]);
 
   const handleAddAjaran = async () => {

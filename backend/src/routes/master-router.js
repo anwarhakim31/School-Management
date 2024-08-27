@@ -6,6 +6,7 @@ import {
   getAkademik,
   toggleSemester,
   updateJam,
+  getSemester,
 } from "../controllers/master-controller.js";
 
 const masterRouter = express.Router();
@@ -13,6 +14,7 @@ const masterRouter = express.Router();
 // masterRouter.post("/add-total", verifyToken, addtotal);
 masterRouter.get("/get-master", verifyToken, getMaster);
 masterRouter.get("/get-akademik", verifyToken, getAkademik);
+masterRouter.get("/get-semester", verifyToken, getSemester);
 masterRouter.post("/toggle-semester", verifyToken, toggleSemester);
 masterRouter.put("/update-time", verifyToken, updateJam);
 // masterRouter.delete("/delete-total/:id", verifyToken, deletetotal);

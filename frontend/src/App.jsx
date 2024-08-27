@@ -27,7 +27,7 @@ import RekapDataPage from "./pages/guru/rekap-data";
 import ProfileGuruPage from "./pages/guru/profile-guru";
 import MasterDataPage from "./pages/admin/master-data";
 import RekapAbsensiPage from "./pages/admin/rekap-absensi";
-import DataMuridPageguru from "./pages/guru/data-siswa";
+import DataSiswaPageguru from "./pages/guru/data-siswa";
 import DataNilaiSiswaPage from "./pages/guru/data-nilai-siswa";
 
 function App() {
@@ -221,10 +221,10 @@ function App() {
             }
           />
           <Route
-            path={"data-murid"}
+            path={"data-siswa"}
             element={
               <PrivateRoute role={"guru"}>
-                <DataMuridPageguru />
+                <DataSiswaPageguru />
               </PrivateRoute>
             }
           />

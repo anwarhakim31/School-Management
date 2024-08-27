@@ -35,7 +35,7 @@ import PrintComponent from "@/components/fragments/guru/data-murid/PrintModal";
 
 const selectRow = [7, 14, 21, 28];
 
-const DataMuridPageguru = () => {
+const DataSiswaPageguru = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const buttonFilterRef = useRef();
@@ -435,4 +435,4 @@ const exportToExcel = async (data, kelas, nama) => {
   saveAs(blob, "rekap_absen.xlsx");
 };
 
-export default DataMuridPageguru;
+export default DataSiswaPageguru;

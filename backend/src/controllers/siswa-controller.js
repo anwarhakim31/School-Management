@@ -385,3 +385,24 @@ export const getAllDetail = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getSiswaKelas = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    const siswa = await Siswa.find({ kelas: id });
+
+    if (!siswa) {
+      throw new ResponseError(404, "Siswa tidak ditemukan.");
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Berhasil mengambil siswa`,
+      siswa,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
