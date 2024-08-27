@@ -99,7 +99,7 @@ const EditModal = ({ onClose }) => {
       >
         <div className="p-4 sticky top-0 bg-white z-20 sm:static border-b">
           <HeaderModal
-            titile={"Ubah Jadwal"}
+            titile={"Edit Jadwal"}
             onClose={onClose2}
             className={"font-semibold"}
           />
@@ -117,7 +117,11 @@ const EditModal = ({ onClose }) => {
               control={control}
               rules={{ required: "Bidang studi diperlukan." }}
               render={({ field: { onChange, value } }) => (
-                <DropdownMapel value={value} onChange={onChange} />
+                <DropdownMapel
+                  value={value}
+                  onChange={onChange}
+                  url={"/api/mapel/get-mapel"}
+                />
               )}
             />
             <span className="text-xs h-4 text-neutral2 block">

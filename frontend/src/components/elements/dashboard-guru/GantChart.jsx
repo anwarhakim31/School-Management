@@ -79,7 +79,7 @@ const GantChart = ({ schedules, durasi, loading }) => {
                       }}
                     >
                       <p className="text-[0.5rem] truncate">{schedule.class}</p>
-                      <p className="text-[0.5rem] flex flex-wrap  gap-1 ">
+                      <p className="text-[0.5rem] flex flex-col sm:flex-row  ">
                         {schedule.mulai} <span> - </span> {schedule.selesai}
                       </p>
                     </div>

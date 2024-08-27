@@ -187,7 +187,33 @@ export const getWaliKelas = async (req, res, next) => {
       kelas,
     });
   } catch (error) {
-    console.log(error);
+    next(error);
+  }
+};
+
+export const getMapelKelas = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    const jadwal = await Jadwal.find({ kelas: id })
+      .populate("bidangStudi")
+      .select("bidangStudi");
+
+    if (!jadwal) {
+      throw new ResponseError(
+        404,
+        "Mata Pelajaran pada kelas ini tidak ditemukan."
+      );
+    }
+
+    const bidangStudi = jadwal.map((j) => j.bidangStudi);
+
+    res.status(200).json({
+      success: true,
+      message: `Berhasil mengambil mata pelajaran pada kelas.`,
+      mapel: bidangStudi,
+    });
+  } catch (error) {
     next(error);
   }
 };

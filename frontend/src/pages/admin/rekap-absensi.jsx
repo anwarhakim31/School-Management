@@ -111,21 +111,21 @@ const RekapAbsensiPage = () => {
           <div className="hidden md:flex gap-4">
             <div className="flex justify-start flex-wrap md:flex-nowrap   gap-4">
               <div className="flex items-center gap-2">
-                <p className="text-sm font-semibold text-gray-700">Tahun</p>
+                <p className="text-xs font-semibold text-gray-700">Tahun</p>
                 <YearDropdown onSelectYear={handleSelectYeay} />
               </div>
               <div className="flex items-center gap-2">
-                <p className="text-sm font-semibold text-gray-700">Bulan</p>
+                <p className="text-xs font-semibold text-gray-700">Bulan</p>
                 <MonthDropdown onSelectMonth={handleSelectMonth} />
               </div>
             </div>
             <div className="flex justify-start flex-wrap md:flex-nowrap  gap-4">
               <div className="flex items-center gap-2">
-                <p className="text-sm font-semibold text-gray-700">Kelas</p>
+                <p className="text-xs font-semibold text-gray-700">Kelas</p>
                 <KelasDropdown onChange={onSelectKelas} />
               </div>
               <div className="flex items-center gap-2">
-                <p className="text-sm font-semibold text-gray-700">
+                <p className="text-xs font-semibold text-gray-700">
                   Nama Kelas
                 </p>
                 <NamaKelasDropdown onChange={onSelectIdKelas} kelas={kelas} />

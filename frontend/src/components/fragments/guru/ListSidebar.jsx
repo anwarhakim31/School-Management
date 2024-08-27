@@ -1,6 +1,7 @@
 import DashboardIcon from "../../../assets/svg/dashboard.svg?react";
 import SiswaIcon from "../../../assets/svg/siswa.svg?react";
 import GuruIcon from "../../../assets/svg/guru.svg?react";
+import ScoreIcon from "../../../assets/svg/Score.svg?react";
 import KelasIcon from "../../../assets/svg/class.svg?react";
 import { Link, Navigate, NavLink, useNavigate } from "react-router-dom";
 import {
@@ -70,8 +71,8 @@ const ListSidebar = () => {
         },
         {
           id: 2,
-          nama: "Data kelas",
-          path: "/guru/data-kelas",
+          nama: "Data Murid",
+          path: "/guru/data-murid",
           icon: (
             <GraduationCap
               height={20}
@@ -82,25 +83,24 @@ const ListSidebar = () => {
             />
           ),
         },
+        {
+          id: 3,
+          nama: "Data Nilai",
+          path: "/guru/data-nilai",
+          icon: (
+            <ScoreIcon
+              height={20}
+              width={20}
+              className={
+                "text-white   group-hover:text-neutral  duration-300 transition-all"
+              }
+            />
+          ),
+        },
       ],
     },
     {
       id: 3,
-      nama: "Nilai",
-      path: "/guru/jadwal-mengajar",
-      icon: (
-        <DashboardIcon
-          height={17}
-          width={17}
-          className={
-            "text-white group-hover:text-neutral stroke-[2] duration-300 transition-all"
-          }
-        />
-      ),
-    },
-
-    {
-      id: 4,
       nama: "Rekap",
       path: "/guru/rekap-data",
       icon: (
@@ -155,7 +155,7 @@ const ListSidebar = () => {
           {list.dropDown && (
             <div
               className={`${
-                activeDropDown === list.id ? "max-h-[90px] my-1" : "max-h-0"
+                activeDropDown === list.id ? "max-h-[130px] my-1" : "max-h-0"
               }   transition-all duration-300 ease-in-out overflow-hidden`}
               onClick={(e) => e.stopPropagation()}
             >

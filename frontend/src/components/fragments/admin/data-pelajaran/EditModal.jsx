@@ -59,7 +59,7 @@ const EditModal = ({ onClose }) => {
       >
         <div className="py-4 px-6 border-b">
           <HeaderModal
-            titile={"Tambah Mata Pelajaran"}
+            titile={"Edit Mata Pelajaran"}
             onClose={onClose}
             className={"font-semibold"}
           />

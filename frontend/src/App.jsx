@@ -23,11 +23,12 @@ import EditGuruPage from "./pages/admin/edit-guru";
 import GuruLayout from "./components/layouts/guru/GuruLayout";
 import GuruDashboardPage from "./pages/guru/guru-dashboard";
 import AbsenHarianPage from "./pages/guru/absen-harian";
-import DataKelasguruPage from "./pages/guru/data-siswa";
 import RekapDataPage from "./pages/guru/rekap-data";
 import ProfileGuruPage from "./pages/guru/profile-guru";
 import MasterDataPage from "./pages/admin/master-data";
 import RekapAbsensiPage from "./pages/admin/rekap-absensi";
+import DataMuridPageguru from "./pages/guru/data-siswa";
+import DataNilaiSiswaPage from "./pages/guru/data-nilai-siswa";
 
 function App() {
   const dispatch = useDispatch();
@@ -220,10 +221,18 @@ function App() {
             }
           />
           <Route
-            path={"data-kelas"}
+            path={"data-murid"}
             element={
               <PrivateRoute role={"guru"}>
-                <DataKelasguruPage />
+                <DataMuridPageguru />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={"data-nilai"}
+            element={
+              <PrivateRoute role={"guru"}>
+                <DataNilaiSiswaPage />
               </PrivateRoute>
             }
           />

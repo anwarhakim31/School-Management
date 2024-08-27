@@ -19,7 +19,7 @@ const AbsenHarianPage = () => {
   const [data, setData] = useState([]);
   const [absensiData, setAbsensiData] = useState([]);
 
-  const tanggal = new Date();
+  const hariIni = new Date();
 
   useEffect(() => {
     const getData = async () => {
@@ -116,8 +116,8 @@ const AbsenHarianPage = () => {
           <h3 className="text-sm  font-semibold text-gray-800">
             Kelas {data.kelas} {data.nama}
           </h3>
-          <h3 className="text-sm  font-semibold text-gray-800">
-            {formatIndonesiaDate(tanggal)}
+          <h3 className="text-xs  font-semibold text-gray-800">
+            {formatIndonesiaDate(hariIni)}
           </h3>
         </div>
       </div>

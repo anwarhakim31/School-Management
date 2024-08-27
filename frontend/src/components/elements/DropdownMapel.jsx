@@ -6,7 +6,7 @@ import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
-const DropdownMapel = ({ onChange, value }) => {
+const DropdownMapel = ({ onChange, value, url }) => {
   const dataEdit = useSelector(selectedDataEdit);
   const mapelRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -32,7 +32,7 @@ const DropdownMapel = ({ onChange, value }) => {
   useEffect(() => {
     const getMapel = async () => {
       try {
-        const res = await axios.get(HOST + "/api/mapel/get-mapel", {
+        const res = await axios.get(HOST + url, {
           withCredentials: true,
         });
 
@@ -44,19 +44,21 @@ const DropdownMapel = ({ onChange, value }) => {
       }
     };
     getMapel();
-  }, []);
+  }, [url]);
 
   useEffect(() => {
-    let clone = [...dataMapel];
+    if (dataMapel) {
+      let clone = [...dataMapel];
 
-    if (search) {
-      const split = search.trim().toLocaleLowerCase().split(" ");
-      clone = clone.filter((data) =>
-        split.every((key) => data.nama.toLocaleLowerCase().includes(key))
-      );
+      if (search) {
+        const split = search.trim().toLocaleLowerCase().split(" ");
+        clone = clone.filter((data) =>
+          split.every((key) => data.nama.toLocaleLowerCase().includes(key))
+        );
+      }
+
+      setDataSearch(clone);
     }
-
-    setDataSearch(clone);
   }, [dataMapel, search]);
 
   useEffect(() => {

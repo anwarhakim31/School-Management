@@ -20,30 +20,24 @@ const slides = [
 
 const Slider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(true);
+  const [clone, setClone] = useState(slides);
   const timeoutRef = useRef(null);
 
   const nextSlide = () => {
     setCurrentIndex((prevState) => prevState + 1);
-    setIsTransitioning(true);
   };
 
   useEffect(() => {
     timeoutRef.current = setInterval(() => {
       nextSlide();
-    }, 4000);
+    }, 3000);
 
     return () => clearInterval(timeoutRef.current);
-  }, []);
+  }, [clone]);
 
   useEffect(() => {
-    if (currentIndex >= slides.length) {
-      const resetTimeout = setTimeout(() => {
-        setIsTransitioning(false);
-        setCurrentIndex(0);
-      }, 1000); // The transition duration should match the CSS transition duration
-
-      return () => clearTimeout(resetTimeout);
+    if (currentIndex === clone.length - 1) {
+      setClone((prevClone) => [...prevClone, ...slides]);
     }
   }, [currentIndex]);
 
@@ -60,16 +54,18 @@ const Slider = () => {
         </div>
         <div
           className={`flex transition-transform duration-500 ease-in-out ${
-            isTransitioning ? "transform" : ""
+            currentIndex % clone.length === 0 ? "transform" : ""
           }`}
           style={{
-            transform: `translateX(-${(currentIndex % slides.length) * 100}%)`,
+            transform: `translateX(-${currentIndex * 100}%)`,
           }}
         >
-          {[...slides, ...slides].map((slide, index) => (
+          {clone.map((slide, index) => (
             <div
               key={index}
-              className="w-full flex-shrink-0 h-full text-center text-black flex items-center justify-between flex-col px-4"
+              className={`${
+                currentIndex === index ? "opacity-100" : "opacity-0"
+              } w-full flex-shrink-0 h-full text-center text-black flex items-center justify-between flex-col px-4`}
             >
               <q className="leading-9">{slide.quote}</q>
               <span className="mt-10 italic">{slide.name}</span>
@@ -83,7 +79,7 @@ const Slider = () => {
               key={i}
               onClick={() => {
                 setCurrentIndex(i);
-                setIsTransitioning(true);
+                setClone([...slides]);
               }}
               className={`${
                 currentIndex % slides.length === i ? "bg-indigo-500" : ""

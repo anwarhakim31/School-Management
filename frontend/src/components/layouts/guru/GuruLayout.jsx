@@ -31,7 +31,7 @@ const GuruLayout = () => {
         ref={sidebarRef}
         className={`${
           isSidebar ? "left-0 " : "-left-[300px] lg:left-0"
-        } lg:block bg-neutral z-50 fixed lg:static py-6 shadow-xl boder-r border-gray-500 -hidden w-[230px] lg:w-[225px] min-h-screen transition-all duration-300`}
+        } lg:block bg-neutral z-50 fixed lg:static py-6 shadow-xl boder-r border-gray-500 -hidden w-[230px] lg:w-[220px] min-h-screen transition-all duration-300`}
       >
         <AsideLayout setIsSidebar={setIsSidebar} />
       </aside>

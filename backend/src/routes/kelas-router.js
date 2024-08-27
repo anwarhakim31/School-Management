@@ -4,6 +4,7 @@ import {
   addKelas,
   deleteKelas,
   getKelas,
+  getMapelKelas,
   getWaliKelas,
   updateKelas,
 } from "../controllers/kelas-controller.js";
@@ -15,5 +16,6 @@ kelasRouter.get("/get-kelas", verifyToken, getKelas);
 kelasRouter.delete("/delete-kelas/:id", verifyToken, deleteKelas);
 kelasRouter.put("/update-kelas/:id", verifyToken, updateKelas);
 kelasRouter.get("/get-wali-kelas/:id", verifyToken, getWaliKelas);
+kelasRouter.get("/get-mapel-kelas/:id", verifyToken, getMapelKelas);
 
 export default kelasRouter;
