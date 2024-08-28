@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../../../../assets/Schoolarcy (2).webp";
+import { formatDate } from "@/util/formatDate";
 
 const PrintComponent = React.forwardRef(({ data, dataSiswa }, ref) => {
   return (
@@ -13,14 +14,14 @@ const PrintComponent = React.forwardRef(({ data, dataSiswa }, ref) => {
             <tr>
               <th
                 scope="col"
-                colSpan={6}
+                colSpan={9}
                 className="px-3 py-2 text-center border-b border-white"
               >
                 DATA SISWA {data.kelas} {data.nama}
               </th>
             </tr>
             <tr className="border">
-              <th scope="col" className="px-3 py-2  border">
+              <th scope="col" className="px-3 py-2  border ">
                 NIS
               </th>
 
@@ -29,6 +30,15 @@ const PrintComponent = React.forwardRef(({ data, dataSiswa }, ref) => {
               </th>
               <th scope="col" className=" py-2 whitespace-nowrap border px-1">
                 Jenis Kelamin
+              </th>
+              <th scope="col" className=" py-2 whitespace-nowrap border px-1">
+                Tempat Lahir
+              </th>
+              <th scope="col" className=" py-2 whitespace-nowrap border px-1">
+                Tanggal Lahir
+              </th>
+              <th scope="col" className=" py-2 whitespace-nowrap border px-1">
+                Agama
               </th>
               <th
                 scope="col"
@@ -78,6 +88,25 @@ const PrintComponent = React.forwardRef(({ data, dataSiswa }, ref) => {
                     className="py-1 text-xs font-normal text-gray-900 whitespace-nowrap border px-1"
                   >
                     {siswa.jenisKelamin}
+                  </td>
+                  <td
+                    scope="row"
+                    className="py-1 text-xs font-normal text-gray-900 whitespace-nowrap border px-1"
+                  >
+                    {siswa.tempatLahir}
+                  </td>
+                  <td
+                    scope="row"
+                    className="py-1 text-xs font-normal text-gray-900 whitespace-nowrap border px-1"
+                  >
+                    {formatDate(siswa.tanggalLahir)}
+                  </td>
+
+                  <td
+                    scope="row"
+                    className="py-1 text-xs font-normal text-gray-900 whitespace-nowrap border px-1"
+                  >
+                    {siswa.agama}
                   </td>
                   <td
                     scope="row"

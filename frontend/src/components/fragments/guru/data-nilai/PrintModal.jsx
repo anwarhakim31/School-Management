@@ -8,25 +8,24 @@ const PrintComponent = React.forwardRef(({ data, dataNilai }, ref) => {
         <img src={logo} alt="logo" width={200} height={200} />
       </div>
       <div className="w-full h-max p-8">
-        <table className="w-full  text-left  text-gray-500 border">
-          <thead className="text-xs text-left  text-white uppercase bg-gradient-to-r from-[#12a7e3] to-neutral">
+        <table className="w-full text-left text-gray-500 border">
+          <thead className="text-xs text-left text-white uppercase bg-gradient-to-r from-[#12a7e3] to-neutral">
             <tr>
               <th
                 scope="col"
                 colSpan={6}
-                className="px-3 py-2 text-center border-b border-white "
+                className="px-3 py-2 text-center border-b border-white"
               >
                 DATA NILAI SISWA KELAS {data.kelas} {data.nama}
               </th>
             </tr>
             <tr className="border">
-              <th scope="col" className="px-10 py-4  whitespace-nowrap ">
+              <th scope="col" className="px-10 py-4 whitespace-nowrap">
                 Mata Pelajaran
               </th>
-
               <th
                 scope="col"
-                className="px-10 pr-4  py-4  whitespace-nowrap border"
+                className="px-10 pr-4 py-4 whitespace-nowrap border"
               >
                 Nama Siswa
               </th>
@@ -36,16 +35,16 @@ const PrintComponent = React.forwardRef(({ data, dataNilai }, ref) => {
               >
                 Kategori
               </th>
-              <th scope="col" className="px-3 py-4 text-center  border">
+              <th scope="col" className="px-3 py-4 text-center border">
                 Nilai
               </th>
               <th
                 scope="col"
-                className="px-5 py-4 text-center  whitespace-nowrap border"
+                className="px-5 py-4 text-center whitespace-nowrap border"
               >
                 Tahun Ajaran
               </th>
-              <th scope="col" className="py-4 text-center  ">
+              <th scope="col" className="py-4 text-center">
                 Semester
               </th>
             </tr>
@@ -65,18 +64,17 @@ const PrintComponent = React.forwardRef(({ data, dataNilai }, ref) => {
             )}
             {dataNilai &&
               dataNilai.length !== 0 &&
-              dataNilai.map((nilai, i) => (
-                <tr key={nilai._id} className={` hover:bg-gray-100  `}>
+              dataNilai.map((nilai) => (
+                <tr key={nilai._id} className="hover:bg-gray-100">
                   <td
                     scope="row"
                     className="px-10 py-1 text-xs font-normal text-gray-900 whitespace-nowrap border"
                   >
                     {nilai.mataPelajaran.kode} {nilai.mataPelajaran.nama}
                   </td>
-
                   <td
                     scope="row"
-                    className="px-10 pr-4 py-1  line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap  border"
+                    className="px-10 pr-4 py-1 line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap border"
                   >
                     {nilai.siswa.nama}
                   </td>
@@ -88,19 +86,19 @@ const PrintComponent = React.forwardRef(({ data, dataNilai }, ref) => {
                   </td>
                   <td
                     scope="row"
-                    className=" py-1 px-3 text-xs text-center font-normal text-gray-900 whitespace-nowrap border"
+                    className="py-1 px-3 text-xs text-center font-normal text-gray-900 whitespace-nowrap border"
                   >
                     {nilai.nilai}
                   </td>
                   <td
                     scope="row"
-                    className="px-5 py-1 text-center  overflow-hidden line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap border"
+                    className="px-5 py-1 text-center overflow-hidden line-clamp-1 text-xs font-normal text-gray-900 whitespace-nowrap border"
                   >
                     {nilai.tahunAjaran}
                   </td>
                   <td
                     scope="row"
-                    className="py-1 text-center  text-xs font-normal text-gray-900 whitespace-nowrap border"
+                    className="py-1 text-center text-xs font-normal text-gray-900 whitespace-nowrap border"
                   >
                     {nilai.semester}
                   </td>

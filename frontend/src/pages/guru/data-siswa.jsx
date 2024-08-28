@@ -32,6 +32,7 @@ import ExelJs from "exceljs";
 import { saveAs } from "file-saver";
 import ReactToPrint from "react-to-print";
 import PrintComponent from "@/components/fragments/guru/data-murid/PrintModal";
+import { formatDate } from "@/util/formatDate";
 
 const selectRow = [7, 14, 21, 28];
 
@@ -151,16 +152,6 @@ const DataSiswaPageguru = () => {
   const handleEditSiswa = (data) => {
     dispatch(setDataEdit(data));
     handleToggleEdit();
-  };
-
-  const handlePrintScreen = () => {
-    setIsPrint(true);
-
-    setTimeout(() => {
-      window.print();
-
-      setIsPrint(false);
-    }, 500);
   };
 
   useEffect(() => {
@@ -309,7 +300,6 @@ const DataSiswaPageguru = () => {
                 <button
                   title="Print"
                   className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1.5 rounded-md"
-                  onClick={handlePrintScreen}
                 >
                   <Printer
                     width={20}
@@ -339,7 +329,6 @@ const DataSiswaPageguru = () => {
             limit={limit}
             page={page}
             setPage={setPage}
-            isPrint={isPrint}
           />
         )}
       </div>
@@ -368,7 +357,7 @@ const exportToExcel = async (data, kelas, nama) => {
   const workbook = new ExelJs.Workbook();
   const worksheet = workbook.addWorksheet(`Data Siswa Kelas ${kelas} ${nama}`);
 
-  worksheet.mergeCells("A1:E1"); // Menggabungkan sel A1 hingga D1
+  worksheet.mergeCells("A1:I1"); // Menggabungkan sel A1 hingga D1
   worksheet.getCell("A1").value = `Data Siswa Kelas ${kelas} ${nama}`; // Menambahkan judul
   worksheet.getCell("A1").font = { size: 16, bold: true };
   worksheet.getCell("A1").border = {
@@ -386,6 +375,10 @@ const exportToExcel = async (data, kelas, nama) => {
     "NIS",
     "Nama Siswa",
     "Jenis Kelamin",
+    "Tempat Lahir",
+    "Tanggal Lahir",
+    "Agama",
+    "Tahun Masuk",
     "Alamat",
     "Telepon",
   ]; // Mengatur nilai header kolom
@@ -404,7 +397,17 @@ const exportToExcel = async (data, kelas, nama) => {
       right: { style: "thin", color: "FFFFFFFF" },
     };
     worksheet.getColumn(colNumber).width =
-      colNumber === 1 ? 20 : colNumber === 2 ? 20 : colNumber === 3 ? 15 : 15;
+      colNumber === 1
+        ? 20
+        : colNumber === 2
+        ? 30
+        : colNumber === 6
+        ? 25
+        : colNumber === 8
+        ? 30
+        : colNumber === 3
+        ? 15
+        : 15;
   });
 
   // Styling header
@@ -415,6 +418,10 @@ const exportToExcel = async (data, kelas, nama) => {
       siswa.nis,
       siswa.nama,
       siswa.jenisKelamin,
+      siswa.tempatLahir,
+      formatDate(siswa.tanggalLahir),
+      siswa.agama,
+      siswa.tahunMasuk,
       siswa.alamat,
       siswa.phone,
     ];
@@ -439,7 +446,7 @@ const exportToExcel = async (data, kelas, nama) => {
   // Ekspor workbook ke Excel
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: "application/octet-stream" });
-  saveAs(blob, "rekap_absen.xlsx");
+  saveAs(blob, `Data Siswa Kelas ${kelas} ${nama}.xlsx`);
 };
 
 export default DataSiswaPageguru;

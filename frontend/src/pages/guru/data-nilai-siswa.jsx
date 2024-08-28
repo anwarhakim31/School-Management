@@ -10,17 +10,19 @@ import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { Filter, Printer, Search, Trash2 } from "lucide-react";
+import ExelJS from "exceljs";
+import { FileDown, Filter, Printer, Search, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import FilterSort from "@/components/elements/data-nilai/FilterSort";
 import FilterCategory from "@/components/elements/data-nilai/FilterCategory";
 import PrintComponent from "@/components/fragments/guru/data-nilai/PrintModal";
 import ReactToPrint from "react-to-print";
+import { saveAs } from "file-saver";
 
 const selectRow = [7, 14, 21, 28];
 
-const DataNilaiSiswaPage = () => {
+const DataNilainilaiPage = () => {
   const componentRef = useRef(null);
   const userData = useSelector(selectedUserData);
   const dataChecked = useSelector(selectedDataDeleteMany);
@@ -29,7 +31,7 @@ const DataNilaiSiswaPage = () => {
   const [isAddNilai, setIsAddNilai] = useState(false);
   const [isEditNilai, setIsEditNilai] = useState(false);
   const [isDeleteNilai, setIsDeleteNilai] = useState(false);
-  const [isDeleteManySiswa, setIsDeleteManySiswa] = useState(false);
+  const [isDeleteManynilai, setIsDeleteManynilai] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedSort, setSelectedSort] = useState("terbaru");
   const [selectedFilter, setSelectedFilter] = useState("");
@@ -67,7 +69,7 @@ const DataNilaiSiswaPage = () => {
     isAddNilai,
     isDeleteNilai,
     isEditNilai,
-    isDeleteManySiswa,
+    isDeleteManynilai,
     search,
     userData._id,
     page,
@@ -92,7 +94,7 @@ const DataNilaiSiswaPage = () => {
     setIsDeleteNilai(!isDeleteNilai);
   };
   const handleToggleDeleteMany = () => {
-    setIsDeleteManySiswa(!isDeleteManySiswa);
+    setIsDeleteManynilai(!isDeleteManynilai);
   };
 
   const handleSelectBaris = (value) => {
@@ -137,11 +139,11 @@ const DataNilaiSiswaPage = () => {
         </div>
         <div>
           <p className="text-xs mt-2 grid grid-cols-3 gap-1">
-            <span className="font-semibold">Total Siswa</span>
+            <span className="font-semibold">Total nilai</span>
             {loading ? (
               <span className="w-1/2 h-4 col-span-2 bg-backup block animate-pulse rounded-sm "></span>
             ) : (
-              <span>: {data.jumlahSiswa}</span>
+              <span>: {data.jumlahnilai}</span>
             )}
           </p>
         </div>
@@ -160,7 +162,7 @@ const DataNilaiSiswaPage = () => {
         <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
-            placeholder="Cari Nama Siswa, Kode dan Nama Mapel"
+            placeholder="Cari Nama nilai, Kode dan Nama Mapel"
             value={search}
             disabled={loading}
             onChange={(e) => setSearch(e.target.value)}
@@ -192,7 +194,7 @@ const DataNilaiSiswaPage = () => {
         <div className="flex-between px-4 h-14 ">
           <div className="flex items-center gap-4  ">
             <button
-              title="Hapus siswa terpilih"
+              title="Hapus nilai terpilih"
               onClick={handleToggleDeleteMany}
               className={`${
                 dataChecked.length > 0
@@ -218,11 +220,17 @@ const DataNilaiSiswaPage = () => {
             />
           </div>
           <div className="flex gap-2">
-            {/* <button
+            <button
               title="Excel"
               disabled={loading}
               className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1.5 rounded-md"
-              onClick={() => exportToExcel(dataSiswa, data.kelas, data.nama)}
+              onClick={() =>
+                exportToExcel(
+                  dataNilai,
+                  userData.waliKelas.kelas,
+                  userData.waliKelas.nama
+                )
+              }
             >
               <FileDown
                 width={20}
@@ -230,11 +238,12 @@ const DataNilaiSiswaPage = () => {
                 strokeWidth={1}
                 className="group-hover:text-white"
               />
-            </button> */}
+            </button>
             <ReactToPrint
               trigger={() => (
                 <button
                   title="Print"
+                  disabled={loading}
                   className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1.5 rounded-md"
                   onClick={handlePrintScreen}
                 >
@@ -267,7 +276,6 @@ const DataNilaiSiswaPage = () => {
             page={page}
             setPage={setPage}
             pagination={pagination}
-            // isPrint={isPrint}
           />
         )}
       </div>
@@ -279,7 +287,7 @@ const DataNilaiSiswaPage = () => {
       )}
       {isEditNilai && <EditModal onClose={handleEditNilai} />}
       {isAddNilai && <AddModal onClose={handleToggleAdd} />}
-      {isDeleteManySiswa && (
+      {isDeleteManynilai && (
         <DeleteManyModal
           onClose={handleToggleDeleteMany}
           setAllCheck={setAllCheck}
@@ -296,4 +304,101 @@ const DataNilaiSiswaPage = () => {
   );
 };
 
-export default DataNilaiSiswaPage;
+const exportToExcel = async (data, kelas, nama) => {
+  const workbook = new ExelJS.Workbook();
+  const worksheet = workbook.addWorksheet(
+    `Data Nilai nilai Kelas ${kelas} ${nama}`
+  );
+
+  worksheet.mergeCells("A1:F1");
+  worksheet.getCell("A1").value = `Data Nilai Siswa Kelas ${kelas} ${nama}`;
+  worksheet.getCell("A1").font = { size: 16, bold: true };
+  worksheet.getCell("A1").border = {
+    top: { style: "thin", color: "FFFFFFFF" },
+    left: { style: "thin", color: "FFFFFFFF" },
+    bottom: { style: "thin", color: "FFFFFFFF" },
+    right: { style: "thin", color: "FFFFFFFF" },
+  };
+  worksheet.getCell("A1").alignment = {
+    vertical: "middle",
+    horizontal: "center",
+  };
+
+  worksheet.getRow(2).values = [
+    "Mata Pelajaran",
+    "Nama Siswa",
+    "Kategori",
+    "Nilai",
+    "Tahun Ajaran",
+    "Semsester",
+  ]; // Mengatur nilai header kolom
+  worksheet.getRow(2).eachCell((cell, colNumber) => {
+    cell.fill = {
+      type: "pattern",
+      pattern: "solid",
+      fgColor: { argb: "362f7e" }, // Warna Biru
+    };
+    cell.font = { color: { argb: "FFFFFFFF" }, bold: true }; // Teks putih
+    cell.alignment = { vertical: "middle", horizontal: "center" }; // Rata tengah
+    cell.border = {
+      top: { style: "thin", color: "FFFFFFFF" },
+      left: { style: "thin", color: "FFFFFFFF" },
+      bottom: { style: "thin", color: "FFFFFFFF" },
+      right: { style: "thin", color: "FFFFFFFF" },
+    };
+    worksheet.getColumn(colNumber).alignment =
+      colNumber === 1
+        ? { horizontal: "left" }
+        : colNumber === 2
+        ? { horizontal: "left" }
+        : { horizontal: "center" };
+
+    worksheet.getColumn(colNumber).width =
+      colNumber === 1
+        ? 20
+        : colNumber === 2
+        ? 30
+        : colNumber === 3
+        ? 10
+        : colNumber === 4
+        ? 5
+        : 15;
+  });
+
+  // Styling header
+
+  // Menambahkan data nilai dan status
+  data.forEach((nilai) => {
+    const rowValues = [
+      `${nilai.mataPelajaran.kode} ${nilai.mataPelajaran.nama}`,
+      nilai.siswa.nama,
+      nilai.kategori,
+      nilai.nilai,
+      nilai.tahunAjaran,
+      nilai.semester,
+    ];
+
+    const row = worksheet.addRow(rowValues);
+
+    // Menambahkan border pada setiap cell di body
+    row.eachCell((cell) => {
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      };
+    });
+
+    // Menambahkan border pada setiap cell di body
+
+    // Styling berdasarkan status untuk setiap cell
+  });
+
+  // Ekspor workbook ke Excel
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: "application/octet-stream" });
+  saveAs(blob, `Data Nilai Siswa Kelas ${kelas} ${nama}.xlsx`);
+};
+
+export default DataNilainilaiPage;
