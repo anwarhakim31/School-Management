@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { formatTanggalIndonesia } from "../data/formatTanggalIndonesia.js";
 import ResponseError from "../error/response-error.js";
 import Absensi from "../models/Absensi-model.js";
@@ -122,6 +123,88 @@ export const postAbsenKelas = async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: `Absensi berhasil disimpan pada ${formattedDate}`,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const editAbsenKelas = async (req, res, next) => {
+  try {
+    const kelasId = req.params.kelasId;
+    const { guruId, absensiData } = req.body;
+
+    const today = new Date();
+
+    const startOfDay = new Date();
+    startOfDay.setUTCHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setUTCHours(23, 59, 59, 999);
+
+    const absensi = await Absensi.find({
+      siswa: {
+        $in: absensiData.map((data) => new mongoose.Types.ObjectId(data._id)),
+      },
+      kelas: new mongoose.Types.ObjectId(kelasId),
+      tanggal: {
+        $gte: startOfDay,
+        $lt: endOfDay,
+      },
+    });
+
+    const bulkOps = absensi.map((absenList) => {
+      const data = absensiData.find((absen) =>
+        absen._id.includes(absenList.siswa)
+      );
+      return {
+        updateOne: {
+          filter: { _id: absenList._id },
+          update: { status: data.status },
+        },
+      };
+    });
+
+    await Absensi.bulkWrite(bulkOps);
+
+    const formattedDate = formatTanggalIndonesia(today);
+
+    res.status(201).json({
+      success: true,
+      message: `Berhasil mengubah absensi pada ${formattedDate}`,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const getDataAlreadyAbsen = async (req, res, next) => {
+  try {
+    const id = req.params.kelasId;
+
+    const siswaList = await Kelas.findById(id).select("siswa");
+
+    const startOfDay = new Date();
+    startOfDay.setUTCHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setUTCHours(23, 59, 59, 999);
+
+    const absenHariIni = await Absensi.find({
+      siswa: { $in: siswaList.siswa },
+      kelas: new mongoose.Types.ObjectId(id),
+      tanggal: {
+        $gte: startOfDay,
+        $lt: endOfDay,
+      },
+    }).populate({ path: "siswa", select: "nama _id" });
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengambil data absensi hari ini.",
+      absenHariIni,
     });
   } catch (error) {
     console.log(error);

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import ResponseError from "../error/response-error.js";
 import Guru from "../models/guru-model.js";
 import Jadwal from "../models/jadwal-model.js";
@@ -166,15 +167,13 @@ export const updateKelas = async (req, res, next) => {
 
 export const getWaliKelas = async (req, res, next) => {
   try {
-    const waliKelas = req.params.id;
+    const id = req.params.id;
 
-    const kelas = await Kelas.findOne({ waliKelas: waliKelas }).populate({
+    const kelas = await Kelas.findOne({
+      waliKelas: new mongoose.Types.ObjectId(id),
+    }).populate({
       path: "siswa",
-      select: "-password",
-      populate: {
-        path: "kelas",
-        select: "nama kelas",
-      },
+      options: { sort: { createdAt: -1 } },
     });
 
     if (!kelas) {

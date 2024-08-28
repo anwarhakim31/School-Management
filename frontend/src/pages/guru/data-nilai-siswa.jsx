@@ -3,7 +3,7 @@ import AddModal from "@/components/fragments/guru/data-nilai/AddModal";
 import DeleteManyModal from "@/components/fragments/guru/data-nilai/DeleteManyModal";
 import DeleteModal from "@/components/fragments/guru/data-nilai/DeleteModal";
 import EditModal from "@/components/fragments/guru/data-nilai/EditModal";
-import Nilai from "../../assets/svg/Score.svg";
+import Nilai from "../../assets/svg/Score.svg?react";
 import TableNilai from "@/components/fragments/guru/data-nilai/Table-Nilai";
 import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
 import { selectedUserData } from "@/store/slices/auth-slice";
@@ -11,7 +11,14 @@ import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
 import ExelJS from "exceljs";
-import { FileDown, Filter, Printer, Search, Trash2 } from "lucide-react";
+import {
+  EllipsisVerticalIcon,
+  FileDown,
+  Filter,
+  Printer,
+  Search,
+  Trash2,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import FilterSort from "@/components/elements/data-nilai/FilterSort";
@@ -24,6 +31,7 @@ const selectRow = [7, 14, 21, 28];
 
 const DataNilainilaiPage = () => {
   const componentRef = useRef(null);
+  const menuRef = useRef(null);
   const userData = useSelector(selectedUserData);
   const dataChecked = useSelector(selectedDataDeleteMany);
   const [loading, setLoading] = useState(true);
@@ -32,6 +40,7 @@ const DataNilainilaiPage = () => {
   const [isEditNilai, setIsEditNilai] = useState(false);
   const [isDeleteNilai, setIsDeleteNilai] = useState(false);
   const [isDeleteManynilai, setIsDeleteManynilai] = useState(false);
+  const [isMenuMobile, setIsMenuMobile] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedSort, setSelectedSort] = useState("terbaru");
   const [selectedFilter, setSelectedFilter] = useState("");
@@ -116,53 +125,30 @@ const DataNilainilaiPage = () => {
     }
   };
 
+  const handleToggleMenu = (e) => {
+    e.preventDefault();
+    setIsMenuMobile(!isMenuMobile);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setIsMenuMobile(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMenuMobile]);
+
   return (
     <section className="px-6 py-4 mb-4 ">
-      {/* <div className="border bg-white border-t-gray-300 border-l-gray-300 p-4 mb-6 md:max-w-[300px] border-r-4 border-b-4 border-neutral  rounded-md">
-        <div className="flex items-center mb-4 justify-between">
-          <h3 className="text-sm  font-bold">Detail Kelas</h3>
-        </div>
-
-        <div>
-          <div className="text-xs mt-2 grid grid-cols-3 gap-1">
-            <p className="font-semibold">Kelas </p>
-            <p className="truncate col-span-2">
-              {loading ? (
-                <span className="w-1/2 h-4 bg-backup block animate-pulse rounded-sm "></span>
-              ) : (
-                <span>
-                  : {data.kelas} {data.nama}
-                </span>
-              )}
-            </p>
-          </div>
-        </div>
-        <div>
-          <p className="text-xs mt-2 grid grid-cols-3 gap-1">
-            <span className="font-semibold">Total nilai</span>
-            {loading ? (
-              <span className="w-1/2 h-4 col-span-2 bg-backup block animate-pulse rounded-sm "></span>
-            ) : (
-              <span>: {data.jumlahnilai}</span>
-            )}
-          </p>
-        </div>
-        <div>
-          <p className="text-xs mt-2 grid grid-cols-3 gap-1">
-            <span className="font-semibold">Posisi Kelas</span>
-            {loading ? (
-              <span className="w-1/2 h-4 col-span-2 bg-backup block animate-pulse rounded-sm "></span>
-            ) : (
-              <span>: {data.posisi ? data.posisi : ""}</span>
-            )}
-          </p>
-        </div>
-      </div> */}
-      <div className="w-full flex-between gap-6">
+      <div className="w-full flex-between  overflow-auto gap-6">
         <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
-            placeholder="Cari Nama nilai, Kode dan Nama Mapel"
+            placeholder="Cari Nama Nilai, Kode Dan Nama Mapel"
             value={search}
             disabled={loading}
             onChange={(e) => setSearch(e.target.value)}
@@ -172,27 +158,20 @@ const DataNilainilaiPage = () => {
             <Search height={20} width={20} className="text-gray-400" />
           </div>
         </div>
-
         <button
           aria-label="tambah nilai"
           disabled={loading}
           onClick={handleToggleAdd}
           className="flex-between gap-3 min-w-fit disabled:cursor-not-allowed bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
         >
-          <img
-            src={Nilai}
-            alt="student"
-            width={15}
-            height={15}
-            className="bg-white"
-          />
+          <Nilai />
           Tambah Nilai
         </button>
       </div>
 
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-lg">
-        <div className="flex-between px-4 h-14 ">
-          <div className="flex items-center gap-4  ">
+        <div className="flex  justify-between flex-row-reverse sm:flex-row items-center px-4 h-14 ">
+          <div className="flex flex-row-reverse sm:flex-row items-center gap-4  ">
             <button
               title="Hapus nilai terpilih"
               onClick={handleToggleDeleteMany}
@@ -210,16 +189,33 @@ const DataNilainilaiPage = () => {
               onSelect={handleSelectBaris}
               selected={limit}
             />
-            <FilterSort
-              selectedSort={selectedSort}
-              handleSortChange={handleSortChange}
-            />
-            <FilterCategory
-              selectedFilter={selectedFilter}
-              handleOptionChange={handleOptionChange}
-            />
+            <div className="hidden sm:inline-flex gap-3">
+              <FilterSort
+                selectedSort={selectedSort}
+                handleSortChange={handleSortChange}
+              />
+              <FilterCategory
+                selectedFilter={selectedFilter}
+                handleOptionChange={handleOptionChange}
+              />
+            </div>
+            {(selectedSort !== "terbaru" || selectedFilter !== "") && (
+              <button
+                onClick={() => {
+                  if (selectedSort !== "terbaru") {
+                    setSelectedSort("terbaru");
+                  }
+                  if (selectedFilter !== "") {
+                    setSelectedFilter("");
+                  }
+                }}
+                className="border border-gray-400 bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-md flex-between gap-3"
+              >
+                Clear
+              </button>
+            )}
           </div>
-          <div className="flex gap-2">
+          <div className="hidden sm:flex gap-2 ">
             <button
               title="Excel"
               disabled={loading}
@@ -257,6 +253,75 @@ const DataNilainilaiPage = () => {
               )}
               content={() => componentRef.current}
             />
+          </div>
+          <div ref={menuRef} className="relative block sm:hidden">
+            <button
+              onClick={handleToggleMenu}
+              className="flex-center  w-8 h-8 rounded-full border p-1 bg-gray-100 hover:bg-gray-200 border-neutral"
+            >
+              <EllipsisVerticalIcon
+                width={15}
+                height={15}
+                className="text-gray-800"
+              />
+            </button>
+
+            {isMenuMobile && (
+              <div
+                role="menu"
+                className="absolute left-0  mt-1 flex-between p-2  border shadow-sm  w-[120px] bg-white rounded-md "
+              >
+                <div className="flex flex-col gap-3">
+                  <FilterSort
+                    selectedSort={selectedSort}
+                    handleSortChange={handleSortChange}
+                  />
+                  <FilterCategory
+                    selectedFilter={selectedFilter}
+                    handleOptionChange={handleOptionChange}
+                  />
+                </div>
+                <div className="flex flex-col gap-3">
+                  <button
+                    title="Excel"
+                    disabled={loading}
+                    className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1 rounded-md"
+                    onClick={() =>
+                      exportToExcel(
+                        dataNilai,
+                        userData.waliKelas.kelas,
+                        userData.waliKelas.nama
+                      )
+                    }
+                  >
+                    <FileDown
+                      width={20}
+                      height={20}
+                      strokeWidth={1}
+                      className="group-hover:text-white"
+                    />
+                  </button>
+                  <ReactToPrint
+                    trigger={() => (
+                      <button
+                        title="Print"
+                        disabled={loading}
+                        className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1 rounded-md"
+                        onClick={handlePrintScreen}
+                      >
+                        <Printer
+                          width={20}
+                          height={20}
+                          strokeWidth={1}
+                          className="group-hover:text-white"
+                        />
+                      </button>
+                    )}
+                    content={() => componentRef.current}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
         {loading ? (

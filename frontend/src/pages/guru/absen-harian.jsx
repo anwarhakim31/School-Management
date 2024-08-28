@@ -13,6 +13,7 @@ const AbsenHarianPage = () => {
   const [loading, setLoading] = useState(true);
   const [loading2, setLoading2] = useState(false);
   const [alreadyAbsensi, setAlreadyAbsensi] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [hariLibur, setHariLibur] = useState(false);
   const [trigger, setTrigger] = useState(false);
   const [delay, setDelay] = useState(false);
@@ -90,17 +91,27 @@ const AbsenHarianPage = () => {
 
   const handleSubmit = async () => {
     setLoading2(true);
+
+    const path = isEdit
+      ? `${userData.waliKelas._id}/edit-absensi`
+      : `${userData.waliKelas._id}/absensi`;
+
     try {
       const res = await axios.post(
-        HOST + `/api/absen/${userData.waliKelas._id}/absensi`,
+        HOST + `/api/absen/${path}`,
         { absensiData, guruId: userData._id },
         { withCredentials: true }
       );
 
       if (res.status === 201) {
         toast.success(res.data.message);
+
         setAbsensiData([]);
         setTrigger(true);
+        if (isEdit) {
+          setIsEdit(false);
+          setAlreadyAbsensi(true);
+        }
       }
     } catch (error) {
       responseError(error);
@@ -109,18 +120,45 @@ const AbsenHarianPage = () => {
     }
   };
 
+  const handleGetAlreadyAbsen = async () => {
+    setAlreadyAbsensi(false);
+    setIsEdit(true);
+
+    try {
+      const res = await axios.get(
+        HOST + "/api/absen/data-already/" + userData.waliKelas._id,
+        { withCredentials: true }
+      );
+
+      if (res.status === 200) {
+        const absenValue = res.data.absenHariIni.map((absen) => ({
+          _id: absen?.siswa?._id,
+          status: absen?.status,
+        }));
+
+        setAbsensiData(absenValue);
+      }
+    } catch (error) {
+      responseError(error);
+    }
+  };
+
   return (
     <section className="px-6 py-4 mb-4 ">
-      <div className="border bg-white border-t-gray-300 border-l-gray-300 p-4 mb-6 md:max-w-[300px] border-r-4 border-b-4 border-neutral  rounded-md">
-        <div className="space-y-2 ">
-          <h3 className="text-sm  font-semibold text-gray-800">
-            Kelas {userData.waliKelas.kelas} {userData.waliKelas.nama}
-          </h3>
-          <h3 className="text-xs  font-semibold text-gray-800">
-            {formatIndonesiaDate(hariIni)}
-          </h3>
-        </div>
+      <div className="w-full flex-between">
+        <h3 className="text-sm  font-semibold text-gray-800">
+          {formatIndonesiaDate(hariIni)}
+        </h3>
+
+        {alreadyAbsensi && (
+          <div className="flex gap-2">
+            <button onClick={handleGetAlreadyAbsen} className="btn">
+              Edit Absen
+            </button>
+          </div>
+        )}
       </div>
+
       <div className="relative">
         {loading ? (
           <>
@@ -277,9 +315,9 @@ const AbsenHarianPage = () => {
                   key={i}
                   className={`${i === 0 && "mr-auto"} ${
                     i === 2 && "ml-auto"
-                  } border-t-4 rounded-lg -rotate-12 border-[#895fc3] border-b-4 p-4`}
+                  } border-t-4 rounded-lg -rotate-12 border-blue-700 border-b-4 p-4`}
                 >
-                  <p className="font-bold text-[#895fc3]">
+                  <p className="font-bold text-blue-700">
                     Sudah Absensi Hari Ini
                   </p>
                 </div>
@@ -299,9 +337,9 @@ const AbsenHarianPage = () => {
                   key={i}
                   className={`${i === 0 && "mr-auto"} ${
                     i === 2 && "ml-auto"
-                  } border-t-4 rounded-lg -rotate-12 border-[#895fc3] border-b-4 p-4`}
+                  } border-t-4 rounded-lg -rotate-12 border-blue-700 border-b-4 p-4`}
                 >
-                  <p className="font-bold text-[#895fc3]">Hari Libur Sekolah</p>
+                  <p className="font-bold text-blue-700">Hari Libur Sekolah</p>
                 </div>
               ))}
             </div>
@@ -312,7 +350,7 @@ const AbsenHarianPage = () => {
       <div className="w-full flex justify-end">
         <button
           onClick={handleSubmit}
-          className="w-full sm:max-w-[200px] h-10 disabled:cursor-not-allowed disabled:bg-purple-500 bg-neutral hover:bg-[#895fc3] text-white mt-8 text-sm rounded-md"
+          className="w-full sm:max-w-[200px] h-10 disabled:cursor-not-allowed disabled:bg-indigo-500 bg-neutral hover:bg-blue-700 text-white mt-8 text-sm rounded-md"
           disabled={loading2 || alreadyAbsensi || hariLibur}
         >
           Simpan

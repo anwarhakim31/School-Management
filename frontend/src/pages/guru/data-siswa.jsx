@@ -13,6 +13,7 @@ import responseError from "@/util/services";
 import axios from "axios";
 import {
   Bolt,
+  EllipsisVerticalIcon,
   FileDown,
   Filter,
   Printer,
@@ -40,6 +41,7 @@ const DataSiswaPageguru = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const buttonFilterRef = useRef();
+  const menuRef = useRef(null);
   const FilterRef = useRef();
   const componentRef = useRef();
   const [loading, setLoading] = useState(true);
@@ -49,7 +51,8 @@ const DataSiswaPageguru = () => {
   const [isDeleteManySiswa, setIsDeleteManySiswa] = useState(false);
   const [allCheck, setAllCheck] = useState(false);
   const [isFilter, setIsFilter] = useState(false);
-  const [isPrint, setIsPrint] = useState(false);
+  const [isMenuMobile, setIsMenuMobile] = useState(false);
+
   const dataChecked = useSelector(selectedDataDeleteMany);
   const userData = useSelector(selectedUserData);
   const [search, setSearch] = useState("");
@@ -115,6 +118,10 @@ const DataSiswaPageguru = () => {
     setDataSiswa(datas);
   }, [data, search, filter]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [search, dataSiswa?.length]);
+
   const handleToggleDeleteOne = () => {
     setIsDeleteSiswa(!isDeleteSiswa);
   };
@@ -154,11 +161,9 @@ const DataSiswaPageguru = () => {
     handleToggleEdit();
   };
 
-  useEffect(() => {
-    if (dataSiswa && dataSiswa.length === 0) {
-      setPage(1);
-    }
-  }, [dataSiswa]);
+  const handleToggleMenu = () => {
+    setIsMenuMobile(!isMenuMobile);
+  };
 
   return (
     <section className="px-6 py-4 mb-4 ">
@@ -206,11 +211,11 @@ const DataSiswaPageguru = () => {
         <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
-            placeholder="Cari..."
+            placeholder="Cari Nama Dan NIS Siswa"
             value={search}
             disabled={loading}
             onChange={handleSearch}
-            className="w-full rounded-full disabled:cursor-not-allowed py-1.5 pr-2 pl-10 text-sm border border-gray-400 outline-offset-0 outline-1 outline-neutral"
+            className="w-full rounded-full disabled:cursor-not-allowed py-2 pr-2 pl-10 text-xs border border-gray-400 outline-offset-0 outline-1 outline-neutral"
           />
           <div className="absolute left-4 top-1/2 -translate-y-1/2">
             <Search height={20} width={20} className="text-gray-400" />
@@ -281,7 +286,7 @@ const DataSiswaPageguru = () => {
               )}
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="hidden sm:flex gap-2">
             <button
               title="Excel"
               disabled={loading}
@@ -312,10 +317,69 @@ const DataSiswaPageguru = () => {
               content={() => componentRef.current}
             />
           </div>
+          <div ref={menuRef} className="relative block sm:hidden">
+            <button
+              onClick={handleToggleMenu}
+              className="flex-center  w-8 h-8 rounded-full border p-1 bg-gray-100 hover:bg-gray-200 border-neutral"
+            >
+              <EllipsisVerticalIcon
+                width={15}
+                height={15}
+                className="text-gray-800"
+              />
+            </button>
+
+            {isMenuMobile && (
+              <div
+                role="menu"
+                className="absolute right-0 mt-1 flex-between p-2  border shadow-sm  w-fit bg-white rounded-md "
+              >
+                <div className="flex flex-col gap-3">
+                  <button
+                    title="Excel"
+                    disabled={loading}
+                    className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1 rounded-md"
+                    onClick={() =>
+                      exportToExcel(
+                        dataSiswa,
+                        userData.waliKelas.kelas,
+                        userData.waliKelas.nama
+                      )
+                    }
+                  >
+                    <FileDown
+                      width={20}
+                      height={20}
+                      strokeWidth={1}
+                      className="group-hover:text-white"
+                    />
+                  </button>
+                  <ReactToPrint
+                    trigger={() => (
+                      <button
+                        title="Print"
+                        disabled={loading}
+                        className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1 rounded-md"
+                      >
+                        <Printer
+                          width={20}
+                          height={20}
+                          strokeWidth={1}
+                          className="group-hover:text-white"
+                        />
+                      </button>
+                    )}
+                    content={() => componentRef.current}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
+
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
-            <div className="w-full min-h-[430px] flex-center bg-backup animate-pulse overflow-auto ">
+            <div className="w-full min-h-[450px] flex-center bg-backup animate-pulse overflow-auto ">
               <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
             </div>
           </div>

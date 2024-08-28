@@ -7,6 +7,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { genSalt, hash } from "bcrypt";
 import Total from "../models/total-model.js";
 import TahunAjaran from "../models/tahunAjaran-model.js";
+import Absensi from "../models/Absensi-model.js";
 
 export const getAll = async (req, res, next) => {
   try {
@@ -289,6 +290,8 @@ export const deleteOneSiswa = async (req, res, next) => {
 
     await Siswa.deleteOne({ _id: id });
 
+    await Absensi.deleteMany({ siswa: id });
+
     const ajaran = await TahunAjaran.findOne({ status: true }).select("ajaran");
 
     if (ajaran) {
@@ -349,6 +352,8 @@ export const deleteManySiswa = async (req, res, next) => {
         },
         { new: true }
       );
+
+      await Absensi.deleteMany({ siswa: siswa._id });
 
       if (updatedKelas) {
         const jumlahSiswa = updatedKelas.siswa.length;
