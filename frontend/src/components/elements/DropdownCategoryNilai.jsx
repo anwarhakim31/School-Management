@@ -11,7 +11,7 @@ const DropdownCategoryNilai = ({ onChange }) => {
   const dataEdit = useSelector(selectedDataEdit);
   const siswaRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("Ujian");
+  const [selectedCategory, setSelectedCategory] = useState("ujian");
 
   const handleInputClick = (e) => {
     e.preventDefault();
@@ -59,7 +59,7 @@ const DropdownCategoryNilai = ({ onChange }) => {
         value={selectedCategory}
         readOnly
         onClick={handleInputClick}
-        className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
+        className="block w-full text-xs capitalize bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
       />
       <div className="absolute pointer-events-none right-2 top-2.5">
         {isOpen ? (
@@ -73,13 +73,13 @@ const DropdownCategoryNilai = ({ onChange }) => {
         <div className="absolute mt-1  w-full bg-white border z-50 border-gray-400 rounded shadow">
           <ul className="max-h-28 overflow-y-auto">
             <li
-              onClick={() => handleSelectCategory("Ujian")}
+              onClick={() => handleSelectCategory("ujian")}
               className="px-4 py-2 text-xs hover:bg-gray-200 cursor-pointer"
             >
               <p className="">Ujian</p>
             </li>
             <li
-              onClick={() => handleSelectCategory("Ujian")}
+              onClick={() => handleSelectCategory("tugas")}
               className="px-4 py-2 text-xs hover:bg-gray-200 cursor-pointer"
             >
               <p className="">Tugas</p>

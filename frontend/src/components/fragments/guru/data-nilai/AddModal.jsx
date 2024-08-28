@@ -30,7 +30,7 @@ const AddModal = ({ onClose }) => {
     defaultValues: {
       mataPelajaran: "",
       siswa: "",
-      kategori: "Ujian",
+      kategori: "ujian",
       nilai: "",
       semester: "",
       tahunAjaran: "",

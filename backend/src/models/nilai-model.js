@@ -14,6 +14,7 @@ const nilaiSchema = new mongoose.Schema({
   kategori: {
     type: String,
     required: true,
+    enum: ["ujian", "tugas"],
   },
   nilai: {
     type: Number,

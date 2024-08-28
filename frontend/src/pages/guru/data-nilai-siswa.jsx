@@ -24,6 +24,7 @@ const DataNilaiSiswaPage = () => {
   const [isEditNilai, setIsEditNilai] = useState(false);
   const [isDeleteNilai, setIsDeleteNilai] = useState(false);
   const [isDeleteManySiswa, setIsDeleteManySiswa] = useState(false);
+  const [search, setSearch] = useState("");
   const [dataNilai, setDataNilai] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(7);
@@ -33,7 +34,7 @@ const DataNilaiSiswaPage = () => {
       try {
         const res = await axios.get(
           HOST + "/api/nilai/all-siswa/" + userData._id,
-          { withCredentials: true }
+          { params: { search }, withCredentials: true }
         );
 
         if (res.status === 200) {
@@ -49,7 +50,7 @@ const DataNilaiSiswaPage = () => {
     };
 
     getKelas();
-  }, [isAddNilai, isDeleteNilai, isEditNilai, isDeleteManySiswa]);
+  }, [isAddNilai, isDeleteNilai, isEditNilai, isDeleteManySiswa, search]);
 
   const handleToggleAdd = () => {
     setIsAddNilai(!isAddNilai);
@@ -115,11 +116,11 @@ const DataNilaiSiswaPage = () => {
         <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
-            placeholder="Cari..."
-            // value={search}
-            // disabled={loading}
-            // onChange={handleSearch}
-            className="w-full rounded-full disabled:cursor-not-allowed py-1.5 pr-2 pl-10 text-sm border border-gray-400 outline-offset-0 outline-1 outline-neutral"
+            placeholder="Cari Nama Siswa, Kode dan Nama Mapel"
+            value={search}
+            disabled={loading}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full rounded-full disabled:cursor-not-allowed text-xs py-1.5 pr-2 pl-10  border border-gray-400 outline-offset-0 outline-1 outline-neutral"
           />
           <div className="absolute left-4 top-1/2 -translate-y-1/2">
             <Search height={20} width={20} className="text-gray-400" />

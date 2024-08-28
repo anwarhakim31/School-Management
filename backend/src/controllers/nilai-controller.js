@@ -5,6 +5,20 @@ import Nilai from "../models/Nilai-model.js";
 export const addNilai = async (req, res, next) => {
   try {
     const data = req.body;
+    const { kategori, mataPelajaran, siswa } = req.body;
+
+    const isExist = await Nilai.findOne({
+      siswa,
+      kategori,
+      mataPelajaran,
+    });
+
+    if (isExist) {
+      throw new ResponseError(
+        400,
+        `Kategori nilai ${kategori.toLowerCase()} untuk siswa ini sudah ada.`
+      );
+    }
 
     const nilai = Nilai({ ...data });
 
@@ -22,6 +36,7 @@ export const addNilai = async (req, res, next) => {
 export const getNilaiKelas = async (req, res, next) => {
   try {
     const { walikelasId } = req.params;
+    const { search } = req.query;
 
     const kelas = await Kelas.findOne({ waliKelas: walikelasId });
 
@@ -32,14 +47,74 @@ export const getNilaiKelas = async (req, res, next) => {
       );
     }
 
-    const siswaId = kelas.siswa.map((siswa) => siswa);
+    const searchRegex = new RegExp(search.trim(), "i");
 
-    const nilai = await Nilai.find({ siswa: { $in: siswaId } })
-      .populate({
-        path: "siswa",
-        select: "nama",
-      })
-      .populate("mataPelajaran");
+    const nilai = await Nilai.aggregate([
+      {
+        $match: {
+          siswa: { $in: kelas.siswa },
+        },
+      },
+      {
+        $lookup: {
+          from: "siswas",
+          localField: "siswa",
+          foreignField: "_id",
+          as: "siswa",
+        },
+      },
+      {
+        $unwind: "$siswa",
+      },
+      {
+        $lookup: {
+          from: "mapels",
+          localField: "mataPelajaran",
+          foreignField: "_id",
+          as: "mataPelajaran",
+        },
+      },
+      {
+        $unwind: "$mataPelajaran",
+      },
+      {
+        $match: {
+          $or: [
+            {
+              "siswa.nama": { $regex: searchRegex },
+            },
+            {
+              "mataPelajaran.kode": { $regex: searchRegex },
+            },
+            {
+              "mataPelajaran.nama": { $regex: searchRegex },
+            },
+          ],
+        },
+      },
+      {
+        $sort: { createdAt: -1 },
+      },
+      {
+        $project: {
+          _id: 1,
+          siswa: {
+            _id: "$siswa._id",
+            nama: "$siswa.nama",
+          },
+          nilai: 1,
+          mataPelajaran: {
+            _id: "$mataPelajaran._id",
+            nama: "$mataPelajaran.nama",
+            kode: "$mataPelajaran.kode",
+          },
+          createdAt: 1,
+          kategori: 1,
+          tahunAjaran: 1,
+          semester: 1,
+        },
+      },
+    ]);
 
     res.status(200).json({
       success: true,
