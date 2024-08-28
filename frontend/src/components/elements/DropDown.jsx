@@ -32,7 +32,7 @@ const CustomDropdown = ({ options, selected, onSelect }) => {
       <button
         type="button"
         onClick={toggleDropdown}
-        className="inline-flex text-xs items-center px-2 py-1.5 hover:bg-neutral hover:border-gray-400 hover:text-white border border-gray-300 bg-white transition-all duration-300 text-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-neutral"
+        className="inline-flex text-xs items-center px-2 py-1.5 truncate hover:bg-neutral hover:border-gray-400 hover:text-white border border-gray-300 bg-white transition-all duration-300 text-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-neutral"
       >
         List baris{" "}
         <span className="font-semibold block ml-2"> {selectedOption}</span>

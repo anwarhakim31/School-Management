@@ -38,6 +38,7 @@ export const getNilaiKelas = async (req, res, next) => {
     const { walikelasId } = req.params;
     const { search } = req.query;
     const sort = req.query.selectedSort;
+    const filter = req.query.selectedFilter;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 7;
 
@@ -54,7 +55,7 @@ export const getNilaiKelas = async (req, res, next) => {
 
     const searchRegex = new RegExp(search.trim(), "i");
 
-    const totalResults = await Nilai.aggregate([
+    const countPipeline = [
       {
         $match: {
           siswa: { $in: kelas.siswa },
@@ -97,10 +98,21 @@ export const getNilaiKelas = async (req, res, next) => {
           ],
         },
       },
-      {
-        $count: "total",
-      },
-    ]);
+    ];
+
+    if (filter === "ujian" || filter === "tugas") {
+      countPipeline.push({
+        $match: {
+          kategori: filter,
+        },
+      });
+    }
+
+    countPipeline.push({
+      $count: "total",
+    });
+
+    const totalResults = await Nilai.aggregate(countPipeline);
 
     const total = totalResults.length > 0 ? totalResults[0].total : 0;
 
@@ -196,6 +208,14 @@ export const getNilaiKelas = async (req, res, next) => {
       pipeline.push({
         $sort: {
           nilai: sort === "100-0" ? -1 : 1,
+        },
+      });
+    }
+
+    if (filter === "ujian" || filter === "tugas") {
+      pipeline.push({
+        $match: {
+          kategori: filter,
         },
       });
     }

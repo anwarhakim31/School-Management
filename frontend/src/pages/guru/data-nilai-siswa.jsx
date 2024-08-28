@@ -14,6 +14,7 @@ import { Filter, Search, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import FilterSort from "@/components/elements/data-nilai/FilterSort";
+import FilterCategory from "@/components/elements/data-nilai/FilterCategory";
 
 const selectRow = [7, 14, 21, 28];
 
@@ -28,6 +29,7 @@ const DataNilaiSiswaPage = () => {
   const [isDeleteManySiswa, setIsDeleteManySiswa] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedSort, setSelectedSort] = useState("terbaru");
+  const [selectedFilter, setSelectedFilter] = useState("");
   const [dataNilai, setDataNilai] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(7);
@@ -39,7 +41,7 @@ const DataNilaiSiswaPage = () => {
         const res = await axios.get(
           `${HOST}/api/nilai/all-siswa/${userData._id}`,
           {
-            params: { search, page, limit, selectedSort },
+            params: { search, page, limit, selectedSort, selectedFilter },
             withCredentials: true,
           }
         );
@@ -68,6 +70,7 @@ const DataNilaiSiswaPage = () => {
     page,
     limit,
     selectedSort,
+    selectedFilter,
   ]);
   useEffect(() => {
     if (dataNilai.length === 0) {
@@ -96,6 +99,10 @@ const DataNilaiSiswaPage = () => {
 
   const handleSortChange = (value) => {
     setSelectedSort(value);
+  };
+
+  const handleOptionChange = (value) => {
+    setSelectedFilter(value);
   };
 
   return (
@@ -195,6 +202,10 @@ const DataNilaiSiswaPage = () => {
             <FilterSort
               selectedSort={selectedSort}
               handleSortChange={handleSortChange}
+            />
+            <FilterCategory
+              selectedFilter={selectedFilter}
+              handleOptionChange={handleOptionChange}
             />
           </div>
           {/* <div className="flex gap-2">
