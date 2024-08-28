@@ -10,15 +10,18 @@ import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { Filter, Search, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Filter, Printer, Search, Trash2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import FilterSort from "@/components/elements/data-nilai/FilterSort";
 import FilterCategory from "@/components/elements/data-nilai/FilterCategory";
+import PrintComponent from "@/components/fragments/guru/data-nilai/PrintModal";
+import ReactToPrint from "react-to-print";
 
 const selectRow = [7, 14, 21, 28];
 
 const DataNilaiSiswaPage = () => {
+  const componentRef = useRef(null);
   const userData = useSelector(selectedUserData);
   const dataChecked = useSelector(selectedDataDeleteMany);
   const [loading, setLoading] = useState(true);
@@ -103,6 +106,12 @@ const DataNilaiSiswaPage = () => {
 
   const handleOptionChange = (value) => {
     setSelectedFilter(value);
+  };
+
+  const handlePrintScreen = () => {
+    if (componentRef.current) {
+      componentRef.current.print();
+    }
   };
 
   return (
@@ -208,8 +217,8 @@ const DataNilaiSiswaPage = () => {
               handleOptionChange={handleOptionChange}
             />
           </div>
-          {/* <div className="flex gap-2">
-            <button
+          <div className="flex gap-2">
+            {/* <button
               title="Excel"
               disabled={loading}
               className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1.5 rounded-md"
@@ -221,7 +230,7 @@ const DataNilaiSiswaPage = () => {
                 strokeWidth={1}
                 className="group-hover:text-white"
               />
-            </button>
+            </button> */}
             <ReactToPrint
               trigger={() => (
                 <button
@@ -239,7 +248,7 @@ const DataNilaiSiswaPage = () => {
               )}
               content={() => componentRef.current}
             />
-          </div> */}
+          </div>
         </div>
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
@@ -276,9 +285,13 @@ const DataNilaiSiswaPage = () => {
           setAllCheck={setAllCheck}
         />
       )}
-      {/* <div style={{ display: "none" }}>
-        <PrintComponent ref={componentRef} dataSiswa={dataSiswa} data={data} />
-      </div> */}
+      <div style={{ display: "none" }}>
+        <PrintComponent
+          ref={componentRef}
+          dataNilai={dataNilai}
+          data={userData.waliKelas}
+        />
+      </div>
     </section>
   );
 };
