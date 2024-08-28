@@ -3,6 +3,7 @@ import AddModal from "@/components/fragments/guru/data-nilai/AddModal";
 import DeleteManyModal from "@/components/fragments/guru/data-nilai/DeleteManyModal";
 import DeleteModal from "@/components/fragments/guru/data-nilai/DeleteModal";
 import EditModal from "@/components/fragments/guru/data-nilai/EditModal";
+import Nilai from "../../assets/svg/Score.svg";
 import TableNilai from "@/components/fragments/guru/data-nilai/Table-Nilai";
 import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
 import { selectedUserData } from "@/store/slices/auth-slice";
@@ -12,6 +13,7 @@ import axios from "axios";
 import { Filter, Search, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import FilterSort from "@/components/elements/data-nilai/FilterSort";
 
 const selectRow = [7, 14, 21, 28];
 
@@ -25,20 +27,26 @@ const DataNilaiSiswaPage = () => {
   const [isDeleteNilai, setIsDeleteNilai] = useState(false);
   const [isDeleteManySiswa, setIsDeleteManySiswa] = useState(false);
   const [search, setSearch] = useState("");
+  const [selectedSort, setSelectedSort] = useState("terbaru");
   const [dataNilai, setDataNilai] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(7);
+  const [pagination, setPagination] = useState({});
 
   useEffect(() => {
     const getKelas = async () => {
       try {
         const res = await axios.get(
-          HOST + "/api/nilai/all-siswa/" + userData._id,
-          { params: { search }, withCredentials: true }
+          `${HOST}/api/nilai/all-siswa/${userData._id}`,
+          {
+            params: { search, page, limit, selectedSort },
+            withCredentials: true,
+          }
         );
 
         if (res.status === 200) {
           setDataNilai(res.data.nilai);
+          setPagination(res.data.pagination);
         }
       } catch (error) {
         responseError(error);
@@ -50,7 +58,22 @@ const DataNilaiSiswaPage = () => {
     };
 
     getKelas();
-  }, [isAddNilai, isDeleteNilai, isEditNilai, isDeleteManySiswa, search]);
+  }, [
+    isAddNilai,
+    isDeleteNilai,
+    isEditNilai,
+    isDeleteManySiswa,
+    search,
+    userData._id,
+    page,
+    limit,
+    selectedSort,
+  ]);
+  useEffect(() => {
+    if (dataNilai.length === 0) {
+      setPage(1);
+    }
+  }, [dataNilai]);
 
   const handleToggleAdd = () => {
     setIsAddNilai(!isAddNilai);
@@ -68,6 +91,11 @@ const DataNilaiSiswaPage = () => {
 
   const handleSelectBaris = (value) => {
     setLimit(value);
+    setPage(1);
+  };
+
+  const handleSortChange = (value) => {
+    setSelectedSort(value);
   };
 
   return (
@@ -120,7 +148,7 @@ const DataNilaiSiswaPage = () => {
             value={search}
             disabled={loading}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-full disabled:cursor-not-allowed text-xs py-1.5 pr-2 pl-10  border border-gray-400 outline-offset-0 outline-1 outline-neutral"
+            className="w-full rounded-full disabled:cursor-not-allowed text-xs py-2 pr-2 pl-10  border border-gray-400 outline-offset-0 outline-1 outline-neutral"
           />
           <div className="absolute left-4 top-1/2 -translate-y-1/2">
             <Search height={20} width={20} className="text-gray-400" />
@@ -129,11 +157,17 @@ const DataNilaiSiswaPage = () => {
 
         <button
           aria-label="tambah nilai"
-          // disabled={loading}
+          disabled={loading}
           onClick={handleToggleAdd}
           className="flex-between gap-3 min-w-fit disabled:cursor-not-allowed bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
         >
-          {/* <img src={Student} alt="student" width={15} height={15} /> */}
+          <img
+            src={Nilai}
+            alt="student"
+            width={15}
+            height={15}
+            className="bg-white"
+          />
           Tambah Nilai
         </button>
       </div>
@@ -158,21 +192,10 @@ const DataNilaiSiswaPage = () => {
               onSelect={handleSelectBaris}
               selected={limit}
             />
-            <div className="flex gap-2 relative  mr-auto  ">
-              <button
-                // onClick={handleToggleFilter}
-                // ref={buttonFilterRef}
-                // disabled={dataSiswa?.length === 0}
-                className="border border-gray-400 group disabled:cursor-not-allowed bg-white text-gray-500  hover:bg-neutral hover:border-gray-400 border-dashed  py-1.5 transition-all duration-300 font-medium hover:text-white  text-xs px-4 rounded-md flex-between gap-3"
-              >
-                <Filter
-                  strokeWidth={2}
-                  width={15}
-                  height={15}
-                  className="text-gray-600 group-hover:text-white"
-                />
-              </button>
-            </div>
+            <FilterSort
+              selectedSort={selectedSort}
+              handleSortChange={handleSortChange}
+            />
           </div>
           {/* <div className="flex gap-2">
             <button
@@ -209,7 +232,7 @@ const DataNilaiSiswaPage = () => {
         </div>
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
-            <div className="w-full min-h-[430px] flex-center bg-backup animate-pulse overflow-auto ">
+            <div className="w-full min-h-[450px] flex-center bg-backup animate-pulse overflow-auto ">
               <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
             </div>
           </div>
@@ -223,6 +246,7 @@ const DataNilaiSiswaPage = () => {
             limit={limit}
             page={page}
             setPage={setPage}
+            pagination={pagination}
             // isPrint={isPrint}
           />
         )}

@@ -128,6 +128,7 @@ const DataSiswaPageguru = () => {
 
   const handleSelectBaris = (value) => {
     setLimit(value);
+    setPage(1);
   };
 
   const handleSearch = (e) => {
@@ -161,6 +162,12 @@ const DataSiswaPageguru = () => {
       setIsPrint(false);
     }, 500);
   };
+
+  useEffect(() => {
+    if (dataSiswa && dataSiswa.length === 0) {
+      setPage(1);
+    }
+  }, [dataSiswa]);
 
   return (
     <section className="px-6 py-4 mb-4 ">

@@ -29,16 +29,14 @@ const TableNilai = ({
   limit,
   setPage,
   isPrint,
+  pagination,
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [dataChecked, setDataChecked] = useState([]);
 
-  const lastOfIndexnilai = page * limit;
-  const firstOfindexnilai = lastOfIndexnilai - limit;
-
-  const nilaiSlice = data?.slice(firstOfindexnilai, lastOfIndexnilai);
-  const totalnilai = data?.length;
+  const lastOfIndexnilai = pagination?.page * pagination?.limit;
+  const firstOfindexnilai = lastOfIndexnilai - pagination?.limit;
 
   const handleDeletenilai = (data) => {
     handleToggleDeleteOne();
@@ -54,8 +52,8 @@ const TableNilai = ({
     setAllCheck(!allCheck);
 
     if (checked) {
-      setDataChecked(nilaiSlice.map((nilai) => nilai._id));
-      dispatch(setDataDeleteMany(nilaiSlice.map((nilai) => nilai._id)));
+      setDataChecked(data.map((nilai) => nilai._id));
+      dispatch(setDataDeleteMany(data.map((nilai) => nilai._id)));
     } else {
       setDataChecked([]);
       dispatch(setDataDeleteMany([]));
@@ -79,7 +77,7 @@ const TableNilai = ({
   return (
     <>
       <div className="block w-full shadow-md pb-[3.5rem]">
-        <div className="w-full min-h-[430px]  overflow-auto ">
+        <div className="w-full min-h-[450px]  overflow-auto ">
           <table className="w-full    text-left  text-gray-500 ">
             <thead className="text-xs text-left  text-white uppercase bg-neutral">
               <tr>
@@ -142,7 +140,7 @@ const TableNilai = ({
               )}
               {data &&
                 data.length !== 0 &&
-                [...nilaiSlice].reverse().map((nilai, i) => (
+                data.map((nilai, i) => (
                   <tr
                     key={nilai._id}
                     className={` hover:bg-gray-100 border-b  `}
@@ -208,19 +206,19 @@ const TableNilai = ({
                         <button
                           title="Edit"
                           onClick={() => handleToggleEdit(nilai)}
-                          className="w-[20px] h-[20px]  flex-center"
+                          className="w-[25px] h-[25px] border-2 rounded-md  border-gray-300 group hover:border-neutral1 flex-center transition-all duration-300"
                         >
                           <Edit
                             width={18}
                             absoluteStrokeWidth={true}
                             strokeWidth={1}
                             height={18}
-                            className="text-gray-800  hover:text-neutral1 transition-all duration-300"
+                            className="text-gray-800  group-hover:text-neutral1 transition-all duration-300"
                           />
                         </button>
                         <button
                           title="Hapus"
-                          className="w-[20px] h-[20px] border-b border-gray-500 flex-center"
+                          className="w-[25px] h-[25px] border-2 rounded-md  border-gray-300 group hover:border-neutral2 flex-center transition-all duration-300"
                           onClick={() => handleDeletenilai(nilai)}
                         >
                           <Trash
@@ -228,7 +226,7 @@ const TableNilai = ({
                             height={18}
                             absoluteStrokeWidth={true}
                             strokeWidth={1}
-                            className="text-gray-800  hover:text-neutral2 fill-gray-100 transition-all duration-300"
+                            className="text-gray-800  group-hover:text-neutral2 transition-all duration-300"
                           />
                         </button>
                       </div>
@@ -244,8 +242,8 @@ const TableNilai = ({
           limit={limit}
           page={page}
           data={data}
-          totalnilai={totalnilai}
           handlePagination={handlePagination}
+          pagination={pagination}
         />
       </div>
 
@@ -308,7 +306,7 @@ const TableNilai = ({
                 )}
                 {data &&
                   data.length !== 0 &&
-                  [...nilaiSlice].reverse().map((nilai, i) => (
+                  data.map((nilai, i) => (
                     <tr
                       key={nilai.nis}
                       className={` hover:bg-gray-100 border-b  `}
@@ -384,14 +382,13 @@ const TableNilai = ({
 const Pagination = ({
   lastOfIndexnilai,
   firstOfindexnilai,
-  limit,
-  page,
-  totalnilai,
+  pagination,
   handlePagination,
 }) => {
   const pageNumber = [];
 
-  const totalPage = Math.ceil(totalnilai / limit);
+  const totalPage = pagination?.totalPage;
+  const page = pagination?.page;
 
   for (let i = 1; i <= totalPage; i++) {
     pageNumber.push(i);
@@ -409,17 +406,17 @@ const Pagination = ({
     <div className=" absolute h-9 left-0 bottom-5 border-t pt-4 w-full flex-between px-3">
       <div className="flex">
         <p className="text-[10px] sm:text-xs">{`Menampilkan ${
-          totalnilai === 0 ? 0 : firstOfindexnilai + 1
+          pagination?.total === 0 ? 0 : firstOfindexnilai + 1 || 0
         } - ${
           page === totalPage
-            ? totalnilai
-            : totalnilai === 0
+            ? pagination?.total
+            : pagination?.total === 0
             ? 0
-            : lastOfIndexnilai
-        } dari ${totalnilai} data`}</p>
+            : lastOfIndexnilai || 0
+        } dari ${pagination?.total || 0} data`}</p>
       </div>
       <div className="flex-center space-x-4">
-        {totalnilai === 0 ? (
+        {pagination?.total === 0 ? (
           ""
         ) : (
           <div className="flex gap-2 ">

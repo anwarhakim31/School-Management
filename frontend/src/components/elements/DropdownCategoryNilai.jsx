@@ -18,21 +18,11 @@ const DropdownCategoryNilai = ({ onChange }) => {
     setIsOpen(!isOpen);
   };
 
-  // useEffect(() => {
-  //   if (dataEdit) {
-  //     setTimeout(() => {
-  //       setSelectedsiswa({ nama: dataEdit.siswa.nama, id: dataEdit.siswa._id });
-  //       onChange(dataEdit.siswa._id);
-  //     }, 100);
-  //   }
-  // }, [dataEdit]);
-
-  // useEffect(() => {
-  //   if (siswa) {
-  //     setSelectedsiswa("");
-  //     onChange("");
-  //   }
-  // }, [siswa]);
+  useEffect(() => {
+    if (dataEdit) {
+      setSelectedCategory(dataEdit.kategori);
+    }
+  }, [dataEdit]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
