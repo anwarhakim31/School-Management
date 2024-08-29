@@ -23,7 +23,6 @@ const TableAbsen = ({
   kelas,
   month,
 }) => {
-  console.log(rekapAbsen);
   return (
     <>
       <div className="w-full min-h-[calc(80vh-140px)] overflow-auto rounded-md">

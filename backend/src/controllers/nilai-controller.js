@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import ResponseError from "../error/response-error.js";
 import Kelas from "../models/kelas-model.js";
 import Nilai from "../models/Nilai-model.js";
@@ -293,6 +294,35 @@ export const updateNilai = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Berhasil mengubah nilai siswa",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getRekapKelas = async (req, res, next) => {
+  try {
+    const id = req.userId;
+    const { semester, tahunAjaran } = req.query;
+
+    const kelas = await Kelas.findOne({
+      waliKelas: id,
+    });
+
+    if (!kelas) {
+      throw new ResponseError(404, "Kelas tidak memiliki siswa.");
+    }
+
+    const nilai = await Nilai.find({
+      siswa: { $in: kelas.siswa },
+    });
+
+    console.log(nilai);
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengambil semua nilai siswa",
+      nilai,
     });
   } catch (error) {
     next(error);

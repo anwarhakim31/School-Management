@@ -1,5 +1,3 @@
-import MonthDropdown from "@/components/elements/MonthDropdown";
-import YearDropdown from "@/components/elements/YearDropDown";
 import TableAbsen from "@/components/fragments/guru/rekap/TableAbsen";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
@@ -12,16 +10,16 @@ import { saveAs } from "file-saver";
 import ExcelJS from "exceljs";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
 import PrintComponent from "@/components/fragments/guru/rekap/PrintModal";
+import DropdownTahunAjaran from "@/components/elements/DropdownTahunAjaran";
+import DropdownSemester from "@/components/elements/DropdownSemester";
 
 const RekapNilaiFragment = () => {
-  const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().getMonth();
   const [loading, setLoading] = useState(true);
-  const [year, setYear] = useState(currentYear);
-  const [month, setMonth] = useState(currentMonth);
+  const [tahunAjaran, setTahunAjaran] = useState("");
+  const [semester, setSemester] = useState("");
   const userData = useSelector(selectedUserData);
   const [countDay, setCountDay] = useState(0);
-  const [rekapAbsen, setRekapAbsen] = useState([]);
+  const [rekapNilai, setRekapNilai] = useState([]);
   const [kelas, setkelas] = useState({});
 
   const componentRef = useRef(null);
@@ -29,15 +27,12 @@ const RekapNilaiFragment = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await axios.get(
-          HOST + "/api/absen/" + userData.waliKelas._id + "/rekap-absen",
-          { withCredentials: true, params: { month, year } }
-        );
+        const res = await axios.get(HOST + "/api/nilai/rekap-nilai", {
+          withCredentials: true,
+        });
 
         if (res.status === 200) {
-          setCountDay(res.data.jumlahHari);
-          setRekapAbsen(res.data.rekapAbsensi);
-          setkelas(res.data.kelas);
+          setRekapNilai(res.data.nilai);
         }
       } catch (error) {
         responseError(error);
@@ -49,14 +44,14 @@ const RekapNilaiFragment = () => {
     };
 
     getData();
-  }, [year, month]);
+  }, [semester]);
 
-  const handleSelectYeay = (value) => {
-    setYear(value);
+  const handleSelectAjaran = (value) => {
+    setTahunAjaran(value);
   };
 
-  const handleSelectMonth = (value) => {
-    setMonth(value);
+  const handleSelectSemester = (value) => {
+    setSemester(value);
   };
 
   return (
@@ -64,34 +59,27 @@ const RekapNilaiFragment = () => {
       <div className="flex-between">
         <div className="flex justify-start flex-wrap gap-4">
           <div className="flex items-center gap-4">
-            <p className="text-sm font-semibold text-gray-700">Tahun</p>
-            <YearDropdown onSelectYear={handleSelectYeay} />
+            <p className="text-sm font-semibold text-gray-700">Tahun Ajaran</p>
+            <DropdownTahunAjaran onSelectAjaran={handleSelectAjaran} />
           </div>
           <div className="flex items-center gap-4">
-            <p className="text-sm font-semibold text-gray-700">Bulan</p>
-            <MonthDropdown onSelectMonth={handleSelectMonth} />
+            <p className="text-sm font-semibold text-gray-700">Semester</p>
+            <DropdownSemester onSelectedSemester={handleSelectSemester} />
           </div>
         </div>
         <div className="flex items-center justify-end flex-wrap gap-4">
-          <button
-            disabled={loading || rekapAbsen.length === 0}
+          {/* <button
+            disabled={loading || rekapNilai.length === 0}
             onClick={() =>
-              exportToExcel(
-                countDay,
-                rekapAbsen,
-                kelas.grade,
-                kelas.nama,
-                month,
-                year
-              )
+              exportToExcel(countDay, rekapAbsen, kelas.grade, kelas.nama)
             }
             className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
           >
             <FileDownIcon height={15} width={15} />
             Excel
-          </button>
+          </button> */}
 
-          <ReactToPrint
+          {/* <ReactToPrint
             trigger={() => (
               <button
                 disabled={loading || rekapAbsen.length === 0}
@@ -102,7 +90,7 @@ const RekapNilaiFragment = () => {
               </button>
             )}
             content={() => componentRef.current}
-          />
+          /> */}
         </div>
       </div>
       <div className="relative border broder-gray-300 rounded-md bg-white mt-6 overflow-hidden">
@@ -113,23 +101,21 @@ const RekapNilaiFragment = () => {
             </div>
           </div>
         ) : (
-          <TableAbsen
-            month={month}
-            rekapAbsen={rekapAbsen}
-            countDay={countDay}
-            kelas={kelas}
-          />
+          ""
+          // <TableAbsen
+          //   rekapAbsen={re}
+          //   countDay={countDay}
+          //   kelas={kelas}
+          // />
         )}
       </div>
       <div style={{ display: "none" }}>
-        <PrintComponent
+        {/* <PrintComponent
           ref={componentRef}
           rekapAbsen={rekapAbsen}
           countDay={countDay}
           kelas={kelas}
-          month={month}
-          year={year}
-        />
+        /> */}
       </div>
     </Fragment>
   );
@@ -152,14 +138,7 @@ const formatStatus = (status) => {
   }
 };
 
-const exportToExcel = async (
-  countDay,
-  rekapAbsen,
-  kelas,
-  nama,
-  month,
-  year
-) => {
+const exportToExcel = async (countDay, rekapAbsen, kelas, nama) => {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Rekap Absen");
 
