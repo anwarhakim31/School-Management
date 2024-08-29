@@ -32,12 +32,12 @@ const HeaderLayout = ({ handleToggleSidebar }) => {
   };
 
   return (
-    <header className="w-full p-6 flex justify-between items-center">
+    <header className="w-full p-4 flex justify-between items-center">
       <div className="flex-center gap-4 ">
         <button
           aria-label="toggle sidebar"
           onClick={handleToggleSidebar}
-          className=" lg:hidden w-9 h-9  p-2 border bg-white hover:border-neutral transition-all duration-300 flex-center rounded-lg"
+          className=" lg:hidden w-9 h-9  p-2 border bg-white hover:border-neutral transition-all duration-300 flex-center rounded-full"
         >
           <Menu width={25} height={25} />
         </button>
@@ -55,7 +55,7 @@ const HeaderLayout = ({ handleToggleSidebar }) => {
           </div>
           <Link
             to={"/guru/profile"}
-            className="w-10 h-10 bg-backup flex items-center justify-center rounded-full overflow-hidden"
+            className="w-9 h-9 bg-backup flex items-center justify-center rounded-full overflow-hidden"
           >
             <img
               src={data.photo ? data.photo : profile}
@@ -67,7 +67,7 @@ const HeaderLayout = ({ handleToggleSidebar }) => {
         <div className="relative">
           <button
             ref={buttonRef}
-            className="bg-white border hover:border-neutral transition-all duration-300 w-10 h-10 p-2 rounded-full flex items-center justify-center cursor-pointer"
+            className="bg-white border hover:border-neutral transition-all duration-300 w-9 h-9 p-2 rounded-full flex items-center justify-center cursor-pointer"
             aria-label="menu"
             onClick={handleLogout}
           >

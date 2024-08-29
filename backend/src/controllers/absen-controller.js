@@ -138,10 +138,10 @@ export const editAbsenKelas = async (req, res, next) => {
     const today = new Date();
 
     const startOfDay = new Date();
-    startOfDay.setUTCHours(0, 0, 0, 0);
+    startOfDay.setHours(0, 0, 0, 0);
 
     const endOfDay = new Date();
-    endOfDay.setUTCHours(23, 59, 59, 999);
+    endOfDay.setHours(23, 59, 59, 999);
 
     const absensi = await Absensi.find({
       siswa: {
@@ -150,7 +150,7 @@ export const editAbsenKelas = async (req, res, next) => {
       kelas: new mongoose.Types.ObjectId(kelasId),
       tanggal: {
         $gte: startOfDay,
-        $lt: endOfDay,
+        $lte: endOfDay,
       },
     });
 
@@ -187,17 +187,17 @@ export const getDataAlreadyAbsen = async (req, res, next) => {
     const siswaList = await Kelas.findById(id).select("siswa");
 
     const startOfDay = new Date();
-    startOfDay.setUTCHours(0, 0, 0, 0);
+    startOfDay.setHours(0, 0, 0, 0);
 
     const endOfDay = new Date();
-    endOfDay.setUTCHours(23, 59, 59, 999);
+    endOfDay.setHours(23, 59, 59, 999);
 
     const absenHariIni = await Absensi.find({
       siswa: { $in: siswaList.siswa },
       kelas: new mongoose.Types.ObjectId(id),
       tanggal: {
         $gte: startOfDay,
-        $lt: endOfDay,
+        $lte: endOfDay,
       },
     }).populate({ path: "siswa", select: "nama _id" });
 

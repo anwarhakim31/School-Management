@@ -5,8 +5,14 @@ import ListSidebar from "@/components/fragments/guru/ListSidebar";
 const AsideLayout = ({ setIsSidebar }) => {
   return (
     <>
-      <div className="w-[150px] h-[50px]  mb-2 mx-auto block">
-        <img src={logo} alt="logo" className="object-contain mt-1" />
+      <div className="w-[150px] h-[50px]   mx-auto block">
+        <img
+          src={logo}
+          alt="logo"
+          className="object-contain "
+          height={150}
+          width={140}
+        />
       </div>
       <div className="">
         <ListSidebar />

@@ -82,9 +82,9 @@ const TableAbsen = ({
                   >
                     {siswa.nama}
                   </td>
-                  {siswa?.statusPerHari.map((stat, idx) => (
+                  {siswa?.statusPerHari.map((stat, i) => (
                     <td
-                      key={idx}
+                      key={i}
                       scope="row"
                       className={`${stat === " " && " text-white"} ${
                         stat === "hadir" && "bg-green-400 text-white"

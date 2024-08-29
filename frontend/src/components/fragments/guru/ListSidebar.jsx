@@ -116,7 +116,7 @@ const ListSidebar = () => {
   ].filter(Boolean);
 
   return (
-    <ul className="w-full py-2 h-[80vh] overflow-auto">
+    <ul className="w-full h-[80vh] overflow-auto">
       {Navlist.map((list) => (
         <li
           onClick={() => handleActiveDropDown(list.id)}

@@ -131,6 +131,8 @@ const AbsenHarianPage = () => {
       );
 
       if (res.status === 200) {
+        console.log(res.data.absenHariIni);
+
         const absenValue = res.data.absenHariIni.map((absen) => ({
           _id: absen?.siswa?._id,
           status: absen?.status,
@@ -146,7 +148,7 @@ const AbsenHarianPage = () => {
   return (
     <section className="px-6 py-4 mb-4 ">
       <div className="w-full flex-between">
-        <h3 className="text-sm  font-semibold text-gray-800">
+        <h3 className="text-sm h-12 flex-center font-semibold text-gray-800">
           {formatIndonesiaDate(hariIni)}
         </h3>
 
