@@ -43,7 +43,7 @@ const DropdownTahunAjaran = ({ onSelectAjaran }) => {
         });
 
         if (res.status == 200) {
-          setDataAjaran(res.data.ajaran);
+          setDataAjaran(res.data.ajaran.sort((a, b) => a.status - b.status));
         }
       } catch (error) {
         responseError(error);
@@ -53,12 +53,19 @@ const DropdownTahunAjaran = ({ onSelectAjaran }) => {
     getAjaran();
   }, []);
 
+  useEffect(() => {
+    if (dataAjaran) {
+      setSelectedAjaran(dataAjaran[0]?.ajaran);
+      onSelectAjaran(dataAjaran[0]?.ajaran);
+    }
+  }, [dataAjaran]);
+
   return (
     <div ref={dropdownRef} className="relative w-32">
       <input
         className=" block w-full bg-white border text-xs select-none border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
         readOnly
-        value={selectedAjaran || "Pilih"}
+        value={selectedAjaran}
         onClick={handleInputClick}
       />
       <div className="absolute pointer-events-none right-2 top-2.5">

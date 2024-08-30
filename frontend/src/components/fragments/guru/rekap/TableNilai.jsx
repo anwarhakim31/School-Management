@@ -61,7 +61,7 @@ const TableNilai = ({ data, dataMapel }) => {
   }, [siswaWithAverage]);
 
   return (
-    <div className="block w-full shadow-md pb-[3.5rem]">
+    <div className="block w-full shadow-md">
       <div className="w-full min-h-[calc(80vh-140px)]  overflow-auto ">
         <table className="w-full border-collapse border  border-white  text-left text-gray-500 ">
           <thead className="text-xs text-left text-white uppercase bg-neutral">
@@ -69,7 +69,7 @@ const TableNilai = ({ data, dataMapel }) => {
               <th
                 scope="col"
                 rowSpan={3}
-                className="px-20 py-2 border text-center whitespace-nowrap"
+                className="px-20 py-2  text-center whitespace-nowrap"
               >
                 Nama Siswa
               </th>
@@ -91,7 +91,7 @@ const TableNilai = ({ data, dataMapel }) => {
               <th
                 scope="col"
                 rowSpan={3}
-                className="w-10 py-2 px-2 border text-center "
+                className="w-10 py-2 px-2  text-center "
               >
                 Rangking
               </th>

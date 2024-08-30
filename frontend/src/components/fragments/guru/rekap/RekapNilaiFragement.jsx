@@ -28,6 +28,7 @@ const RekapNilaiFragment = () => {
 
   useEffect(() => {
     const getData = async () => {
+      setLoading(true);
       try {
         const res = await axios.get(HOST + "/api/nilai/rekap-nilai", {
           params: { semester, tahunAjaran },
@@ -86,10 +87,11 @@ const RekapNilaiFragment = () => {
             disabled={loading || rekapNilai.length === 0}
             onClick={() =>
               exportToExcel(
-                countDay,
                 rekapNilai,
-                userData.waliKelas.kelas,
-                userData.waliKelas.nama
+                dataMapel,
+                userData.waliKelas,
+                tahunAjaran,
+                semester
               )
             }
             className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
@@ -139,74 +141,123 @@ const RekapNilaiFragment = () => {
 
 export default RekapNilaiFragment;
 
-const formatStatus = (status) => {
-  switch (status) {
-    case "hadir":
-      return "H";
-    case "izin":
-      return "I";
-    case "sakit":
-      return "S";
-    case "alpha":
-      return "A";
-    default:
-      return "";
-  }
+const getUniqueStudents = (data) => {
+  const uniqueStudentMap = new Map();
+
+  data.forEach((nilai) => {
+    const studentId = nilai.siswa._id;
+    if (!uniqueStudentMap.has(studentId)) {
+      uniqueStudentMap.set(studentId, nilai.siswa);
+    }
+  });
+
+  return Array.from(uniqueStudentMap.values()).sort((a, b) =>
+    a.nama.localeCompare(b.nama)
+  );
 };
 
-const exportToExcel = async (countDay, rekapAbsen, kelas, nama) => {
+const exportToExcel = async (data, dataMapel, kelas, tahunAjaran, semester) => {
   const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet("Rekap Absen");
+  const worksheet = workbook.addWorksheet("Rekap Nilai");
 
+  // Step 1: Get Unique Students
+  const uniqueStudents = getUniqueStudents(data);
+
+  // Step 2: Calculate Averages for Each Student
+  const siswaWithAverage = uniqueStudents.map((siswa) => {
+    const nilaiTotal = dataMapel.reduce((acc, mapel) => {
+      const nilaiTugas = data.find(
+        (nilai) =>
+          nilai.siswa._id === siswa._id &&
+          nilai.mataPelajaran.kode === mapel &&
+          nilai.kategori === "tugas"
+      );
+
+      const nilaiUjian = data.find(
+        (nilai) =>
+          nilai.siswa._id === siswa._id &&
+          nilai.mataPelajaran.kode === mapel &&
+          nilai.kategori === "ujian"
+      );
+
+      const tugasScore = nilaiTugas ? nilaiTugas.nilai : 0;
+      const ujianScore = nilaiUjian ? nilaiUjian.nilai : 0;
+
+      return acc + tugasScore + ujianScore;
+    }, 0);
+
+    const countScores = dataMapel.length * 2;
+    const average = nilaiTotal / countScores;
+
+    return {
+      siswa,
+      average,
+    };
+  });
+
+  // Step 3: Rank Students Based on Their Averages
+  const siswaWithRanking = [...siswaWithAverage].sort(
+    (a, b) => b.average - a.average
+  );
+
+  let currentRank = 1;
+  siswaWithRanking.forEach((siswa, index, array) => {
+    if (index > 0 && siswa.average === array[index - 1].average) {
+      siswa.ranking = array[index - 1].ranking;
+    } else {
+      siswa.ranking = currentRank;
+    }
+    currentRank++;
+  });
+
+  // Step 4: Export to Excel
   // Title Header
-  const header = [
-    `Absensi Kelas ${kelas} ${nama} ${new Date(
-      year,
-      month + 1,
-      0
-    ).toLocaleString("default", { month: "long" })} ${year}`,
+  const headerTitle = [
+    `NILAI SISWA KELAS TAHUN AJARAN ${tahunAjaran} ${semester.toUpperCase()} - KELAS ${
+      kelas.kelas
+    } ${kelas.nama.toUpperCase()} `,
   ];
-  const headerRow = worksheet.addRow(header);
+  worksheet.addRow(headerTitle);
 
   // Merge cells for title header
-  worksheet.mergeCells(headerRow.number, 1, headerRow.number, countDay + 5); // Adjust the number of columns to match header width
+  worksheet.mergeCells(1, 1, 1, dataMapel.length * 2 + 3); // Adjust the number of columns to match header width
   worksheet.getRow(1).height = 30;
-  // Membuat header tabel
-  const header1 = ["Nama Siswa", ...Array(countDay).fill("Tanggal"), "Total"];
-  const header2 = [
-    "",
-    ...Array.from({ length: countDay }, (_, i) => i + 1),
-    "H",
-    "I",
-    "S",
-    "A",
+
+  // Create headers for the table
+  const header1 = [
+    "Nama Siswa",
+    ...dataMapel.flatMap((mapel) => ["Mata Pelajaran", ""]),
+    "Rata-Rata",
+    "Rangking",
   ];
+  const header2 = ["", ...dataMapel.flatMap((mapel) => [mapel, ""]), "", ""];
+  const header3 = ["", ...dataMapel.flatMap(() => ["T", "U"]), "", ""];
 
-  // Menambahkan header ke worksheet
-
+  // Add headers to the worksheet
   worksheet.addRow(header1);
   worksheet.addRow(header2);
+  worksheet.addRow(header3);
 
-  // Merging header cells sesuai dengan struktur HTML
-  worksheet.mergeCells(2, 1, 3, 1); // Menggabungkan "Nama Siswa" (RowSpan 2)
-  worksheet.mergeCells(2, 2, 2, countDay + 1); // Menggabungkan "Tanggal" (ColSpan countDay)
-  worksheet.mergeCells(2, countDay + 2, 2, countDay + 5); // Menggabungkan "Total" (ColSpan 4)
+  // Merge cells for "Nama Siswa"
+  worksheet.mergeCells(2, 1, 4, 1); // Merges "Nama Siswa" cells (RowSpan 3)
 
-  // Mengatur lebar kolom agar sesuai dengan tampilan HTML
-  worksheet.getColumn(1).width = 20; // Lebar kolom "Nama Siswa" (disesuaikan dengan lebar di HTML)
+  // Merge cells for each "Mata Pelajaran"
+  worksheet.mergeCells(2, 2, 2, 2 + dataMapel.length * 2 - 1);
 
-  // Lebar untuk kolom tanggal
-  for (let i = 2; i <= countDay + 1; i++) {
-    worksheet.getColumn(i).width = 4; // Lebar kolom tanggal, bisa diatur sesuai kebutuhan
+  // Merge cells for "Rata-Rata" and "Rangking"
+  const rataRataColumn = dataMapel.length * 2 + 2;
+  const rangkingColumn = dataMapel.length * 2 + 3;
+  worksheet.mergeCells(2, rataRataColumn, 4, rataRataColumn); // Merge "Rata-Rata"
+  worksheet.mergeCells(2, rangkingColumn, 4, rangkingColumn); // Merge "Rangking"
+
+  // Set column widths
+  worksheet.getColumn(1).width = 30; // Width for "Nama Siswa"
+
+  for (let i = 2; i <= dataMapel.length * 2 + 3; i++) {
+    worksheet.getColumn(i).width = 8; // Width for "T" and "U" columns
   }
 
-  // Lebar untuk kolom total (Hadir, Izin, Sakit, Alpha)
-  worksheet.getColumn(countDay + 2).width = 4; // Lebar kolom H
-  worksheet.getColumn(countDay + 3).width = 4; // Lebar kolom I
-  worksheet.getColumn(countDay + 4).width = 4; // Lebar kolom S
-  worksheet.getColumn(countDay + 5).width = 4; // Lebar kolom A
-
-  // Styling header
+  // Styling headers
   const headerStyle = (row, color) => {
     row.eachCell((cell) => {
       cell.alignment = { horizontal: "center", vertical: "middle" };
@@ -225,25 +276,40 @@ const exportToExcel = async (countDay, rekapAbsen, kelas, nama) => {
     });
   };
 
-  // Menggunakan warna dan border pada header
-  headerStyle(worksheet.getRow(1), "362f7e"); // Warna abu-abu netral untuk header 1
-  headerStyle(worksheet.getRow(2), "362f7e"); // Warna abu-abu netral untuk header 2
-  headerStyle(worksheet.getRow(3), "362f7e"); // Warna abu-abu netral untuk header 2
+  // Apply styles to headers
+  headerStyle(worksheet.getRow(1), "362f7e"); // Color for header 1
+  headerStyle(worksheet.getRow(2), "362f7e"); // Color for header 2
+  headerStyle(worksheet.getRow(3), "362f7e"); // Color for header 3
+  headerStyle(worksheet.getRow(4), "362f7e"); // Color for header 3
 
-  // Menambahkan data siswa dan status
-  rekapAbsen.forEach((siswa) => {
-    const rowValues = [
-      siswa.nama,
-      ...siswa.statusPerHari.map(formatStatus),
-      siswa.totalHadir,
-      siswa.totalIzin,
-      siswa.totalSakit,
-      siswa.totalAlpha,
-    ];
+  // Add student data and scores
+  siswaWithRanking.forEach((siswa) => {
+    const nilaiPerMapel = dataMapel.flatMap((mapel) => {
+      const nilaiTugas = data.find(
+        (nilai) =>
+          nilai.siswa._id === siswa.siswa._id &&
+          nilai.mataPelajaran.kode === mapel &&
+          nilai.kategori === "tugas"
+      );
+      const nilaiUjian = data.find(
+        (nilai) =>
+          nilai.siswa._id === siswa.siswa._id &&
+          nilai.mataPelajaran.kode === mapel &&
+          nilai.kategori === "ujian"
+      );
+      return [
+        nilaiTugas ? nilaiTugas.nilai : "-",
+        nilaiUjian ? nilaiUjian.nilai : "-",
+      ];
+    });
 
+    const rataRata = siswa.average || 0;
+    const rangking = siswa.ranking || "-";
+
+    const rowValues = [siswa.siswa.nama, ...nilaiPerMapel, rataRata, rangking];
     const row = worksheet.addRow(rowValues);
 
-    // Menambahkan border pada setiap cell di body
+    // Add border to each cell in the body
     row.eachCell((cell) => {
       cell.border = {
         top: { style: "thin" },
@@ -251,55 +317,12 @@ const exportToExcel = async (countDay, rekapAbsen, kelas, nama) => {
         bottom: { style: "thin" },
         right: { style: "thin" },
       };
-    });
-
-    // Styling berdasarkan status untuk setiap cell
-    siswa.statusPerHari.forEach((status, idx) => {
-      const cell = row.getCell(idx + 2); // Menggeser karena kolom pertama untuk nama siswa
-
-      switch (status) {
-        case "hadir":
-          cell.fill = {
-            type: "pattern",
-            pattern: "solid",
-            fgColor: { argb: "28A745" }, // Hijau untuk hadir
-          };
-          cell.font = { bold: true, color: { argb: "FFFFFF" } };
-          break;
-        case "izin":
-          cell.fill = {
-            type: "pattern",
-            pattern: "solid",
-            fgColor: { argb: "007BFF" }, // Biru untuk izin
-          };
-          cell.font = { bold: true, color: { argb: "FFFFFF" } };
-          break;
-        case "sakit":
-          cell.fill = {
-            type: "pattern",
-            pattern: "solid",
-            fgColor: { argb: "FFC107" }, // Kuning untuk sakit
-          };
-          cell.font = { bold: true, color: { argb: "FFFFFF" } };
-          break;
-        case "alpha":
-          cell.fill = {
-            type: "pattern",
-            pattern: "solid",
-            fgColor: { argb: "DC3545" }, // Merah untuk alpha
-          };
-          cell.font = { bold: true, color: { argb: "FFFFFF" } };
-          break;
-        default:
-          break;
-      }
-
       cell.alignment = { horizontal: "center", vertical: "middle" };
     });
   });
 
-  // Ekspor workbook ke Excel
+  // Export workbook to Excel
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: "application/octet-stream" });
-  saveAs(blob, "rekap_absen.xlsx");
+  saveAs(blob, "rekap_nilai.xlsx");
 };

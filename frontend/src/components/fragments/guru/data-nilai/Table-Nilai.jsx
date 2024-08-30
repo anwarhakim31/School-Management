@@ -250,7 +250,7 @@ const TableNilai = ({
       {isPrint && (
         <div className="fixed inset-0 bg-white z-[999999] flex  justify-center p-8">
           <div className="w-full   overflow-auto ">
-            <table className="w-full    text-left  text-gray-500 border">
+            <table className="w-full    text-left  text-gray-500 ">
               <thead className="text-xs text-left  text-white uppercase bg-neutral">
                 <tr>
                   <th

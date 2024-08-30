@@ -74,17 +74,17 @@ const PrintComponentNilai = React.forwardRef(
                   <th
                     colSpan={dataMapel.length + 5}
                     scope="col"
-                    className="py-4 border-b"
+                    className="py-4 border-b uppercase"
                   >
-                    Nilai Siswa Tahun Ajaran {tahunAjaran} {semester}{" "}
-                    {kelas?.grade} {kelas?.nama}
+                    Nilai Siswa Tahun Ajaran {tahunAjaran} {semester} - Kelas
+                    {kelas?.kelas} {kelas?.nama}
                   </th>
                 </tr>
                 <tr>
                   <th
                     scope="col"
                     rowSpan={3}
-                    className="px-20 py-2 border text-center whitespace-nowrap"
+                    className="px-20 py-2  text-center whitespace-nowrap"
                   >
                     Nama Siswa
                   </th>
@@ -106,7 +106,7 @@ const PrintComponentNilai = React.forwardRef(
                   <th
                     scope="col"
                     rowSpan={3}
-                    className="w-10 py-2 px-2 border text-center "
+                    className="w-10 py-2 px-2  text-center "
                   >
                     Rangking
                   </th>
