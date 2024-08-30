@@ -6,6 +6,7 @@ import {
   deleteManyNilai,
   deleteOneNilai,
   getNilaiKelas,
+  getRaport,
   getRekapKelas,
   updateNilai,
 } from "../controllers/nilai-controller.js";
@@ -18,5 +19,6 @@ nilaiRouter.get("/rekap-nilai", verifyToken, getRekapKelas);
 nilaiRouter.delete("/delete-one-nilai/:id", verifyToken, deleteOneNilai);
 nilaiRouter.delete("/delete-many-nilai", verifyToken, deleteManyNilai);
 nilaiRouter.put("/update-nilai/:id", verifyToken, updateNilai);
+nilaiRouter.get("/get-raport/:siswaId", verifyToken, getRaport);
 
 export default nilaiRouter;

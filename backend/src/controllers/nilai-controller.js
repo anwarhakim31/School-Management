@@ -336,3 +336,23 @@ export const getRekapKelas = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getRaport = async (req, res, next) => {
+  try {
+    const id = req.params.siswaId;
+
+    const nilai = await Nilai.find({
+      siswa: new mongoose.Types.ObjectId(id),
+      semester,
+      ajaran,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengambil semua nilai siswa",
+      nilai,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

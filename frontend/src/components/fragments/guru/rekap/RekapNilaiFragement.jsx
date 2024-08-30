@@ -71,7 +71,7 @@ const RekapNilaiFragment = () => {
 
   return (
     <Fragment>
-      <div className="flex-between">
+      <div className="flex-between bg-white p-4 rounded-tr-md rounded-tl-md border border-b-0">
         <div className="flex justify-start flex-wrap gap-4">
           <div className="flex items-center gap-4">
             <p className="text-sm font-semibold text-gray-700">Tahun Ajaran</p>
@@ -114,9 +114,9 @@ const RekapNilaiFragment = () => {
           />
         </div>
       </div>
-      <div className="relative border broder-gray-300 rounded-md bg-white mt-6 overflow-hidden">
+      <div className="relative border broder-gray-300 rounded-md bg-white  overflow-hidden">
         {loading ? (
-          <div className="min-h-[calc(80vh-140px)]  bg-backup  animate-pulse  flex-center">
+          <div className="min-h-[calc(80vh-160px)]  bg-backup  animate-pulse  flex-center">
             <div>
               <div className="border-4 border-gray-200 border-t-neutral rounded-full w-6 h-6 animate-spin"></div>
             </div>

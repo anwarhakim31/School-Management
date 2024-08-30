@@ -42,7 +42,7 @@ const TableNilai = ({ data, dataMapel }) => {
       };
     });
   }, [siswas, data, dataMapel]);
-
+  console.log(siswaWithAverage);
   const siswaWithRanking = useMemo(() => {
     const sortedSiswa = [...siswaWithAverage].sort(
       (a, b) => b.average - a.average
@@ -62,7 +62,7 @@ const TableNilai = ({ data, dataMapel }) => {
 
   return (
     <div className="block w-full shadow-md">
-      <div className="w-full min-h-[calc(80vh-140px)]  overflow-auto ">
+      <div className="w-full min-h-[calc(80vh-160px)]  overflow-auto ">
         <table className="w-full border-collapse border  border-white  text-left text-gray-500 ">
           <thead className="text-xs text-left text-white uppercase bg-neutral">
             <tr>
@@ -146,45 +146,47 @@ const TableNilai = ({ data, dataMapel }) => {
               </tr>
             )}
 
-            {siswaWithRanking.map((siswa) => (
-              <tr key={siswa._id}>
-                <td scope="row" className="px-20 text-xs py-2 border">
-                  {siswa.nama}
-                </td>
-                {dataMapel.map((mapel, i) => {
-                  const nilaiTugas = data.find(
-                    (nilai) =>
-                      nilai.siswa._id === siswa._id &&
-                      nilai.mataPelajaran.kode === mapel &&
-                      nilai.kategori === "tugas"
-                  );
+            {siswaWithRanking
+              .sort((a, b) => a.nama.localeCompare(b.nama))
+              .map((siswa) => (
+                <tr key={siswa._id}>
+                  <td scope="row" className="px-20 text-xs py-2 border">
+                    {siswa.nama}
+                  </td>
+                  {dataMapel.map((mapel, i) => {
+                    const nilaiTugas = data.find(
+                      (nilai) =>
+                        nilai.siswa._id === siswa._id &&
+                        nilai.mataPelajaran.kode === mapel &&
+                        nilai.kategori === "tugas"
+                    );
 
-                  const nilaiUjian = data.find(
-                    (nilai) =>
-                      nilai.siswa._id === siswa._id &&
-                      nilai.mataPelajaran.kode === mapel &&
-                      nilai.kategori === "ujian"
-                  );
+                    const nilaiUjian = data.find(
+                      (nilai) =>
+                        nilai.siswa._id === siswa._id &&
+                        nilai.mataPelajaran.kode === mapel &&
+                        nilai.kategori === "ujian"
+                    );
 
-                  return (
-                    <Fragment key={i}>
-                      <td className="px-2 text-xs py-2 border text-center">
-                        {nilaiTugas ? nilaiTugas.nilai : "-"}
-                      </td>
-                      <td className="px-2 text-xs py-2 border text-center">
-                        {nilaiUjian ? nilaiUjian.nilai : "-"}
-                      </td>
-                    </Fragment>
-                  );
-                })}
-                <td className="px-2 text-xs py-2 border text-center">
-                  {siswa.average.toFixed(2)}
-                </td>
-                <td className="px-2 text-xs py-2 border text-center">
-                  {siswa.ranking}
-                </td>
-              </tr>
-            ))}
+                    return (
+                      <Fragment key={i}>
+                        <td className="px-2 text-xs py-2 border text-center">
+                          {nilaiTugas ? nilaiTugas.nilai : "-"}
+                        </td>
+                        <td className="px-2 text-xs py-2 border text-center">
+                          {nilaiUjian ? nilaiUjian.nilai : "-"}
+                        </td>
+                      </Fragment>
+                    );
+                  })}
+                  <td className="px-2 text-xs py-2 border text-center">
+                    {siswa.average.toFixed(2)}
+                  </td>
+                  <td className="px-2 text-xs py-2 border text-center">
+                    {siswa.ranking}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

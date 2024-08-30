@@ -29,6 +29,7 @@ import MasterDataPage from "./pages/admin/master-data";
 import RekapAbsensiPage from "./pages/admin/rekap-absensi";
 import DataSiswaPageguru from "./pages/guru/data-siswa";
 import DataNilaiSiswaPage from "./pages/guru/data-nilai-siswa";
+import RaporSiswaPage from "./pages/guru/rapor-siswa";
 
 function App() {
   const dispatch = useDispatch();
@@ -241,6 +242,14 @@ function App() {
             element={
               <PrivateRoute role={"guru"}>
                 <RekapDataPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={"rapor-siswa"}
+            element={
+              <PrivateRoute role={"guru"}>
+                <RaporSiswaPage />
               </PrivateRoute>
             }
           />

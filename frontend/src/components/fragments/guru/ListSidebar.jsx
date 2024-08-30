@@ -5,6 +5,7 @@ import ScoreIcon from "../../../assets/svg/Score.svg?react";
 import KelasIcon from "../../../assets/svg/class.svg?react";
 import { Link, Navigate, NavLink, useNavigate } from "react-router-dom";
 import {
+  BookUser,
   ChevronDown,
   ChevronUp,
   FileStack,
@@ -105,6 +106,20 @@ const ListSidebar = () => {
       path: "/guru/rekap-data",
       icon: (
         <NotebookTabs
+          height={17}
+          width={17}
+          className={
+            "text-white group-hover:text-neutral stroke-[2] duration-300 transition-all"
+          }
+        />
+      ),
+    },
+    userData.waliKelas && {
+      id: 4,
+      nama: "Rapor",
+      path: "/guru/rapor-siswa",
+      icon: (
+        <BookUser
           height={17}
           width={17}
           className={

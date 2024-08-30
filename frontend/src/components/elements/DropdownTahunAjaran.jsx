@@ -65,7 +65,7 @@ const DropdownTahunAjaran = ({ onSelectAjaran }) => {
       <input
         className=" block w-full bg-white border text-xs select-none border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
         readOnly
-        value={selectedAjaran}
+        value={selectedAjaran || ""}
         onClick={handleInputClick}
       />
       <div className="absolute pointer-events-none right-2 top-2.5">

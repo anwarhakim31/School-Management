@@ -25,25 +25,25 @@ const TableAbsen = ({
 }) => {
   return (
     <>
-      <div className="w-full min-h-[calc(80vh-140px)] overflow-auto rounded-md">
-        <table className="w-full rounded-md ">
+      <div className="w-full min-h-[calc(80vh-160px)] overflow-auto ">
+        <table className="w-full border border-collapse ">
           <thead className="uppercase text-xs bg-neutral text-white">
             <tr>
               <th
                 scope="col"
                 rowSpan={2}
-                className="py-4 px-4 text-center border-r whitespace-nowrap"
+                className="py-4 px-4 text-center  whitespace-nowrap"
               >
                 Nama Siswa
               </th>
               <th
                 scope="col"
                 colSpan={countDay}
-                className="py-2 text-center border-b"
+                className="py-2 text-center border"
               >
                 Tanggal
               </th>
-              <th scope="col" colSpan={4} className="px-2 text-center border">
+              <th scope="col" colSpan={4} className="px-2 text-center ">
                 Total
               </th>
             </tr>
@@ -56,7 +56,7 @@ const TableAbsen = ({
               <th className="py-2 px-1 border w-6">H</th>
               <th className="py-2 px-1 border w-6">I</th>
               <th className="py-2 px-1 border w-6">S</th>
-              <th className="py-2 px-1 border w-6">A</th>
+              <th className="py-2 px-1  border-t w-6">A</th>
             </tr>
           </thead>
           <tbody>
