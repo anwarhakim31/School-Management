@@ -151,7 +151,7 @@ const ProfileGuruPage = () => {
 
   return (
     <section className="mx-6 mb-10">
-      <div className="flex-between mt-4   bg-white  p-4 rounded-tl-lg rounded-tr-lg">
+      <div className="flex-between mt-4 border-b  bg-white  p-4 rounded-tl-lg rounded-tr-lg">
         <div>
           <h1 className="text-neutral mb-1 font-semibold">Data Pribadi Anda</h1>
           <p className="text-xs font-medium text-gray-500">

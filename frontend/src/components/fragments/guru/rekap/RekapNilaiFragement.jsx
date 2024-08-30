@@ -4,14 +4,16 @@ import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
 import { FileDownIcon, Printer } from "lucide-react";
-import { useEffect, useRef, useState, Fragment } from "react";
+import { useEffect, useRef, useState, Fragment, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { saveAs } from "file-saver";
 import ExcelJS from "exceljs";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
-import PrintComponent from "@/components/fragments/guru/rekap/PrintModal";
 import DropdownTahunAjaran from "@/components/elements/DropdownTahunAjaran";
 import DropdownSemester from "@/components/elements/DropdownSemester";
+import TableNilai from "./TableNilai";
+import { data } from "autoprefixer";
+import PrintComponentNilai from "./PrintModalNilai";
 
 const RekapNilaiFragment = () => {
   const [loading, setLoading] = useState(true);
@@ -20,7 +22,7 @@ const RekapNilaiFragment = () => {
   const userData = useSelector(selectedUserData);
   const [countDay, setCountDay] = useState(0);
   const [rekapNilai, setRekapNilai] = useState([]);
-  const [kelas, setkelas] = useState({});
+  const [dataMapel, setDataMapel] = useState([]);
 
   const componentRef = useRef(null);
 
@@ -28,10 +30,20 @@ const RekapNilaiFragment = () => {
     const getData = async () => {
       try {
         const res = await axios.get(HOST + "/api/nilai/rekap-nilai", {
+          params: { semester, tahunAjaran },
           withCredentials: true,
         });
 
         if (res.status === 200) {
+          const sortMapel = res.data.nilai.sort((a, b) =>
+            a.mataPelajaran.kode.localeCompare(b.mataPelajaran.kode)
+          );
+
+          const uniqueMapel = Array.from(
+            new Set(sortMapel.map((mapel) => mapel.mataPelajaran.kode))
+          );
+
+          setDataMapel(uniqueMapel);
           setRekapNilai(res.data.nilai);
         }
       } catch (error) {
@@ -43,8 +55,10 @@ const RekapNilaiFragment = () => {
       }
     };
 
-    getData();
-  }, [semester]);
+    if (semester && tahunAjaran) {
+      getData();
+    }
+  }, [semester, tahunAjaran]);
 
   const handleSelectAjaran = (value) => {
     setTahunAjaran(value);
@@ -68,21 +82,26 @@ const RekapNilaiFragment = () => {
           </div>
         </div>
         <div className="flex items-center justify-end flex-wrap gap-4">
-          {/* <button
+          <button
             disabled={loading || rekapNilai.length === 0}
             onClick={() =>
-              exportToExcel(countDay, rekapAbsen, kelas.grade, kelas.nama)
+              exportToExcel(
+                countDay,
+                rekapNilai,
+                userData.waliKelas.kelas,
+                userData.waliKelas.nama
+              )
             }
             className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
           >
             <FileDownIcon height={15} width={15} />
             Excel
-          </button> */}
+          </button>
 
-          {/* <ReactToPrint
+          <ReactToPrint
             trigger={() => (
               <button
-                disabled={loading || rekapAbsen.length === 0}
+                disabled={loading || rekapNilai.length === 0}
                 className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
               >
                 <Printer height={15} width={15} />
@@ -90,32 +109,29 @@ const RekapNilaiFragment = () => {
               </button>
             )}
             content={() => componentRef.current}
-          /> */}
+          />
         </div>
       </div>
       <div className="relative border broder-gray-300 rounded-md bg-white mt-6 overflow-hidden">
         {loading ? (
-          <div className="min-h-[400px] bg-backup  animate-pulse  flex-center">
+          <div className="min-h-[calc(80vh-140px)]  bg-backup  animate-pulse  flex-center">
             <div>
               <div className="border-4 border-gray-200 border-t-neutral rounded-full w-6 h-6 animate-spin"></div>
             </div>
           </div>
         ) : (
-          ""
-          // <TableAbsen
-          //   rekapAbsen={re}
-          //   countDay={countDay}
-          //   kelas={kelas}
-          // />
+          <TableNilai data={rekapNilai} dataMapel={dataMapel} />
         )}
       </div>
       <div style={{ display: "none" }}>
-        {/* <PrintComponent
+        <PrintComponentNilai
           ref={componentRef}
-          rekapAbsen={rekapAbsen}
-          countDay={countDay}
-          kelas={kelas}
-        /> */}
+          data={rekapNilai}
+          dataMapel={dataMapel}
+          kelas={userData.waliKelas}
+          semester={semester}
+          tahunAjaran={tahunAjaran}
+        />
       </div>
     </Fragment>
   );

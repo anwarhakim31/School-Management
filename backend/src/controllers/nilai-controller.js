@@ -315,9 +315,17 @@ export const getRekapKelas = async (req, res, next) => {
 
     const nilai = await Nilai.find({
       siswa: { $in: kelas.siswa },
-    });
-
-    console.log(nilai);
+      semester,
+      tahunAjaran,
+    })
+      .populate({
+        path: "mataPelajaran",
+        select: "kode nama",
+      })
+      .populate({
+        path: "siswa",
+        select: "nama",
+      });
 
     res.status(200).json({
       success: true,
