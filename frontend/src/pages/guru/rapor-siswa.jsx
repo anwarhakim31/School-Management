@@ -8,6 +8,7 @@ import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import { Printer } from "lucide-react";
 import ReactToPrint from "react-to-print";
+import PrintComponent from "@/components/fragments/guru/rapor/PrintModal";
 
 const RaporSiswaPage = () => {
   const userData = useSelector(selectedUserData);
@@ -146,10 +147,7 @@ const RaporSiswaPage = () => {
           />
         </div>
       </div>
-      <div
-        ref={raporRef}
-        className="relative bg-white border mt-4 text-gray-900 border-gray-800 max-w-full md:max-w-[210mm] h-auto md:min-h-[297mm] mx-auto"
-      >
+      <div className="relative bg-white border mt-4 text-gray-900 border-gray-800 max-w-full md:max-w-[210mm] h-auto md:min-h-[297mm] mx-auto">
         <div className="p-4 md:p-8">
           <div className="flex justify-center border-b-2 border-double border-gray-700 py-6">
             <img
@@ -420,6 +418,13 @@ const RaporSiswaPage = () => {
             </div>
           </div>
         )}
+        <PrintComponent
+          ref={raporRef}
+          dataMapel={dataMapel}
+          dataRapor={dataRapor}
+          average={average}
+          totalAbsen={totalAbsen}
+        />
       </div>
     </section>
   );

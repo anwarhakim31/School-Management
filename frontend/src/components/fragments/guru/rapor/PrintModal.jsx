@@ -3,25 +3,10 @@ import logo from "../../../../assets/Schoolarcy (2).webp";
 
 const PrintComponent = React.forwardRef(
   ({ dataRapor, average, totalAbsen, dataMapel }, ref) => {
-    const formatTable = (status) => {
-      switch (status) {
-        case "hadir":
-          return <p className="text-xs">H</p>;
-        case "izin":
-          return <p className="text-xs">I</p>;
-        case "sakit":
-          return <p className="text-xs">S</p>;
-        case "alpha":
-          return <p className="text-xs">A</p>;
-        default:
-          return <p className="text-xs">-</p>;
-      }
-    };
-
     return (
       <div
         ref={ref}
-        className="relative bg-white border mt-4 text-gray-900 border-gray-800 max-w-full md:max-w-[210mm] h-auto md:min-h-[297mm] mx-auto"
+        className="relative bg-white r mt-4 text-gray-900   mx-auto"
       >
         <div className="p-4 md:p-8">
           <div className="flex justify-center border-b-2 border-double border-gray-700 py-6">
