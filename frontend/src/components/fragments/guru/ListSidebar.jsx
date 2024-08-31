@@ -1,6 +1,5 @@
 import DashboardIcon from "../../../assets/svg/dashboard.svg?react";
-import SiswaIcon from "../../../assets/svg/siswa.svg?react";
-import GuruIcon from "../../../assets/svg/guru.svg?react";
+import StudiIcon from "../../../assets/svg/studi.svg?react";
 import ScoreIcon from "../../../assets/svg/Score.svg?react";
 import KelasIcon from "../../../assets/svg/class.svg?react";
 import { Link, Navigate, NavLink, useNavigate } from "react-router-dom";
@@ -102,6 +101,21 @@ const ListSidebar = () => {
     },
     {
       id: 3,
+      nama: "Studi",
+      path: "/guru/data-studi",
+      icon: (
+        <StudiIcon
+          height={17}
+          width={17}
+          className={
+            "text-white group-hover:text-neutral stroke-[2] duration-300 transition-all"
+          }
+        />
+      ),
+    },
+
+    {
+      id: 4,
       nama: "Rekap",
       path: "/guru/rekap-data",
       icon: (
@@ -115,7 +129,7 @@ const ListSidebar = () => {
       ),
     },
     userData.waliKelas && {
-      id: 4,
+      id: 5,
       nama: "Rapor",
       path: "/guru/rapor-siswa",
       icon: (

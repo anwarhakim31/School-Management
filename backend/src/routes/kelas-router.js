@@ -4,6 +4,7 @@ import {
   addKelas,
   deleteKelas,
   getKelas,
+  getKelasMengajar,
   getMapelKelas,
   getWaliKelas,
   updateKelas,
@@ -13,6 +14,7 @@ const kelasRouter = express.Router();
 
 kelasRouter.post("/add-kelas", verifyToken, addKelas);
 kelasRouter.get("/get-kelas", verifyToken, getKelas);
+kelasRouter.get("/get-kelas-mengajar", verifyToken, getKelasMengajar);
 kelasRouter.delete("/delete-kelas/:id", verifyToken, deleteKelas);
 kelasRouter.put("/update-kelas/:id", verifyToken, updateKelas);
 kelasRouter.get("/get-wali-kelas/:id", verifyToken, getWaliKelas);

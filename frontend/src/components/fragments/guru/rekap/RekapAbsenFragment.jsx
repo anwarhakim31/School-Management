@@ -65,6 +65,18 @@ const RekapAbsenFragment = () => {
     setIsMenu(!isMenu);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setIsMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMenu]);
+
   return (
     <Fragment>
       <div className=" bg-white p-4 rounded-tr-md rounded-tl-md border border-b-0">

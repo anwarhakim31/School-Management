@@ -157,7 +157,7 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
-      <div className="flex justify-center flex-wrap md:flex-nowrap items-center mt-8 gap-8">
+      <div className="flex justify-center flex-wrap md:flex-nowrap items-center mt-10 gap-8">
         <div className="w-full p-4 md:w-1/2 bg-white rounded-lg h-[310px] shadow-lg">
           <div className="border-b pb-4 border-gray-100 flex items-center gap-2">
             <div>

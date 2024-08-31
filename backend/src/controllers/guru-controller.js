@@ -275,8 +275,6 @@ export const updateGuru = async (req, res, next) => {
       );
     }
 
-    console.log(updated);
-
     res.status(200).json({
       success: true,
       message: "Berhasil mengubah data guru.",
@@ -302,12 +300,14 @@ export const getDashboard = async (req, res, next) => {
       jumlahPertemuan += jadwal.jumlahPertemuan;
     }
 
+    const totalMurid = guru.waliKelas ? guru.waliKelas.siswa.length : 0;
+
     res.status(200).json({
       success: true,
       message: "Berhasil mengambil detail guru.",
       detail: {
         bidangStudi: guru.bidangStudi.nama,
-        totalMurid: guru.waliKelas.siswa.length,
+        totalMurid,
         jumlahPertemuan,
       },
     });

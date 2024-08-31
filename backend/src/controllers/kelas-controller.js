@@ -216,3 +216,31 @@ export const getMapelKelas = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getKelasMengajar = async (req, res, next) => {
+  try {
+    const id = req.userId;
+
+    const jadwalList = await Jadwal.find({
+      guru: new mongoose.Types.ObjectId(id),
+    }).populate("kelas");
+
+    const uniquesKelas = jadwalList.reduce((acc, jadwal) => {
+      const kelas = jadwal.kelas;
+
+      if (!acc.some((item) => item._id.toString() === kelas._id)) {
+        acc.push(kelas);
+      }
+
+      return acc;
+    }, []);
+
+    res.status(200).json({
+      success: true,
+      message: `Berhasil mengambil data`,
+      kelas: uniquesKelas,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

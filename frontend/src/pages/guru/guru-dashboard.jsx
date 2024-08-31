@@ -63,8 +63,6 @@ const GuruDashboardPage = () => {
     getDetail();
   }, []);
 
-  console.log(dataGuru);
-
   return (
     <section className="px-6 py-4">
       <div className="grid xs:grid-cols-2 md:grid-cols-4 gap-4">
@@ -91,7 +89,7 @@ const GuruDashboardPage = () => {
               <div className=" flex-center h-6 w-2/3 m-auto bg-backup rounded-sm border-t-backup animate-pulse duration-500"></div>
             ) : (
               <h1 className=" flex-1 flex-center  text-white font-semibold text-2xl h-12 truncate">
-                {dataGuru && dataGuru.bidangStudi}
+                {(dataGuru && dataGuru.bidangStudi) || "Kosong"}
               </h1>
             )}
           </div>
@@ -120,7 +118,9 @@ const GuruDashboardPage = () => {
             ) : (
               <h1 className=" flex-1 flex-center  text-white font-semibold text-3xl h-12 ">
                 {dataGuru && (
-                  <AnimasiCounter targetNumber={dataGuru.jumlahPertemuan} />
+                  <AnimasiCounter
+                    targetNumber={dataGuru.jumlahPertemuan || 0}
+                  />
                 )}
               </h1>
             )}
@@ -197,7 +197,7 @@ const GuruDashboardPage = () => {
           </div>
         )}
       </div>
-      <div className="w-full mt-8 px-4 py-4 bg-white rounded-lg shadow-lg">
+      <div className="w-full mt-10 px-4 py-4 bg-white rounded-lg shadow-lg">
         <div className="border-b pb-4 border-gray-100 flex items-center gap-2 mb-4">
           <div>
             <Gant width={"20"} height={"20"} />
