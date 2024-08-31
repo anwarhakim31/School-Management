@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 import ResponseError from "../error/response-error.js";
 import Kelas from "../models/kelas-model.js";
 import Nilai from "../models/Nilai-model.js";
+import Siswa from "../models/siswa-model.js";
+import Master from "../models/master-model.js";
+import TahunAjaran from "../models/tahunAjaran-model.js";
 
 export const addNilai = async (req, res, next) => {
   try {
@@ -341,16 +344,44 @@ export const getRaport = async (req, res, next) => {
   try {
     const id = req.params.siswaId;
 
+    const siswa = await Siswa.findById(id)
+      .populate({ path: "kelas", select: "nama kelas" })
+      .select("nama nis kelas");
+
+    const master = await Master.findOne();
+
+    const semesterActive = master.semester.find(
+      (semester) => semester.status === true
+    );
+
+    const ajaran = await TahunAjaran.find({ status: true });
+
     const nilai = await Nilai.find({
       siswa: new mongoose.Types.ObjectId(id),
-      semester,
-      ajaran,
-    });
+      semester: semesterActive.keterangan,
+      tahunAjaran: ajaran[0].ajaran,
+    })
+      .populate("mataPelajaran")
+      .select("nilai kategori mataPelajaran");
+
+    const siswaWithNiali = {
+      _id: siswa._id,
+      nama: siswa.nama,
+      nis: siswa.nis,
+      kelas: `${siswa.kelas.kelas} ${siswa.kelas.nama}`,
+      ajaran: ajaran[0].ajaran,
+      semester: semesterActive.keterangan,
+      nilai: nilai.map((item) => ({
+        nilai: item.nilai,
+        mapel: item.mataPelajaran.nama,
+        kategori: item.kategori,
+      })),
+    };
 
     res.status(200).json({
       success: true,
       message: "Berhasil mengambil semua nilai siswa",
-      nilai,
+      rapor: siswaWithNiali,
     });
   } catch (error) {
     next(error);

@@ -76,7 +76,7 @@ const DropdownTahunAjaran = ({ onSelectAjaran }) => {
         )}
       </div>
 
-      {isOpen && (
+      {isOpen && dataAjaran.length > 0 && (
         <div className="absolute mt-1 w-full bg-white border z-10 border-gray-400 rounded shadow">
           <ul className="max-h-40 overflow-y-auto">
             {dataAjaran &&

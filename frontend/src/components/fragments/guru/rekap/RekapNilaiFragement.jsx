@@ -3,7 +3,7 @@ import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { FileDownIcon, Printer } from "lucide-react";
+import { EllipsisVerticalIcon, FileDownIcon, Printer } from "lucide-react";
 import { useEffect, useRef, useState, Fragment, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { saveAs } from "file-saver";
@@ -16,11 +16,13 @@ import { data } from "autoprefixer";
 import PrintComponentNilai from "./PrintModalNilai";
 
 const RekapNilaiFragment = () => {
+  const menuRef = useRef(null);
   const [loading, setLoading] = useState(true);
+  const [isMenu, setIsMenu] = useState(false);
   const [tahunAjaran, setTahunAjaran] = useState("");
   const [semester, setSemester] = useState("");
   const userData = useSelector(selectedUserData);
-  const [countDay, setCountDay] = useState(0);
+
   const [rekapNilai, setRekapNilai] = useState([]);
   const [dataMapel, setDataMapel] = useState([]);
 
@@ -69,49 +71,129 @@ const RekapNilaiFragment = () => {
     setSemester(value);
   };
 
+  const handleToggleMenu = (e) => {
+    e.preventDefault();
+    setIsMenu(!isMenu);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setIsMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMenu]);
+
   return (
     <Fragment>
-      <div className="flex-between bg-white p-4 rounded-tr-md rounded-tl-md border border-b-0">
-        <div className="flex justify-start flex-wrap gap-4">
-          <div className="flex items-center gap-4">
-            <p className="text-sm font-semibold text-gray-700">Tahun Ajaran</p>
-            <DropdownTahunAjaran onSelectAjaran={handleSelectAjaran} />
+      <div className="  bg-white p-4 rounded-tr-md rounded-tl-md border border-b-0">
+        <div className="hidden md:flex-between">
+          <div className="flex justify-start flex-wrap gap-4">
+            <div className="flex items-center gap-4">
+              <p className="text-sm font-semibold text-gray-700">
+                Tahun Ajaran
+              </p>
+              <DropdownTahunAjaran onSelectAjaran={handleSelectAjaran} />
+            </div>
+            <div className="flex items-center gap-4">
+              <p className="text-sm font-semibold text-gray-700">Semester</p>
+              <DropdownSemester onSelectedSemester={handleSelectSemester} />
+            </div>
           </div>
-          <div className="flex items-center gap-4">
-            <p className="text-sm font-semibold text-gray-700">Semester</p>
-            <DropdownSemester onSelectedSemester={handleSelectSemester} />
+          <div className="flex items-center justify-end flex-wrap gap-4">
+            <button
+              disabled={loading || rekapNilai.length === 0}
+              onClick={() =>
+                exportToExcel(
+                  rekapNilai,
+                  dataMapel,
+                  userData.waliKelas,
+                  tahunAjaran,
+                  semester
+                )
+              }
+              className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
+            >
+              <FileDownIcon height={15} width={15} />
+              Excel
+            </button>
+
+            <ReactToPrint
+              trigger={() => (
+                <button
+                  disabled={loading || rekapNilai.length === 0}
+                  className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
+                >
+                  <Printer height={15} width={15} />
+                  Print
+                </button>
+              )}
+              content={() => componentRef.current}
+            />
           </div>
         </div>
-        <div className="flex items-center justify-end flex-wrap gap-4">
+
+        <div className="relative block md:hidden w-fit" ref={menuRef}>
           <button
-            disabled={loading || rekapNilai.length === 0}
-            onClick={() =>
-              exportToExcel(
-                rekapNilai,
-                dataMapel,
-                userData.waliKelas,
-                tahunAjaran,
-                semester
-              )
-            }
-            className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
+            onClick={handleToggleMenu}
+            className="flex-center  w-8 h-8 rounded-full border p-1 bg-gray-100 hover:bg-gray-200 border-neutral"
           >
-            <FileDownIcon height={15} width={15} />
-            Excel
+            <EllipsisVerticalIcon
+              width={15}
+              height={15}
+              className="text-gray-800"
+            />
           </button>
 
-          <ReactToPrint
-            trigger={() => (
-              <button
-                disabled={loading || rekapNilai.length === 0}
-                className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
-              >
-                <Printer height={15} width={15} />
-                Print
-              </button>
-            )}
-            content={() => componentRef.current}
-          />
+          {isMenu && (
+            <div className="absolute left-0  w-max  mt-1 z-10 bg-white border shadow-md rounded-md p-4">
+              <div className="grid grid-cols-2 items-center">
+                <p className="text-sm font-semibold text-gray-700">
+                  Tahun Ajaran
+                </p>
+                <DropdownTahunAjaran onSelectAjaran={handleSelectAjaran} />
+              </div>
+              <div className="grid grid-cols-2 mt-4 items-center">
+                <p className="text-sm font-semibold text-gray-700">Semester</p>
+                <DropdownSemester onSelectedSemester={handleSelectSemester} />
+              </div>
+              <div className="flex gap-4 mt-8">
+                <button
+                  disabled={loading || rekapNilai.length === 0}
+                  onClick={() =>
+                    exportToExcel(
+                      rekapNilai,
+                      dataMapel,
+                      userData.waliKelas,
+                      tahunAjaran,
+                      semester
+                    )
+                  }
+                  className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
+                >
+                  <FileDownIcon height={15} width={15} />
+                  Excel
+                </button>
+
+                <ReactToPrint
+                  trigger={() => (
+                    <button
+                      disabled={loading || rekapNilai.length === 0}
+                      className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
+                    >
+                      <Printer height={15} width={15} />
+                      Print
+                    </button>
+                  )}
+                  content={() => componentRef.current}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <div className="relative border broder-gray-300 rounded-md bg-white  overflow-hidden">

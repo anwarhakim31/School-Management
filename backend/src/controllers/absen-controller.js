@@ -18,7 +18,7 @@ export const getAbsenKelas = async (req, res, next) => {
 
     const today = new Date();
 
-    const formatHari = today.toLocaleString("en-US", { weekday: "long" });
+    const formatHari = today.toLocaleString("id-ID", { weekday: "long" });
 
     const libur = await Libur.findOne({
       $or: [
