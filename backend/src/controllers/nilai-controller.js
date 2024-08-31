@@ -5,6 +5,7 @@ import Nilai from "../models/Nilai-model.js";
 import Siswa from "../models/siswa-model.js";
 import Master from "../models/master-model.js";
 import TahunAjaran from "../models/tahunAjaran-model.js";
+import Absensi from "../models/Absensi-model.js";
 
 export const addNilai = async (req, res, next) => {
   try {
@@ -345,7 +346,11 @@ export const getRaport = async (req, res, next) => {
     const id = req.params.siswaId;
 
     const siswa = await Siswa.findById(id)
-      .populate({ path: "kelas", select: "nama kelas" })
+      .populate({
+        path: "kelas",
+        populate: { path: "waliKelas", select: "nama" },
+        select: "nama kelas waliKelas",
+      })
       .select("nama nis kelas");
 
     const master = await Master.findOne();
@@ -364,11 +369,16 @@ export const getRaport = async (req, res, next) => {
       .populate("mataPelajaran")
       .select("nilai kategori mataPelajaran");
 
+    const absen = await Absensi.find({
+      siswa: new mongoose.Types.ObjectId(id),
+    });
+
     const siswaWithNiali = {
       _id: siswa._id,
       nama: siswa.nama,
       nis: siswa.nis,
       kelas: `${siswa.kelas.kelas} ${siswa.kelas.nama}`,
+      waliKelas: siswa.kelas.waliKelas.nama,
       ajaran: ajaran[0].ajaran,
       semester: semesterActive.keterangan,
       nilai: nilai.map((item) => ({
@@ -382,6 +392,7 @@ export const getRaport = async (req, res, next) => {
       success: true,
       message: "Berhasil mengambil semua nilai siswa",
       rapor: siswaWithNiali,
+      absen,
     });
   } catch (error) {
     next(error);

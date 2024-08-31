@@ -42,7 +42,7 @@ const TableNilai = ({ data, dataMapel }) => {
       };
     });
   }, [siswas, data, dataMapel]);
-  console.log(siswaWithAverage);
+
   const siswaWithRanking = useMemo(() => {
     const sortedSiswa = [...siswaWithAverage].sort(
       (a, b) => b.average - a.average
