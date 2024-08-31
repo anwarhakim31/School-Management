@@ -56,7 +56,7 @@ const HeaderLayout = ({ handleOpenEdit, setIsEdit, handleToggleSidebar }) => {
   }, []);
 
   return (
-    <header className="w-full p-6 flex justify-between items-center">
+    <header className="w-full p-4 flex justify-between items-center">
       <div className="flex-center gap-4">
         <button
           aria-label="toggle sidebar"

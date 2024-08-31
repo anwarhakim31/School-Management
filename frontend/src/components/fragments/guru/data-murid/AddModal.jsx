@@ -184,7 +184,7 @@ const AddModal = ({ onClose, kelas }) => {
               Ekstensi file: jpeg/jpg, png
             </p>
           </div>
-          <form className=" col-span-2 w-full   grid grid-cols-2 gap-4">
+          <form className=" col-span-2 w-full   grid grid-cols-2 gap-x-4">
             <div>
               <div className="mb-2">
                 <label
@@ -378,6 +378,20 @@ const AddModal = ({ onClose, kelas }) => {
                   {errors.phone && errors.phone.message}
                 </span>
               </div>
+            </div>
+            <div className="mb-2 col-span-2">
+              <label
+                htmlFor="alamaat"
+                className="text-xs mb-2 block font-semibold"
+              >
+                Alamat
+              </label>
+              <textarea
+                type={"text"}
+                name="alamat"
+                {...register("alamat")}
+                className="py-1.5 h-14 bg-white border  text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
+              />
             </div>
           </form>
         </div>

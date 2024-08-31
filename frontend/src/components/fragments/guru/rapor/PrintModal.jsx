@@ -9,15 +9,15 @@ const PrintComponent = React.forwardRef(
         className="relative bg-white r mt-4 text-gray-900   mx-auto"
       >
         <div className="p-4 md:p-8">
-          <div className="flex justify-center border-b-2 border-double border-gray-700 py-6">
+          <div className="flex justify-center border-b-2 border-double border-gray-700 py-10">
             <img
               src={logo}
               alt="Logo"
               className="w-[150px] h-[30px] md:w-[180px] md:h-[35px]"
             />
           </div>
-          <div className="border-t-2 border-gray-700 mt-2 md:mx-8"></div>
-          <div className="grid grid-cols-4 mt-6">
+          <div className="border-t border-gray-700 mt-2 "></div>
+          <div className="grid grid-cols-4 mt-10">
             <div className="col-span-2 space-y-2">
               <div className="flex text-[0.5rem] sm:text-[0.625rem] md:text-xs gap-2">
                 <p className="min-w-[30px] md:min-w-[80px] font-medium">

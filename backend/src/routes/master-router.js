@@ -14,7 +14,7 @@ const masterRouter = express.Router();
 // masterRouter.post("/add-total", verifyToken, addtotal);
 masterRouter.get("/get-master", verifyToken, getMaster);
 masterRouter.get("/get-akademik", verifyToken, getAkademik);
-masterRouter.get("/get-semester", verifyToken, getSemester);
+masterRouter.get("/get-semester", getSemester);
 masterRouter.post("/toggle-semester", verifyToken, toggleSemester);
 masterRouter.put("/update-time", verifyToken, updateJam);
 // masterRouter.delete("/delete-total/:id", verifyToken, deletetotal);

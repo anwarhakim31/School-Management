@@ -6,7 +6,13 @@ const AsideLayout = ({ setIsSidebar }) => {
   return (
     <>
       <div className="w-[150px] h-[50px]  mb-2 mx-auto block">
-        <img src={logo} alt="logo" className="object-contain mt-1" />
+        <img
+          src={logo}
+          alt="logo"
+          height={150}
+          width={140}
+          className="object-contain mt-1"
+        />
       </div>
       <div className="">
         <ListSidebar />

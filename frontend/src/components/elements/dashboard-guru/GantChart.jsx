@@ -23,8 +23,6 @@ const getClassColor = (classNumber) => {
 const GantChart = ({ schedules, durasi, loading }) => {
   const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
-  console.log(schedules);
-
   const calculatePercentage = (start, end) => {
     const [startHour, startMinute] = start.split(":").map(Number);
     const [endHour, endMinute] = end.split(":").map(Number);
@@ -33,8 +31,6 @@ const GantChart = ({ schedules, durasi, loading }) => {
     const totalMinutes = endTime - startTime;
     return (totalMinutes / durasi.lama) * 100; // Convert to percentage
   };
-
-  console.log(durasi);
 
   // Function to calculate the 'left' position in percentage
   const calculateLeft = (start) => {

@@ -2,10 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import AsideLayout from "../guru/AsideLayout";
 import { Outlet } from "react-router-dom";
 import HeaderLayout from "./HeaderLayout";
+import ButtonScrollTop from "@/components/elements/ButtonScrollTop";
 
 const GuruLayout = () => {
   const [isSidebar, setIsSidebar] = useState(false);
   const sidebarRef = useRef();
+  const scrollContainerRef = useRef(null);
 
   const handleToggleSidebar = () => {
     setIsSidebar(!isSidebar);
@@ -36,11 +38,16 @@ const GuruLayout = () => {
         <AsideLayout setIsSidebar={setIsSidebar} />
       </aside>
       <div className="flex flex-1 overflow-hidden">
-        <div className="flex flex-col flex-1 overflow-auto">
+        <div
+          ref={scrollContainerRef}
+          className="flex flex-col flex-1 overflow-auto"
+        >
           <HeaderLayout handleToggleSidebar={handleToggleSidebar} />
           <Outlet />
         </div>
       </div>
+
+      <ButtonScrollTop scrollContainerRef={scrollContainerRef} />
     </main>
   );
 };

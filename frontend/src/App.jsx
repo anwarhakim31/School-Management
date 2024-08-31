@@ -30,6 +30,7 @@ import RekapAbsensiPage from "./pages/admin/rekap-absensi";
 import DataSiswaPageguru from "./pages/guru/data-siswa";
 import DataNilaiSiswaPage from "./pages/guru/data-nilai-siswa";
 import RaporSiswaPage from "./pages/guru/rapor-siswa";
+import RekapNilaiPageadmin from "./pages/admin/rekap-nilai";
 
 function App() {
   const dispatch = useDispatch();
@@ -184,10 +185,18 @@ function App() {
             }
           />
           <Route
-            path="rekap-absensi-siswa"
+            path="rekap-absensi-kelas"
             element={
               <PrivateRoute role={"admin"}>
                 <RekapAbsensiPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="rekap-nilai-kelas"
+            element={
+              <PrivateRoute role={"admin"}>
+                <RekapNilaiPageadmin />
               </PrivateRoute>
             }
           />

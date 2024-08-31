@@ -133,7 +133,7 @@ const Navlist = [
       {
         id: 1,
         nama: "Absensi",
-        path: "/admin/rekap-absensi-siswa",
+        path: "/admin/rekap-absensi-kelas",
         icon: (
           <NotebookPen
             height={20}
@@ -147,6 +147,7 @@ const Navlist = [
       {
         id: 2,
         nama: "Nilai",
+        path: "/admin/rekap-nilai-kelas",
         icon: (
           <NotebookText
             height={20}

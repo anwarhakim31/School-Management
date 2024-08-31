@@ -306,19 +306,25 @@ export const updateNilai = async (req, res, next) => {
 
 export const getRekapKelas = async (req, res, next) => {
   try {
-    const id = req.userId;
-    const { semester, tahunAjaran } = req.query;
+    const { semester, tahunAjaran, kelas, nama, id } = req.query;
 
-    const kelas = await Kelas.findOne({
-      waliKelas: id,
-    });
+    let kelass;
 
-    if (!kelas) {
+    if (kelas && nama) {
+      kelass = await Kelas.findOne({
+        kelas,
+        nama,
+      });
+    } else {
+      kelass = await Kelas.findById({ _id: id });
+    }
+
+    if (!kelass) {
       throw new ResponseError(404, "Kelas tidak memiliki siswa.");
     }
 
     const nilai = await Nilai.find({
-      siswa: { $in: kelas.siswa },
+      siswa: { $in: kelass.siswa },
       semester,
       tahunAjaran,
     })
@@ -335,6 +341,10 @@ export const getRekapKelas = async (req, res, next) => {
       success: true,
       message: "Berhasil mengambil semua nilai siswa",
       nilai,
+      kelas: {
+        kelas: kelass.kelas,
+        nama: kelass.nama,
+      },
     });
   } catch (error) {
     next(error);

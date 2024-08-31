@@ -35,7 +35,9 @@ const DropdownSiswa = ({ onChange, value, url }) => {
         });
 
         if (res.status === 200) {
-          setdataSiswa(res.data.siswa);
+          setdataSiswa(
+            res.data.siswa.sort((a, b) => a.nama.localeCompare(b.nama))
+          );
         }
       } catch (error) {
         responseError(error);

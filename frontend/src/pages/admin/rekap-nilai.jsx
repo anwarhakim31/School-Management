@@ -1,3 +1,4 @@
+import React from "react";
 import TableAbsen from "@/components/fragments/guru/rekap/TableAbsen";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
@@ -11,18 +12,24 @@ import ExcelJS from "exceljs";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
 import DropdownTahunAjaran from "@/components/elements/DropdownTahunAjaran";
 import DropdownSemester from "@/components/elements/DropdownSemester";
-import TableNilai from "../../TableNilai";
-import { data } from "autoprefixer";
-import PrintComponentNilai from "../../PrintModalNilai";
 
-const RekapNilaiFragment = () => {
+import { data } from "autoprefixer";
+
+import KelasDropdown from "@/components/elements/KelasDropdown";
+import NamaKelasDropdown from "@/components/elements/NamaKelasDropdown";
+import TableNilai from "@/components/fragments/TableNilai";
+import PrintComponentNilai from "@/components/fragments/PrintModalNilai";
+
+const RekapNilaiPageadmin = () => {
   const menuRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [isMenu, setIsMenu] = useState(false);
   const [tahunAjaran, setTahunAjaran] = useState("");
   const [semester, setSemester] = useState("");
+  const [kelas, setKelas] = useState("");
+  const [idKelas, setIdKelas] = useState("");
   const userData = useSelector(selectedUserData);
-
+  const [dataKelas, setDataKelas] = useState({});
   const [rekapNilai, setRekapNilai] = useState([]);
   const [dataMapel, setDataMapel] = useState([]);
 
@@ -36,8 +43,7 @@ const RekapNilaiFragment = () => {
           params: {
             semester,
             tahunAjaran,
-            kelas: userData.waliKelas.kelas,
-            nama: userData.waliKelas.nama,
+            id: idKelas,
           },
           withCredentials: true,
         });
@@ -53,6 +59,7 @@ const RekapNilaiFragment = () => {
 
           setDataMapel(uniqueMapel);
           setRekapNilai(res.data.nilai);
+          setDataKelas(res.data.kelas);
         }
       } catch (error) {
         responseError(error);
@@ -63,8 +70,10 @@ const RekapNilaiFragment = () => {
       }
     };
 
-    getData();
-  }, [semester, tahunAjaran]);
+    if ((idKelas, semester, idKelas)) {
+      getData();
+    }
+  }, [semester, tahunAjaran, idKelas]);
 
   const handleSelectAjaran = (value) => {
     setTahunAjaran(value);
@@ -72,6 +81,13 @@ const RekapNilaiFragment = () => {
 
   const handleSelectSemester = (value) => {
     setSemester(value);
+  };
+  const onSelectKelas = (value) => {
+    setKelas(value);
+  };
+
+  const onSelectIdKelas = (value) => {
+    setIdKelas(value);
   };
 
   const handleToggleMenu = (e) => {
@@ -92,21 +108,78 @@ const RekapNilaiFragment = () => {
   }, [isMenu]);
 
   return (
-    <Fragment>
-      <div className="  bg-white p-4 rounded-tr-md rounded-tl-md border border-b-0">
-        <div className="hidden md:flex-between">
-          <div className="flex justify-start flex-wrap gap-4">
-            <div className="flex items-center gap-4">
-              <p className="text-sm font-semibold text-gray-700">
-                Tahun Ajaran
-              </p>
-              <DropdownTahunAjaran onSelectAjaran={handleSelectAjaran} />
-            </div>
-            <div className="flex items-center gap-4">
-              <p className="text-sm font-semibold text-gray-700">Semester</p>
-              <DropdownSemester onSelectedSemester={handleSelectSemester} />
+    <section className="px-6 py-4 mb-4 ">
+      <div className="  bg-white p-4 rounded-md border border-b-0">
+        <h3 className="text-sm font-semibold mb-4 text-neutral">
+          Pilih rekap nilai siswa pada setiap kelas.
+        </h3>
+        <div className="flex-between">
+          <div className="hidden xl:flex-between">
+            <div className="flex justify-start flex-wrap gap-4">
+              <div className="flex items-center gap-4">
+                <p className="text-sm font-semibold text-gray-700">
+                  Tahun Ajaran
+                </p>
+                <DropdownTahunAjaran onSelectAjaran={handleSelectAjaran} />
+              </div>
+              <div className="flex items-center gap-4">
+                <p className="text-sm font-semibold text-gray-700">Semester</p>
+                <DropdownSemester onSelectedSemester={handleSelectSemester} />
+              </div>
+              <div className="flex justify-start flex-wrap md:flex-nowrap  gap-4">
+                <div className="flex items-center gap-2">
+                  <p className="text-xs font-semibold text-gray-700">Kelas</p>
+                  <KelasDropdown onChange={onSelectKelas} />
+                </div>
+                <div className="flex items-center gap-2">
+                  <p className="text-xs font-semibold text-gray-700">
+                    Nama Kelas
+                  </p>
+                  <NamaKelasDropdown onChange={onSelectIdKelas} kelas={kelas} />
+                </div>
+              </div>
             </div>
           </div>
+          <div className="relative block xl:hidden w-fit" ref={menuRef}>
+            <button
+              onClick={handleToggleMenu}
+              className="flex-center  w-8 h-8 rounded-full border p-1 bg-gray-100 hover:bg-gray-200 border-neutral"
+            >
+              <EllipsisVerticalIcon
+                width={15}
+                height={15}
+                className="text-gray-800"
+              />
+            </button>
+
+            {isMenu && (
+              <div className="absolute left-0  w-max  mt-1 z-10 bg-white border shadow-md rounded-md p-4">
+                <div className="grid grid-cols-2 items-center">
+                  <p className="text-sm font-semibold text-gray-700">
+                    Tahun Ajaran
+                  </p>
+                  <DropdownTahunAjaran onSelectAjaran={handleSelectAjaran} />
+                </div>
+                <div className="grid grid-cols-2 mt-4 items-center">
+                  <p className="text-sm font-semibold text-gray-700">
+                    Semester
+                  </p>
+                  <DropdownSemester onSelectedSemester={handleSelectSemester} />
+                </div>
+                <div className="grid grid-cols-2 mt-4 items-center">
+                  <p className="text-xs font-semibold text-gray-700">Kelas</p>
+                  <KelasDropdown onChange={onSelectKelas} />
+                </div>
+                <div className="grid grid-cols-2 mt-4 items-center">
+                  <p className="text-xs font-semibold text-gray-700">
+                    Nama Kelas
+                  </p>
+                  <NamaKelasDropdown onChange={onSelectIdKelas} kelas={kelas} />
+                </div>
+              </div>
+            )}
+          </div>
+
           <div className="flex items-center justify-end flex-wrap gap-4">
             <button
               disabled={loading || rekapNilai.length === 0}
@@ -114,7 +187,7 @@ const RekapNilaiFragment = () => {
                 exportToExcel(
                   rekapNilai,
                   dataMapel,
-                  userData.waliKelas,
+                  dataKelas,
                   tahunAjaran,
                   semester
                 )
@@ -139,67 +212,8 @@ const RekapNilaiFragment = () => {
             />
           </div>
         </div>
-
-        <div className="relative block md:hidden w-fit" ref={menuRef}>
-          <button
-            onClick={handleToggleMenu}
-            className="flex-center  w-8 h-8 rounded-full border p-1 bg-gray-100 hover:bg-gray-200 border-neutral"
-          >
-            <EllipsisVerticalIcon
-              width={15}
-              height={15}
-              className="text-gray-800"
-            />
-          </button>
-
-          {isMenu && (
-            <div className="absolute left-0  w-max  mt-1 z-10 bg-white border shadow-md rounded-md p-4">
-              <div className="grid grid-cols-2 items-center">
-                <p className="text-sm font-semibold text-gray-700">
-                  Tahun Ajaran
-                </p>
-                <DropdownTahunAjaran onSelectAjaran={handleSelectAjaran} />
-              </div>
-              <div className="grid grid-cols-2 mt-4 items-center">
-                <p className="text-sm font-semibold text-gray-700">Semester</p>
-                <DropdownSemester onSelectedSemester={handleSelectSemester} />
-              </div>
-              <div className="flex gap-4 mt-8">
-                <button
-                  disabled={loading || rekapNilai.length === 0}
-                  onClick={() =>
-                    exportToExcel(
-                      rekapNilai,
-                      dataMapel,
-                      userData.waliKelas,
-                      tahunAjaran,
-                      semester
-                    )
-                  }
-                  className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
-                >
-                  <FileDownIcon height={15} width={15} />
-                  Excel
-                </button>
-
-                <ReactToPrint
-                  trigger={() => (
-                    <button
-                      disabled={loading || rekapNilai.length === 0}
-                      className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
-                    >
-                      <Printer height={15} width={15} />
-                      Print
-                    </button>
-                  )}
-                  content={() => componentRef.current}
-                />
-              </div>
-            </div>
-          )}
-        </div>
       </div>
-      <div className="relative border broder-gray-300 rounded-md bg-white  overflow-hidden">
+      <div className="relative border mt-10 broder-gray-300 rounded-md bg-white  overflow-hidden">
         {loading ? (
           <div className="min-h-[calc(80vh-160px)]  bg-backup  animate-pulse  flex-center">
             <div>
@@ -215,16 +229,14 @@ const RekapNilaiFragment = () => {
           ref={componentRef}
           data={rekapNilai}
           dataMapel={dataMapel}
-          kelas={userData.waliKelas}
+          kelas={dataKelas}
           semester={semester}
           tahunAjaran={tahunAjaran}
         />
       </div>
-    </Fragment>
+    </section>
   );
 };
-
-export default RekapNilaiFragment;
 
 const getUniqueStudents = (data) => {
   const uniqueStudentMap = new Map();
@@ -411,3 +423,5 @@ const exportToExcel = async (data, dataMapel, kelas, tahunAjaran, semester) => {
   const blob = new Blob([buffer], { type: "application/octet-stream" });
   saveAs(blob, "rekap_nilai.xlsx");
 };
+
+export default RekapNilaiPageadmin;
