@@ -20,7 +20,7 @@ const RekapAbsensiPage = () => {
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
   const [isActive, setIsActive] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [year, setYear] = useState(currentYear);
   const [month, setMonth] = useState(currentMonth);
   const [countDay, setCountDay] = useState(0);
@@ -32,9 +32,7 @@ const RekapAbsensiPage = () => {
 
   useEffect(() => {
     const getData = async () => {
-      if (kelas) {
-        setLoading(true);
-      }
+      setLoading(true);
 
       try {
         const res = await axios.get(
@@ -63,10 +61,6 @@ const RekapAbsensiPage = () => {
       getData();
     }
   }, [year, month, idKelas]);
-
-  useEffect(() => {
-    setLoading(true);
-  }, [kelas]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -100,6 +94,8 @@ const RekapAbsensiPage = () => {
   const onSelectIdKelas = (value) => {
     setIdKelas(value);
   };
+
+  console.log(kelas, idKelas);
 
   return (
     <section className="px-6 py-4 mb-4 ">
@@ -166,14 +162,14 @@ const RekapAbsensiPage = () => {
                       <p className="text-sm font-semibold text-gray-700">
                         Kelas
                       </p>
-                      <KelasDropdown onSelectKelas={onSelectKelas} />
+                      <KelasDropdown onChange={onSelectKelas} />
                     </div>
                     <div className="flex items-center gap-2">
                       <p className="text-sm font-semibold text-gray-700">
                         Nama
                       </p>
                       <NamaKelasDropdown
-                        onSelectIdKelas={onSelectIdKelas}
+                        onChange={onSelectIdKelas}
                         kelas={kelas}
                       />
                     </div>
@@ -219,7 +215,7 @@ const RekapAbsensiPage = () => {
       </div>
       <div className="relative border broder-gray-300 rounded-md bg-white mt-10 overflow-hidden">
         {loading ? (
-          <div className="min-h-[calc(80vh-140px)] bg-backup border border-gray-400 rounded-md  animate-pulse  flex-center">
+          <div className="min-h-[calc(80vh-160px)] bg-backup border border-gray-400 rounded-md  animate-pulse flex-center">
             <div>
               <div className="border-4 border-gray-200 border-t-neutral rounded-full w-6 h-6 animate-spin"></div>
             </div>
@@ -231,6 +227,11 @@ const RekapAbsensiPage = () => {
             countDay={countDay}
             kelas={kelas}
           />
+        )}
+        {(!kelas || !idKelas) && (
+          <div className="absolute inset-0 flex-center bg-white">
+            <p className="text-xs font-medium">Pilih Kelas Terlebih dulu..</p>
+          </div>
         )}
       </div>
       <div style={{ display: "none" }}>

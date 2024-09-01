@@ -4,7 +4,12 @@ import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { EllipsisVerticalIcon, FileDownIcon, Printer } from "lucide-react";
+import {
+  EllipsisVerticalIcon,
+  FileDownIcon,
+  Filter,
+  Printer,
+} from "lucide-react";
 import { useEffect, useRef, useState, Fragment, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { saveAs } from "file-saver";
@@ -109,7 +114,7 @@ const RekapNilaiPageadmin = () => {
 
   return (
     <section className="px-6 py-4 mb-4 ">
-      <div className="  bg-white p-4 rounded-md border border-b-0">
+      <div className="  bg-white p-4 rounded-md shadow-md border border-b-0">
         <h3 className="text-sm font-semibold mb-4 text-neutral">
           Pilih rekap nilai siswa pada setiap kelas.
         </h3>
@@ -215,13 +220,18 @@ const RekapNilaiPageadmin = () => {
       </div>
       <div className="relative border mt-10 broder-gray-300 rounded-md bg-white  overflow-hidden">
         {loading ? (
-          <div className="min-h-[calc(80vh-160px)]  bg-backup  animate-pulse  flex-center">
+          <div className="min-h-[calc(80vh-160px)] bg-backup  animate-pulse  flex-center">
             <div>
               <div className="border-4 border-gray-200 border-t-neutral rounded-full w-6 h-6 animate-spin"></div>
             </div>
           </div>
         ) : (
           <TableNilai data={rekapNilai} dataMapel={dataMapel} />
+        )}
+        {(!kelas || !idKelas) && (
+          <div className="absolute inset-0 flex-center bg-white">
+            <p className="text-xs font-medium">Pilih Kelas Terlebih dulu..</p>
+          </div>
         )}
       </div>
       <div style={{ display: "none" }}>

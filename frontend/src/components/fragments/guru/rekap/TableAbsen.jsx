@@ -64,7 +64,7 @@ const TableAbsen = ({
               <tr>
                 <td
                   colSpan={`${countDay + 4}`}
-                  className="px-2 py-4 border-gray-300 text-xs font-medium text-gray-900 h-[350px] whitespace-nowrap"
+                  className="px-2 py-4 border-gray-300 text-xs font-medium text-gray-900 h-[300px] whitespace-nowrap"
                 >
                   <p className="flex-center w-full text-xs">
                     Kelas Tidak Memiliki Siswa.

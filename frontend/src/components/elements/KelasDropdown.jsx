@@ -97,15 +97,17 @@ const KelasDropdown = ({ onChange, value }) => {
         <div className="absolute mt-1   w-full bg-white border z-50 border-gray-400 rounded shadow">
           <ul className="max-h-40 overflow-y-auto">
             {kelas &&
-              kelas.map((kel) => (
-                <li
-                  key={kel}
-                  onClick={() => handleSelectKelas(kel)}
-                  className="px-4 py-2 text-center text-xs hover:bg-gray-200 cursor-pointer"
-                >
-                  {kel}
-                </li>
-              ))}
+              kelas
+                .sort((a, b) => b - a)
+                .map((kel) => (
+                  <li
+                    key={kel}
+                    onClick={() => handleSelectKelas(kel)}
+                    className="px-4 py-2 text-center text-xs hover:bg-gray-200 cursor-pointer"
+                  >
+                    {kel}
+                  </li>
+                ))}
           </ul>
         </div>
       )}

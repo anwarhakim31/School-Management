@@ -33,7 +33,7 @@ export const getMaster = async (req, res, next) => {
         },
       },
       {
-        $limit: 2,
+        $limit: 5,
       },
     ]);
     const kelasPerTotal = await Kelas.aggregate([

@@ -1,5 +1,5 @@
 import guru from "../../assets/svg/Student.svg";
-import ExportExcel from "@/components/elements/DataToExel";
+import ExcelJs from "exceljs";
 import CustomDropdown from "@/components/elements/DropDown";
 import DropdownFilter from "@/components/elements/DropDownFilter";
 import HeaderBox from "@/components/elements/data-guru/HeaderBox";
@@ -27,8 +27,8 @@ const DataGuruPage = () => {
   const [dataDetail, setDataDetail] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(7);
-  const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
-  const [isDeleteManySiswa, setIsDeletManySiswa] = useState(false);
+  const [isDeleteGuru, setIsDeleteGuru] = useState(false);
+  const [isDeleteManyGuru, setIsDeletManyGuru] = useState(false);
   const [allCheck, setAllCheck] = useState(false);
   const [filters, setFilters] = useState({
     kelas: "",
@@ -81,7 +81,7 @@ const DataGuruPage = () => {
   );
 
   useEffect(() => {
-    const getSiswa = async () => {
+    const getGuru = async () => {
       try {
         const res = await axios.get(`${HOST}/api/guru/get-all-guru`, {
           params: {
@@ -122,9 +122,9 @@ const DataGuruPage = () => {
         }, 50);
       }
     };
-    getSiswa();
+    getGuru();
     getDetail();
-  }, [limit, page, search, isDeleteSiswa, isDeleteManySiswa, filters]);
+  }, [limit, page, search, isDeleteGuru, isDeleteManyGuru, filters]);
 
   useEffect(() => {
     if (limit) {
@@ -133,10 +133,10 @@ const DataGuruPage = () => {
   }, [limit]);
 
   const handleToggleDeleteOne = () => {
-    setIsDeleteSiswa(!isDeleteSiswa);
+    setIsDeleteGuru(!isDeleteGuru);
   };
   const handleToggleDeleteMany = () => {
-    setIsDeletManySiswa(!isDeleteManySiswa);
+    setIsDeletManyGuru(!isDeleteManyGuru);
   };
 
   const handleSearch = (e) => {
@@ -162,6 +162,8 @@ const DataGuruPage = () => {
       [filterName]: filterValue,
     }));
   };
+
+  console.log(dataGuru);
 
   return (
     <section className="px-6 py-4 mb-4 ">
@@ -195,7 +197,7 @@ const DataGuruPage = () => {
         <div className="flex-between px-4 h-14 ">
           <div className="flex items-center gap-4  ">
             <button
-              title="Hapus siswa terpilih"
+              title="Hapus Guru terpilih"
               disabled={loading}
               onClick={handleToggleDeleteMany}
               className={`${
@@ -216,12 +218,19 @@ const DataGuruPage = () => {
             />
           </div>
           <div>
-            <ExportExcel
-              columns={columns}
-              data={dataGuru}
-              namaFile={"Data-Siswa"}
-              loading={loading}
-            />
+            <button
+              title="Excel"
+              disabled={loading}
+              className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1.5 rounded-md"
+              onClick={() => exportToExcel(dataGuru)}
+            >
+              <FileDown
+                width={20}
+                height={20}
+                strokeWidth={1}
+                className="group-hover:text-white"
+              />
+            </button>
           </div>
         </div>
         {loading ? (
@@ -245,8 +254,8 @@ const DataGuruPage = () => {
           />
         )}
       </div>
-      {isDeleteSiswa && <DeleteModal onClose={handleToggleDeleteOne} />}
-      {isDeleteManySiswa && (
+      {isDeleteGuru && <DeleteModal onClose={handleToggleDeleteOne} />}
+      {isDeleteManyGuru && (
         <DeleteManyModal
           onClose={handleToggleDeleteMany}
           setAllCheck={setAllCheck}
@@ -254,6 +263,105 @@ const DataGuruPage = () => {
       )}
     </section>
   );
+};
+
+const exportToExcel = async (data) => {
+  const workbook = new ExcelJs.Workbook();
+  const worksheet = workbook.addWorksheet(`Data Guru`);
+
+  worksheet.mergeCells("A1:J1"); // Menggabungkan sel A1 hingga D1
+  worksheet.getCell("A1").value = `Data Guru`; // Menambahkan judul
+  worksheet.getCell("A1").font = { size: 16, bold: true };
+  worksheet.getCell("A1").border = {
+    top: { style: "thin", color: "FFFFFFFF" },
+    left: { style: "thin", color: "FFFFFFFF" },
+    bottom: { style: "thin", color: "FFFFFFFF" },
+    right: { style: "thin", color: "FFFFFFFF" },
+  }; // Mengatur gaya font
+  worksheet.getCell("A1").alignment = {
+    vertical: "middle",
+    horizontal: "center",
+  };
+
+  worksheet.getRow(2).values = [
+    "NIP",
+    "Nama Guru",
+    "Jenis Kelamin",
+    "Tempat Lahir",
+    "Tanggal Lahir",
+    "Bidang Studi",
+    "status",
+    "Alamat",
+    "Telepon",
+    "Wali Kelas",
+  ]; // Mengatur nilai header kolom
+  worksheet.getRow(2).eachCell((cell, colNumber) => {
+    cell.fill = {
+      type: "pattern",
+      pattern: "solid",
+      fgColor: { argb: "362f7e" }, // Warna Biru
+    };
+    cell.font = { color: { argb: "FFFFFFFF" }, bold: true }; // Teks putih
+    cell.alignment = { vertical: "middle", horizontal: "center" }; // Rata tengah
+    cell.border = {
+      top: { style: "thin", color: "FFFFFFFF" },
+      left: { style: "thin", color: "FFFFFFFF" },
+      bottom: { style: "thin", color: "FFFFFFFF" },
+      right: { style: "thin", color: "FFFFFFFF" },
+    };
+    worksheet.getColumn(colNumber).width =
+      colNumber === 1
+        ? 20
+        : colNumber === 2
+        ? 30
+        : colNumber === 6
+        ? 25
+        : colNumber === 8
+        ? 30
+        : colNumber === 3
+        ? 15
+        : 15;
+  });
+
+  data.forEach((Guru) => {
+    const waliKelas = Guru.waliKelas
+      ? `${Guru.waliKelas.kelas || ""} ${Guru.waliKelas.nama || ""}`
+      : "";
+
+    const rowValues = [
+      Guru.nip,
+      Guru.nama,
+      Guru.jenisKelamin,
+      Guru.tempatLahir,
+      formatDate(Guru.tanggalLahir),
+      Guru.bidangStudi.nama,
+      Guru.status,
+      Guru.alamat,
+      Guru.phone,
+      waliKelas,
+    ];
+
+    const row = worksheet.addRow(rowValues);
+
+    // Menambahkan border pada setiap cell di body
+    row.eachCell((cell) => {
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      };
+    });
+
+    // Menambahkan border pada setiap cell di body
+
+    // Styling berdasarkan status untuk setiap cell
+  });
+
+  // Ekspor workbook ke Excel
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: "application/octet-stream" });
+  saveAs(blob, `Data Guru.xlsx`);
 };
 
 export default DataGuruPage;

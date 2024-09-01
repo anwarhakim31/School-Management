@@ -10,11 +10,13 @@ import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import { formatDate } from "@/util/formatDate";
 import responseError from "@/util/services";
+import ExcelJs from "exceljs";
 import axios from "axios";
 import { FileDown, Plus, Search, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { saveAs } from "file-saver";
 
 const selectRow = [7, 14, 21, 28];
 
@@ -192,11 +194,6 @@ const DataSiswaPage = () => {
           to={"/admin/tambah-siswa"}
           className="flex-between gap-3 min-w-fit bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
         >
-          {/* <Plus
-            width={15}
-            height={15}
-            className="rounded-full bg-white text-neutral"
-          />{" "} */}
           <img src={Student} alt="student" width={15} height={15} />
           Tambah Siswa
         </Link>
@@ -227,12 +224,19 @@ const DataSiswaPage = () => {
             />
           </div>
           <div>
-            <ExportExcel
-              columns={columns}
-              data={dataSiswa}
-              namaFile={"Data-Siswa"}
-              loading={loading}
-            />
+            <button
+              title="Excel"
+              disabled={loading}
+              className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1.5 rounded-md"
+              onClick={() => exportToExcel(dataSiswa)}
+            >
+              <FileDown
+                width={20}
+                height={20}
+                strokeWidth={1}
+                className="group-hover:text-white"
+              />
+            </button>
           </div>
         </div>
         {loading ? (
@@ -265,6 +269,108 @@ const DataSiswaPage = () => {
       )}
     </section>
   );
+};
+
+const exportToExcel = async (data) => {
+  const workbook = new ExcelJs.Workbook();
+  const worksheet = workbook.addWorksheet(`Data Siswa`);
+
+  worksheet.mergeCells("A1:J1"); // Menggabungkan sel A1 hingga D1
+  worksheet.getCell("A1").value = `Data Siswa`; // Menambahkan judul
+  worksheet.getCell("A1").font = { size: 16, bold: true };
+  worksheet.getCell("A1").border = {
+    top: { style: "thin", color: "FFFFFFFF" },
+    left: { style: "thin", color: "FFFFFFFF" },
+    bottom: { style: "thin", color: "FFFFFFFF" },
+    right: { style: "thin", color: "FFFFFFFF" },
+  }; // Mengatur gaya font
+  worksheet.getCell("A1").alignment = {
+    vertical: "middle",
+    horizontal: "center",
+  };
+
+  worksheet.getRow(2).values = [
+    "NIS",
+    "Nama Siswa",
+    "Jenis Kelamin",
+    "Tempat Lahir",
+    "Tanggal Lahir",
+    "Agama",
+    "Tahun Masuk",
+    "Alamat",
+    "Telepon",
+    "kelas",
+  ]; // Mengatur nilai header kolom
+  worksheet.getRow(2).eachCell((cell, colNumber) => {
+    cell.fill = {
+      type: "pattern",
+      pattern: "solid",
+      fgColor: { argb: "362f7e" }, // Warna Biru
+    };
+    cell.font = { color: { argb: "FFFFFFFF" }, bold: true }; // Teks putih
+    cell.alignment = { vertical: "middle", horizontal: "center" }; // Rata tengah
+    cell.border = {
+      top: { style: "thin", color: "FFFFFFFF" },
+      left: { style: "thin", color: "FFFFFFFF" },
+      bottom: { style: "thin", color: "FFFFFFFF" },
+      right: { style: "thin", color: "FFFFFFFF" },
+    };
+    worksheet.getColumn(colNumber).width =
+      colNumber === 1
+        ? 20
+        : colNumber === 2
+        ? 30
+        : colNumber === 6
+        ? 25
+        : colNumber === 8
+        ? 30
+        : colNumber === 10
+        ? 25
+        : colNumber === 3
+        ? 15
+        : 15;
+  });
+
+  // Styling header
+
+  // Menambahkan data siswa dan status
+  data.forEach((siswa) => {
+    const kelas = `${siswa?.kelas?.kelas || ""} ${siswa?.kelas?.nama || ""}`;
+
+    const rowValues = [
+      siswa.nis,
+      siswa.nama,
+      siswa.jenisKelamin,
+      siswa.tempatLahir,
+      formatDate(siswa.tanggalLahir),
+      siswa.agama,
+      siswa.tahunMasuk,
+      siswa.alamat,
+      siswa.phone,
+      kelas ? kelas : "kosong",
+    ];
+
+    const row = worksheet.addRow(rowValues);
+
+    // Menambahkan border pada setiap cell di body
+    row.eachCell((cell) => {
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      };
+    });
+
+    // Menambahkan border pada setiap cell di body
+
+    // Styling berdasarkan status untuk setiap cell
+  });
+
+  // Ekspor workbook ke Excel
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: "application/octet-stream" });
+  saveAs(blob, `Data Siswa.xlsx`);
 };
 
 export default DataSiswaPage;

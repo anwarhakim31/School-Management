@@ -167,46 +167,6 @@ const DataSiswaPageguru = () => {
 
   return (
     <section className="px-6 py-4 mb-4 ">
-      {/* <div className="border bg-white border-t-gray-300 border-l-gray-300 p-4 mb-6 md:max-w-[300px] border-r-4 border-b-4 border-neutral  rounded-md">
-        <div className="flex items-center mb-4 justify-between">
-          <h3 className="text-sm  font-bold">Detail Kelas</h3>
-        </div>
-
-        <div>
-          <div className="text-xs mt-2 grid grid-cols-3 gap-1">
-            <p className="font-semibold">Kelas </p>
-            <p className="truncate col-span-2">
-              {loading ? (
-                <span className="w-1/2 h-4 bg-backup block animate-pulse rounded-sm "></span>
-              ) : (
-                <span>
-                  : {data.kelas} {data.nama}
-                </span>
-              )}
-            </p>
-          </div>
-        </div>
-        <div>
-          <p className="text-xs mt-2 grid grid-cols-3 gap-1">
-            <span className="font-semibold">Total Siswa</span>
-            {loading ? (
-              <span className="w-1/2 h-4 col-span-2 bg-backup block animate-pulse rounded-sm "></span>
-            ) : (
-              <span>: {data.jumlahSiswa}</span>
-            )}
-          </p>
-        </div>
-        <div>
-          <p className="text-xs mt-2 grid grid-cols-3 gap-1">
-            <span className="font-semibold">Posisi Kelas</span>
-            {loading ? (
-              <span className="w-1/2 h-4 col-span-2 bg-backup block animate-pulse rounded-sm "></span>
-            ) : (
-              <span>: {data.posisi ? data.posisi : ""}</span>
-            )}
-          </p>
-        </div>
-      </div> */}
       <div className="w-full flex-between gap-6">
         <div className="relative flex w-full  md:max-w-[300px]">
           <input
@@ -232,7 +192,6 @@ const DataSiswaPageguru = () => {
           Tambah Siswa
         </button>
       </div>
-
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-lg">
         <div className="flex-between px-4 h-14 ">
           <div className="flex items-center gap-4  ">
