@@ -105,7 +105,7 @@ const RekapAbsensiPage = () => {
     <section className="px-6 py-4 mb-4 ">
       <div className=" bg-white p-4 border shadow-md rounded-md">
         <h3 className="text-sm font-semibold mb-4 text-neutral">
-          Pilih Rekap absensi siswa pada setiap kelas.
+          Pilih rekap absensi siswa pada setiap kelas.
         </h3>
         <div className="flex-between">
           <div className="hidden md:flex gap-4">

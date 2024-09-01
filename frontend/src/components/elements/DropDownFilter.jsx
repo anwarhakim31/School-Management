@@ -13,11 +13,13 @@ const FilterDropdown = ({ handleFilterChange, setFilters }) => {
     kelasNama: "",
     jenisKelamin: "",
     tahunMasuk: "",
+    bidangStudi: "",
   });
   const [kelasDB, setKelasDB] = useState([]);
   const [kelas, setKelas] = useState([]);
   const [kelasName, setKelasName] = useState([]);
   const [tahunMasuk, setTahunMasuk] = useState([]);
+  const [mapel, setMapel] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -50,7 +52,23 @@ const FilterDropdown = ({ handleFilterChange, setFilters }) => {
         responseError(error);
       }
     };
+
+    const getBidang = async () => {
+      try {
+        const res = await axios.get(HOST + "/api/mapel/get-mapel", {
+          withCredentials: true,
+        });
+
+        if (res.status == 200) {
+          setMapel(res.data.mapel);
+        }
+      } catch (error) {
+        responseError(error);
+      }
+    };
+
     getData();
+    getBidang();
   }, []);
 
   useEffect(() => {
@@ -113,12 +131,14 @@ const FilterDropdown = ({ handleFilterChange, setFilters }) => {
                     kelasNama: "",
                     jenisKelamin: "",
                     tahunMasuk: "",
+                    bidangStudi: "",
                   });
                   setFilters({
                     kelas: "",
                     kelasNama: "",
                     jenisKelamin: "",
                     tahunMasuk: "",
+                    bidangStudi: "",
                   });
                   setIsOpen(false);
                 }}
@@ -150,11 +170,14 @@ const FilterDropdown = ({ handleFilterChange, setFilters }) => {
                 role="menuitem"
               >
                 <option value="">Semua</option>
-                {kelas.map((kel, i) => (
-                  <option key={i} value={kel} className="my-2">
-                    {"Kelas " + kel}
-                  </option>
-                ))}
+                {kelas &&
+                  kelas
+                    .sort((a, b) => b - a)
+                    .map((kel, i) => (
+                      <option key={i} value={kel} className="my-2">
+                        {"Kelas " + kel}
+                      </option>
+                    ))}
               </select>
             </div>
             {selectedFilter.kelas !== "" && (
@@ -195,6 +218,27 @@ const FilterDropdown = ({ handleFilterChange, setFilters }) => {
                 <option value="Perempuan">Perempuan</option>
               </select>
             </div>
+            {pathname === "/admin/data-guru" && (
+              <div className="px-4 py-2">
+                <label className="block text-xs font-medium text-gray-700">
+                  Bidang Studi
+                </label>
+                <select
+                  name="bidangStudi"
+                  value={selectedFilter.bidangStudi}
+                  onChange={handleDropdownChange}
+                  className="block w-full px-4 py-1.5 mt-1 text-xs text-gray-700 bg-white border-gray-300 rounded-md border  focus:outline-none"
+                  role="menuitem"
+                >
+                  <option value="">Semua</option>
+                  {mapel.map((studi) => (
+                    <option key={studi.kode} value={studi._id}>
+                      {studi.nama}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             {pathname !== "/admin/data-guru" && (
               <div className="px-4 py-2">

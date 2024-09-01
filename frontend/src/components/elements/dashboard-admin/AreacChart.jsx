@@ -21,7 +21,7 @@ const AreaChartComponent = ({ data }) => {
         data={data}
         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
       >
-        <CartesianGrid strokeDasharray="1 1" />
+        <CartesianGrid strokeDasharray="1 1" strokeOpacity={0.5} />
         <XAxis dataKey="year" />
         <YAxis fontSize={10} axisLine={false} tickLine={false} />
         <Tooltip />

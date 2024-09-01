@@ -43,13 +43,13 @@ const TablePelajaran = ({
         <table className="text-center w-full text-gray-500 table-a">
           <thead className="text-xs uppercase text-white bg-neutral">
             <tr>
-              <th scope="col" className="px-2 py-4">
+              <th scope="col" className="px-2 w-[30%] py-4">
                 Kode Mata Pelajaran
               </th>
-              <th scope="col" className="px-3 py-4">
+              <th scope="col" className="px-3 w-[50%] py-4">
                 Nama Mata Pelajaran
               </th>
-              <th className="sr-only"></th>
+              <th className="sr-only w-[20%]"></th>
             </tr>
           </thead>
           <tbody>
@@ -87,20 +87,20 @@ const TablePelajaran = ({
                 >
                   <td
                     scope="row"
-                    className="px-2    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
+                    className="px-2 w-[30%]   border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
                   >
                     {mapel.kode}
                   </td>
                   <td
                     scope="row"
-                    className="px-3    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
+                    className="px-3  w-[50%]  border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
                   >
                     {mapel.nama}
                   </td>
 
                   <td
                     scope="row"
-                    className="px-3    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
+                    className="px-3 w-[20%]   border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
                   >
                     <div className="flex-center gap-4">
                       <button

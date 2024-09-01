@@ -177,11 +177,11 @@ const DataSiswaPage = () => {
         <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
-            placeholder="Cari..."
+            placeholder="Cari nama dan nis dari siswa."
             value={search}
             disabled={loading}
             onChange={handleSearch}
-            className="w-full rounded-full disabled:cursor-not-allowed py-1.5 pr-2 pl-10 text-sm border border-gray-400 outline-offset-0 outline-1 outline-neutral"
+            className="w-full rounded-full disabled:cursor-not-allowed py-2 pr-2 pl-10 text-sm border border-gray-400 outline-offset-0 outline-1 outline-neutral"
           />
           <div className="absolute left-4 top-1/2 -translate-y-1/2">
             <Search height={20} width={20} className="text-gray-400" />
