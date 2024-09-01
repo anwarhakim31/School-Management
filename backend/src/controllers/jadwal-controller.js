@@ -215,6 +215,21 @@ export const deleteJadwal = async (req, res, next) => {
   }
 };
 
+export const deleteManyJadwal = async (req, res, next) => {
+  try {
+    const { dataChecked } = req.body;
+
+    await Jadwal.deleteMany({ _id: { $in: dataChecked } });
+
+    res
+      .status(200)
+      .json({ success: true, message: "Berhasil menghapus jadwal terpilih." });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 export const editJadwal = async (req, res, next) => {
   try {
     const { id } = req.params;

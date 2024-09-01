@@ -1,20 +1,27 @@
 import React from "react";
-import { setDataDelete, setDataEdit } from "@/store/slices/admin-slice";
+import {
+  setDataDelete,
+  setDataDeleteMany,
+  setDataEdit,
+} from "@/store/slices/admin-slice";
 import { ChevronLeft, ChevronRight, Edit, Trash, Trash2 } from "lucide-react";
 import { space } from "postcss/lib/list";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const TableJadwal = ({
   data,
   handleToggleDelete,
   handleToggleEdit,
   loading,
+  allCheck,
+  setAllCheck,
 }) => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const perPage = 5;
-
+  const [dataChecked, setDataChecked] = useState([]);
   const lastIndexjadwal = perPage * currentPage;
   const firstIndexjadwal = lastIndexjadwal - perPage;
 
@@ -38,12 +45,49 @@ const TableJadwal = ({
     }
   }, [dataSlice]);
 
+  const handleCheckboxChange = (checked, jadwal) => {
+    if (checked) {
+      setDataChecked((prev) => [...prev, jadwal._id]);
+      dispatch(setDataDeleteMany([...dataChecked, jadwal._id]));
+    } else {
+      setDataChecked((prev) => prev.filter((id) => id !== jadwal._id));
+      dispatch(
+        setDataDeleteMany(dataChecked.filter((id) => id !== jadwal._id))
+      );
+    }
+  };
+
+  const handleCheckboxAll = (checked) => {
+    setAllCheck(!allCheck);
+
+    if (checked) {
+      setDataChecked(dataSlice.map((jadwal) => jadwal._id));
+      dispatch(setDataDeleteMany((jadwal) => jadwal._id));
+    } else {
+      setDataChecked([]);
+      dispatch(setDataDeleteMany([]));
+    }
+  };
+
   return (
     <div className="block w-full relative  shadow-md pb-[3.5rem]">
       <div className="w-full  min-h-[340px] overflow-x-auto rounded-md">
         <table className=" w-full text-gray-500 table-a">
           <thead className="text-xs uppercase text-white bg-neutral">
             <tr>
+              <th
+                scope="col"
+                className="px-3 py-4 flex items-center justify-center"
+              >
+                <Checkbox
+                  type="checkbox"
+                  checked={allCheck}
+                  onCheckedChange={handleCheckboxAll}
+                  className={
+                    "min-h-4 min-w-3 border-white data-[state=checked]:bg-gray-800"
+                  }
+                />
+              </th>
               <th
                 scope="col"
                 className="px-10 text-left py-4 whitespace-nowrap"
@@ -102,6 +146,22 @@ const TableJadwal = ({
                     dataSlice.length === 7 && "last:border-none"
                   } hover:bg-gray-100 border-b  `}
                 >
+                  <td scope="row" className="px-3 py-3 relative">
+                    <Checkbox
+                      type="checkbox"
+                      name=""
+                      checked={dataChecked.some(
+                        (check) => check === jadwal._id
+                      )}
+                      onCheckedChange={(checked) =>
+                        handleCheckboxChange(checked, jadwal)
+                      }
+                      id=""
+                      className={
+                        "w-4 h-4 absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2  data-[state=checked]:bg-gray-800"
+                      }
+                    />
+                  </td>
                   <td
                     scope="row"
                     className="px-10   border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "

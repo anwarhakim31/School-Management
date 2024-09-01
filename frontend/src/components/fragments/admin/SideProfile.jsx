@@ -269,7 +269,7 @@ const SideProfile = forwardRef(({ handleClose }, ref) => {
             type="submit"
             className="w-full py-2.5 mt-4 text-white bg-neutral hover:bg-indigo-600 text-xs rounded-full"
           >
-            {loading ? <LoaderButton /> : "Submit"}
+            {loading ? <LoaderButton /> : "Simpan"}
           </button>
         </form>
       </div>
