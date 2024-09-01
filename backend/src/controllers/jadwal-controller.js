@@ -3,6 +3,7 @@ import ResponseError from "../error/response-error.js";
 import Jadwal from "../models/jadwal-model.js";
 import Libur from "../models/libur-model.js";
 import Master from "../models/master-model.js";
+import Mapel from "../models/mapel-model.js";
 
 const waktuKeTanggal = (waktu) => {
   const [jam, menit] = waktu.split(":").map(Number);
@@ -32,13 +33,6 @@ export const addJadwal = async (req, res, next) => {
     const miliDetik = end - start;
 
     const selisihDetik = Math.floor(miliDetik / (1000 * 60));
-
-    if (selisihDetik <= 40) {
-      throw new ResponseError(
-        400,
-        "Jam belajar tidak bisa kurang dari 40menit"
-      );
-    }
 
     if (mulai < master.startTime) {
       throw new ResponseError(
@@ -72,6 +66,20 @@ export const addJadwal = async (req, res, next) => {
       throw new ResponseError(
         400,
         "Jam mulai pembelajaran tidak boleh melebihi jam selesai."
+      );
+    }
+
+    if (selesai <= mulai) {
+      throw new ResponseError(
+        400,
+        "Jam selesai tidak boleh sebelum jam mulai dalam pembelajaran"
+      );
+    }
+
+    if (mulai >= selesai) {
+      throw new ResponseError(
+        400,
+        "Jam mulai tidak boleh setelah jam selesai dalam pembelajaran"
       );
     }
 
@@ -124,6 +132,36 @@ export const addJadwal = async (req, res, next) => {
       );
     }
 
+    if (selisihDetik <= 40) {
+      throw new ResponseError(
+        400,
+        "Jam belajar tidak bisa kurang dari 40menit"
+      );
+    }
+
+    const pertemuan = await Jadwal.find({
+      kelas: new mongoose.Types.ObjectId(kelas),
+      guru: new mongoose.Types.ObjectId(guru),
+      bidangStudi: new mongoose.Types.ObjectId(bidangStudi),
+    });
+
+    if (pertemuan && pertemuan.some((schedule) => schedule.jumlahPertemuan)) {
+      const totalPertemuan = pertemuan.reduce((acc, schedule) => {
+        return acc + schedule.jumlahPertemuan;
+      }, 0);
+
+      const mapel = await Mapel.findById(bidangStudi);
+
+      if (totalPertemuan + jumlahPertemuan >= 50) {
+        throw new ResponseError(
+          400,
+          `Jumlah pertemuan bidang studi ${mapel.nama} pada kelas ini tersisa ${
+            50 - totalPertemuan
+          } pertemuan`
+        );
+      }
+    }
+
     const jadwal = new Jadwal({
       bidangStudi,
       guru,
@@ -142,6 +180,7 @@ export const addJadwal = async (req, res, next) => {
       jadwal,
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
@@ -398,6 +437,27 @@ export const getJadwalGuru = async (req, res, next) => {
       durasi: { lama: lamaSekolah, mulai: mulaiSekolah },
     });
   } catch (error) {
+    next(error);
+  }
+};
+
+export const getPertemuan = async (req, res, next) => {
+  try {
+    const id = req.userId;
+    const { bidangStudi, kelas } = req.query;
+
+    const pertemuan = await Jadwal.find({
+      bidangStudi: new mongoose.Types.ObjectId(bidangStudi),
+      kelas: new mongoose.Types.ObjectId(kelas),
+      guru: id,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengambil total jadwal pertemuan",
+    });
+  } catch (error) {
+    console.log(error);
     next(error);
   }
 };

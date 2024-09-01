@@ -37,8 +37,8 @@ const AreaChartComponent = ({ data }) => {
           type="monotone"
           dataKey="SMP"
           stackId="1"
-          stroke="#4d44b5"
-          fill="#4d44b5"
+          stroke="#9333ea"
+          fill="#9333ea"
         />
         <Area
           type="monotone"

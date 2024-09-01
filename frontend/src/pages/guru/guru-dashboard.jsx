@@ -114,7 +114,7 @@ const GuruDashboardPage = () => {
           </div>
           <div className="h-8 flex-1 flex-center">
             {loading ? (
-              <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-white rounded-full border-t-gray-500 animate-spin"></div>
+              <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-white rounded-full border-t-neutral animate-spin"></div>
             ) : (
               <h1 className=" flex-1 flex-center  text-white font-semibold text-3xl h-12 ">
                 {dataGuru && (
@@ -185,7 +185,7 @@ const GuruDashboardPage = () => {
             </div>
             <div className="h-8 flex-1 flex-center">
               {loading ? (
-                <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-white rounded-full border-t-gray-500 animate-spin"></div>
+                <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-white rounded-full border-t-neutral animate-spin"></div>
               ) : (
                 <h1 className=" flex-1 flex-center  text-white font-semibold text-3xl h-12 ">
                   {dataGuru && (

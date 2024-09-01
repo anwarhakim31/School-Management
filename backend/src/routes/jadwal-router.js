@@ -8,6 +8,7 @@ import {
   getJadwal,
   getJadwalGuru,
   getJadwalMengajar,
+  getPertemuan,
 } from "../controllers/jadwal-controller.js";
 
 const jadwalRouter = new express.Router();
@@ -16,6 +17,7 @@ jadwalRouter.post("/add-jadwal", verifyToken, addJadwal);
 jadwalRouter.get("/get-jadwal", verifyToken, getJadwal);
 jadwalRouter.get("/get-jadwal-guru", verifyToken, getJadwalGuru);
 jadwalRouter.get("/get-jadwal-mengajar", verifyToken, getJadwalMengajar);
+jadwalRouter.get("/get-pertemuan", verifyToken, getPertemuan);
 jadwalRouter.delete("/delete-jadwal/:id", verifyToken, deleteJadwal);
 jadwalRouter.delete("/delete-many-jadwal", verifyToken, deleteManyJadwal);
 jadwalRouter.put("/edit-jadwal/:id", verifyToken, editJadwal);

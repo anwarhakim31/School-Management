@@ -237,11 +237,23 @@ const AddModal = ({ onClose }) => {
               htmlFor="jumlah pertemuan"
               className="text-xs w-fit mb-2 block font-semibold text-gray-700"
             >
-              Jumlah Pertemuan
+              Jumlah Pertemuan{" "}
+              <span className="text-[0.625rem] text-neutral2">
+                ( Maksimal jumlah pertemuan 50 persemester )
+              </span>
             </label>
             <input
               {...register("jumlahPertemuan", {
                 required: "Jumlah pertemuan diperlukan.",
+                max: {
+                  value: 50,
+                  message:
+                    "Maksimal jumlah pertemuan di kelas adalah 50 persemester. ",
+                },
+                min: {
+                  value: 15,
+                  message: "Minimal jumlah pertemuan di kelas adalah 15",
+                },
               })}
               type="number"
               placeholder="Masukkan jumlah pertemuan"
