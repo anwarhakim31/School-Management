@@ -124,13 +124,13 @@ export const updateKelas = async (req, res, next) => {
 
       await Kelas.findByIdAndUpdate(
         id,
-        { $unset: { waliKelas: null } },
+        { $unset: { waliKelas: null }, $set: { ...req.body } },
         { runValidators: true, new: true }
       );
     } else {
-      const alreadyWali = await Guru.findOne({ _id: { $ne: waliKelas } });
+      const alreadyWali = await Guru.findById({ _id: waliKelas });
 
-      if (alreadyWali) {
+      if (alreadyWali.waliKelas) {
         throw new ResponseError(404, "Guru sudah sebagai Wali Kelas.");
       }
 
@@ -147,6 +147,8 @@ export const updateKelas = async (req, res, next) => {
       await Guru.findByIdAndUpdate(waliKelas, {
         waliKelas: id,
       });
+
+      console.log(res.body);
 
       await Kelas.findByIdAndUpdate(
         id,

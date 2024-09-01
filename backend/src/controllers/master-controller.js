@@ -24,13 +24,16 @@ export const getMaster = async (req, res, next) => {
         },
       },
       {
-        $sort: { startYear: 1 },
+        $sort: { startYear: -1 },
       },
       {
         $project: {
           ajaran: 1,
           totalSiswa: 1,
         },
+      },
+      {
+        $limit: 2,
       },
     ]);
     const kelasPerTotal = await Kelas.aggregate([
@@ -63,6 +66,41 @@ export const getMaster = async (req, res, next) => {
       },
     ]);
 
+    const siswaList = await Siswa.find().populate({
+      path: "kelas",
+      select: "kelas",
+    });
+
+    function getCategory(kelas) {
+      if (kelas >= 1 && kelas <= 6) return "SD";
+      if (kelas >= 7 && kelas <= 9) return "SMP";
+      if (kelas >= 10 && kelas <= 12) return "SMA";
+      return "Unknown";
+    }
+
+    const groupedData = siswaList.reduce((acc, student) => {
+      const { tahunMasuk, kelas } = student;
+
+      if (kelas && kelas.kelas) {
+        const category = getCategory(kelas.kelas);
+
+        if (!acc[tahunMasuk]) {
+          acc[tahunMasuk] = { SD: 0, SMP: 0, SMA: 0 };
+        }
+
+        acc[tahunMasuk][category]++;
+      }
+
+      return acc;
+    }, {});
+
+    const siswaPertingkat = Object.keys(groupedData).map((tahunMasuk) => ({
+      year: tahunMasuk,
+      SD: groupedData[tahunMasuk].SD,
+      SMP: groupedData[tahunMasuk].SMP,
+      SMA: groupedData[tahunMasuk].SMA,
+    }));
+
     res.status(200).json({
       success: true,
       message: "Berhasil mengambil data Umum.",
@@ -74,6 +112,7 @@ export const getMaster = async (req, res, next) => {
         siswaPerAjaran,
         kelasPerTotal,
       },
+      siswaPertingkat,
     });
   } catch (error) {
     next(error);

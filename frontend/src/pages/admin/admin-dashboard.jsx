@@ -12,10 +12,13 @@ import Barchart from "../../assets/svg/barchart.svg?react";
 import Piechart from "../../assets/svg/piechart.svg?react";
 import BarChartComponent from "@/components/elements/dashboard-admin/BarChart";
 import PieChartComponent from "@/components/elements/dashboard-admin/Piechar";
+import AreaChartComponent from "@/components/elements/dashboard-admin/AreacChart";
+import { AreaChart } from "lucide-react";
 
 const AdminDashboard = () => {
   const [dataUmum, setdataUmum] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [siswaPertingkat, setSiswaPertingkat] = useState([]);
 
   useEffect(() => {
     const getAjaran = async () => {
@@ -26,6 +29,7 @@ const AdminDashboard = () => {
 
         if (res.status === 200) {
           setdataUmum(res.data.data);
+          setSiswaPertingkat(res.data.siswaPertingkat);
         }
       } catch (error) {
         responseError(error);
@@ -38,8 +42,6 @@ const AdminDashboard = () => {
 
     getAjaran();
   }, []);
-
-  console.log(dataUmum);
 
   return (
     <section className="px-6 py-4  ">
@@ -155,6 +157,19 @@ const AdminDashboard = () => {
               </h1>
             )}
           </div>
+        </div>
+      </div>
+      <div className="w-full p-4  mt-10 bg-white rounded-lg h-[350px] shadow-lg">
+        <div className="border-b pb-4 border-gray-100 flex items-center gap-2">
+          <div>
+            <AreaChart width={"20"} height={"20"} className="text-[#4d44b5]" />
+          </div>
+          <span className="text-sm font-semibold">
+            Grafik Total Siswa Pertingkat
+          </span>
+        </div>
+        <div className="h-[250px] w-full">
+          <AreaChartComponent data={siswaPertingkat} />
         </div>
       </div>
       <div className="flex justify-center flex-wrap md:flex-nowrap items-center mt-10 gap-8">

@@ -17,6 +17,7 @@ const siswaRouter = express.Router();
 siswaRouter.get("/get-all-siswa", verifyToken, getAll);
 siswaRouter.get("/get-detail-siswa", verifyToken, getAllDetail);
 siswaRouter.get("/get-siswa/kelas/:id", verifyToken, getSiswaKelas);
+
 siswaRouter.post("/add-siswa", verifyToken, addSiswa);
 siswaRouter.post("/edit-siswa", verifyToken, editSiswa);
 siswaRouter.delete("/delete-one-siswa/:id", verifyToken, deleteOneSiswa);

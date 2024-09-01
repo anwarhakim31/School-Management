@@ -6,9 +6,7 @@ import { useSelector } from "react-redux";
 
 const RekapDataPage = () => {
   const userData = useSelector(selectedUserData);
-  const fragment = userData.waliKelas
-    ? ["Rekap Absen", "Rekap Nilai", "Rekap Studi"]
-    : ["Rekap Studi"];
+  const fragment = ["Rekap Absen", "Rekap Nilai"];
   const [selectedFragment, setSelectedFragment] = useState(fragment[0]);
 
   return (

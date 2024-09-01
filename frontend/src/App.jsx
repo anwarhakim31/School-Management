@@ -31,7 +31,6 @@ import DataSiswaPageguru from "./pages/guru/data-siswa";
 import DataNilaiSiswaPage from "./pages/guru/data-nilai-siswa";
 import RaporSiswaPage from "./pages/guru/rapor-siswa";
 import RekapNilaiPageadmin from "./pages/admin/rekap-nilai";
-import DataStudiPage from "./pages/guru/data-studi";
 
 function App() {
   const dispatch = useDispatch();
@@ -247,14 +246,14 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route
+          {/* <Route
             path={"data-studi"}
             element={
               <PrivateRoute role={"guru"}>
                 <DataStudiPage />
               </PrivateRoute>
             }
-          />
+          /> */}
           <Route
             path={"rekap-data"}
             element={

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import ResponseError from "../error/response-error.js";
 import Jadwal from "../models/jadwal-model.js";
 import Libur from "../models/libur-model.js";
@@ -83,8 +84,6 @@ export const addJadwal = async (req, res, next) => {
         { mulai: { $lte: mulai }, selesai: { $gte: selesai } },
       ],
     });
-
-    console.log(jadwalKelas);
 
     if (jadwalKelas) {
       throw new ResponseError(
@@ -384,7 +383,6 @@ export const getJadwalGuru = async (req, res, next) => {
       durasi: { lama: lamaSekolah, mulai: mulaiSekolah },
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

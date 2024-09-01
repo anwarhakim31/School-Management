@@ -38,7 +38,7 @@ const BarChartComponent = ({ data, x, y, loading }) => {
         width={"100%"}
         height={400}
         outerRadius={5}
-        data={data}
+        data={[...data].reverse()}
         margin={{
           right: 20,
           left: -30,
