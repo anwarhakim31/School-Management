@@ -91,7 +91,7 @@ const PrintComponentNilai = React.forwardRef(
 
                   <th
                     scope="col"
-                    colSpan={4}
+                    colSpan={dataMapel.length * 2}
                     className="px-4 pr-4 py-2 text-center border whitespace-nowrap"
                   >
                     Mata Pelajaran

@@ -43,7 +43,12 @@ const PertemuanDropdown = ({ onChange, value, kelas }) => {
     if (dataPer === 0) {
       onChange(0);
     }
-  }, [dataPer]);
+
+    if (kelas) {
+      setSelectedPer(1);
+      onChange(1);
+    }
+  }, [dataPer, kelas]);
 
   const handleInputClick = (event) => {
     event.stopPropagation();

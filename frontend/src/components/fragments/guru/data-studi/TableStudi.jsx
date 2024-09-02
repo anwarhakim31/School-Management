@@ -12,20 +12,20 @@ const TableStudi = ({
 }) => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 5;
+  const perPage = 6;
 
-  const lastIndexKelas = perPage * currentPage;
-  const firstIndexKelas = lastIndexKelas - perPage;
+  const lastIndexNilai = perPage * currentPage;
+  const firstIndexNilai = lastIndexNilai - perPage;
 
-  const dataSlice = data?.slice(firstIndexKelas, lastIndexKelas);
+  const dataSlice = data?.slice(firstIndexNilai, lastIndexNilai);
 
-  const handleDeleteKelas = (kelas) => {
-    dispatch(setDataDelete(kelas));
+  const handleDeleteNilai = (Nilai) => {
+    dispatch(setDataDelete(Nilai));
     handleToggleDelete();
   };
 
-  const handleEditKelas = (kelas) => {
-    dispatch(setDataEdit(kelas));
+  const handleEditNilai = (Nilai) => {
+    dispatch(setDataEdit(Nilai));
     handleToggleEdit();
   };
 
@@ -38,54 +38,44 @@ const TableStudi = ({
 
   return (
     <div className="block w-full relative  shadow-md pb-[3.5rem]">
-      <div className="w-full  min-h-[340px] overflow-x-auto rounded-md">
-        <table className="text-center w-full text-gray-500 table-a">
+      <div className="w-full  min-h-[340px] overflow-x-auto ">
+        <table className="text-center w-full text-gray-500 ">
           <thead className="text-xs uppercase text-white bg-neutral">
             <tr>
-              <th scope="col" className="px-5 py-4">
-                Kelas
+              <th scope="col" className="w-[30%] px-10 py-4 text-left ">
+                Nama Siswa
               </th>
-              <th scope="col" className="px-3 py-4">
-                BidangStudi
-              </th>
-              <th scope="col" className="px-3 py-4 whitespace-nowrap">
+
+              <th scope="col" className="px-5 py-4 w-[15%] whitespace-nowrap ">
                 Pertemuan
               </th>
               <th
                 scope="col"
-                className="px-10 py-4  whitespace-nowrap text-left"
-              >
-                Nama Siswa
-              </th>
-              <th
-                scope="col"
-                className="px-6  whitespace-nowrap  py-4 text-left"
+                className="px-5 w-[15%]  whitespace-nowrap  py-4 text-center"
               >
                 Nilai
               </th>
-
+              <th
+                scope="col"
+                className="px-5 w-[20%]  whitespace-nowrap  py-4 text-center"
+              >
+                Tahun Ajaran
+              </th>
+              <th
+                scope="col"
+                className="px-5 w-[20%]  whitespace-nowrap  py-4 text-center"
+              >
+                Semester
+              </th>
               <th className="opacity-0 px-3 ">Edit</th>
             </tr>
           </thead>
           <tbody>
-            {loading && (
-              <tr className="w-full h-full">
-                <td
-                  colSpan="7"
-                  className="px-2 py-4  border-gray-300 text-xs text-gray800 whitespace-nowrap h-[350px]"
-                >
-                  <div className="flex flex-col items-center justify-center">
-                    <span className="w-8 h-8 block mb-2 animate-spin rounded-full border-4 border-t-gray-800 border-gray-300"></span>
-                    <span>Loading</span>
-                  </div>
-                </td>
-              </tr>
-            )}
             {dataSlice && !loading && dataSlice.length === 0 && (
               <tr className="w-full h-full">
                 <td
                   colSpan="10"
-                  className="px-2 py-4  border-gray-300 text-xs text-gray-900 whitespace-nowrap h-[350px]"
+                  className="px-2 py-4  border-gray-300 text-xs text-gray-900 whitespace-nowrap h-[290px]"
                 >
                   Tidak ada data
                 </td>
@@ -93,55 +83,44 @@ const TableStudi = ({
             )}
             {dataSlice &&
               !loading &&
-              [...dataSlice].map((kelas) => (
+              dataSlice.map((Nilai) => (
                 <tr
-                  key={kelas._id}
+                  key={Nilai._id}
                   className={`${
                     dataSlice.length === 7 && "last:border-none"
                   } hover:bg-gray-100 border-b  `}
                 >
                   <td
                     scope="row"
-                    className="px-2    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
+                    className="px-10  text-left  border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
                   >
-                    {kelas.kelas}
+                    {Nilai.siswa.nama}
+                  </td>
+                  <td
+                    scope="row"
+                    className="px-5    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
+                  >
+                    {Nilai.pertemuan}
+                  </td>
+                  <td
+                    scope="row"
+                    className="px-5    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
+                  >
+                    {Nilai.nilai}
+                  </td>
+                  <td
+                    scope="row"
+                    className="px-3  text-center border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
+                  >
+                    {Nilai.tahunAjaran}
                   </td>
                   <td
                     scope="row"
                     className="px-3    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
                   >
-                    {kelas.nama}
+                    {Nilai.semester}
                   </td>
-                  <td
-                    scope="row"
-                    className="px-3    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
-                  >
-                    {kelas.jumlahSiswa} Siswa
-                  </td>
-                  <td
-                    scope="row"
-                    className="px-6    border-gray-300 text-left py-4 text-xs text-gray-900 whitespace-nowrap "
-                  >
-                    {kelas.waliKelas ? (
-                      kelas.waliKelas.nama
-                    ) : (
-                      <span className="text-gray-800 font-bold">
-                        Data Kosong
-                      </span>
-                    )}
-                  </td>
-                  <td
-                    scope="row"
-                    className="px-6    border-gray-300 text-left  py-4 text-xs text-gray-900 whitespace-nowrap "
-                  >
-                    {kelas.posisi ? (
-                      kelas.posisi
-                    ) : (
-                      <span className="text-gray-800 font-bold">
-                        Data Kosong
-                      </span>
-                    )}
-                  </td>
+
                   <td
                     scope="row"
                     className="px-3    border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
@@ -149,7 +128,7 @@ const TableStudi = ({
                     <div className="flex-center gap-4">
                       <button
                         title="Edit"
-                        onClick={() => handleEditKelas(kelas)}
+                        onClick={() => handleEditNilai(Nilai)}
                         className="w-[25px] h-[25px] border-2 rounded-md  border-gray-300 group hover:border-neutral1 flex-center transition-all duration-300"
                       >
                         <Edit
@@ -162,7 +141,7 @@ const TableStudi = ({
                       <button
                         title="Hapus"
                         className="w-[25px] h-[25px] border-2 rounded-md  border-gray-300 group hover:border-neutral2 flex-center transition-all duration-300"
-                        onClick={() => handleDeleteKelas(kelas)}
+                        onClick={() => handleDeleteNilai(Nilai)}
                       >
                         <Trash
                           width={15}
@@ -180,11 +159,11 @@ const TableStudi = ({
       </div>
 
       <Pagination
-        totalKelas={data?.length}
+        totalNilai={data?.length}
         perPage={perPage}
         currentPage={currentPage}
-        firstIndexKelas={firstIndexKelas}
-        lastIndexKelas={lastIndexKelas}
+        firstIndexNilai={firstIndexNilai}
+        lastIndexNilai={lastIndexNilai}
         paginate={handlePaginate}
         loading={loading}
         dataSlice={dataSlice}
@@ -195,17 +174,17 @@ const TableStudi = ({
 
 const Pagination = ({
   loading,
-  totalKelas,
+  totalNilai,
   perPage,
   currentPage,
-  firstIndexKelas,
-  lastIndexKelas,
+  firstIndexNilai,
+  lastIndexNilai,
   paginate,
   dataSlice,
 }) => {
   const pageNumber = [];
 
-  const totalPage = Math.ceil(totalKelas / perPage);
+  const totalPage = Math.ceil(totalNilai / perPage);
 
   for (let i = 1; i <= totalPage; i++) {
     pageNumber.push(i);
@@ -228,10 +207,10 @@ const Pagination = ({
         <>
           <div className="h-6 flex-center">
             <p className="text-xs">{`Menampilkan ${
-              dataSlice?.length === 0 ? 0 : firstIndexKelas + 1
+              dataSlice?.length === 0 ? 0 : firstIndexNilai + 1
             } - ${
-              firstIndexKelas + dataSlice?.length
-            } dari ${totalKelas} Data`}</p>
+              firstIndexNilai + dataSlice?.length
+            } dari ${totalNilai} Data`}</p>
           </div>
           {pageNumber?.length !== 0 && (
             <div className="flex gap-2 ">

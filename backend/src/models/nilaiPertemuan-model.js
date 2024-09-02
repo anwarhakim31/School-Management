@@ -14,7 +14,7 @@ const nilaiPertemuanSchema = new mongoose.Schema({
   kelas: {
     type: mongoose.Schema.ObjectId,
     required: true,
-    ref: "kelas",
+    ref: "Kelas",
   },
   pertemuan: {
     type: "String",

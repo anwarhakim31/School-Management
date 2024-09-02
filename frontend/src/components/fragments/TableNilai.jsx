@@ -76,8 +76,8 @@ const TableNilai = ({ data, dataMapel }) => {
 
               <th
                 scope="col"
-                colSpan={4}
-                className="px-4 w-[50%] pr-4 py-2 text-center border whitespace-nowrap"
+                colSpan={dataMapel.length * 2}
+                className="px-4 pr-4 py-2 text-center border whitespace-nowrap"
               >
                 Mata Pelajaran
               </th>

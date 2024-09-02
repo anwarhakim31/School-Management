@@ -9,22 +9,50 @@ import {
   Trash2,
 } from "lucide-react";
 import Studi from "../../assets/svg/studi.svg?react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TableStudi from "@/components/fragments/guru/data-studi/TableStudi";
 import KelasDropdown from "@/components/elements/data-studi/kelasDropdown";
 import PertemuanDropdown from "@/components/elements/data-studi/PertemuanDropdown";
 import AddModal from "@/components/fragments/guru/data-studi/AddModal";
+import responseError from "@/util/services";
+import axios from "axios";
+import { HOST } from "@/util/constant";
 
 const DataStudiPage = () => {
-  const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   const [kelas, setKelas] = useState({ id: "", grade: "", nama: "" });
+
   const [pertemuan, setPertemuan] = useState("");
   const [isAddNilai, setIsAddNilai] = useState(false);
   const [isEditNilai, setIsEditNilai] = useState(false);
   const [isDeleteNilai, setIsDeleteNilai] = useState(false);
   const [isDeleteManynilai, setIsDeleteManynilai] = useState(false);
   const [dataNilai, setDataNilai] = useState([]);
+
+  useEffect(() => {
+    const getNilai = async () => {
+      try {
+        const res = await axios.get(
+          HOST + `/api/nilaiPertemuan/${kelas.id}/pertemuan/${pertemuan}`,
+          { withCredentials: true }
+        );
+
+        if (res.status === 200) {
+          setDataNilai(res.data.nilai);
+
+          console.log(res.data);
+        }
+      } catch (error) {
+        responseError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (kelas && pertemuan) {
+      getNilai();
+    }
+  }, [kelas, pertemuan, isAddNilai]);
 
   const handleChangeKelas = (value) => {
     setKelas(value);
@@ -74,119 +102,24 @@ const DataStudiPage = () => {
                 <p className="text-xs font-semibold text-gray-700">Kelas</p>
                 <KelasDropdown onChange={handleChangeKelas} />
               </div>
-              <div className="flex items-center gap-4">
-                <p className="text-xs font-semibold text-gray-700">Pertemuan</p>
-                <PertemuanDropdown
-                  kelas={kelas.id}
-                  onChange={handleChangePertemuan}
-                />
-              </div>
-
-              {/* {isFilter && (
-                <FilterSiswa
-                  ref={FilterRef}
-                  filter={filter}
-                  isFilter={isFilter}
-                  handleOptionChange={handleOptionChange}
-                  handleToggleFilter={handleToggleFilter}
-                />
-              )} */}
-            </div>
-          </div>
-          {/* <div className="hidden sm:flex gap-2">
-            <button
-              title="Excel"
-              disabled={loading}
-              className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1.5 rounded-md"
-              onClick={() => exportToExcel(dataSiswa, data.kelas, data.nama)}
-            >
-              <FileDown
-                width={20}
-                height={20}
-                strokeWidth={1}
-                className="group-hover:text-white"
-              />
-            </button>
-            <ReactToPrint
-              trigger={() => (
-                <button
-                  title="Print"
-                  className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1.5 rounded-md"
-                >
-                  <Printer
-                    width={20}
-                    height={20}
-                    strokeWidth={1}
-                    className="group-hover:text-white"
-                  />
-                </button>
-              )}
-              content={() => componentRef.current}
-            />
-          </div> */}
-          {/* <div ref={menuRef} className="relative block sm:hidden">
-            <button
-              onClick={handleToggleMenu}
-              className="flex-center  w-8 h-8 rounded-full border p-1 bg-gray-100 hover:bg-gray-200 border-neutral"
-            >
-              <EllipsisVerticalIcon
-                width={15}
-                height={15}
-                className="text-gray-800"
-              />
-            </button>
-
-            {isMenuMobile && (
-              <div
-                role="menu"
-                className="absolute right-0 mt-1 flex-between p-2  border shadow-sm  w-fit bg-white rounded-md "
-              >
-                <div className="flex flex-col gap-3">
-                  <button
-                    title="Excel"
-                    disabled={loading}
-                    className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1 rounded-md"
-                    onClick={() =>
-                      exportToExcel(
-                        dataSiswa,
-                        userData.waliKelas.kelas,
-                        userData.waliKelas.nama
-                      )
-                    }
-                  >
-                    <FileDown
-                      width={20}
-                      height={20}
-                      strokeWidth={1}
-                      className="group-hover:text-white"
-                    />
-                  </button>
-                  <ReactToPrint
-                    trigger={() => (
-                      <button
-                        title="Print"
-                        disabled={loading}
-                        className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1 rounded-md"
-                      >
-                        <Printer
-                          width={20}
-                          height={20}
-                          strokeWidth={1}
-                          className="group-hover:text-white"
-                        />
-                      </button>
-                    )}
-                    content={() => componentRef.current}
+              {kelas.id && (
+                <div className="flex items-center gap-4">
+                  <p className="text-xs font-semibold text-gray-700">
+                    Pertemuan
+                  </p>
+                  <PertemuanDropdown
+                    kelas={kelas.id}
+                    onChange={handleChangePertemuan}
                   />
                 </div>
-              </div>
-            )}
-          </div> */}
+              )}
+            </div>
+          </div>
         </div>
 
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
-            <div className="w-full min-h-[450px] flex-center bg-backup animate-pulse overflow-auto ">
+            <div className="w-full min-h-[395px] flex-center bg-backup animate-pulse overflow-auto ">
               <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
             </div>
           </div>

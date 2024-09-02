@@ -39,3 +39,25 @@ export const addNilai = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getNilai = async (req, res, next) => {
+  try {
+    const pertemuan = req.params.pertemuan;
+    const kelas = req.params.kelasId;
+    const nilai = await NilaiPertemuan.find({
+      kelas: new mongoose.Types.ObjectId(kelas),
+      pertemuan,
+    })
+      .populate({ path: "kelas", select: "nama kelas" })
+      .populate({ path: "siswa", select: "nama " })
+      .populate({ path: "mataPelajaran" });
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengambil nilai pertemuan.",
+      nilai,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
