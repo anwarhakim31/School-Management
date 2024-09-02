@@ -17,11 +17,14 @@ import AddModal from "@/components/fragments/guru/data-studi/AddModal";
 import responseError from "@/util/services";
 import axios from "axios";
 import { HOST } from "@/util/constant";
+import DeleteModal from "@/components/fragments/DeleteModal";
+import { useSelector } from "react-redux";
+import { selectedDataDelete } from "@/store/slices/admin-slice";
 
 const DataStudiPage = () => {
+  const dataDelete = useSelector(selectedDataDelete);
   const [loading, setLoading] = useState(true);
   const [kelas, setKelas] = useState({ id: "", grade: "", nama: "" });
-
   const [pertemuan, setPertemuan] = useState("");
   const [isAddNilai, setIsAddNilai] = useState(false);
   const [isEditNilai, setIsEditNilai] = useState(false);
@@ -52,7 +55,14 @@ const DataStudiPage = () => {
     if (kelas && pertemuan) {
       getNilai();
     }
-  }, [kelas, pertemuan, isAddNilai]);
+  }, [
+    kelas,
+    pertemuan,
+    isAddNilai,
+    isDeleteNilai,
+    isDeleteManynilai,
+    isEditNilai,
+  ]);
 
   const handleChangeKelas = (value) => {
     setKelas(value);
@@ -64,6 +74,9 @@ const DataStudiPage = () => {
 
   const handleToggleAdd = () => {
     setIsAddNilai(!isAddNilai);
+  };
+  const handleToggleDelete = () => {
+    setIsDeleteNilai(!isDeleteNilai);
   };
 
   return (
@@ -119,21 +132,25 @@ const DataStudiPage = () => {
 
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
-            <div className="w-full min-h-[395px] flex-center bg-backup animate-pulse overflow-auto ">
+            <div className="w-full min-h-[396px] flex-center bg-backup animate-pulse overflow-auto ">
               <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
             </div>
           </div>
         ) : (
-          <TableStudi data={dataNilai} />
-        )}
-      </div>
-      {/* {isDeleteSiswa && (
-          <DeleteModal
-            onClose={handleToggleDeleteOne}
-            title={"Apakah And yakin ingin menghapus siswa?"}
+          <TableStudi
+            data={dataNilai}
+            handleToggleDelete={handleToggleDelete}
           />
         )}
-        {isEditSiswa && <EditModal onClose={handleToggleEdit} kelas={data} />} */}
+      </div>
+      {isDeleteNilai && (
+        <DeleteModal
+          onClose={handleToggleDelete}
+          title={"Apakah Anda yakin ingin menghapus nilai pertemuan?"}
+          url={`/api/nilaiPertemuan/delete-one/${dataDelete._id}`}
+        />
+      )}
+      {/* {isEditSiswa && <EditModal onClose={handleToggleEdit} kelas={data} />} */}
       {isAddNilai && (
         <AddModal
           onClose={handleToggleAdd}

@@ -97,7 +97,7 @@ const DropdownSiswa = ({ onChange, value, url }) => {
 
       {isOpen && dataSiswa?.length > 0 && (
         <div className="absolute mt-1  w-full bg-white border z-50 border-gray-400 rounded shadow">
-          <ul className="max-h-28 overflow-y-auto">
+          <ul className="max-h-32 overflow-y-auto">
             <li className=" sticky top-0   text-xs hover:bg-gray-200 cursor-pointer">
               <input
                 type="search"

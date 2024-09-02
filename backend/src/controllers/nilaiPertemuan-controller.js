@@ -13,12 +13,21 @@ export const addNilai = async (req, res, next) => {
     const data = req.body;
     const { pertemuan, mataPelajaran, siswa, kelas } = req.body;
 
+    const master = await Master.findOne();
+
+    const semester = master.semester.find((part) => part.status === true);
+    const tahunjaran = await TahunAjaran.findOne({ status: true });
+
     const isExist = await NilaiPertemuan.findOne({
+      semester: semester.keterangan,
+      tahunAjaran: tahunjaran.ajaran,
       siswa,
       pertemuan,
       mataPelajaran,
       kelas,
     });
+
+    console.log(semester, tahunjaran);
 
     if (isExist) {
       throw new ResponseError(
@@ -56,6 +65,21 @@ export const getNilai = async (req, res, next) => {
       success: true,
       message: "Berhasil mengambil nilai pertemuan.",
       nilai,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteNilai = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const nilai = await NilaiPertemuan.findByIdAndDelete(id, { new: true });
+
+    res.status(200).json({
+      success: true,
+      message: `Berhasil menghapus nilai pertemuan ${nilai.pertemuan}`,
     });
   } catch (error) {
     next(error);

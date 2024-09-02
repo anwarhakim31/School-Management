@@ -12,7 +12,14 @@ export const addNilai = async (req, res, next) => {
     const data = req.body;
     const { kategori, mataPelajaran, siswa } = req.body;
 
+    const master = await Master.findOne();
+
+    const semester = master.semester.find((part) => part.status === true);
+    const tahunjaran = await TahunAjaran.findOne({ status: true });
+
     const isExist = await Nilai.findOne({
+      semester: semester.keterangan,
+      tahunAjaran: tahunjaran.ajaran,
       siswa,
       kategori,
       mataPelajaran,
@@ -279,8 +286,15 @@ export const updateNilai = async (req, res, next) => {
     const data = req.body;
     const { siswa, kategori, mataPelajaran } = req.body;
 
+    const master = await Master.findOne();
+
+    const semester = master.semester.find((part) => part.status === true);
+    const tahunjaran = await TahunAjaran.findOne({ status: true });
+
     const isExist = await Nilai.findOne({
       _id: { $ne: id },
+      semester: semester.keterangan,
+      tahunAjaran: tahunjaran.ajaran,
       siswa,
       kategori,
       mataPelajaran,

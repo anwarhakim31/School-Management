@@ -38,7 +38,7 @@ const TableStudi = ({
 
   return (
     <div className="block w-full relative  shadow-md pb-[3.5rem]">
-      <div className="w-full  min-h-[340px] overflow-x-auto ">
+      <div className="w-full  min-h-[396px] overflow-x-auto ">
         <table className="text-center w-full text-gray-500 ">
           <thead className="text-xs uppercase text-white bg-neutral">
             <tr>
