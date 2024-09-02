@@ -13,13 +13,29 @@ import { useState } from "react";
 import TableStudi from "@/components/fragments/guru/data-studi/TableStudi";
 import KelasDropdown from "@/components/elements/data-studi/kelasDropdown";
 import PertemuanDropdown from "@/components/elements/data-studi/PertemuanDropdown";
+import AddModal from "@/components/fragments/guru/data-studi/AddModal";
 
 const DataStudiPage = () => {
   const [loading, setLoading] = useState(false);
-  const [kelas, setKelas] = useState("");
+
+  const [kelas, setKelas] = useState({ id: "", grade: "", nama: "" });
+  const [pertemuan, setPertemuan] = useState("");
+  const [isAddNilai, setIsAddNilai] = useState(false);
+  const [isEditNilai, setIsEditNilai] = useState(false);
+  const [isDeleteNilai, setIsDeleteNilai] = useState(false);
+  const [isDeleteManynilai, setIsDeleteManynilai] = useState(false);
+  const [dataNilai, setDataNilai] = useState([]);
 
   const handleChangeKelas = (value) => {
     setKelas(value);
+  };
+
+  const handleChangePertemuan = (value) => {
+    setPertemuan(value);
+  };
+
+  const handleToggleAdd = () => {
+    setIsAddNilai(!isAddNilai);
   };
 
   return (
@@ -41,8 +57,8 @@ const DataStudiPage = () => {
 
         <button
           aria-label="tambah data"
-          //   disabled={loading}
-          //   onClick={handleToggleAdd}
+          disabled={loading || pertemuan === 0}
+          onClick={handleToggleAdd}
           className="flex-between gap-3 min-w-fit disabled:cursor-not-allowed bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
         >
           <Studi width={15} height={15} className="stroke-white" />
@@ -60,7 +76,10 @@ const DataStudiPage = () => {
               </div>
               <div className="flex items-center gap-4">
                 <p className="text-xs font-semibold text-gray-700">Pertemuan</p>
-                <PertemuanDropdown kelas={kelas} />
+                <PertemuanDropdown
+                  kelas={kelas.id}
+                  onChange={handleChangePertemuan}
+                />
               </div>
 
               {/* {isFilter && (
@@ -172,7 +191,7 @@ const DataStudiPage = () => {
             </div>
           </div>
         ) : (
-          <TableStudi />
+          <TableStudi data={dataNilai} />
         )}
       </div>
       {/* {isDeleteSiswa && (
@@ -181,9 +200,15 @@ const DataStudiPage = () => {
             title={"Apakah And yakin ingin menghapus siswa?"}
           />
         )}
-        {isEditSiswa && <EditModal onClose={handleToggleEdit} kelas={data} />}
-        {isAddSiswa && <AddModal onClose={handleToggleAdd} kelas={data} />}
-        {isDeleteManySiswa && (
+        {isEditSiswa && <EditModal onClose={handleToggleEdit} kelas={data} />} */}
+      {isAddNilai && (
+        <AddModal
+          onClose={handleToggleAdd}
+          kelas={kelas}
+          pertemuan={pertemuan}
+        />
+      )}
+      {/* {isDeleteManySiswa && (
           <DeleteManyModal
             onClose={handleToggleDeleteMany}
             setAllCheck={setAllCheck}

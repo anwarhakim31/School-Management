@@ -11,6 +11,11 @@ const nilaiPertemuanSchema = new mongoose.Schema({
     required: true,
     ref: "Mapel",
   },
+  kelas: {
+    type: mongoose.Schema.ObjectId,
+    required: true,
+    ref: "kelas",
+  },
   pertemuan: {
     type: "String",
     required: true,

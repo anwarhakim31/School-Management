@@ -230,7 +230,7 @@ export const getKelasMengajar = async (req, res, next) => {
     const uniquesKelas = jadwalList.reduce((acc, jadwal) => {
       const kelas = jadwal.kelas;
 
-      if (!acc.some((item) => item._id.toString() === kelas._id)) {
+      if (!acc.some((item) => item.nama.toString() === kelas.nama)) {
         acc.push(kelas);
       }
 

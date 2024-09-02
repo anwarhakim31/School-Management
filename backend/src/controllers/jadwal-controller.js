@@ -155,7 +155,7 @@ export const addJadwal = async (req, res, next) => {
       if (totalPertemuan + jumlahPertemuan >= 50) {
         throw new ResponseError(
           400,
-          `Jumlah pertemuan bidang studi ${mapel.nama} pada kelas ini tersisa ${
+          `Jumlah pertemuan bidang studi  ${mapel.nama.toLowerCase()} pada kelas ini tersisa ${
             50 - totalPertemuan
           } pertemuan`
         );
@@ -319,6 +319,20 @@ export const editJadwal = async (req, res, next) => {
       );
     }
 
+    if (selesai <= mulai) {
+      throw new ResponseError(
+        400,
+        "Jam selesai tidak boleh sebelum jam mulai dalam pembelajaran"
+      );
+    }
+
+    if (mulai >= selesai) {
+      throw new ResponseError(
+        400,
+        "Jam mulai tidak boleh setelah jam selesai dalam pembelajaran"
+      );
+    }
+
     if (mulai > master.endTime) {
       throw new ResponseError(
         400,
@@ -375,6 +389,29 @@ export const editJadwal = async (req, res, next) => {
         400,
         "Hari yang yang di atur merupakan libur  pekan"
       );
+    }
+
+    const pertemuan = await Jadwal.find({
+      kelas: new mongoose.Types.ObjectId(kelas),
+      guru: new mongoose.Types.ObjectId(guru),
+      bidangStudi: new mongoose.Types.ObjectId(bidangStudi),
+    });
+
+    if (pertemuan && pertemuan.some((schedule) => schedule.jumlahPertemuan)) {
+      const totalPertemuan = pertemuan.reduce((acc, schedule) => {
+        return acc + schedule.jumlahPertemuan;
+      }, 0);
+
+      const mapel = await Mapel.findById(bidangStudi);
+
+      if (totalPertemuan + jumlahPertemuan >= 50) {
+        throw new ResponseError(
+          400,
+          `Jumlah pertemuan bidang studi ${mapel.nama.toLowerCase()} pada kelas ini tersisa ${
+            50 - totalPertemuan
+          } pertemuan`
+        );
+      }
     }
 
     await Jadwal.findByIdAndUpdate(
@@ -446,16 +483,25 @@ export const getPertemuan = async (req, res, next) => {
     const id = req.userId;
     const { bidangStudi, kelas } = req.query;
 
-    const pertemuan = await Jadwal.find({
+    const jadwal = await Jadwal.find({
       bidangStudi: new mongoose.Types.ObjectId(bidangStudi),
       kelas: new mongoose.Types.ObjectId(kelas),
       guru: id,
     });
 
-    res.status(200).json({
-      success: true,
-      message: "Berhasil mengambil total jadwal pertemuan",
-    });
+    if (jadwal && jadwal.some((schedule) => schedule.jumlahPertemuan)) {
+      const pertemuan = jadwal.reduce((acc, schedule) => {
+        return acc + schedule.jumlahPertemuan;
+      }, 0);
+
+      console.log(pertemuan);
+
+      res.status(200).json({
+        success: true,
+        message: "Berhasil mengambil total jadwal pertemuan",
+        pertemuan,
+      });
+    }
   } catch (error) {
     console.log(error);
     next(error);

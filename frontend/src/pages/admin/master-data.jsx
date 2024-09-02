@@ -168,18 +168,18 @@ const MasterDataPage = () => {
             />
           )}
         </div>
-        <div className="w-full flex-between  pt-8 pb-4 px-2 rounded-md    gap-6 border bg-white">
+        <div className="w-full flex-between flex-wrap pt-8 pb-4 px-2 rounded-md    gap-6 border bg-white">
           <h1 className=" font-semibold text-xs  text-neutral w-36 text-center py-1 rounded-full border bg-gray-100 border-gray-300">
             Tahun Ajaran
           </h1>
-          <div className="flex-center ml-auto gap-2">
+          <div className="flex-center  ml-auto gap-2">
             {isAddajaran && (
               <div
                 className={`${
                   isAddajaran
                     ? "translate-x-0 opacity-100"
                     : "-translate-x-40 opacity-0"
-                } relative bg-white flex items-center  border border-gray-400 rounded-md transition-all duration-300`}
+                } relative bg-white flex items-center flex-wrap  border border-gray-400 rounded-md transition-all duration-300`}
               >
                 <input
                   type="text"
@@ -187,7 +187,7 @@ const MasterDataPage = () => {
                   value={ajaran}
                   onChange={(e) => setAjaran(e.target.value)}
                   maxLength={10}
-                  className="py-2 px-2 text-xs rounded-md max-w-40 outline-neutral pr-14"
+                  className="py-2.5 h-[2.15rem] px-2 text-xs rounded-md max-w-36 outline-neutral pr-14"
                 />
                 <div className="flex gap-2 absolute right-1">
                   <button
@@ -208,14 +208,17 @@ const MasterDataPage = () => {
               </div>
             )}
 
-            <button
-              aria-label="tambah ajaran"
-              disabled={loading || isAddajaran}
-              onClick={handleToggleAdd}
-              className="bg-neutral hover:bg-indigo-800  min-w-fit transition-all w-fit duration-300 text-white py-2.5 text-xs px-4 rounded-md flex-between gap-3"
-            >
-              <CalendarCog width={15} height={15} className=" " /> Tambah Ajaran
-            </button>
+            {!isAddajaran && (
+              <button
+                aria-label="tambah ajaran"
+                disabled={loading || isAddajaran}
+                onClick={handleToggleAdd}
+                className="bg-neutral hover:bg-indigo-800  min-w-fit transition-all w-fit duration-300 text-white py-2.5 text-xs px-4 rounded-md flex-between gap-3"
+              >
+                <CalendarCog width={15} height={15} className=" " /> Tambah
+                Ajaran
+              </button>
+            )}
           </div>
         </div>
         <div className="relative bg-white w-full   border  overflow-hidden  rounded-md">

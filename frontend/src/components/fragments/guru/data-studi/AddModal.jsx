@@ -16,7 +16,7 @@ import { selectedUserData } from "@/store/slices/auth-slice";
 import DropdownSiswa from "@/components/elements/DropdownSiswa";
 import DropdownCategoryNilai from "@/components/elements/DropdownCategoryNilai";
 
-const AddModal = ({ onClose }) => {
+const AddModal = ({ onClose, kelas, pertemuan }) => {
   const userData = useSelector(selectedUserData);
 
   const {
@@ -30,7 +30,8 @@ const AddModal = ({ onClose }) => {
     defaultValues: {
       mataPelajaran: "",
       siswa: "",
-      kategori: "ujian",
+      kelas: "",
+      pertemuan: "",
       nilai: "",
       semester: "",
       tahunAjaran: "",
@@ -95,6 +96,20 @@ const AddModal = ({ onClose }) => {
     getData();
   }, []);
 
+  useEffect(() => {
+    if (userData) {
+      setValue("mataPelajaran", userData.bidangStudi);
+    }
+
+    if (kelas) {
+      setValue("kelas", kelas._id);
+    }
+
+    if (pertemuan) {
+      setValue("pertemuan", pertemuan);
+    }
+  }, [userData, kelas, pertemuan]);
+
   return (
     <Modal onClose={onClose}>
       <div
@@ -103,7 +118,7 @@ const AddModal = ({ onClose }) => {
       >
         <div className="p-4 sticky top-0 bg-white z-20 sm:static border-b">
           <HeaderModal
-            titile={"Tambah Nilai"}
+            titile={`Tambah Nilai Pertemuan Kelas ${kelas.grade} ${kelas.nama}`}
             onClose={onClose}
             className={"font-semibold"}
           />
@@ -120,11 +135,13 @@ const AddModal = ({ onClose }) => {
               name="mataPelajaran"
               control={control}
               rules={{ required: "Mata Pelajaran diperlukan." }}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange } }) => (
                 <DropdownMapel
-                  value={value}
+                  value={userData.bidangStudi}
                   onChange={onChange}
-                  url={`/api/kelas/get-mapel-kelas/${userData.waliKelas._id}`}
+                  url={`/api/guru/get-bidangStudi`}
+                  disabled={true}
+                  readOnly={true}
                 />
               )}
             />
@@ -162,15 +179,14 @@ const AddModal = ({ onClose }) => {
                 htmlFor="kategori"
                 className="text-xs w-fit mb-2 block font-semibold text-gray-700"
               >
-                Kategori Nilai
+                Pertemuan
               </label>
-              <Controller
-                name="kategori"
-                control={control}
-                rules={{ required: "Kategori Nilai Diperlukan." }}
-                render={({ field: { onChange } }) => (
-                  <DropdownCategoryNilai onChange={onChange} />
-                )}
+              <input
+                type="text"
+                {...register("pertemuan")}
+                className="block w-full disabled:pointer-events-none disabled:bg-gray-100 text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "
+                readOnly
+                disabled
               />
 
               <span className="text-xs h-4 text-neutral2 block">
@@ -187,7 +203,6 @@ const AddModal = ({ onClose }) => {
               <input
                 type="number"
                 name=""
-                placeholder="0-100"
                 className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "
                 id="nilai"
                 {...register("nilai", {
@@ -224,7 +239,7 @@ const AddModal = ({ onClose }) => {
                 })}
                 readOnly
                 disabled
-                className="block w-full text-xs bg-white border disabled:pointer-events-none disabled:bg-gray-100 border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "
+                className="block w-full text-xs disabled:pointer-events-none disabled:bg-gray-100 bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "
                 id="tahunAjaran"
               />
               <span className="text-xs h-4 text-neutral2 block">

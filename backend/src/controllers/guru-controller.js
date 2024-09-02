@@ -315,3 +315,23 @@ export const getDashboard = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getBidangStudi = async (req, res, next) => {
+  try {
+    const id = req.userId;
+
+    const guru = await Guru.findById(id)
+      .populate("bidangStudi")
+      .select("bidangStudi -_id");
+
+    const mapel = Array(guru.bidangStudi);
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengambil detail guru.",
+      mapel,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

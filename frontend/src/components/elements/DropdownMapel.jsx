@@ -5,8 +5,10 @@ import axios from "axios";
 import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
-const DropdownMapel = ({ onChange, value, url }) => {
+const DropdownMapel = ({ onChange, value, url, disabled, readOnly }) => {
+  const { pathname } = useLocation();
   const dataEdit = useSelector(selectedDataEdit);
   const mapelRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +29,14 @@ const DropdownMapel = ({ onChange, value, url }) => {
         nama: dataEdit.mataPelajaran.nama,
       });
     }
-  }, [dataEdit]);
+
+    if (dataMapel.length === 1 && pathname === "/guru/data-studi") {
+      setSelectedMapel({
+        kode: dataMapel[0].kode,
+        nama: dataMapel[0].nama,
+      });
+    }
+  }, [dataEdit, pathname, dataMapel]);
 
   useEffect(() => {
     const getMapel = async () => {
@@ -83,6 +92,7 @@ const DropdownMapel = ({ onChange, value, url }) => {
     <div ref={mapelRef} className="relative w-full">
       <input
         type="text"
+        disabled={disabled}
         value={
           !selectedMapel
             ? "Pilih Mata Pelajaran"
@@ -90,7 +100,7 @@ const DropdownMapel = ({ onChange, value, url }) => {
         }
         readOnly
         onClick={handleInputClick}
-        className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
+        className="block w-full text-xs disabled:pointer-events-none disabled:bg-gray-100 bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
       />
       <div className="absolute pointer-events-none right-2 top-2.5">
         {isOpen ? (

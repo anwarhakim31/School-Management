@@ -67,13 +67,13 @@ const GuruDashboardPage = () => {
     <section className="px-6 py-4">
       <div className="grid xs:grid-cols-2 md:grid-cols-4 gap-4">
         <div
-          className="min-h-[125px] flex flex-col justify-center   rounded-lg p-4 shadow-md"
+          className="min-h-[125px] flex flex-col justify-center   rounded-md p-4 shadow-md"
           style={{
             background: "linear-gradient(to right top,#537ec0, #5bbbea)",
           }}
         >
           <div className="flex gap-2 border-b pb-2 items-center border-gray-50/50">
-            <div className="bg-sky-600 p-1 rounded-lg">
+            <div className="bg-sky-600 p-1 rounded-md">
               <MapelIcon
                 width={"20"}
                 height={"20"}
@@ -95,13 +95,13 @@ const GuruDashboardPage = () => {
           </div>
         </div>
         <div
-          className="min-h-[125px] flex flex-col rounded-lg p-4 shadow-md"
+          className="min-h-[125px] flex flex-col rounded-md p-4 shadow-md"
           style={{
             background: "linear-gradient(to right top, #ba75e3, #6f80dc)",
           }}
         >
           <div className="flex gap-2 border-b pb-2 items-center border-gray-50/50">
-            <div className="bg-purple-600 p-1 rounded-lg">
+            <div className="bg-purple-600 p-1 rounded-md">
               <Presentation
                 width={"20"}
                 height={"20"}
@@ -128,13 +128,13 @@ const GuruDashboardPage = () => {
         </div>
         {userData.waliKelas && (
           <div
-            className="min-h-[125px] flex flex-col rounded-lg p-4 shadow-md"
+            className="min-h-[125px] flex flex-col rounded-md p-4 shadow-md"
             style={{
               background: "linear-gradient(to right top,#c94f60,#fe967d)",
             }}
           >
             <div className="flex gap-2 border-b pb-2 items-center border-gray-50/50">
-              <div className="bg-rose-500 p-1 rounded-lg">
+              <div className="bg-rose-500 p-1 rounded-md">
                 <ClassIcon
                   width={"20"}
                   height={"20"}
@@ -166,13 +166,13 @@ const GuruDashboardPage = () => {
         )}
         {userData.waliKelas && (
           <div
-            className="min-h-[125px] flex flex-col rounded-lg p-4 shadow-md"
+            className="min-h-[125px] flex flex-col rounded-md p-4 shadow-md"
             style={{
               background: "linear-gradient(to right top, #4f46e5, #54aff7)",
             }}
           >
             <div className="flex gap-2 border-b pb-2 items-center border-gray-50/50">
-              <div className="bg-indigo-600 p-1 rounded-lg">
+              <div className="bg-indigo-600 p-1 rounded-md">
                 <SiswaIcon
                   width={"20"}
                   height={"20"}
@@ -197,7 +197,7 @@ const GuruDashboardPage = () => {
           </div>
         )}
       </div>
-      <div className="w-full mt-10 px-4 py-4 bg-white rounded-lg shadow-lg">
+      <div className="w-full mt-10 px-4 py-4 bg-white rounded-md shadow-lg">
         <div className="border-b pb-4 border-gray-100 flex items-center gap-2 mb-4">
           <div>
             <Gant width={"20"} height={"20"} />

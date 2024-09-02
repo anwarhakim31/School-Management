@@ -9,8 +9,9 @@ const PertemuanDropdown = ({ onChange, value, kelas }) => {
   const dataUser = useSelector(selectedUserData);
   const dropdownRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
-  const [dataPer, setDataPer] = useState(1);
-  const [selectedPer, setSelectedPer] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [dataPer, setDataPer] = useState(0);
+  const [selectedPer, setSelectedPer] = useState(0);
 
   useEffect(() => {
     const getKelas = async () => {
@@ -28,6 +29,8 @@ const PertemuanDropdown = ({ onChange, value, kelas }) => {
         }
       } catch (error) {
         reportError(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -36,7 +39,11 @@ const PertemuanDropdown = ({ onChange, value, kelas }) => {
     }
   }, [kelas, dataUser]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (dataPer === 0) {
+      onChange(0);
+    }
+  }, [dataPer]);
 
   const handleInputClick = (event) => {
     event.stopPropagation();
@@ -45,7 +52,7 @@ const PertemuanDropdown = ({ onChange, value, kelas }) => {
 
   const handleSelectKelas = (value) => {
     setSelectedPer(value);
-    // onChange(dataKelas[0]._id);
+    onChange(value);
     setIsOpen(false);
   };
 
@@ -61,14 +68,15 @@ const PertemuanDropdown = ({ onChange, value, kelas }) => {
     return () => document.removeEventListener("mousedown", handleclickOutSide);
   }, [isOpen]);
 
-  console.log(dataPer);
-
   return (
-    <div ref={dropdownRef} className="relative w-20">
+    <div ref={dropdownRef} className="relative w-24">
       <input
-        className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
+        className={`${
+          loading ? "text-white" : "text-inherit"
+        } block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer`}
         readOnly
-        value={selectedPer ? selectedPer : "Pilih Kelas"}
+        disabled={dataPer === 0}
+        value={selectedPer ? selectedPer : dataPer === 0 ? "kosong" : "Pilih"}
         onClick={handleInputClick}
       />
       <div className="absolute pointer-events-none right-2 top-2.5">
@@ -92,6 +100,12 @@ const PertemuanDropdown = ({ onChange, value, kelas }) => {
                   {i + 1}
                 </li>
               ))}
+            <li
+              className="px-4 py-2 text-left text-xs hover:bg-gray-200 cursor-pointer truncate"
+              onClick={() => handleSelectKelas("ujian")}
+            >
+              Ujian
+            </li>
           </ul>
         </div>
       )}

@@ -9,6 +9,7 @@ const KelasDropdown = ({ onChange, value }) => {
   const dataEdit = useSelector(selectedDataEdit);
   const dropdownRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [dataKelas, setDataKelas] = useState([]);
   const [selectedKelas, setSelectedKelas] = useState(null);
 
@@ -24,6 +25,8 @@ const KelasDropdown = ({ onChange, value }) => {
         }
       } catch (error) {
         reportError(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -33,7 +36,11 @@ const KelasDropdown = ({ onChange, value }) => {
   useEffect(() => {
     if (dataKelas.length > 0) {
       setSelectedKelas({ grade: dataKelas[0].kelas, nama: dataKelas[0].nama });
-      onChange(dataKelas[0]._id);
+      onChange({
+        id: dataKelas[0]._id,
+        grade: dataKelas[0].kelas,
+        nama: dataKelas[0].nama,
+      });
     }
   }, [dataKelas]);
 
@@ -44,7 +51,7 @@ const KelasDropdown = ({ onChange, value }) => {
 
   const handleSelectKelas = (grade, nama) => {
     setSelectedKelas({ grade, nama });
-    onChange(dataKelas[0]._id);
+    onChange({ id: dataKelas[0]._id, grade, nama });
     setIsOpen(false);
   };
 
@@ -63,11 +70,16 @@ const KelasDropdown = ({ onChange, value }) => {
   return (
     <div ref={dropdownRef} className="relative w-40">
       <input
-        className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
+        className={`${
+          loading ? "text-white" : "text-inherit"
+        } block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer`}
         readOnly
+        disabled={dataKelas.length === 0}
         value={
           selectedKelas
             ? `${selectedKelas.grade} ${selectedKelas.nama}`
+            : dataKelas.length === 0
+            ? "Jadwal Kosong"
             : "Pilih Kelas"
         }
         onClick={handleInputClick}

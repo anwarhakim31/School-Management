@@ -69,7 +69,7 @@ const TableNilai = ({ data, dataMapel }) => {
               <th
                 scope="col"
                 rowSpan={3}
-                className="px-20 py-2  text-center whitespace-nowrap"
+                className="px-10 w-[30%] py-2 border text-center whitespace-nowrap"
               >
                 Nama Siswa
               </th>
@@ -77,21 +77,21 @@ const TableNilai = ({ data, dataMapel }) => {
               <th
                 scope="col"
                 colSpan={4}
-                className="px-4 pr-4 py-2 text-center border whitespace-nowrap"
+                className="px-4 w-[50%] pr-4 py-2 text-center border whitespace-nowrap"
               >
                 Mata Pelajaran
               </th>
               <th
                 scope="col"
                 rowSpan={3}
-                className="px-2 w-10 py-2 border text-center whitespace-nowrap"
+                className="px-2  w-[10%] py-2 border text-center whitespace-nowrap"
               >
                 Rata-Rata
               </th>
               <th
                 scope="col"
                 rowSpan={3}
-                className="w-10 py-2 px-2  text-center "
+                className=" w-[10%] py-2 px-2 border  text-center "
               >
                 Rangking
               </th>
@@ -137,7 +137,7 @@ const TableNilai = ({ data, dataMapel }) => {
               <tr>
                 <td
                   colSpan="9"
-                  className="px-2 py-4  text-xs font-medium text-gray-900 h-[400px]  whitespace-nowrap"
+                  className="px-2 py-4  text-xs font-medium text-gray-900 h-[350px]  whitespace-nowrap"
                 >
                   <div className="flex justify-center w-full">
                     Tidak ada data
@@ -150,7 +150,7 @@ const TableNilai = ({ data, dataMapel }) => {
               .sort((a, b) => a.nama.localeCompare(b.nama))
               .map((siswa) => (
                 <tr key={siswa._id}>
-                  <td scope="row" className="px-20 text-xs py-2 border">
+                  <td scope="row" className=" px-10 text-xs py-2 border">
                     {siswa.nama}
                   </td>
                   {dataMapel.map((mapel, i) => {

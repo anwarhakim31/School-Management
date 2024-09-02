@@ -32,18 +32,18 @@ const TableAbsen = ({
               <th
                 scope="col"
                 rowSpan={2}
-                className="py-4 px-4 text-center  whitespace-nowrap"
+                className="py-4 px-4 w-[30%] text-center  whitespace-nowrap"
               >
                 Nama Siswa
               </th>
               <th
                 scope="col"
                 colSpan={countDay}
-                className="py-2 text-center border"
+                className="py-2 w-[50%] text-center border"
               >
                 Tanggal
               </th>
-              <th scope="col" colSpan={4} className="px-2 text-center ">
+              <th scope="col" colSpan={4} className="w-[20%] px-2 text-center ">
                 Total
               </th>
             </tr>

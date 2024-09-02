@@ -47,13 +47,13 @@ const AdminDashboard = () => {
     <section className="px-6 pt-4 pb-10   ">
       <div className="grid xs:grid-cols-2 md:grid-cols-4 gap-4">
         <div
-          className="min-h-[125px] flex flex-col justify-center   rounded-lg p-4 shadow-md"
+          className="min-h-[125px] flex flex-col justify-center   rounded-md p-4 shadow-md"
           style={{
             background: "linear-gradient(to right top,#537ec0, #5bbbea)",
           }}
         >
           <div className="flex gap-2 border-b pb-2 items-center border-gray-50/50">
-            <div className="bg-sky-600 p-1 rounded-lg">
+            <div className="bg-sky-600 p-1 rounded-md">
               <SiswaIcon width={"20"} height={"20"} className={" stroke-[1]"} />
             </div>
             <h3 className="text-sm font-semibold text-white line-clamp-1 ">
@@ -73,13 +73,13 @@ const AdminDashboard = () => {
           </div>
         </div>
         <div
-          className="min-h-[125px] flex flex-col rounded-lg p-4 shadow-md"
+          className="min-h-[125px] flex flex-col rounded-md p-4 shadow-md"
           style={{
             background: "linear-gradient(to right top, #ba75e3, #6f80dc)",
           }}
         >
           <div className="flex gap-2 border-b pb-2 items-center border-gray-50/50">
-            <div className="bg-purple-600 p-1 rounded-lg">
+            <div className="bg-purple-600 p-1 rounded-md">
               <GuruIcon width={"20"} height={"20"} className={" stroke-[1]"} />
             </div>
             <h3 className="text-sm font-semibold text-white line-clamp-1 ">
@@ -99,13 +99,13 @@ const AdminDashboard = () => {
           </div>
         </div>
         <div
-          className="min-h-[125px] flex flex-col rounded-lg p-4 shadow-md"
+          className="min-h-[125px] flex flex-col rounded-md p-4 shadow-md"
           style={{
             background: "linear-gradient(to right top,#c94f60,#fe967d)",
           }}
         >
           <div className="flex gap-2 border-b pb-2 items-center border-gray-50/50">
-            <div className="bg-rose-500 p-1 rounded-lg">
+            <div className="bg-rose-500 p-1 rounded-md">
               <ClassIcon
                 width={"20"}
                 height={"20"}
@@ -129,13 +129,13 @@ const AdminDashboard = () => {
           </div>
         </div>
         <div
-          className="min-h-[125px] flex flex-col rounded-lg p-4 shadow-md"
+          className="min-h-[125px] flex flex-col rounded-md p-4 shadow-md"
           style={{
             background: "linear-gradient(to right top, #4f46e5, #54aff7)",
           }}
         >
           <div className="flex gap-2 border-b pb-2 items-center border-gray-50/50">
-            <div className="bg-indigo-600 p-1 rounded-lg">
+            <div className="bg-indigo-600 p-1 rounded-md">
               <MapelIcon
                 width={"20"}
                 height={"20"}
@@ -159,7 +159,7 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
-      <div className="w-full p-4  mt-10 bg-white rounded-lg h-[350px] shadow-lg">
+      <div className="w-full p-4  mt-10 bg-white rounded-md h-[350px] shadow-lg">
         <div className="border-b pb-4 border-gray-100 flex items-center gap-2">
           <div>
             <AreaChart width={"20"} height={"20"} className="text-[#4d44b5]" />
@@ -173,7 +173,7 @@ const AdminDashboard = () => {
         </div>
       </div>
       <div className="flex justify-center flex-wrap md:flex-nowrap items-center mt-10 gap-8">
-        <div className="w-full p-4 md:w-1/2 bg-white rounded-lg h-[310px] shadow-lg">
+        <div className="w-full p-4 md:w-1/2 bg-white rounded-md h-[310px] shadow-lg">
           <div className="border-b pb-4 border-gray-100 flex items-center gap-2">
             <div>
               <Barchart width={"20"} height={"20"} />
@@ -197,7 +197,7 @@ const AdminDashboard = () => {
             </p>
           )}
         </div>
-        <div className="w-full p-4 md:w-1/2 bg-white rounded-lg h-[310px] shadow-lg">
+        <div className="w-full p-4 md:w-1/2 bg-white rounded-md h-[310px] shadow-lg">
           <div className="border-b pb-4 border-gray-100 flex items-center gap-2">
             <div>
               <Piechart width={"20"} height={"20"} />

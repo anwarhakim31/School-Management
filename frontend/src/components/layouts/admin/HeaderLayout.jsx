@@ -61,7 +61,7 @@ const HeaderLayout = ({ handleOpenEdit, setIsEdit, handleToggleSidebar }) => {
         <button
           aria-label="toggle sidebar"
           onClick={handleToggleSidebar}
-          className=" lg:hidden w-9 h-9  p-2 border bg-white hover:border-neutral transition-all duration-300 flex-center rounded-lg"
+          className=" lg:hidden w-9 h-9  p-2 border bg-white hover:border-neutral transition-all duration-300 flex-center rounded-full"
         >
           <Menu width={25} height={25} />
         </button>
@@ -77,7 +77,7 @@ const HeaderLayout = ({ handleOpenEdit, setIsEdit, handleToggleSidebar }) => {
               {data.role}
             </span>
           </div>
-          <div className="w-10 h-10 bg-backup flex items-center justify-center rounded-full overflow-hidden">
+          <div className="w-9 h-9 bg-backup flex items-center justify-center rounded-full overflow-hidden">
             {data.foto ? (
               <img src={data.foto} alt="foto" />
             ) : (
@@ -93,7 +93,7 @@ const HeaderLayout = ({ handleOpenEdit, setIsEdit, handleToggleSidebar }) => {
         <div className="relative">
           <button
             ref={buttonRef}
-            className="bg-white border hover:border-neutral transition-all duration-300 w-10 h-10 p-2 rounded-full flex items-center justify-center cursor-pointer"
+            className="bg-white border hover:border-neutral transition-all duration-300 w-9 h-9 p-2 rounded-full flex items-center justify-center cursor-pointer"
             aria-label="menu"
             onClick={() => {
               setIsSetting((prev) => !prev);
