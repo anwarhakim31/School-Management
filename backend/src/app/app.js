@@ -15,6 +15,7 @@ import liburRouter from "../routes/libur-router.js";
 import masterRouter from "../routes/master-router.js";
 import jadwalRouter from "../routes/jadwal-router.js";
 import nilaiRouter from "../routes/nilai-router.js";
+import nilaiPertemuanRouter from "../routes/nilaiPertemuan-router.js";
 
 export const app = express();
 
@@ -40,5 +41,6 @@ app.use("/api/absen", absenRouter);
 app.use("/api/libur", liburRouter);
 app.use("/api/jadwal", jadwalRouter);
 app.use("/api/nilai", nilaiRouter);
+app.use("/api/nilaiPertemuan", nilaiPertemuanRouter);
 
 app.use(errorMiddleware);

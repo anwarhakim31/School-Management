@@ -9,7 +9,7 @@ const PertemuanDropdown = ({ onChange, value, kelas }) => {
   const dataUser = useSelector(selectedUserData);
   const dropdownRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [dataPer, setDataPer] = useState(0);
   const [selectedPer, setSelectedPer] = useState(0);
 

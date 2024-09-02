@@ -43,14 +43,15 @@ const AddModal = ({ onClose, kelas, pertemuan }) => {
     setLoading(true);
     try {
       const res = await axios.post(
-        HOST + "/api/nilai/add-nilai",
+        HOST + "/api/nilaiPertemuan/add-nilai",
         {
           siswa: data.siswa,
           mataPelajaran: data.mataPelajaran,
-          kategori: data.kategori,
+          pertemuan: data.pertemuan,
           nilai: data.nilai,
           semester: data.semester,
           tahunAjaran: data.tahunAjaran,
+          kelas: data.kelas,
         },
         { withCredentials: true }
       );
@@ -102,8 +103,10 @@ const AddModal = ({ onClose, kelas, pertemuan }) => {
     }
 
     if (kelas) {
-      setValue("kelas", kelas._id);
+      setValue("kelas", kelas.id);
     }
+
+    console.log(kelas);
 
     if (pertemuan) {
       setValue("pertemuan", pertemuan);
