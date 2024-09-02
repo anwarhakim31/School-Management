@@ -85,3 +85,18 @@ export const deleteNilai = async (req, res, next) => {
     next(error);
   }
 };
+
+export const deleteManyNilai = async (req, res, next) => {
+  try {
+    const { dataChecked } = req.body;
+
+    await NilaiPertemuan.deleteMany({ _id: { $in: dataChecked } });
+
+    res.status(200).json({
+      success: true,
+      message: `Berhasil menghapus nilai pertemuan terpilih.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

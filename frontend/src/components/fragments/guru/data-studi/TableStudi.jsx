@@ -1,4 +1,9 @@
-import { setDataDelete, setDataEdit } from "@/store/slices/admin-slice";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  setDataDelete,
+  setDataDeleteMany,
+  setDataEdit,
+} from "@/store/slices/admin-slice";
 import { ChevronLeft, ChevronRight, Edit, Trash, Trash2 } from "lucide-react";
 import { space } from "postcss/lib/list";
 import React, { useEffect, useState } from "react";
@@ -9,9 +14,12 @@ const TableStudi = ({
   handleToggleDelete,
   handleToggleEdit,
   loading,
+  allChecked,
+  setAllChecked,
 }) => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
+  const [dataChecked, setDataChecked] = useState([]);
   const perPage = 6;
 
   const lastIndexNilai = perPage * currentPage;
@@ -36,17 +44,55 @@ const TableStudi = ({
     }
   }, [dataSlice]);
 
+  const handleCheckboxChange = (checked, nilai) => {
+    if (checked) {
+      setDataChecked((prev) => [...prev, nilai._id]);
+      dispatch(setDataDeleteMany([...dataChecked, nilai._id]));
+    } else {
+      setDataChecked((prev) => prev.filter((id) => id !== nilai._id));
+      dispatch(setDataDeleteMany(dataChecked.filter((id) => id !== nilai._id)));
+    }
+  };
+
+  const handleCheckboxAll = (checked) => {
+    setAllChecked(!allChecked);
+
+    if (checked) {
+      setDataChecked(dataSlice.map((nilai) => nilai._id));
+      dispatch(setDataDeleteMany(dataSlice.map((nilai) => nilai._id)));
+    } else {
+      setDataChecked([]);
+      dispatch(setDataDeleteMany([]));
+    }
+  };
+
   return (
     <div className="block w-full relative  shadow-md pb-[3.5rem]">
       <div className="w-full  min-h-[396px] overflow-x-auto ">
         <table className="text-center w-full text-gray-500 ">
           <thead className="text-xs uppercase text-white bg-neutral">
             <tr>
-              <th scope="col" className="w-[30%] px-10 py-4 text-left ">
+              <th
+                scope="col"
+                className="px-5 py-4 flex items-center justify-center"
+              >
+                <Checkbox
+                  type="checkbox"
+                  checked={allChecked}
+                  onCheckedChange={handleCheckboxAll}
+                  className={
+                    "min-h-4 min-w-3 border-white data-[state=checked]:bg-gray-800"
+                  }
+                />
+              </th>
+              <th
+                scope="col"
+                className="w-[25%] px-10 py-4 text-left whitespace-nowrap  "
+              >
                 Nama Siswa
               </th>
 
-              <th scope="col" className="px-5 py-4 w-[15%] whitespace-nowrap ">
+              <th scope="col" className="px-5 py-4 w-[15%] ">
                 Pertemuan
               </th>
               <th
@@ -90,6 +136,20 @@ const TableStudi = ({
                     dataSlice.length === 7 && "last:border-none"
                   } hover:bg-gray-100 border-b  `}
                 >
+                  <td scope="row" className="px-3 py-3 relative">
+                    <Checkbox
+                      type="checkbox"
+                      name=""
+                      checked={dataChecked.includes(Nilai._id)}
+                      onCheckedChange={(checked) =>
+                        handleCheckboxChange(checked, Nilai)
+                      }
+                      id=""
+                      className={
+                        "w-4 h-4 absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2  data-[state=checked]:bg-gray-800"
+                      }
+                    />
+                  </td>
                   <td
                     scope="row"
                     className="px-10  text-left  border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "

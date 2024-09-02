@@ -9,7 +9,7 @@ import {
   Trash2,
 } from "lucide-react";
 import Studi from "../../assets/svg/studi.svg?react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TableStudi from "@/components/fragments/guru/data-studi/TableStudi";
 import KelasDropdown from "@/components/elements/data-studi/kelasDropdown";
 import PertemuanDropdown from "@/components/elements/data-studi/PertemuanDropdown";
@@ -17,17 +17,26 @@ import AddModal from "@/components/fragments/guru/data-studi/AddModal";
 import responseError from "@/util/services";
 import axios from "axios";
 import { HOST } from "@/util/constant";
-import DeleteModal from "@/components/fragments/DeleteModal";
+import ModalDelete from "@/components/fragments/ModalDelete";
 import { useSelector } from "react-redux";
-import { selectedDataDelete } from "@/store/slices/admin-slice";
+import {
+  selectedDataDelete,
+  selectedDataDeleteMany,
+} from "@/store/slices/admin-slice";
+import DeleteManyModal from "@/components/fragments/ModalDeleteMany";
 
 const DataStudiPage = () => {
+  const menuRef = useRef(null);
   const dataDelete = useSelector(selectedDataDelete);
+  const dataChecked = useSelector(selectedDataDeleteMany);
   const [loading, setLoading] = useState(true);
   const [kelas, setKelas] = useState({ id: "", grade: "", nama: "" });
   const [pertemuan, setPertemuan] = useState("");
   const [isAddNilai, setIsAddNilai] = useState(false);
+  const [search, setSearch] = useState("");
   const [isEditNilai, setIsEditNilai] = useState(false);
+  const [allChecked, setAllChecked] = useState(false);
+  const [isMenuMobile, setIsMenuMobile] = useState(false);
   const [isDeleteNilai, setIsDeleteNilai] = useState(false);
   const [isDeleteManynilai, setIsDeleteManynilai] = useState(false);
   const [dataNilai, setDataNilai] = useState([]);
@@ -79,6 +88,14 @@ const DataStudiPage = () => {
     setIsDeleteNilai(!isDeleteNilai);
   };
 
+  const handleToggleDeleteMany = () => {
+    setIsDeleteManynilai(!isDeleteManynilai);
+  };
+
+  const handleToggleMenu = () => {
+    setIsMenuMobile(!isMenuMobile);
+  };
+
   return (
     <section className="px-6 py-4  ">
       <div className="w-full flex-between gap-6">
@@ -86,9 +103,9 @@ const DataStudiPage = () => {
           <input
             type="search"
             placeholder="Cari Nama Siswa"
-            // value={search}
-            // disabled={loading}
-            // onChange={handleSearch}
+            value={search}
+            disabled={loading}
+            onChange={(e) => setSearch(e.target.value)}
             className="w-full rounded-full disabled:cursor-not-allowed py-2 pr-2 pl-10 text-xs border border-gray-400 outline-offset-0 outline-1 outline-neutral"
           />
           <div className="absolute left-4 top-1/2 -translate-y-1/2">
@@ -108,9 +125,22 @@ const DataStudiPage = () => {
       </div>
 
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-lg">
-        <div className="flex-between px-4 h-14 ">
-          <div className="flex items-center gap-4  ">
-            <div className="flex gap-2 relative  mr-auto  ">
+        <div className="flex items-center gap-4  ">
+          <div className="flex-center gap-2 relative  mr-auto  px-4 h-14 ">
+            <div className="flex-center">
+              <button
+                title="Hapus nilai terpilih"
+                onClick={handleToggleDeleteMany}
+                className={`${
+                  dataChecked.length > 0
+                    ? "opacity-100"
+                    : "opacity-0 pointer-events-none"
+                } border block border-gray-300 bg-white  text-gray-500 group rounded-md  hover:border-gray-400    py-1.5 px-2 transition-all duration-300 font-medium hover:text-white  text-xs   flex-between gap-3`}
+              >
+                <Trash2 width={15} height={15} className=" text-neutral2 " />
+              </button>
+            </div>
+            <div className="hidden md:flex-center gap-2">
               <div className="flex items-center gap-4">
                 <p className="text-xs font-semibold text-gray-700">Kelas</p>
                 <KelasDropdown onChange={handleChangeKelas} />
@@ -127,6 +157,45 @@ const DataStudiPage = () => {
                 </div>
               )}
             </div>
+            <div ref={menuRef} className="relative block sm:hidden">
+              <button
+                onClick={handleToggleMenu}
+                className="flex-center  w-8 h-8 rounded-full border p-1 bg-gray-100 hover:bg-gray-200 border-neutral"
+              >
+                <EllipsisVerticalIcon
+                  width={15}
+                  height={15}
+                  className="text-gray-800"
+                />
+              </button>
+
+              {isMenuMobile && (
+                <div
+                  role="menu"
+                  className="absolute left-0 z-50 mt-1 flex-between p-4  border shadow-sm  w-fit bg-white rounded-md "
+                >
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center gap-4">
+                      <p className="text-xs font-semibold text-gray-700">
+                        Kelas
+                      </p>
+                      <KelasDropdown onChange={handleChangeKelas} />
+                    </div>
+                    {kelas.id && (
+                      <div className="flex items-center gap-4">
+                        <p className="text-xs font-semibold text-gray-700">
+                          Pertemuan
+                        </p>
+                        <PertemuanDropdown
+                          kelas={kelas.id}
+                          onChange={handleChangePertemuan}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -140,11 +209,14 @@ const DataStudiPage = () => {
           <TableStudi
             data={dataNilai}
             handleToggleDelete={handleToggleDelete}
+            handleToggleDeleteMany={handleToggleDeleteMany}
+            allChecked={allChecked}
+            setAllChecked={setAllChecked}
           />
         )}
       </div>
       {isDeleteNilai && (
-        <DeleteModal
+        <ModalDelete
           onClose={handleToggleDelete}
           title={"Apakah Anda yakin ingin menghapus nilai pertemuan?"}
           url={`/api/nilaiPertemuan/delete-one/${dataDelete._id}`}
@@ -158,19 +230,14 @@ const DataStudiPage = () => {
           pertemuan={pertemuan}
         />
       )}
-      {/* {isDeleteManySiswa && (
-          <DeleteManyModal
-            onClose={handleToggleDeleteMany}
-            setAllCheck={setAllCheck}
-          />
-        )}
-        <div style={{ display: "none" }}>
-          <PrintComponent
-            ref={componentRef}
-            dataSiswa={dataSiswa}
-            data={data}
-          />
-        </div> */}
+      {isDeleteManynilai && (
+        <DeleteManyModal
+          onClose={handleToggleDeleteMany}
+          setAllCheck={setAllChecked}
+          url={"/api/nilaiPertemuan/delete-many"}
+          title={"Apakah And yakin ingin menghapus nilai terpilih?"}
+        />
+      )}
     </section>
   );
 };
