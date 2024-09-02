@@ -43,7 +43,11 @@ const DropdownTahunAjaran = ({ onSelectAjaran }) => {
         });
 
         if (res.status == 200) {
-          setDataAjaran(res.data.ajaran.sort((a, b) => b.status - a.status));
+          const data = res.data.ajaran.sort((a, b) => b.status - a.status);
+
+          setDataAjaran(data);
+          setSelectedAjaran(data[0]?.ajaran);
+          onSelectAjaran(data[0]?.ajaran);
         }
       } catch (error) {
         responseError(error);
@@ -52,11 +56,6 @@ const DropdownTahunAjaran = ({ onSelectAjaran }) => {
 
     getAjaran();
   }, []);
-
-  useEffect(() => {
-    setSelectedAjaran(dataAjaran[0]?.ajaran);
-    onSelectAjaran(dataAjaran[0]?.ajaran);
-  }, [dataAjaran]);
 
   return (
     <div ref={dropdownRef} className="relative w-32">

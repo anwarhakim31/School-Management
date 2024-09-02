@@ -80,8 +80,8 @@ const RekapAbsenFragment = () => {
   return (
     <Fragment>
       <div className=" bg-white p-4 rounded-tr-md rounded-tl-md border border-b-0">
-        <div className="hidden md:flex-between">
-          <div className="flex justify-start flex-wrap gap-4">
+        <div className="flex-between flex-row-reverse md:flex-row-reverse">
+          <div className="hidden md:flex justify-start flex-wrap gap-4">
             <div className="flex items-center gap-4">
               <p className="text-sm font-semibold text-gray-700">Tahun</p>
               <YearDropdown onSelectYear={handleSelectYeay} />
@@ -123,63 +123,31 @@ const RekapAbsenFragment = () => {
               content={() => componentRef.current}
             />
           </div>
-        </div>
-        <div className="relative block md:hidden w-fit" ref={menuRef}>
-          <button
-            onClick={handleToggleMenu}
-            className="flex-center  w-8 h-8 rounded-full border p-1 bg-gray-100 hover:bg-gray-200 border-neutral"
-          >
-            <EllipsisVerticalIcon
-              width={15}
-              height={15}
-              className="text-gray-800"
-            />
-          </button>
+          <div className="relative block md:hidden w-fit" ref={menuRef}>
+            <button
+              onClick={handleToggleMenu}
+              className="flex-center  w-8 h-8 rounded-full border p-1 bg-gray-100 hover:bg-gray-200 border-neutral"
+            >
+              <EllipsisVerticalIcon
+                width={15}
+                height={15}
+                className="text-gray-800"
+              />
+            </button>
 
-          {isMenu && (
-            <div className="absolute left-0  w-max  mt-1 z-10 bg-white border shadow-md rounded-md p-4">
-              <div className="grid grid-cols-2 items-center">
-                <p className="text-sm font-semibold text-gray-700">Tahun</p>
-                <YearDropdown onSelectYear={handleSelectYeay} />
+            {isMenu && (
+              <div className="absolute left-0  w-max  mt-1 z-10 bg-white border shadow-md rounded-md p-4">
+                <div className="grid grid-cols-2 items-center">
+                  <p className="text-sm font-semibold text-gray-700">Tahun</p>
+                  <YearDropdown onSelectYear={handleSelectYeay} />
+                </div>
+                <div className="grid grid-cols-2 mt-4 items-center">
+                  <p className="text-sm font-semibold text-gray-700">Bulan</p>
+                  <MonthDropdown onSelectMonth={handleSelectMonth} />
+                </div>
               </div>
-              <div className="grid grid-cols-2 mt-4 items-center">
-                <p className="text-sm font-semibold text-gray-700">Bulan</p>
-                <MonthDropdown onSelectMonth={handleSelectMonth} />
-              </div>
-              <div className="flex gap-4 mt-8">
-                <button
-                  disabled={loading || rekapAbsen.length === 0}
-                  onClick={() =>
-                    exportToExcel(
-                      countDay,
-                      rekapAbsen,
-                      kelas.grade,
-                      kelas.nama,
-                      month,
-                      year
-                    )
-                  }
-                  className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
-                >
-                  <FileDownIcon height={15} width={15} />
-                  Excel
-                </button>
-
-                <ReactToPrint
-                  trigger={() => (
-                    <button
-                      disabled={loading || rekapAbsen.length === 0}
-                      className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
-                    >
-                      <Printer height={15} width={15} />
-                      Print
-                    </button>
-                  )}
-                  content={() => componentRef.current}
-                />
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
       <div className="relative border broder-gray-300 rounded-bl-md rounded-br-md bg-white  overflow-hidden">

@@ -1,4 +1,3 @@
-import TableAbsen from "@/components/fragments/guru/rekap/TableAbsen";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
@@ -8,17 +7,17 @@ import { useEffect, useRef, useState, Fragment, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { saveAs } from "file-saver";
 import ExcelJS from "exceljs";
-import ReactToPrint, { useReactToPrint } from "react-to-print";
-import DropdownTahunAjaran from "@/components/elements/DropdownTahunAjaran";
+import ReactToPrint from "react-to-print";
+
 import DropdownSemester from "@/components/elements/DropdownSemester";
-import TableNilai from "../../TableNilai";
-import { data } from "autoprefixer";
-import PrintComponentNilai from "../../PrintModalNilai";
+
 import KelasDropdown from "@/components/elements/data-studi/kelasDropdown";
-import PertemuanDropdown from "@/components/elements/data-studi/PertemuanDropdown";
+
 import TableNilaiPertemuan from "./TableNilaiPertemuan";
+import PrintComponent from "./PrintModaStudi";
 
 const RekapNilaiStudiFragment = () => {
+  const componentRef = useRef(null);
   const menuRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [isMenu, setIsMenu] = useState(false);
@@ -28,10 +27,6 @@ const RekapNilaiStudiFragment = () => {
 
   const [rekapNilai, setRekapNilai] = useState([]);
   const [totalPertemuan, setTotalPertemuan] = useState(0);
-
-  const componentRef = useRef(null);
-
-  console.log(kelas);
 
   useEffect(() => {
     const getData = async () => {
@@ -87,6 +82,8 @@ const RekapNilaiStudiFragment = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMenu]);
 
+  console.log(totalPertemuan);
+
   return (
     <Fragment>
       <div className="  bg-white p-4 rounded-tr-md rounded-tl-md border border-b-0">
@@ -101,17 +98,11 @@ const RekapNilaiStudiFragment = () => {
               <DropdownSemester onSelectedSemester={handleSelectSemester} />
             </div>
           </div>
-          {/* <div className="flex items-center justify-end flex-wrap gap-4">
+          <div className="flex items-center justify-end flex-wrap gap-4">
             <button
               disabled={loading || rekapNilai.length === 0}
               onClick={() =>
-                exportToExcel(
-                  rekapNilai,
-                  dataMapel,
-                  userData.waliKelas,
-                  tahunAjaran,
-                  semester
-                )
+                exportToExcel(rekapNilai, totalPertemuan, kelas, semester)
               }
               className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
             >
@@ -131,7 +122,7 @@ const RekapNilaiStudiFragment = () => {
               )}
               content={() => componentRef.current}
             />
-          </div> */}
+          </div>
         </div>
 
         <div className="relative block md:hidden w-fit" ref={menuRef}>
@@ -206,135 +197,68 @@ const RekapNilaiStudiFragment = () => {
         )}
       </div>
       <div style={{ display: "none" }}>
-        {/* <PrintComponentNilai
+        <PrintComponent
           ref={componentRef}
           data={rekapNilai}
-          kelas={userData.waliKelas}
-        /> */}
+          totalPertemuan={totalPertemuan}
+          kelas={kelas}
+          semester={semester}
+        />
       </div>
     </Fragment>
   );
 };
 
-export default RekapNilaiStudiFragment;
-
-const getUniqueStudents = (data) => {
-  const uniqueStudentMap = new Map();
-
-  data.forEach((nilai) => {
-    const studentId = nilai.siswa._id;
-    if (!uniqueStudentMap.has(studentId)) {
-      uniqueStudentMap.set(studentId, nilai.siswa);
-    }
-  });
-
-  return Array.from(uniqueStudentMap.values()).sort((a, b) =>
-    a.nama.localeCompare(b.nama)
-  );
-};
-
-const exportToExcel = async (data, dataMapel, kelas, tahunAjaran, semester) => {
+const exportToExcel = async (rekapNilai, totalPertemuan, kelas, semester) => {
   const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet("Rekap Nilai");
+  const worksheet = workbook.addWorksheet("Rekap Absen");
 
-  // Step 1: Get Unique Students
-  const uniqueStudents = getUniqueStudents(data);
-
-  // Step 2: Calculate Averages for Each Student
-  const siswaWithAverage = uniqueStudents.map((siswa) => {
-    const nilaiTotal = dataMapel.reduce((acc, mapel) => {
-      const nilaiTugas = data.find(
-        (nilai) =>
-          nilai.siswa._id === siswa._id &&
-          nilai.mataPelajaran.kode === mapel &&
-          nilai.kategori === "tugas"
-      );
-
-      const nilaiUjian = data.find(
-        (nilai) =>
-          nilai.siswa._id === siswa._id &&
-          nilai.mataPelajaran.kode === mapel &&
-          nilai.kategori === "ujian"
-      );
-
-      const tugasScore = nilaiTugas ? nilaiTugas.nilai : 0;
-      const ujianScore = nilaiUjian ? nilaiUjian.nilai : 0;
-
-      return acc + tugasScore + ujianScore;
-    }, 0);
-
-    const countScores = dataMapel.length * 2;
-    const average = nilaiTotal / countScores;
-
-    return {
-      siswa,
-      average,
-    };
-  });
-
-  // Step 3: Rank Students Based on Their Averages
-  const siswaWithRanking = [...siswaWithAverage].sort(
-    (a, b) => b.average - a.average
-  );
-
-  let currentRank = 1;
-  siswaWithRanking.forEach((siswa, index, array) => {
-    if (index > 0 && siswa.average === array[index - 1].average) {
-      siswa.ranking = array[index - 1].ranking;
-    } else {
-      siswa.ranking = currentRank;
-    }
-    currentRank++;
-  });
-
-  // Step 4: Export to Excel
   // Title Header
-  const headerTitle = [
-    `NILAI SISWA KELAS TAHUN AJARAN ${tahunAjaran} ${semester.toUpperCase()} - KELAS ${
-      kelas.kelas
-    } ${kelas.nama.toUpperCase()} `,
+  const header = [
+    `NILAI PERTEMUAN KELAS ${
+      kelas.grade
+    } ${kelas.nama.toUpperCase()}  ${semester.toUpperCase()}`,
   ];
-  worksheet.addRow(headerTitle);
+  const headerRow = worksheet.addRow(header);
 
   // Merge cells for title header
-  worksheet.mergeCells(1, 1, 1, dataMapel.length * 2 + 3); // Adjust the number of columns to match header width
+  worksheet.mergeCells(
+    headerRow.number,
+    1,
+    headerRow.number,
+    totalPertemuan + 2
+  );
   worksheet.getRow(1).height = 30;
 
-  // Create headers for the table
+  // Membuat header tabel
   const header1 = [
     "Nama Siswa",
-    ...dataMapel.flatMap((mapel) => ["Mata Pelajaran", ""]),
-    "Rata-Rata",
-    "Rangking",
+    ...Array(totalPertemuan).fill("Pertemuan"),
+    "",
   ];
-  const header2 = ["", ...dataMapel.flatMap((mapel) => [mapel, ""]), "", ""];
-  const header3 = ["", ...dataMapel.flatMap(() => ["T", "U"]), "", ""];
+  const header2 = [
+    "",
+    ...Array.from({ length: totalPertemuan }, (_, i) => i + 1),
+    "U",
+  ];
 
-  // Add headers to the worksheet
+  // Menambahkan header ke worksheet
   worksheet.addRow(header1);
   worksheet.addRow(header2);
-  worksheet.addRow(header3);
 
-  // Merge cells for "Nama Siswa"
-  worksheet.mergeCells(2, 1, 4, 1); // Merges "Nama Siswa" cells (RowSpan 3)
+  // Merging header cells sesuai dengan struktur HTML
+  worksheet.mergeCells(2, 1, 3, 1); // Menggabungkan "Nama Siswa" (RowSpan 2)
+  worksheet.mergeCells(2, 2, 2, totalPertemuan + 1); // Menggabungkan header "Pertemuan" (ColSpan totalPertemuan)
+  worksheet.mergeCells(2, totalPertemuan + 2, 2, totalPertemuan + 2); // Menggabungkan "Ujian" (ColSpan 1)
 
-  // Merge cells for each "Mata Pelajaran"
-  worksheet.mergeCells(2, 2, 2, 2 + dataMapel.length * 2 - 1);
-
-  // Merge cells for "Rata-Rata" and "Rangking"
-  const rataRataColumn = dataMapel.length * 2 + 2;
-  const rangkingColumn = dataMapel.length * 2 + 3;
-  worksheet.mergeCells(2, rataRataColumn, 4, rataRataColumn); // Merge "Rata-Rata"
-  worksheet.mergeCells(2, rangkingColumn, 4, rangkingColumn); // Merge "Rangking"
-
-  // Set column widths
-  worksheet.getColumn(1).width = 30; // Width for "Nama Siswa"
-
-  for (let i = 2; i <= dataMapel.length * 2 + 3; i++) {
-    worksheet.getColumn(i).width = 8; // Width for "T" and "U" columns
+  // Mengatur lebar kolom
+  worksheet.getColumn(1).width = 20; // Lebar kolom "Nama Siswa"
+  for (let i = 2; i <= totalPertemuan + 1; i++) {
+    worksheet.getColumn(i).width = 4; // Lebar kolom pertemuan
   }
+  worksheet.getColumn(totalPertemuan + 2).width = 4; // Lebar kolom "Ujian"
 
-  // Styling headers
+  // Styling header
   const headerStyle = (row, color) => {
     row.eachCell((cell) => {
       cell.alignment = { horizontal: "center", vertical: "middle" };
@@ -353,40 +277,17 @@ const exportToExcel = async (data, dataMapel, kelas, tahunAjaran, semester) => {
     });
   };
 
-  // Apply styles to headers
-  headerStyle(worksheet.getRow(1), "362f7e"); // Color for header 1
-  headerStyle(worksheet.getRow(2), "362f7e"); // Color for header 2
-  headerStyle(worksheet.getRow(3), "362f7e"); // Color for header 3
-  headerStyle(worksheet.getRow(4), "362f7e"); // Color for header 3
+  // Menggunakan warna dan border pada header
+  headerStyle(worksheet.getRow(1), "362f7e"); // Warna ungu untuk header 1
+  headerStyle(worksheet.getRow(2), "362f7e"); // Warna ungu untuk header 2
+  headerStyle(worksheet.getRow(3), "362f7e"); // Warna ungu untuk header 3
 
-  // Add student data and scores
-  siswaWithRanking.forEach((siswa) => {
-    const nilaiPerMapel = dataMapel.flatMap((mapel) => {
-      const nilaiTugas = data.find(
-        (nilai) =>
-          nilai.siswa._id === siswa.siswa._id &&
-          nilai.mataPelajaran.kode === mapel &&
-          nilai.kategori === "tugas"
-      );
-      const nilaiUjian = data.find(
-        (nilai) =>
-          nilai.siswa._id === siswa.siswa._id &&
-          nilai.mataPelajaran.kode === mapel &&
-          nilai.kategori === "ujian"
-      );
-      return [
-        nilaiTugas ? nilaiTugas.nilai : "-",
-        nilaiUjian ? nilaiUjian.nilai : "-",
-      ];
-    });
-
-    const rataRata = siswa.average || 0;
-    const rangking = siswa.ranking || "-";
-
-    const rowValues = [siswa.siswa.nama, ...nilaiPerMapel, rataRata, rangking];
+  // Menambahkan data siswa dan nilai (di sini data ditambahkan dengan contoh)
+  rekapNilai.forEach((siswa) => {
+    const rowValues = [siswa.nama, ...siswa.dataNilai, siswa.ujian];
     const row = worksheet.addRow(rowValues);
 
-    // Add border to each cell in the body
+    // Menambahkan border pada setiap cell di body
     row.eachCell((cell) => {
       cell.border = {
         top: { style: "thin" },
@@ -394,12 +295,13 @@ const exportToExcel = async (data, dataMapel, kelas, tahunAjaran, semester) => {
         bottom: { style: "thin" },
         right: { style: "thin" },
       };
-      cell.alignment = { horizontal: "center", vertical: "middle" };
     });
   });
 
-  // Export workbook to Excel
+  // Ekspor workbook ke Excel
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: "application/octet-stream" });
-  saveAs(blob, "rekap_nilai.xlsx");
+  saveAs(blob, "rekap_absen.xlsx");
 };
+
+export default RekapNilaiStudiFragment;

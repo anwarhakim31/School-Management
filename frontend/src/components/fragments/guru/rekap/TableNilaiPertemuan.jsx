@@ -28,12 +28,16 @@ const TableNilaiPertemuan = ({ data, totalPertemuan }) => {
               {Array(totalPertemuan)
                 .fill()
                 .map((_, i) => (
-                  <th key={i} scope="col" className="px-4 text-center border">
-                    {i}
+                  <th
+                    key={i + 1}
+                    scope="col"
+                    className="px-4 text-center border"
+                  >
+                    {i + 1}
                   </th>
                 ))}
               <th scope="col" className="px-4 text-center border">
-                Ujian
+                U
               </th>
             </tr>
           </thead>
@@ -61,7 +65,7 @@ const TableNilaiPertemuan = ({ data, totalPertemuan }) => {
                   </td>
                   {nilai?.dataNilai?.map((data, i) => (
                     <td
-                      key={i}
+                      key={i + 1}
                       scope="row"
                       className="px-2 py-2 border text-center text-xs capitalize text-gray-800 font-medium"
                     >

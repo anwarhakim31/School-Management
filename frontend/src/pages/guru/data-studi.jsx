@@ -164,7 +164,7 @@ const DataStudiPage = () => {
                 <Trash2 width={15} height={15} className=" text-neutral2 " />
               </button>
             </div>
-            <div className="hidden md:flex-center gap-4">
+            <div className="hidden sm:flex-center gap-4">
               <div className="flex items-center gap-4">
                 <p className="text-xs font-semibold text-gray-700">Kelas</p>
                 <KelasDropdown onChange={handleChangeKelas} />

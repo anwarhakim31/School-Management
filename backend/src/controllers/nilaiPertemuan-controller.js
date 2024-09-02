@@ -165,7 +165,11 @@ export const getRekap = async (req, res, next) => {
       });
 
       nilai.forEach((item) => {
-        dataNilai[item.pertemuan] = item.nilai;
+        if (item.pertemuan === "ujian") {
+          dataNilai[totalPertemuan] = item.nilai;
+        } else {
+          dataNilai[item.pertemuan] = item.nilai;
+        }
       });
 
       rekapNilai.push({
