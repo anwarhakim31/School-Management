@@ -1,10 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import AsideLayout from "../guru/AsideLayout";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import HeaderLayout from "./HeaderLayout";
 import ButtonScrollTop from "@/components/elements/ButtonScrollTop";
+import { useDispatch } from "react-redux";
+import { setDataDeleteMany } from "@/store/slices/admin-slice";
 
 const GuruLayout = () => {
+  const dispatch = useDispatch();
+  const { pathname } = useLocation();
   const [isSidebar, setIsSidebar] = useState(false);
   const sidebarRef = useRef();
   const scrollContainerRef = useRef(null);
@@ -26,6 +30,13 @@ const GuruLayout = () => {
 
     return () => document.removeEventListener("mousedown", handleClickOutSide);
   }, [isSidebar]);
+
+  useEffect(() => {
+    if (pathname) {
+      dispatch(setDataDeleteMany([]));
+      setIsSidebar(false);
+    }
+  }, [pathname]);
 
   return (
     <main className="w-screen h-screen flex overflow-hidden">

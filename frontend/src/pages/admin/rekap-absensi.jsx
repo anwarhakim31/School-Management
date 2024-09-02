@@ -213,7 +213,7 @@ const RekapAbsensiPage = () => {
           </div>
         </div>
       </div>
-      <div className="relative border broder-gray-300 rounded-md bg-white mt-10 overflow-hidden">
+      <div className="relative border broder-gray-300 rounded-md bg-white shadow-md mt-10 overflow-hidden">
         {loading ? (
           <div className="min-h-[calc(80vh-160px)] bg-backup border border-gray-400 rounded-md  animate-pulse flex-center">
             <div>

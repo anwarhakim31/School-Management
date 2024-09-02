@@ -218,7 +218,7 @@ const RekapNilaiPageadmin = () => {
           </div>
         </div>
       </div>
-      <div className="relative border mt-10 broder-gray-300 rounded-md bg-white  overflow-hidden">
+      <div className="relative border mt-10 broder-gray-300 rounded-md  shadow-md bg-white  overflow-hidden">
         {loading ? (
           <div className="min-h-[calc(80vh-160px)] bg-backup  animate-pulse  flex-center">
             <div>

@@ -56,6 +56,7 @@ const AdminLayout = () => {
   useEffect(() => {
     if (pathname) {
       dispatch(setDataDeleteMany([]));
+      setIsSidebar(false);
     }
   }, [pathname]);
 

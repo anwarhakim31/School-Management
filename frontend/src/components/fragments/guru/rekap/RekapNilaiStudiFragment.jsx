@@ -14,45 +14,39 @@ import DropdownSemester from "@/components/elements/DropdownSemester";
 import TableNilai from "../../TableNilai";
 import { data } from "autoprefixer";
 import PrintComponentNilai from "../../PrintModalNilai";
+import KelasDropdown from "@/components/elements/data-studi/kelasDropdown";
+import PertemuanDropdown from "@/components/elements/data-studi/PertemuanDropdown";
+import TableNilaiPertemuan from "./TableNilaiPertemuan";
 
-const RekapNilaiFragment = () => {
+const RekapNilaiStudiFragment = () => {
   const menuRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [isMenu, setIsMenu] = useState(false);
-  const [tahunAjaran, setTahunAjaran] = useState("");
+  const [kelas, setKelas] = useState({ kelas: "", nama: "", id: "" });
   const [semester, setSemester] = useState("");
   const userData = useSelector(selectedUserData);
 
   const [rekapNilai, setRekapNilai] = useState([]);
-  const [dataMapel, setDataMapel] = useState([]);
+  const [totalPertemuan, setTotalPertemuan] = useState(0);
 
   const componentRef = useRef(null);
+
+  console.log(kelas);
 
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(HOST + "/api/nilai/rekap-nilai", {
-          params: {
-            semester,
-            tahunAjaran,
-            kelas: userData.waliKelas.kelas,
-            nama: userData.waliKelas.nama,
-          },
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          HOST + `/api/nilaiPertemuan/get-rekap/${kelas.id}/${semester}`,
+          {
+            withCredentials: true,
+          }
+        );
 
         if (res.status === 200) {
-          const sortMapel = res.data.nilai.sort((a, b) =>
-            a.mataPelajaran.kode.localeCompare(b.mataPelajaran.kode)
-          );
-
-          const uniqueMapel = Array.from(
-            new Set(sortMapel.map((mapel) => mapel.mataPelajaran.kode))
-          );
-
-          setDataMapel(uniqueMapel);
-          setRekapNilai(res.data.nilai);
+          setRekapNilai(res.data.rekapNilai);
+          setTotalPertemuan(res.data.totalPertemuan);
         }
       } catch (error) {
         responseError(error);
@@ -63,13 +57,13 @@ const RekapNilaiFragment = () => {
       }
     };
 
-    if (semester && tahunAjaran) {
+    if (kelas.id && semester) {
       getData();
     }
-  }, [semester, tahunAjaran]);
+  }, [kelas, semester]);
 
-  const handleSelectAjaran = (value) => {
-    setTahunAjaran(value);
+  const handleSelectKelas = (value) => {
+    setKelas(value);
   };
 
   const handleSelectSemester = (value) => {
@@ -99,17 +93,15 @@ const RekapNilaiFragment = () => {
         <div className="hidden md:flex-between">
           <div className="flex justify-start flex-wrap gap-4">
             <div className="flex items-center gap-4">
-              <p className="text-sm font-semibold text-gray-700">
-                Tahun Ajaran
-              </p>
-              <DropdownTahunAjaran onSelectAjaran={handleSelectAjaran} />
+              <p className="text-xs font-semibold text-gray-700">Kelas</p>
+              <KelasDropdown onChange={handleSelectKelas} />
             </div>
             <div className="flex items-center gap-4">
-              <p className="text-sm font-semibold text-gray-700">Semester</p>
+              <p className="text-xs font-semibold text-gray-700">Semester</p>
               <DropdownSemester onSelectedSemester={handleSelectSemester} />
             </div>
           </div>
-          <div className="flex items-center justify-end flex-wrap gap-4">
+          {/* <div className="flex items-center justify-end flex-wrap gap-4">
             <button
               disabled={loading || rekapNilai.length === 0}
               onClick={() =>
@@ -139,7 +131,7 @@ const RekapNilaiFragment = () => {
               )}
               content={() => componentRef.current}
             />
-          </div>
+          </div> */}
         </div>
 
         <div className="relative block md:hidden w-fit" ref={menuRef}>
@@ -154,7 +146,7 @@ const RekapNilaiFragment = () => {
             />
           </button>
 
-          {isMenu && (
+          {/* {isMenu && (
             <div className="absolute left-0  w-max  mt-1 z-10 bg-white border shadow-md rounded-md p-4">
               <div className="grid grid-cols-2 items-center">
                 <p className="text-sm font-semibold text-gray-700">
@@ -198,7 +190,7 @@ const RekapNilaiFragment = () => {
                 />
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
       <div className="relative border broder-gray-300 rounded-br-md rounded-bl-md bg-white  overflow-hidden">
@@ -207,24 +199,24 @@ const RekapNilaiFragment = () => {
             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
           </div>
         ) : (
-          <TableNilai data={rekapNilai} dataMapel={dataMapel} />
+          <TableNilaiPertemuan
+            data={rekapNilai}
+            totalPertemuan={totalPertemuan}
+          />
         )}
       </div>
       <div style={{ display: "none" }}>
-        <PrintComponentNilai
+        {/* <PrintComponentNilai
           ref={componentRef}
           data={rekapNilai}
-          dataMapel={dataMapel}
           kelas={userData.waliKelas}
-          semester={semester}
-          tahunAjaran={tahunAjaran}
-        />
+        /> */}
       </div>
     </Fragment>
   );
 };
 
-export default RekapNilaiFragment;
+export default RekapNilaiStudiFragment;
 
 const getUniqueStudents = (data) => {
   const uniqueStudentMap = new Map();

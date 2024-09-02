@@ -6,6 +6,8 @@ import {
   deleteManyNilai,
   deleteNilai,
   getNilai,
+  getRekap,
+  updateNilai,
 } from "../controllers/nilaiPertemuan-controller.js";
 
 const nilaiPertemuanRouter = express.Router();
@@ -18,5 +20,11 @@ nilaiPertemuanRouter.get(
 );
 nilaiPertemuanRouter.delete("/delete-one/:id", verifyToken, deleteNilai);
 nilaiPertemuanRouter.delete("/delete-many", verifyToken, deleteManyNilai);
+nilaiPertemuanRouter.put("/update-nilai/:id", verifyToken, updateNilai);
+nilaiPertemuanRouter.get(
+  "/get-rekap/:kelasId/:semester",
+  verifyToken,
+  getRekap
+);
 
 export default nilaiPertemuanRouter;

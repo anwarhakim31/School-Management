@@ -182,12 +182,10 @@ const RekapAbsenFragment = () => {
           )}
         </div>
       </div>
-      <div className="relative border broder-gray-300 rounded-md bg-white  overflow-hidden">
+      <div className="relative border broder-gray-300 rounded-bl-md rounded-br-md bg-white  overflow-hidden">
         {loading ? (
-          <div className="min-h-[calc(80vh-160px)] bg-backup  animate-pulse  flex-center">
-            <div>
-              <div className="border-4 border-gray-200 border-t-neutral rounded-full w-6 h-6 animate-spin"></div>
-            </div>
+          <div className="min-h-[calc(80vh-160px)] bg-backup    flex-center">
+            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
           </div>
         ) : (
           <TableAbsen

@@ -1,12 +1,15 @@
 import RekapAbsenFragment from "@/components/fragments/guru/rekap/RekapAbsenFragment";
 import RekapNilaiFragment from "@/components/fragments/guru/rekap/RekapNilaiFragement";
+import RekapNilaiStudiFragment from "@/components/fragments/guru/rekap/RekapNilaiStudiFragment";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
 const RekapDataPage = () => {
   const userData = useSelector(selectedUserData);
-  const fragment = ["Rekap Absen", "Rekap Nilai"];
+  const fragment = userData.waliKelas
+    ? ["Rekap Absen", "Rekap Nilai", "Rekap Nilai Studi"]
+    : ["Rekap Nilai Studi"];
   const [selectedFragment, setSelectedFragment] = useState(fragment[0]);
 
   return (
@@ -28,6 +31,7 @@ const RekapDataPage = () => {
       </div>
       {selectedFragment === "Rekap Absen" && <RekapAbsenFragment />}
       {selectedFragment === "Rekap Nilai" && <RekapNilaiFragment />}
+      {selectedFragment === "Rekap Nilai Studi" && <RekapNilaiStudiFragment />}
     </section>
   );
 };

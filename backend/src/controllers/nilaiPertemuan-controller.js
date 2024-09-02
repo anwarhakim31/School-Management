@@ -7,6 +7,7 @@ import Master from "../models/master-model.js";
 import TahunAjaran from "../models/tahunAjaran-model.js";
 import Absensi from "../models/Absensi-model.js";
 import NilaiPertemuan from "../models/nilaiPertemuan-model.js";
+import Jadwal from "../models/jadwal-model.js";
 
 export const addNilai = async (req, res, next) => {
   try {
@@ -95,6 +96,91 @@ export const deleteManyNilai = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: `Berhasil menghapus nilai pertemuan terpilih.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateNilai = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+
+    const update = await NilaiPertemuan.findByIdAndUpdate(
+      id,
+      { ...data },
+      { new: true }
+    );
+
+    if (!update) {
+      throw new ResponseError(400, "Gagal mengedit nilai pertemuan");
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Berhasil mengubah nilai pertemuan.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getRekap = async (req, res, next) => {
+  try {
+    const guruId = req.userId;
+    const kelasId = req.params.kelasId;
+    const semester = req.params.semester;
+
+    const jadwal = await Jadwal.find({
+      guru: guruId,
+      kelas: new mongoose.Types.ObjectId(kelasId),
+    });
+
+    const totalPertemuan = jadwal.reduce((acc, schedule) => {
+      return acc + schedule.jumlahPertemuan;
+    }, 0);
+
+    const kelas = await Kelas.findById(kelasId).populate({ path: "siswa" });
+
+    if (!kelas) {
+      return res.status(404).json({ message: "Kelas tidak ditemukan." });
+    }
+
+    const siswaList = kelas.siswa.sort((a, b) => {
+      const nameA = a.nama.toLowerCase();
+      const nameB = b.nama.toLowerCase();
+      return nameA.localeCompare(nameB);
+    });
+
+    const rekapNilai = [];
+
+    for (const siswa of siswaList) {
+      const dataNilai = Array(totalPertemuan + 1).fill(" ");
+
+      const nilai = await NilaiPertemuan.find({
+        kelas: new mongoose.Types.ObjectId(kelasId),
+        siswa: siswa._id,
+        semester,
+      });
+
+      nilai.forEach((item) => {
+        dataNilai[item.pertemuan] = item.nilai;
+      });
+
+      rekapNilai.push({
+        id: siswa._id,
+        nama: siswa.nama,
+        dataNilai,
+        totalPertemuan,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Berhasil mengambil rekap nilai pertemuan.`,
+      rekapNilai,
+      totalPertemuan,
     });
   } catch (error) {
     next(error);

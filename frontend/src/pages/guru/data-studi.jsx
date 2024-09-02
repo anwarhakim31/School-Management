@@ -24,6 +24,7 @@ import {
   selectedDataDeleteMany,
 } from "@/store/slices/admin-slice";
 import DeleteManyModal from "@/components/fragments/ModalDeleteMany";
+import EditModal from "@/components/fragments/guru/data-studi/EditModal";
 
 const DataStudiPage = () => {
   const menuRef = useRef(null);
@@ -35,6 +36,7 @@ const DataStudiPage = () => {
   const [isAddNilai, setIsAddNilai] = useState(false);
   const [search, setSearch] = useState("");
   const [isEditNilai, setIsEditNilai] = useState(false);
+  const [dataSearch, setDataSearch] = useState([]);
   const [allChecked, setAllChecked] = useState(false);
   const [isMenuMobile, setIsMenuMobile] = useState(false);
   const [isDeleteNilai, setIsDeleteNilai] = useState(false);
@@ -96,6 +98,28 @@ const DataStudiPage = () => {
     setIsMenuMobile(!isMenuMobile);
   };
 
+  const handleToggleEdit = () => {
+    setIsEditNilai(!isEditNilai);
+  };
+
+  useEffect(() => {
+    if (dataNilai) {
+      let clone = [...dataNilai];
+
+      if (search) {
+        const split = search.trim().toLocaleLowerCase().split(" ");
+
+        clone = clone.filter((item) => {
+          return split.every((key) =>
+            item.siswa.nama.toLocaleLowerCase().includes(key)
+          );
+        });
+      }
+
+      setDataSearch(clone);
+    }
+  }, [dataNilai, search]);
+
   return (
     <section className="px-6 py-4  ">
       <div className="w-full flex-between gap-6">
@@ -140,7 +164,7 @@ const DataStudiPage = () => {
                 <Trash2 width={15} height={15} className=" text-neutral2 " />
               </button>
             </div>
-            <div className="hidden md:flex-center gap-2">
+            <div className="hidden md:flex-center gap-4">
               <div className="flex items-center gap-4">
                 <p className="text-xs font-semibold text-gray-700">Kelas</p>
                 <KelasDropdown onChange={handleChangeKelas} />
@@ -201,15 +225,16 @@ const DataStudiPage = () => {
 
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
-            <div className="w-full min-h-[396px] flex-center bg-backup animate-pulse overflow-auto ">
-              <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
+            <div className="w-full min-h-[396px] flex-center bg-backup  overflow-auto ">
+              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           </div>
         ) : (
           <TableStudi
-            data={dataNilai}
+            data={dataSearch}
             handleToggleDelete={handleToggleDelete}
             handleToggleDeleteMany={handleToggleDeleteMany}
+            handleToggleEdit={handleToggleEdit}
             allChecked={allChecked}
             setAllChecked={setAllChecked}
           />
@@ -222,7 +247,7 @@ const DataStudiPage = () => {
           url={`/api/nilaiPertemuan/delete-one/${dataDelete._id}`}
         />
       )}
-      {/* {isEditSiswa && <EditModal onClose={handleToggleEdit} kelas={data} />} */}
+      {isEditNilai && <EditModal onClose={handleToggleEdit} />}
       {isAddNilai && (
         <AddModal
           onClose={handleToggleAdd}

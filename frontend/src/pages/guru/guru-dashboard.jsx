@@ -65,7 +65,7 @@ const GuruDashboardPage = () => {
 
   return (
     <section className="px-6 py-4">
-      <div className="grid xs:grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
         <div
           className="min-h-[125px] flex flex-col justify-center   rounded-md p-4 shadow-md"
           style={{
@@ -86,7 +86,9 @@ const GuruDashboardPage = () => {
           </div>
           <div className="h-8 flex-1 flex-center">
             {loading ? (
-              <div className=" flex-center h-6 w-2/3 m-auto bg-backup rounded-sm border-t-backup animate-pulse duration-500"></div>
+              <div className="relative flex-center h-6 w-2/3 m-auto bg-backup overflow-hidden">
+                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
+              </div>
             ) : (
               <h1 className=" flex-1 flex-center  text-white font-semibold text-2xl h-12 truncate">
                 {(dataGuru && dataGuru.bidangStudi) || "Kosong"}
@@ -147,9 +149,15 @@ const GuruDashboardPage = () => {
             </div>
             <div className="h-8 flex-1 flex-center">
               {loading ? (
-                <div className=" flex-center w-full flex-col gap-3  animate-pulse duration-500">
-                  <div className="w-6 h-4 bg-backup rounded-sm"></div>
-                  <div className="w-1/2 h-4 bg-backup rounded-sm"></div>
+                <div className=" flex-center w-full flex-col gap-3  duration-500">
+                  <div className="w-6 h-4 relative bg-backup overflow-hidden">
+                    {" "}
+                    <div className="absolute inset-0 -translate-x-full  bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
+                  </div>
+                  <div className="w-1/2 h-4 relative bg-backup overflow-hidden">
+                    {" "}
+                    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
+                  </div>
                 </div>
               ) : (
                 <div className=" flex-center flex-col text-white font-semibold  h-12 ">
