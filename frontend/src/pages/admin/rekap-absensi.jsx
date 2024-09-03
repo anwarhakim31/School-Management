@@ -1,5 +1,3 @@
-import MonthDropdown from "@/components/elements/MonthDropdown";
-import YearDropdown from "@/components/elements/YearDropDown";
 import TableAbsen from "@/components/fragments/guru/rekap/TableAbsen";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
@@ -12,8 +10,7 @@ import { saveAs } from "file-saver";
 import ExcelJS from "exceljs";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
 import PrintComponent from "@/components/fragments/guru/rekap/PrintModal";
-import KelasDropdown from "@/components/elements/KelasDropdown";
-import NamaKelasDropdown from "@/components/elements/NamaKelasDropdown";
+import DropdownGroup from "@/components/fragments/admin/RekapData/DropdownGrup";
 
 const RekapAbsensiPage = () => {
   const menuRef = useRef();
@@ -95,8 +92,6 @@ const RekapAbsensiPage = () => {
     setIdKelas(value);
   };
 
-  console.log(kelas, idKelas);
-
   return (
     <section className="px-6 py-4 mb-4 ">
       <div className=" bg-white p-4 border shadow-md rounded-md">
@@ -105,28 +100,13 @@ const RekapAbsensiPage = () => {
         </h3>
         <div className="flex-between">
           <div className="hidden md:flex gap-4">
-            <div className="flex justify-start flex-wrap md:flex-nowrap   gap-4">
-              <div className="flex items-center gap-2">
-                <p className="text-xs font-semibold text-gray-700">Tahun</p>
-                <YearDropdown onSelectYear={handleSelectYeay} />
-              </div>
-              <div className="flex items-center gap-2">
-                <p className="text-xs font-semibold text-gray-700">Bulan</p>
-                <MonthDropdown onSelectMonth={handleSelectMonth} />
-              </div>
-            </div>
-            <div className="flex justify-start flex-wrap md:flex-nowrap  gap-4">
-              <div className="flex items-center gap-2">
-                <p className="text-xs font-semibold text-gray-700">Kelas</p>
-                <KelasDropdown onChange={onSelectKelas} />
-              </div>
-              <div className="flex items-center gap-2">
-                <p className="text-xs font-semibold text-gray-700">
-                  Nama Kelas
-                </p>
-                <NamaKelasDropdown onChange={onSelectIdKelas} kelas={kelas} />
-              </div>
-            </div>
+            <DropdownGroup
+              handleSelectYear={handleSelectYeay}
+              handleSelectMonth={handleSelectMonth}
+              onSelectKelas={onSelectKelas}
+              onSelectIdKelas={onSelectIdKelas}
+              kelas={kelas}
+            />
           </div>
           <div ref={menuRef} className="flex-center md:hidden relative block ">
             <button
@@ -142,39 +122,13 @@ const RekapAbsensiPage = () => {
 
             {isActive && (
               <div className="absolute bg-white z-10 p-4 rounded-md shadow-md border mt-1">
-                <div className="grid gap-4">
-                  <div className="flex justify-start flex-wrap   gap-4">
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold text-gray-700">
-                        Tahun
-                      </p>
-                      <YearDropdown onSelectYear={handleSelectYeay} />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold text-gray-700">
-                        Bulan
-                      </p>
-                      <MonthDropdown onSelectMonth={handleSelectMonth} />
-                    </div>
-                  </div>
-                  <div className="flex justify-start flex-wrap  gap-4">
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold text-gray-700">
-                        Kelas
-                      </p>
-                      <KelasDropdown onChange={onSelectKelas} />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold text-gray-700">
-                        Nama
-                      </p>
-                      <NamaKelasDropdown
-                        onChange={onSelectIdKelas}
-                        kelas={kelas}
-                      />
-                    </div>
-                  </div>
-                </div>
+                <DropdownGroup
+                  handleSelectYear={handleSelectYeay}
+                  handleSelectMonth={handleSelectMonth}
+                  onSelectKelas={onSelectKelas}
+                  onSelectIdKelas={onSelectIdKelas}
+                  kelas={kelas}
+                />
               </div>
             )}
           </div>

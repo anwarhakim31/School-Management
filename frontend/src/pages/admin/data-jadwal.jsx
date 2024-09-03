@@ -1,20 +1,24 @@
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { File, Filter, Plus, Search, Trash2 } from "lucide-react";
+import { Search, Trash2 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import AddModal from "@/components/fragments/admin/data-jadwal.jsx/AddModal";
 import AcaraIcon from "../../assets/svg/acara.svg?react";
 import TableJadwal from "@/components/fragments/admin/data-jadwal.jsx/TableJadwal";
-import DeleteModal from "@/components/fragments/admin/data-jadwal.jsx/DeleteModal";
 import EditModal from "@/components/fragments/admin/data-jadwal.jsx/EditModal";
 import DropDownFilter2 from "@/components/elements/DropDownFilter2";
 import { useSelector } from "react-redux";
-import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
-import DeleteManyModal from "@/components/fragments/admin/data-jadwal.jsx/DeleteManyModal";
+import {
+  selectedDataDelete,
+  selectedDataDeleteMany,
+} from "@/store/slices/admin-slice";
+import DeleteModal from "@/components/fragments/ModalDelete";
+import DeleteManyModal from "@/components/fragments/ModalDeleteMany";
 
 const DataJadwalPage = () => {
   const dataChecked = useSelector(selectedDataDeleteMany);
+  const dataDelete = useSelector(selectedDataDelete);
   const [loading, setLoading] = useState(true);
   const [isAddJadwal, setIsAddJadwal] = useState(false);
   const [isDeleteJadwal, setIsDeleteJadwal] = useState(false);
@@ -104,6 +108,7 @@ const DataJadwalPage = () => {
         <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
+            id="search"
             placeholder="Cari bidang studi dan guru dari jadwal.  "
             value={search}
             disabled={loading}
@@ -161,11 +166,19 @@ const DataJadwalPage = () => {
         )}
       </div>
       {isAddJadwal && <AddModal onClose={handleToggleAdd} />}
-      {isDeleteJadwal && <DeleteModal onClose={handleToggleDelete} />}
+      {isDeleteJadwal && (
+        <DeleteModal
+          onClose={handleToggleDelete}
+          url={"/api/jadwal/delete-jadwal/" + dataDelete._id}
+          title={"Apakah anda yakin ingin menghapus jadwal?"}
+        />
+      )}
       {isDeleteMany && (
         <DeleteManyModal
           onClose={handleToggDeleteMany}
           setAllCheck={setAllCheck}
+          title={"Apakah anda yakin ingin menghapus jadwal terpilih?"}
+          url={"/api/jadwal/delete-many-jadwal"}
         />
       )}
       {isEditJadwal && <EditModal onClose={handleToggleEdit} />}

@@ -60,6 +60,7 @@ const AddModalNasional = ({ onClose }) => {
               </label>
               <input
                 type="date"
+                id="tanggal"
                 name="tanggal"
                 min={1}
                 {...register("tanggal", {
@@ -80,6 +81,7 @@ const AddModalNasional = ({ onClose }) => {
               </label>
               <input
                 type="text"
+                id="keterangan"
                 name="keterangan"
                 {...register("keterangan", {
                   required: "Keterangan diperlukan.",

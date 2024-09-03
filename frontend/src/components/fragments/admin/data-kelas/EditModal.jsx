@@ -134,7 +134,7 @@ const EditModal = ({ onClose }) => {
           </div>
           <div className="px-6  mb-4">
             <label
-              htmlFor=""
+              htmlFor="waliKelas"
               className="text-xs mb-2 block font-semibold text-gray-700"
             >
               Wali Kelas

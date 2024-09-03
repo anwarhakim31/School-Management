@@ -75,6 +75,7 @@ const EditModal = ({ onClose }) => {
             </label>
             <input
               type="text"
+              id="kode"
               name="kode"
               {...register("kode", {
                 required: "Kode tidak boleh kosong.",
@@ -94,7 +95,7 @@ const EditModal = ({ onClose }) => {
               Nama Mata Pelajaran
             </label>
             <input
-              id="posisi"
+              id="nama"
               type="text"
               {...register("nama", {
                 required: "Nama Mata Pelajaran tidak boleh kosong.",

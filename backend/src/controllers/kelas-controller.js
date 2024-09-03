@@ -88,13 +88,13 @@ export const deleteKelas = async (req, res, next) => {
     await Kelas.findByIdAndDelete(id);
     await Jadwal.deleteMany({ kelas: id });
     await NilaiPertemuan.deleteMany({ kelas: id });
-    await Kelas.deleteMany({ kelas: id });
 
     res.status(200).json({
       success: true,
       message: "Kelas berhasil di hapus.",
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

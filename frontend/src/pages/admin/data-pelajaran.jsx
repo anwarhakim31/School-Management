@@ -1,4 +1,3 @@
-import DeleteModal from "@/components/fragments/admin/data-pelajaran/DeleteModal";
 import EditModal from "@/components/fragments/admin/data-pelajaran/EditModal";
 import AddModal from "@/components/fragments/admin/data-pelajaran/AddModal";
 import TablePelajaran from "@/components/fragments/admin/data-pelajaran/TablePelajaran";
@@ -9,12 +8,17 @@ import { Filter, Plus, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import MapelIcon from "../../assets/svg/pelajaran.svg?react";
 import FilterMapel from "@/components/elements/FilterMapel";
+import { useSelector } from "react-redux";
+import { selectedDataDelete } from "@/store/slices/admin-slice";
+import DeleteModal from "@/components/fragments/ModalDelete";
 
 const DataPelajaranPage = () => {
+  const dataDelete = useSelector(selectedDataDelete);
   const [dataMapel, setDataMapel] = useState([]);
   const [dataFilter, setDataFilter] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+
   const [isAddMapel, setIsAddMapel] = useState(false);
   const [isEditMapel, setisEditMapel] = useState(false);
   const [isDeleteMapel, setisDeleteMapel] = useState(false);
@@ -119,6 +123,7 @@ const DataPelajaranPage = () => {
         <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
+            id="search"
             disabled={loading}
             placeholder="Cari kode dan nama mata pelajaran."
             value={search}
@@ -186,7 +191,13 @@ const DataPelajaranPage = () => {
           />
         )}
       </div>
-      {isDeleteMapel && <DeleteModal onClose={handleToggleDelete} />}
+      {isDeleteMapel && (
+        <DeleteModal
+          onClose={handleToggleDelete}
+          url={"/api/mapel/delete-mapel/" + dataDelete._id}
+          title={"Apakah anda yakin ingin menghapus mata pelajaran?"}
+        />
+      )}
       {isAddMapel && <AddModal onClose={handleToggleAdd} />}
       {isEditMapel && <EditModal onClose={handleToggleEdit} />}
     </section>

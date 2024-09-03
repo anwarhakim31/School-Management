@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import profile from "../../assets/profile.png";
 import { Plus, Trash } from "lucide-react";
 import responseError from "@/util/services";
@@ -7,6 +7,7 @@ import { ALLOWED_FILE_TYPES, HOST, MAX_FILE_SIZE } from "@/util/constant";
 import axios from "axios";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
+import DropdownBidangStudi from "@/components/elements/DropdownBidangStudi";
 
 const TambahGuruPage = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const TambahGuruPage = () => {
     handleSubmit,
     setValue,
     watch,
+    control,
     formState: { errors },
   } = useForm();
   const [image, setImage] = useState("");
@@ -33,7 +35,6 @@ const TambahGuruPage = () => {
   const PhotoRef = useRef();
 
   const onSubmit = async (data) => {
-    console.log(data);
     setLoading(true);
     try {
       const res = await axios.post(
@@ -134,6 +135,12 @@ const TambahGuruPage = () => {
 
   const handleDeleteImage = () => {
     setImage("");
+  };
+
+  const changeBidangStudi = (value) => {
+    const { id, name } = value;
+
+    setValue("bidangStudi", id);
   };
 
   const handleChangeImage = async (e) => {
@@ -359,30 +366,23 @@ const TambahGuruPage = () => {
           <div className="">
             <div className="mb-2">
               <label
-                htmlFor="bidangstudi"
+                htmlFor="bidangStudi"
                 className="text-xs mb-2 block font-semibold"
               >
                 Bidang Studi <span className="text-red-500">*</span>
               </label>
-              <select
-                id="bidangstudi"
-                {...register("bidangStudi", {
-                  required: "Bidang Studi tidak boleh kosong.",
-                })}
-                className="py-1.5 h-8 bg-white border text-gray-500   text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
-              >
-                {bidangStudi === "" && (
-                  <option value="">Pilih Bidang Studi</option>
+              <Controller
+                control={control}
+                name="bidangStudi"
+                rules={"Bidang Studi tidak boleh kosong."}
+                render={({ field: { onChange, value } }) => (
+                  <DropdownBidangStudi
+                    onChange={changeBidangStudi}
+                    value={value}
+                  />
                 )}
-                {mapel &&
-                  mapel.map((pel) => {
-                    return (
-                      <option key={pel._id} value={pel._id}>
-                        {pel.nama}
-                      </option>
-                    );
-                  })}
-              </select>
+              />
+
               <span className="text-xs h-4 block mt-1 text-neutral2">
                 {errors.bidangStudi && errors.bidangStudi.message}
               </span>
@@ -395,10 +395,11 @@ const TambahGuruPage = () => {
                 No. Telepon <span className="text-red-500">*</span>
               </label>
               <input
-                type={"tel"}
+                type={"number"}
                 id="No. Telepon"
                 name="phone"
                 value={phone}
+                autoComplete="off"
                 {...register("phone", {
                   required: "No. Telepon tidak boleh kosong.",
                 })}

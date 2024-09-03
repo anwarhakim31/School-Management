@@ -56,6 +56,7 @@ const AddModal = ({ onClose }) => {
             </label>
             <input
               type="text"
+              id="kode"
               name="kode"
               autoFocus
               {...register("kode", {
@@ -76,7 +77,7 @@ const AddModal = ({ onClose }) => {
               Nama Mata Pelajaran
             </label>
             <input
-              id="posisi"
+              id="nama"
               type="text"
               {...register("nama", {
                 required: "Nama Mata Pelajaran tidak boleh kosong.",

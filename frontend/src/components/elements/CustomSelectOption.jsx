@@ -62,7 +62,7 @@ const CustomSelectOption = ({ onChange, wali }) => {
     <div ref={dropRef} className="w-full relative  text-xs  rounded-md ">
       <input
         type="text"
-        id="wali"
+        id="waliKelas"
         onClick={(e) => {
           setIsOpen(!isOpen);
           e.stopPropagation();

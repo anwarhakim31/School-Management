@@ -82,8 +82,8 @@ const AddModal = ({ onClose }) => {
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4 ">
           <div className="px-4 mb-2 ">
             <label
-              htmlFor="mapel"
-              className="text-xs mb-2 block font-semibold text-gray-700"
+              htmlFor="bidangStudi"
+              className="text-xs mb-2 block w-fit font-semibold text-gray-700"
             >
               Bidang Studi
             </label>
@@ -128,7 +128,7 @@ const AddModal = ({ onClose }) => {
           >
             <div className="px-4 mb-2">
               <label
-                htmlFor="hari"
+                htmlFor="kelas"
                 className="text-xs w-fit mb-2 block font-semibold text-gray-700"
               >
                 Kelas
@@ -148,7 +148,7 @@ const AddModal = ({ onClose }) => {
 
             <div className="px-4 mb-2">
               <label
-                htmlFor="hari"
+                htmlFor="namaKelas"
                 className="text-xs w-fit mb-2 block font-semibold text-gray-700"
               >
                 Nama Kelas
@@ -192,18 +192,18 @@ const AddModal = ({ onClose }) => {
           </div>
 
           <div className="px-4 mb-2">
-            <label
-              htmlFor="hari"
-              className="text-xs w-fit mb-2 block font-semibold text-gray-700"
-            >
+            <span className="text-xs w-fit mb-2 block font-semibold text-gray-700">
               Jam Pembelajaran
-            </label>
+            </span>
             <div className="flex-between gap-4 w-full">
               <div className=" gap-2 text-xs w-full">
-                <span className="block mb-3">Mulai</span>
+                <label htmlFor="mulai" className="block mb-3">
+                  Mulai
+                </label>
                 <div className="w-full">
                   <input
                     type="time"
+                    id="mulai"
                     {...register("start", {
                       required: "Jam mulai diperlukan.",
                     })}
@@ -215,10 +215,13 @@ const AddModal = ({ onClose }) => {
                 </div>
               </div>
               <div className=" gap-2 text-xs w-full">
-                <span className="block mb-3">Selesai</span>
+                <label htmlFor="selesai" className="block mb-3">
+                  Selesai
+                </label>
                 <div className="w-full">
                   <input
                     type="time"
+                    id="selesai"
                     {...register("end", {
                       required: "jam selesai diperlukan.",
                     })}
@@ -243,6 +246,7 @@ const AddModal = ({ onClose }) => {
               </span>
             </label>
             <input
+              id="jumlah pertemuan"
               {...register("jumlahPertemuan", {
                 required: "Jumlah pertemuan diperlukan.",
                 max: {

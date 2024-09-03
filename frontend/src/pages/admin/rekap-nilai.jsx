@@ -1,5 +1,3 @@
-import React from "react";
-import TableAbsen from "@/components/fragments/guru/rekap/TableAbsen";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
@@ -10,20 +8,15 @@ import {
   Filter,
   Printer,
 } from "lucide-react";
-import { useEffect, useRef, useState, Fragment, useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { saveAs } from "file-saver";
 import ExcelJS from "exceljs";
-import ReactToPrint, { useReactToPrint } from "react-to-print";
-import DropdownTahunAjaran from "@/components/elements/DropdownTahunAjaran";
-import DropdownSemester from "@/components/elements/DropdownSemester";
+import ReactToPrint from "react-to-print";
 
-import { data } from "autoprefixer";
-
-import KelasDropdown from "@/components/elements/KelasDropdown";
-import NamaKelasDropdown from "@/components/elements/NamaKelasDropdown";
 import TableNilai from "@/components/fragments/TableNilai";
 import PrintComponentNilai from "@/components/fragments/PrintModalNilai";
+import { DropdownGropNiali } from "@/components/fragments/admin/RekapData/DropdownGropNiali";
 
 const RekapNilaiPageadmin = () => {
   const menuRef = useRef(null);
@@ -120,30 +113,13 @@ const RekapNilaiPageadmin = () => {
         </h3>
         <div className="flex-between">
           <div className="hidden xl:flex-between">
-            <div className="flex justify-start flex-wrap gap-4">
-              <div className="flex items-center gap-4">
-                <p className="text-sm font-semibold text-gray-700">
-                  Tahun Ajaran
-                </p>
-                <DropdownTahunAjaran onSelectAjaran={handleSelectAjaran} />
-              </div>
-              <div className="flex items-center gap-4">
-                <p className="text-sm font-semibold text-gray-700">Semester</p>
-                <DropdownSemester onSelectedSemester={handleSelectSemester} />
-              </div>
-              <div className="flex justify-start flex-wrap md:flex-nowrap  gap-4">
-                <div className="flex items-center gap-2">
-                  <p className="text-xs font-semibold text-gray-700">Kelas</p>
-                  <KelasDropdown onChange={onSelectKelas} />
-                </div>
-                <div className="flex items-center gap-2">
-                  <p className="text-xs font-semibold text-gray-700">
-                    Nama Kelas
-                  </p>
-                  <NamaKelasDropdown onChange={onSelectIdKelas} kelas={kelas} />
-                </div>
-              </div>
-            </div>
+            <DropdownGropNiali
+              handleSelectSemester={handleSelectSemester}
+              onSelectIdKelas={onSelectIdKelas}
+              onSelectKelas={onSelectKelas}
+              handleSelectAjaran={handleSelectAjaran}
+              kelas={kelas}
+            />
           </div>
           <div className="relative block xl:hidden w-fit" ref={menuRef}>
             <button
@@ -159,28 +135,13 @@ const RekapNilaiPageadmin = () => {
 
             {isMenu && (
               <div className="absolute left-0  w-max  mt-1 z-10 bg-white border shadow-md rounded-md p-4">
-                <div className="grid grid-cols-2 items-center">
-                  <p className="text-sm font-semibold text-gray-700">
-                    Tahun Ajaran
-                  </p>
-                  <DropdownTahunAjaran onSelectAjaran={handleSelectAjaran} />
-                </div>
-                <div className="grid grid-cols-2 mt-4 items-center">
-                  <p className="text-sm font-semibold text-gray-700">
-                    Semester
-                  </p>
-                  <DropdownSemester onSelectedSemester={handleSelectSemester} />
-                </div>
-                <div className="grid grid-cols-2 mt-4 items-center">
-                  <p className="text-xs font-semibold text-gray-700">Kelas</p>
-                  <KelasDropdown onChange={onSelectKelas} />
-                </div>
-                <div className="grid grid-cols-2 mt-4 items-center">
-                  <p className="text-xs font-semibold text-gray-700">
-                    Nama Kelas
-                  </p>
-                  <NamaKelasDropdown onChange={onSelectIdKelas} kelas={kelas} />
-                </div>
+                <DropdownGropNiali
+                  handleSelectSemester={handleSelectSemester}
+                  onSelectIdKelas={onSelectIdKelas}
+                  onSelectKelas={onSelectKelas}
+                  handleSelectAjaran={handleSelectAjaran}
+                  kelas={kelas}
+                />
               </div>
             )}
           </div>

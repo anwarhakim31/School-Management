@@ -1,8 +1,8 @@
-import guru from "../../assets/svg/Student.svg";
-import ExcelJs from "exceljs";
 import CustomDropdown from "@/components/elements/DropDown";
+import Student from "../../assets/svg/Teacher.svg";
 import DropdownFilter from "@/components/elements/DropDownFilter";
-import HeaderBox from "@/components/elements/data-guru/HeaderBox";
+import HeaderBox from "@/components/elements/data-siswa/HeaderBox";
+import TableSiswa from "@/components/fragments/admin/data-siswa/TableSiswa";
 import {
   selectedDataDelete,
   selectedDataDeleteMany,
@@ -10,53 +10,56 @@ import {
 import { HOST } from "@/util/constant";
 import { formatDate } from "@/util/formatDate";
 import responseError from "@/util/services";
+import ExcelJs from "exceljs";
 import axios from "axios";
 import { FileDown, Plus, Search, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import TableGuru from "@/components/fragments/admin/data-guru.jsx/TableGuru";
+import { saveAs } from "file-saver";
 import DeleteModal from "@/components/fragments/ModalDelete";
 import DeleteManyModal from "@/components/fragments/ModalDeleteMany";
 
 const selectRow = [7, 14, 21, 28];
 
-const DataGuruPage = () => {
+const DataSiswaPage = () => {
   const dataChecked = useSelector(selectedDataDeleteMany);
   const dataDelete = useSelector(selectedDataDelete);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [dataGuru, setDataGuru] = useState([]);
+  const [dataSiswa, setDataSiswa] = useState([]);
   const [pagination, setPagination] = useState({});
   const [dataDetail, setDataDetail] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(7);
-  const [isDeleteGuru, setIsDeleteGuru] = useState(false);
-  const [isDeleteManyGuru, setIsDeletManyGuru] = useState(false);
+  const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
+  const [isDeleteManySiswa, setIsDeletManySiswa] = useState(false);
   const [allCheck, setAllCheck] = useState(false);
   const [filters, setFilters] = useState({
     kelas: "",
     kelasNama: "",
     jenisKelamin: "",
-    bidangStudi: "",
+    tahunMasuk: "",
   });
 
   useEffect(() => {
-    const getGuru = async () => {
+    const getSiswa = async () => {
       try {
-        const res = await axios.get(`${HOST}/api/guru/get-all-guru`, {
+        const res = await axios.get(`${HOST}/api/siswa/get-all-siswa`, {
           params: {
             page,
             limit,
             search,
+            tahunMasuk: filters.tahunMasuk,
             jenisKelamin: filters.jenisKelamin,
+            kelas: filters.jenisKelamin,
             kelasNama: filters.kelasNama,
-            bidangStudi: filters.bidangStudi,
           },
           withCredentials: true,
         });
+
         if (res.status == 200) {
-          setDataGuru(res.data.data);
+          setDataSiswa(res.data.data);
           setPagination(res.data.pagination);
         }
       } catch (error) {
@@ -69,9 +72,10 @@ const DataGuruPage = () => {
     };
     const getDetail = async () => {
       try {
-        const res = await axios.get(`${HOST}/api/guru/get-detail-guru`, {
+        const res = await axios.get(`${HOST}/api/siswa/get-detail-siswa`, {
           withCredentials: true,
         });
+
         if (res.status === 200) {
           setDataDetail(res.data.data);
         }
@@ -83,9 +87,10 @@ const DataGuruPage = () => {
         }, 50);
       }
     };
-    getGuru();
+
+    getSiswa();
     getDetail();
-  }, [limit, page, search, isDeleteGuru, isDeleteManyGuru, filters]);
+  }, [limit, page, search, isDeleteSiswa, isDeleteManySiswa, filters]);
 
   useEffect(() => {
     if (limit) {
@@ -94,10 +99,10 @@ const DataGuruPage = () => {
   }, [limit]);
 
   const handleToggleDeleteOne = () => {
-    setIsDeleteGuru(!isDeleteGuru);
+    setIsDeleteSiswa(!isDeleteSiswa);
   };
   const handleToggleDeleteMany = () => {
-    setIsDeletManyGuru(!isDeleteManyGuru);
+    setIsDeletManySiswa(!isDeleteManySiswa);
   };
 
   const handleSearch = (e) => {
@@ -117,12 +122,17 @@ const DataGuruPage = () => {
     if (filterName === "kelas" && filterValue === "") {
       setFilters((prev) => ({ ...prev, kelasNama: "" }));
     }
-
     setFilters((prevFilters) => ({
       ...prevFilters,
       [filterName]: filterValue,
     }));
   };
+
+  useEffect(() => {
+    if (dataSiswa.length === 0) {
+      setPage(1);
+    }
+  }, [dataSiswa]);
 
   return (
     <section className="px-6 py-4 mb-4 ">
@@ -131,12 +141,12 @@ const DataGuruPage = () => {
         <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
-            placeholder="Cari nama dan nip dari guru."
+            placeholder="Cari nama dan nis dari siswa."
             value={search}
             id="search"
             disabled={loading}
             onChange={handleSearch}
-            className="w-full rounded-full e disabled:cursor-not-allowed py-2 pr-2 pl-10 text-xs border border-gray-400 outline-offset-0 outline-1 outline-neutral"
+            className="w-full rounded-full disabled:cursor-not-allowed py-2 pr-2 pl-10 text-xs border border-gray-400 outline-offset-0 outline-1 outline-neutral"
           />
           <div className="absolute left-4 top-1/2 -translate-y-1/2">
             <Search height={20} width={20} className="text-gray-400" />
@@ -144,12 +154,11 @@ const DataGuruPage = () => {
         </div>
 
         <Link
-          to={"/admin/tambah-guru"}
-          disabled={loading}
+          to={"/admin/tambah-siswa"}
           className="flex-between gap-3 min-w-fit bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
         >
-          <img src={guru} alt="guru" width={15} height={15} />
-          Tambah Guru
+          <img src={Student} alt="student" width={15} height={15} />
+          Tambah Siswa
         </Link>
       </div>
 
@@ -157,12 +166,12 @@ const DataGuruPage = () => {
         <div className="flex-between px-4 h-14 ">
           <div className="flex items-center gap-4  ">
             <button
-              title="Hapus Guru terpilih"
+              title="Hapus siswa terpilih"
               disabled={loading}
               onClick={handleToggleDeleteMany}
               className={`${
                 dataChecked.length > 0 ? "opacity-100" : "opacity-0"
-              } border block border-gray-300 bg-white text-gray-500 group rounded-md  hover:border-gray-400    py-1.5 px-2 transition-all duration-300 font-medium hover:text-white  text-xs   flex-between gap-3`}
+              } border block border-gray-300 bg-white text-gray-500 group rounded-md disabled:cursor-not-allowed  hover:border-gray-400    py-1.5 px-2 transition-all duration-300 font-medium hover:text-white  text-xs   flex-between gap-3`}
             >
               <Trash2 width={15} height={15} className=" text-neutral2 " />
             </button>
@@ -182,7 +191,7 @@ const DataGuruPage = () => {
               title="Excel"
               disabled={loading}
               className="hover:bg-neutral transition-all disabled:cursor-not-allowed duration-300 group border p-1.5 rounded-md"
-              onClick={() => exportToExcel(dataGuru)}
+              onClick={() => exportToExcel(dataSiswa)}
             >
               <FileDown
                 width={20}
@@ -200,12 +209,12 @@ const DataGuruPage = () => {
             </div>
           </div>
         ) : (
-          <TableGuru
-            data={dataGuru}
+          <TableSiswa
+            data={dataSiswa}
             page={page}
-            limit={pagination.page}
-            totalGuru={pagination.totalGuru}
-            totalPage={pagination.totalPage}
+            limit={pagination.perPage}
+            totalSiswa={pagination.total}
+            totalPage={pagination.totalPages}
             handlePagination={handlePagination}
             handleToggleDeleteOne={handleToggleDeleteOne}
             setAllCheck={setAllCheck}
@@ -214,19 +223,19 @@ const DataGuruPage = () => {
           />
         )}
       </div>
-      {isDeleteGuru && (
+      {isDeleteSiswa && (
         <DeleteModal
           onClose={handleToggleDeleteOne}
-          url={"/api/guru/delete-one-guru/" + dataDelete._id}
-          title={"Apakah anda yakin ingin menghapus guru?"}
+          url={"/api/siswa/delete-one-siswa/" + dataDelete._id}
+          title={"Apakah anda yakin ingin menghapus siswa?"}
         />
       )}
-      {isDeleteManyGuru && (
+      {isDeleteManySiswa && (
         <DeleteManyModal
           onClose={handleToggleDeleteMany}
           setAllCheck={setAllCheck}
-          url={"/api/guru/delete-many-guru"}
-          title={"Apakah anda yakin ingin mengapus guru terpilih?"}
+          url={"/api/siswa/delete-many-siswa"}
+          title={"Apakah anda yakin ingin menghapus siswa terpilih?"}
         />
       )}
     </section>
@@ -235,10 +244,10 @@ const DataGuruPage = () => {
 
 const exportToExcel = async (data) => {
   const workbook = new ExcelJs.Workbook();
-  const worksheet = workbook.addWorksheet(`Data Guru`);
+  const worksheet = workbook.addWorksheet(`Data Siswa`);
 
   worksheet.mergeCells("A1:J1"); // Menggabungkan sel A1 hingga D1
-  worksheet.getCell("A1").value = `Data Guru`; // Menambahkan judul
+  worksheet.getCell("A1").value = `Data Siswa`; // Menambahkan judul
   worksheet.getCell("A1").font = { size: 16, bold: true };
   worksheet.getCell("A1").border = {
     top: { style: "thin", color: "FFFFFFFF" },
@@ -252,16 +261,16 @@ const exportToExcel = async (data) => {
   };
 
   worksheet.getRow(2).values = [
-    "NIP",
-    "Nama Guru",
+    "NIS",
+    "Nama Siswa",
     "Jenis Kelamin",
     "Tempat Lahir",
     "Tanggal Lahir",
-    "Bidang Studi",
-    "status",
+    "Agama",
+    "Tahun Masuk",
     "Alamat",
     "Telepon",
-    "Wali Kelas",
+    "kelas",
   ]; // Mengatur nilai header kolom
   worksheet.getRow(2).eachCell((cell, colNumber) => {
     cell.fill = {
@@ -286,27 +295,30 @@ const exportToExcel = async (data) => {
         ? 25
         : colNumber === 8
         ? 30
+        : colNumber === 10
+        ? 25
         : colNumber === 3
         ? 15
         : 15;
   });
 
-  data.forEach((Guru) => {
-    const waliKelas = Guru.waliKelas
-      ? `${Guru.waliKelas.kelas || ""} ${Guru.waliKelas.nama || ""}`
-      : "";
+  // Styling header
+
+  // Menambahkan data siswa dan status
+  data.forEach((siswa) => {
+    const kelas = `${siswa?.kelas?.kelas || ""} ${siswa?.kelas?.nama || ""}`;
 
     const rowValues = [
-      Guru.nip,
-      Guru.nama,
-      Guru.jenisKelamin,
-      Guru.tempatLahir,
-      formatDate(Guru.tanggalLahir),
-      Guru.bidangStudi.nama,
-      Guru.status,
-      Guru.alamat,
-      Guru.phone,
-      waliKelas,
+      siswa.nis,
+      siswa.nama,
+      siswa.jenisKelamin,
+      siswa.tempatLahir,
+      formatDate(siswa.tanggalLahir),
+      siswa.agama,
+      siswa.tahunMasuk,
+      siswa.alamat,
+      siswa.phone,
+      kelas ? kelas : "kosong",
     ];
 
     const row = worksheet.addRow(rowValues);
@@ -329,7 +341,7 @@ const exportToExcel = async (data) => {
   // Ekspor workbook ke Excel
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: "application/octet-stream" });
-  saveAs(blob, `Data Guru.xlsx`);
+  saveAs(blob, `Data Siswa.xlsx`);
 };
 
-export default DataGuruPage;
+export default DataSiswaPage;

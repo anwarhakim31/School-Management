@@ -5,11 +5,12 @@ import responseError from "@/util/services";
 import profile from "../../assets/profile.png";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Plus, Trash } from "lucide-react";
+import DropdownBidangStudi from "@/components/elements/DropdownBidangStudi";
 
 const EditGuruPage = () => {
   const PhotoRef = useRef();
@@ -25,6 +26,7 @@ const EditGuruPage = () => {
   const [photo, setPhoto] = useState("");
 
   const {
+    control,
     register,
     handleSubmit,
     setValue,
@@ -46,7 +48,6 @@ const EditGuruPage = () => {
   });
   const nip = watch("nip");
   const tanggalLahir = watch("tanggalLahir");
-  const bidangStudi = watch("bidangStudi");
   const status = watch("status");
   const phone = watch("phone");
   const selectKelas = watch("kelas");
@@ -128,8 +129,6 @@ const EditGuruPage = () => {
     }
   }, [editData, kelasDB]);
 
-  console.log(bidangStudi);
-
   useEffect(() => {
     setValue("namaKelas", "");
   }, [selectKelas]);
@@ -139,6 +138,11 @@ const EditGuruPage = () => {
       navigate("/admin/data-guru");
     }
   }, []);
+
+  const changeBidangStudi = (value) => {
+    const { id, name } = value;
+    setValue("bidangStudi", id);
+  };
 
   const handleNumberChange = (e, name) => {
     const value = e.target.value;
@@ -168,8 +172,6 @@ const EditGuruPage = () => {
       setLoading(false);
     }
   };
-
-  console.log(status);
 
   const handleChangeImage = async (e) => {
     const file = e.target.files[0];
@@ -319,7 +321,7 @@ const EditGuruPage = () => {
               </span>
             </div>
             <div className="mb-2">
-              <label htmlFor="nis" className="text-xs mb-2 block font-semibold">
+              <label htmlFor="nip" className="text-xs mb-2 block font-semibold">
                 NIP <span className="text-red-500">*</span>
               </label>
               <input
@@ -436,30 +438,22 @@ const EditGuruPage = () => {
           <div className="">
             <div className="mb-2">
               <label
-                htmlFor="bidangstudi"
+                htmlFor="bidangStudi"
                 className="text-xs mb-2 block font-semibold"
               >
                 Bidang Studi <span className="text-red-500">*</span>
               </label>
-              <select
-                id="bidangstudi"
-                {...register("bidangStudi", {
-                  required: "Bidang Studi tidak boleh kosong..",
-                })}
-                className="py-1.5 h-8 bg-white border text-gray-500   text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
-              >
-                {bidangStudi === "" && (
-                  <option value="">Pilih Bidang Studi</option>
+              <Controller
+                control={control}
+                name="bidangStudi"
+                rules={"Bidang Studi tidak boleh kosong."}
+                render={({ field: { onChange, value } }) => (
+                  <DropdownBidangStudi
+                    onChange={changeBidangStudi}
+                    value={value}
+                  />
                 )}
-                {mapel &&
-                  mapel.map((pel) => {
-                    return (
-                      <option key={pel._id} value={pel._id}>
-                        {pel.nama}
-                      </option>
-                    );
-                  })}
-              </select>
+              />
               <span className="text-xs h-4 block mt-1 text-neutral2">
                 {errors.bidangStudi && errors.bidangStudi.message}
               </span>
@@ -472,7 +466,8 @@ const EditGuruPage = () => {
                 No. Telepon <span className="text-red-500">*</span>
               </label>
               <input
-                type={"tel"}
+                type={"number"}
+                autoComplete="off"
                 id="No. Telepon"
                 name="phone"
                 value={phone}

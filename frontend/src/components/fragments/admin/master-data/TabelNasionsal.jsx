@@ -149,8 +149,6 @@ const Pagination = ({
       ? Math.min(totalPage, currentPage + 2)
       : Math.min(totalPage, currentPage + 1);
 
-  console.log(totalPage);
-
   const visiblePage = pageNumber.slice(startPage - 1, endPage);
 
   return (

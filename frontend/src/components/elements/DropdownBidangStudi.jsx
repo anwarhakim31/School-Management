@@ -83,6 +83,7 @@ const DropdownBidangStudi = ({ onChange, value }) => {
     <div ref={mapelRef} className="relative w-full">
       <input
         type="text"
+        id="bidangStudi"
         value={
           !selectedMapel
             ? "Pilih bidang studi"

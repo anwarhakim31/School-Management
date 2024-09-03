@@ -1,6 +1,5 @@
 import FilterKelas from "@/components/elements/data-kelas/FilterKelas";
 import AddModal from "@/components/fragments/admin/data-kelas/AddModal";
-import DeleteModal from "@/components/fragments/admin/data-kelas/DeleteModal";
 import EditModal from "@/components/fragments/admin/data-kelas/EditModal";
 import TableKelas from "@/components/fragments/admin/data-kelas/TableKelas";
 import { HOST } from "@/util/constant";
@@ -9,8 +8,12 @@ import axios from "axios";
 import { Filter, Plus, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import ClassIcon from "../../assets/svg/class.svg?react";
+import { useSelector } from "react-redux";
+import { selectedDataDelete } from "@/store/slices/admin-slice";
+import DeleteModal from "@/components/fragments/ModalDelete";
 
 const DataKelasPage = () => {
+  const dataDelete = useSelector(selectedDataDelete);
   const [dataKelas, setDataKelas] = useState([]);
   const [dataFilter, setDataFilter] = useState([]);
   const [search, setSearch] = useState("");
@@ -138,6 +141,7 @@ const DataKelasPage = () => {
             type="search"
             placeholder="Cari nama dan kelas "
             value={search}
+            id="search"
             disabled={loading}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full disabled:bg-gray-100  rounded-full py-2 pr-2 pl-10 text-xs border border-gray-400 outline-offset-1 outline-1 outline-neutral"
@@ -203,7 +207,13 @@ const DataKelasPage = () => {
           />
         )}
       </div>
-      {isDeleteKelas && <DeleteModal onClose={handleToggleDelete} />}
+      {isDeleteKelas && (
+        <DeleteModal
+          url={"/api/kelas/delete-kelas/" + dataDelete._id}
+          title={"Apakah anda yakin ingin menghapus kelas?"}
+          onClose={handleToggleDelete}
+        />
+      )}
       {isAddKelas && <AddModal onClose={handleToggleAdd} />}
       {isEditKelas && <EditModal onClose={handleToggleEdit} />}
     </section>

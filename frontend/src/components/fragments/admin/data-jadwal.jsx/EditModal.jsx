@@ -107,7 +107,7 @@ const EditModal = ({ onClose }) => {
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4 ">
           <div className="px-4 mb-2 ">
             <label
-              htmlFor="mapel"
+              htmlFor="bidangStudi"
               className="text-xs mb-2 block font-semibold text-gray-700"
             >
               Bidang Studi
@@ -266,6 +266,7 @@ const EditModal = ({ onClose }) => {
               </span>
             </label>
             <input
+              id="jumlah pertemuan"
               {...register("jumlahPertemuan", {
                 required: "Jumlah pertemuan diperlukan.",
                 max: {

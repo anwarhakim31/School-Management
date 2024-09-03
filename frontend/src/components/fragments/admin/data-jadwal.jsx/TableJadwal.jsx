@@ -62,7 +62,7 @@ const TableJadwal = ({
 
     if (checked) {
       setDataChecked(dataSlice.map((jadwal) => jadwal._id));
-      dispatch(setDataDeleteMany((jadwal) => jadwal._id));
+      dispatch(setDataDeleteMany(dataSlice.map((jadwal) => jadwal._id)));
     } else {
       setDataChecked([]);
       dispatch(setDataDeleteMany([]));

@@ -93,6 +93,7 @@ const DropdownGuru = ({ onChange, bidangStudi, value }) => {
     <div ref={guruRef} className="relative w-full">
       <input
         type="text"
+        id="guru"
         value={!selectedGuru ? "Pilih Guru" : selectedGuru.nama}
         readOnly
         onClick={handleInputClick}

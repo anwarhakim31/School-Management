@@ -117,7 +117,6 @@ const EditSiswaPage = () => {
       navigate("/admin/data-siswa");
     }
   }, []);
-  console.log(photo);
 
   const handleNumberChange = (e, name) => {
     const value = e.target.value;
@@ -147,8 +146,6 @@ const EditSiswaPage = () => {
       setLoading(false);
     }
   };
-
-  console.log(editData);
 
   const handleChangeImage = async (e) => {
     const file = e.target.files[0];
@@ -439,7 +436,8 @@ const EditSiswaPage = () => {
                 No. Telepon <span className="text-red-500">*</span>
               </label>
               <input
-                type={"tel"}
+                type={"number"}
+                autoComplete="off"
                 id="No. Telepon"
                 name="phone"
                 value={phone}

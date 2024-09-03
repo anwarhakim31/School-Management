@@ -31,8 +31,6 @@ const TambahSiswaPage = () => {
 
   const PhotoRef = useRef();
 
-  console.log(namaKelas);
-
   const onSubmit = async (data) => {
     setLoading(true);
     try {
@@ -225,6 +223,7 @@ const TambahSiswaPage = () => {
               <input
                 type="text"
                 id="nama"
+                autoComplete="given-name"
                 name="nama"
                 {...register("nama", {
                   required: "Nama tidak boleh kosong.",
@@ -417,7 +416,8 @@ const TambahSiswaPage = () => {
                 No. Telepon <span className="text-red-500">*</span>
               </label>
               <input
-                type={"tel"}
+                type="number"
+                autoComplete="off"
                 id="No. Telepon"
                 name="phone"
                 value={phone}

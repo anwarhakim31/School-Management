@@ -95,7 +95,7 @@ export const getAllGuru = async (req, res, next) => {
       .skip(skip)
       .limit(limit)
       .populate({ path: "waliKelas", select: "nama kelas" })
-      .populate({ path: "bidangStudi", select: "nama" })
+      .populate({ path: "bidangStudi", select: "nama kode" })
       .exec();
 
     const totalGuru = await Guru.countDocuments(filterQuery);

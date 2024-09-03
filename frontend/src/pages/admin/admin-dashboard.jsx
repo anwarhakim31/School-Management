@@ -45,7 +45,7 @@ const AdminDashboard = () => {
 
   return (
     <section className="px-6 pt-4 pb-10   ">
-      <div className="grid xs:grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
         <div className="min-h-[125px] flex flex-col justify-center  bg-white rounded-md p-4 shadow-md">
           <div className="flex gap-2 border-b pb-2 items-center border-neutral/50">
             <div

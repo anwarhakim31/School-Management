@@ -56,7 +56,6 @@ const MasterDataPage = () => {
 
         if (akademikRes.status === 200) {
           setDataAkademik(akademikRes.data.akademik);
-          console.log(akademikRes.data);
         }
       } catch (error) {
         responseError(error);
@@ -180,6 +179,7 @@ const MasterDataPage = () => {
               >
                 <input
                   type="text"
+                  id="ajaran"
                   placeholder="2000/2001"
                   value={ajaran}
                   onChange={(e) => setAjaran(e.target.value)}

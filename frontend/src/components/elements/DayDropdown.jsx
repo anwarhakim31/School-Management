@@ -56,6 +56,7 @@ const DayDropdown = ({ onChange, value }) => {
     <div ref={dayRef} className="relative  ">
       <input
         type="text"
+        id="hari"
         value={!selectedHari ? "Pilih Hari" : selectedHari}
         readOnly
         onClick={handleInputClick}

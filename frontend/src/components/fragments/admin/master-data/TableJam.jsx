@@ -80,7 +80,7 @@ const TableJam = ({ loading, startTime, endTime }) => {
                 name=""
                 value={start}
                 onChange={(e) => setStart(e.target.value)}
-                id=""
+                id="mulai"
                 className="bg-inherit outline-none text-xs"
               />
             </td>
@@ -96,7 +96,7 @@ const TableJam = ({ loading, startTime, endTime }) => {
                 name=""
                 value={end}
                 onChange={(e) => setEnd(e.target.value)}
-                id=""
+                id="selesai"
                 className="bg-inherit outline-none text-xs"
               />
             </td>
