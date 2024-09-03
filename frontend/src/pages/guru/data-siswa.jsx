@@ -164,8 +164,6 @@ const DataSiswaPageguru = () => {
     setIsMenuMobile(!isMenuMobile);
   };
 
-  console.log(dataChecked.length);
-
   return (
     <section className="px-6 py-4 mb-4 ">
       <div className="w-full flex-between gap-6">

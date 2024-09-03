@@ -19,7 +19,7 @@ const PrintComponent = React.forwardRef(
     };
 
     return (
-      <div ref={ref} className="p-4">
+      <div ref={ref} className="p-4 page-landscape">
         <div className="w-full flex-center">
           <img src={logo} alt="logo" width={200} height={200} />
         </div>

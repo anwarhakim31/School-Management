@@ -64,8 +64,13 @@ const EditModal = ({ onClose }) => {
     setValue("waliKelas", value);
   };
 
+  const handleClose = () => {
+    dispatch(setDataEdit(undefined));
+    onClose();
+  };
+
   return (
-    <Modal onClose={onClose}>
+    <Modal onClose={handleClose}>
       <div
         onClick={(e) => e.stopPropagation()}
         className="w-full sm:max-w-[425px] max-h-[400px] rounded-lg shadow-md bg-white"
@@ -73,7 +78,7 @@ const EditModal = ({ onClose }) => {
         <div className="p-4 px-6 border-b">
           <HeaderModal
             titile={"Edit Kelas"}
-            onClose={onClose}
+            onClose={handleClose}
             className={"font-semibold"}
           />
         </div>
@@ -139,10 +144,7 @@ const EditModal = ({ onClose }) => {
             >
               Wali Kelas
             </label>
-            <CustomSelectOption
-              onChange={handleChangeWaliKelas}
-              wali={waliKelas}
-            />
+            <CustomSelectOption onChange={handleChangeWaliKelas} />
 
             <span className="text-xs font-medium h-4 mt-1 block">
               (opsional)

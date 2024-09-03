@@ -60,6 +60,7 @@ const DayDropdown = ({ onChange, value }) => {
         value={!selectedHari ? "Pilih Hari" : selectedHari}
         readOnly
         onClick={handleInputClick}
+        onKeyDown={() => setIsOpen(true)}
         className="block w-28 text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
       />
       <div className="absolute pointer-events-none right-2 top-2.5">
@@ -77,7 +78,13 @@ const DayDropdown = ({ onChange, value }) => {
               <li
                 key={i}
                 onClick={() => handleSelectDay(day, i)}
-                className="px-4 py-2 text-xs hover:bg-gray-200 cursor-pointer"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && handleSelectDay(day, i)}
+                className={`${
+                  selectedHari &&
+                  selectedHari === day &&
+                  "bg-blue-600 text-white"
+                } px-4 py-2 text-xs hover:bg-gray-200 hover:text-neutral cursor-pointer`}
               >
                 <p className="">{day}</p>
               </li>

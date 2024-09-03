@@ -115,7 +115,7 @@ const AddModal = ({ onClose }) => {
           <div className="px-6  mb-4">
             <label
               htmlFor="waliKelas"
-              className="text-xs mb-2 block font-semibold text-gray-700"
+              className="text-xs mb-2 block font-semibold text-gray-700 w-fit"
             >
               Wali Kelas
             </label>

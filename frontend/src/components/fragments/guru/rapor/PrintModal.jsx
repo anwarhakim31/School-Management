@@ -6,7 +6,7 @@ const PrintComponent = React.forwardRef(
     return (
       <div
         ref={ref}
-        className="relative bg-white r mt-4 text-gray-900   mx-auto"
+        className="relative bg-white r mt-4 text-gray-900   mx-auto page-potrait"
       >
         <div className="p-4 md:p-8">
           <div className="flex justify-center border-b-2 border-double border-gray-700 py-10">

@@ -96,6 +96,7 @@ const DropdownGuru = ({ onChange, bidangStudi, value }) => {
         id="guru"
         value={!selectedGuru ? "Pilih Guru" : selectedGuru.nama}
         readOnly
+        onKeyDown={(e) => e.key === "Enter" && setIsOpen(true)}
         onClick={handleInputClick}
         className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
       />
@@ -108,33 +109,44 @@ const DropdownGuru = ({ onChange, bidangStudi, value }) => {
       </div>
 
       {isOpen && dataGuru?.length > 0 && (
-        <div className="absolute mt-1  w-full bg-white border z-50 border-gray-400 rounded shadow">
+        <div className="absolute mt-1  w-full bg-white border z-[100] border-gray-400 rounded shadow">
+          <div className="sticky top-0   text-xs hover:bg-gray-200 cursor-pointer">
+            <input
+              type="search"
+              placeholder="Cari nama guru..."
+              value={search}
+              className=" block mb-2 w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-8 py-2 pr-8 rounded shadow leading-tight focus:outline-none  "
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <Search
+              className="absolute top-1/2 -translate-y-1/2 left-2"
+              width={15}
+              height={15}
+            />
+          </div>
           <ul className="max-h-28 overflow-y-auto">
-            <li className="sticky top-0   text-xs hover:bg-gray-200 cursor-pointer">
-              <input
-                type="search"
-                placeholder="Cari nama guru..."
-                value={search}
-                className=" block mb-2 w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-8 py-2 pr-8 rounded shadow leading-tight focus:outline-none  "
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <Search
-                className="absolute top-1/2 -translate-y-1/2 left-2"
-                width={15}
-                height={15}
-              />
-            </li>
             {dataSearch.length === 0 && (
-              <li className="   text-xs hover:bg-gray-200 text-center py-2">
+              <li
+                tabIndex={0}
+                className="   text-xs hover:bg-gray-200 text-center py-2"
+              >
                 <p>Data Guru tidak ditemukan.</p>
               </li>
             )}
             {dataGuru &&
-              dataSearch.map((guru) => (
+              dataSearch.map((guru, i) => (
                 <li
                   key={guru._id}
+                  tabIndex={0}
+                  onKeyDown={(e) =>
+                    e.key === "Enter" && handleSelectMapel(guru.nama, guru._id)
+                  }
                   onClick={() => handleSelectMapel(guru.nama, guru._id)}
-                  className="px-4 py-2 text-xs hover:bg-gray-200 cursor-pointer"
+                  className={` px-4 py-2 text-xs hover:bg-gray-200 hover:text-neutral cursor-pointer focus:border-neutral ${
+                    selectedGuru.id &&
+                    selectedGuru.id === guru._id &&
+                    "bg-blue-600 text-white"
+                  }`}
                 >
                   <p className="">{guru.nama}</p>
                 </li>

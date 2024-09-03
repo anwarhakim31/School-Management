@@ -4,7 +4,7 @@ import { formatDate } from "@/util/formatDate";
 
 const PrintComponent = React.forwardRef(({ data, dataSiswa }, ref) => {
   return (
-    <div ref={ref} className="p-4">
+    <div ref={ref} className="p-4 page-landscape">
       <div className="w-full flex-center">
         <img src={logo} alt="logo" width={200} height={200} />
       </div>

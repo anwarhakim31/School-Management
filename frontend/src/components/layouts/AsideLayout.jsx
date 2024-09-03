@@ -1,7 +1,7 @@
 import { ChevronsLeft, X } from "lucide-react";
 import logo from "../../assets/Schoolarcy (1).webp";
 import ListSidebarAdmin from "../fragments/admin/ListSidebarAdmin";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import ListSidebarGuru from "../fragments/guru/ListSidebarGuru";
@@ -31,6 +31,19 @@ const AsideLayout = ({ setIsSidebar }) => {
       >
         <ChevronsLeft width={20} height={20} />
       </button>
+      <div className="flex justify-center align-center">
+        <small className="text-[0.625rem] text-white text-center">
+          Copyright <span className="text-[#fdc148]">&copy;</span> 2024.
+          <br /> Created By{" "}
+          <Link
+            target="_blank"
+            className=" underline text-[#fdc148]"
+            to={"https://github.com/anwarhakim31"}
+          >
+            Anwar Hakim
+          </Link>
+        </small>
+      </div>
     </>
   );
 };

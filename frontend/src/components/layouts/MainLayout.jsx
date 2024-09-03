@@ -2,7 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import AsideLayout from "./AsideLayout";
 import { useEffect, useRef, useState } from "react";
 import SideProfile from "@/components/fragments/admin/SideProfile";
-import { setDataDeleteMany } from "@/store/slices/admin-slice";
+import { setDataDeleteMany, setDataEdit } from "@/store/slices/admin-slice";
 import { useDispatch, useSelector } from "react-redux";
 import ButtonScrollTop from "@/components/elements/ButtonScrollTop";
 import HeaderAdminLayout from "./admin/HeaderAdminLayout";
@@ -59,9 +59,10 @@ const MainLayout = () => {
   useEffect(() => {
     if (pathname) {
       dispatch(setDataDeleteMany([]));
+
       setIsSidebar(false);
     }
-  }, [pathname]);
+  }, [pathname, dispatch]);
 
   return (
     <main className="w-screen overflow-hidden h-screen flex ">

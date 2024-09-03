@@ -1,33 +1,39 @@
+import { selectedDataEdit } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
-const CustomSelectOption = ({ onChange, wali }) => {
+const CustomSelectOption = ({ onChange }) => {
+  const dataEdit = useSelector(selectedDataEdit);
   const dropRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
   const [guru, setGuru] = useState([]);
-  const [waliKelas, setWaliKelas] = useState("Tidak memiliki Wali Kelas");
+  const [waliKelas, setWaliKelas] = useState({
+    nama: "Tidak memiliki Wali Kelas",
+  });
 
   const handleWaliKelasSelection = (nama, id) => {
     if (nama === "") {
-      setWaliKelas("Tidak memiliki Wali Kelas");
+      setWaliKelas({ nama: "Tidak memiliki Wali Kelas" });
     } else {
-      setWaliKelas(nama);
+      setWaliKelas({ nama, id });
     }
 
     onChange(id);
     setIsOpen(false);
   };
-
   useEffect(() => {
-    if (wali) {
-      const value = guru.find((item) => item._id === wali);
+    if (dataEdit && dataEdit.waliKelas) {
+      const dataE = guru.find((item) => item._id === dataEdit.waliKelas._id);
 
-      setWaliKelas(value?.nama || "");
+      if (dataE) {
+        setWaliKelas({ nama: dataE.nama, id: dataE._id });
+      }
     }
-  }, [guru, wali]);
+  }, [dataEdit, guru]);
 
   useEffect(() => {
     const guru = async () => {
@@ -67,9 +73,9 @@ const CustomSelectOption = ({ onChange, wali }) => {
           setIsOpen(!isOpen);
           e.stopPropagation();
         }}
-        value={waliKelas}
+        value={waliKelas.nama}
         readOnly
-        className="px-2 py-1.5 w-full  border  rounded-md  outline-neutral select-none cursor-pointer border-gray-500"
+        className={`$ px-2 py-1.5 w-full  border  rounded-md  outline-neutral select-none cursor-pointer border-gray-500`}
       />
       <div className="absolute top-2 right-2 ">
         {isOpen ? (
@@ -100,7 +106,11 @@ const CustomSelectOption = ({ onChange, wali }) => {
                 value={gu.nama}
                 type="button"
                 onClick={() => handleWaliKelasSelection(gu.nama, gu._id)}
-                className="cursor-pointer block w-full my-1 py-1 text-left hover:bg-background px-2"
+                className={`${
+                  waliKelas.id &&
+                  waliKelas.id === gu._id &&
+                  "bg-blue-600 text-white"
+                } cursor-pointer block w-full my-1 py-1 text-left hover:bg-gray-300 hover:text-neutral px-2`}
               >
                 {gu.nama}
               </button>

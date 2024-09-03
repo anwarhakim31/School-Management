@@ -366,7 +366,7 @@ const TambahGuruPage = () => {
             <div className="mb-2">
               <label
                 htmlFor="bidangStudi"
-                className="text-xs mb-2 block font-semibold"
+                className="text-xs mb-2 block font-semibold w-fit"
               >
                 Bidang Studi <span className="text-red-500">*</span>
               </label>

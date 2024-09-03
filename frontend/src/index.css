@@ -123,3 +123,23 @@ input[type="number"] {
     background: white;
   }
 }
+
+@media print {
+  /* Halaman dengan orientasi potret */
+  .page-portrait {
+    page: portrait;
+  }
+
+  @page portrait {
+    size: portrait;
+  }
+
+  /* Halaman dengan orientasi lanskap */
+  .page-landscape {
+    page: landscape;
+  }
+
+  @page landscape {
+    size: landscape;
+  }
+}

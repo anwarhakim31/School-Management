@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 const RekapDataPage = () => {
   const userData = useSelector(selectedUserData);
   const fragment = userData.waliKelas
-    ? ["Rekap Absen", "Rekap Nilai", "Rekap Nilai Studi"]
+    ? ["Rekap Absen", "Rekap Nilai Rapor", "Rekap Nilai Studi"]
     : ["Rekap Nilai Studi"];
   const [selectedFragment, setSelectedFragment] = useState(fragment[0]);
 
@@ -30,7 +30,7 @@ const RekapDataPage = () => {
         ))}
       </div>
       {selectedFragment === "Rekap Absen" && <RekapAbsenFragment />}
-      {selectedFragment === "Rekap Nilai" && <RekapNilaiFragment />}
+      {selectedFragment === "Rekap Nilai Rapor" && <RekapNilaiFragment />}
       {selectedFragment === "Rekap Nilai Studi" && <RekapNilaiStudiFragment />}
     </section>
   );

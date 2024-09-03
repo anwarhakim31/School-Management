@@ -74,16 +74,24 @@ const DropdownSemester = ({ onSelectedSemester }) => {
         <div className="absolute mt-1 w-full bg-white border z-10 border-gray-400 rounded shadow">
           <ul className="max-h-40 overflow-y-auto">
             <li
-              key={data.ajaran}
+              tabIndex={0}
               onClick={() => handleChange({ target: { value: "semester 1" } })}
-              className="px-4 py-2 hover:bg-gray-200 text-xs cursor-pointer"
+              className={` px-4 py-2 hover:bg-gray-200 hover:text-neutral text-xs cursor-pointer ${
+                selectedSemester &&
+                selectedSemester === "semester 1" &&
+                "bg-blue-600 text-white"
+              }`}
             >
               Semester 1
             </li>
             <li
-              key={data.ajaran}
+              tabIndex={0}
               onClick={() => handleChange({ target: { value: "semester 2" } })}
-              className="px-4 py-2 hover:bg-gray-200 text-xs cursor-pointer"
+              className={` px-4 py-2 hover:bg-gray-200 hover:text-neutral text-xs cursor-pointer ${
+                selectedSemester &&
+                selectedSemester === "semester 2" &&
+                "bg-blue-600 text-white"
+              }`}
             >
               Semester 2
             </li>

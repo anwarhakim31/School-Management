@@ -64,12 +64,16 @@ const DropdownCategoryNilai = ({ onChange }) => {
           <ul className="max-h-28 overflow-y-auto">
             <li
               onClick={() => handleSelectCategory("ujian")}
-              className="px-4 py-2 text-xs hover:bg-gray-200 cursor-pointer"
+              tabIndex={0}
+              className={`px-4 py-2 text-xs hover:bg-gray-200 hover:text-neutral cursor-pointer ${
+                selectedCategory === "ujian" && "bg-blue-600 text-white"
+              }`}
             >
               <p className="">Ujian</p>
             </li>
             <li
               onClick={() => handleSelectCategory("tugas")}
+              tabIndex={0}
               className="px-4 py-2 text-xs hover:bg-gray-200 cursor-pointer"
             >
               <p className="">Tugas</p>

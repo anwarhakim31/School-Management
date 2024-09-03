@@ -1,11 +1,13 @@
-import { selectedDataEdit } from "@/store/slices/admin-slice";
+import { selectedDataEdit, setDataEdit } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import axios from "axios";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const KelasDropdown = ({ onChange, value }) => {
+  const { pathname } = useLocation();
   const dataEdit = useSelector(selectedDataEdit);
   const dropdownRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
@@ -15,12 +17,12 @@ const KelasDropdown = ({ onChange, value }) => {
 
   useEffect(() => {
     if (dataEdit) {
-      setSelectedKelas(dataEdit.kelas.kelas);
+      setSelectedKelas(dataEdit?.kelas?.kelas);
     }
     if (value) {
       setSelectedKelas(value);
     }
-  }, [dataEdit, value]);
+  }, [dataEdit, value, pathname]);
 
   useEffect(() => {
     const getKelas = async () => {
@@ -103,8 +105,13 @@ const KelasDropdown = ({ onChange, value }) => {
                 .map((kel) => (
                   <li
                     key={kel}
+                    tabIndex={0}
                     onClick={() => handleSelectKelas(kel)}
-                    className="px-4 py-2 text-center text-xs hover:bg-gray-200 cursor-pointer"
+                    className={`${
+                      selectedKelas &&
+                      selectedKelas === kel &&
+                      "bg-blue-600 text-white"
+                    } px-4 py-2 text-center text-xs hover:bg-gray-200 hover:text-neutral cursor-pointer`}
                   >
                     {kel}
                   </li>

@@ -27,14 +27,18 @@ const DropdownBidangStudi = ({ onChange, value }) => {
   };
 
   useEffect(() => {
+    if (
+      pathname === "/admin/data-jadwal" ||
+      pathname === "/admin/tambah-guru"
+    ) {
+      setSelectedMapel(null);
+    }
     if (dataEdit && dataEdit.bidangStudi) {
       setSelectedMapel({
         kode: dataEdit.bidangStudi.kode,
         nama: dataEdit.bidangStudi.nama,
       });
     }
-
-    setSelectedMapel(null);
   }, [dataEdit, pathname]);
 
   useEffect(() => {
@@ -92,7 +96,7 @@ const DropdownBidangStudi = ({ onChange, value }) => {
       <input
         type="text"
         id="bidangStudi"
-        onKeyDown={handleInputClick}
+        onKeyDown={(e) => e.key === "Enter" && setIsOpen(true)}
         value={
           !selectedMapel
             ? "Pilih bidang studi"
@@ -128,7 +132,10 @@ const DropdownBidangStudi = ({ onChange, value }) => {
           </div>
           <ul className="max-h-28 overflow-y-auto">
             {dataSearch.length === 0 && (
-              <li className="   text-xs hover:bg-gray-200 text-center py-2">
+              <li
+                tabIndex={0}
+                className="   text-xs hover:bg-gray-200 text-center py-2"
+              >
                 <p>Data Bidang Studi tidak ditemukan.</p>
               </li>
             )}
@@ -136,11 +143,13 @@ const DropdownBidangStudi = ({ onChange, value }) => {
               dataSearch.map((mp) => (
                 <li
                   key={mp._id}
+                  tabIndex={0}
+                  onKeyDown={() => handleSelectMapel(mp.kode, mp.nama, mp._id)}
                   onClick={() => handleSelectMapel(mp.kode, mp.nama, mp._id)}
                   className={`${
                     selectedMapel &&
                     selectedMapel.kode === mp.kode &&
-                    "bg-blue-500 text-white"
+                    "bg-blue-600 text-white"
                   } px-4 py-2 grid grid-cols-6 text-xs hover:bg-gray-200 hover:text-neutral cursor-pointer `}
                 >
                   <p className="">{mp.kode}</p>

@@ -81,10 +81,19 @@ const DropdownTahunAjaran = ({ onSelectAjaran }) => {
               dataAjaran.map((data) => (
                 <li
                   key={data.ajaran}
+                  tabIndex={0}
+                  onKeyDown={(e) =>
+                    e.key === "Enter" &&
+                    handleChange({ target: { value: data.ajaran } })
+                  }
                   onClick={() =>
                     handleChange({ target: { value: data.ajaran } })
                   }
-                  className="px-4 py-2 hover:bg-gray-200 text-xs cursor-pointer"
+                  className={` px-4 py-2 hover:bg-gray-200 hover:text-neutral text-xs cursor-pointer ${
+                    selectedAjaran &&
+                    selectedAjaran === data.ajaran &&
+                    "bg-blue-600 text-white"
+                  }`}
                 >
                   {data.ajaran}
                 </li>

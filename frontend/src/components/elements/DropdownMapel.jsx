@@ -95,6 +95,8 @@ const DropdownMapel = ({ onChange, value, url, disabled, readOnly }) => {
       <input
         type="text"
         disabled={disabled}
+        id="mapel"
+        onKeyDown={(e) => e.key === "Enter" && setIsOpen(true)}
         value={
           !selectedMapel
             ? "Pilih Mata Pelajaran"
@@ -114,23 +116,27 @@ const DropdownMapel = ({ onChange, value, url, disabled, readOnly }) => {
 
       {isOpen && (
         <div className="absolute mt-1  w-full bg-white border z-50 border-gray-400 rounded shadow">
+          <div className="sticky top-0   text-xs hover:bg-gray-200 cursor-pointer">
+            <input
+              type="search"
+              placeholder="Cari nama Mata Pelajaran..."
+              value={search}
+              className="block mb-2 w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-8 py-2 pr-8 rounded shadow leading-tight focus:outline-none  "
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <Search
+              className="absolute top-1/2 -translate-y-1/2 left-2"
+              width={15}
+              height={15}
+            />
+          </div>
           <ul className="max-h-32 overflow-y-auto">
-            <li className="sticky top-0   text-xs hover:bg-gray-200 cursor-pointer">
-              <input
-                type="search"
-                placeholder="Cari nama Mata Pelajaran..."
-                value={search}
-                className="block mb-2 w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-8 py-2 pr-8 rounded shadow leading-tight focus:outline-none  "
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <Search
-                className="absolute top-1/2 -translate-y-1/2 left-2"
-                width={15}
-                height={15}
-              />
-            </li>
             {dataSearch.length === 0 && (
-              <li className="   text-xs hover:bg-gray-200 text-center py-2">
+              <li
+                tabIndex={0}
+                onClick={() => handleSelectMapel("", "", "")}
+                className="   text-xs hover:bg-gray-200 text-center py-2"
+              >
                 <p>Data Mata Pelajaran tidak ditemukan.</p>
               </li>
             )}
@@ -138,8 +144,17 @@ const DropdownMapel = ({ onChange, value, url, disabled, readOnly }) => {
               dataSearch.map((mp) => (
                 <li
                   key={mp._id}
+                  tabIndex={0}
+                  onKeyDown={(e) =>
+                    e.key === "Enter" &&
+                    handleSelectMapel(mp.kode, mp.nama, mp._id)
+                  }
                   onClick={() => handleSelectMapel(mp.kode, mp.nama, mp._id)}
-                  className="px-4 py-2 grid grid-cols-6 text-xs hover:bg-gray-200 cursor-pointer"
+                  className={`px-4 py-2 grid grid-cols-6 text-xs hover:bg-gray-200 hover:text-neutral cursor-pointer ${
+                    selectedMapel &&
+                    selectedMapel.kode === mp.kode &&
+                    "bg-blue-600 text-white"
+                  }`}
                 >
                   <p className="">{mp.kode}</p>
                   <p className="col-span-5">{mp.nama}</p>

@@ -260,6 +260,10 @@ export const updateGuru = async (req, res, next) => {
         throw new ResponseError(404, "kelas tidak ditemukan.");
       }
 
+      if (newKelas.waliKelas) {
+        throw new ResponseError(404, "Kelas sudah memiliki wali kelas");
+      }
+
       delete req.body.namaKelas;
       delete req.body.kelas;
 
@@ -268,7 +272,7 @@ export const updateGuru = async (req, res, next) => {
         { waliKelas: guru._id }
       );
 
-      updated = await Guru.findByIdAndUpdate(
+      await Guru.findByIdAndUpdate(
         { _id: id },
         { ...req.body, waliKelas: newKelas._id },
         { new: true }
@@ -280,6 +284,7 @@ export const updateGuru = async (req, res, next) => {
       message: "Berhasil mengubah data guru.",
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

@@ -119,8 +119,13 @@ const NamaKelasDropdown = ({ onChange, kelas, onChange2, value }) => {
             {namaKelas.map((kel) => (
               <li
                 key={kel._id}
+                tabIndex={0}
                 onClick={() => handleSelectKelas(kel.nama, kel._id)}
-                className="px-4 py-2 truncate text-center text-xs hover:bg-gray-200 cursor-pointer"
+                className={`${
+                  selectedNamaKelas.id &&
+                  selectedNamaKelas.id === kel._id &&
+                  "bg-blue-600 text-white"
+                } px-4 py-2 truncate text-center text-xs hover:bg-gray-200 hover:text-neutral cursor-pointer`}
               >
                 {kel.nama}
               </li>
