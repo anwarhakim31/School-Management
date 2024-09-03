@@ -178,7 +178,7 @@ const DataPelajaranPage = () => {
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-md">
         {loading ? (
           <div className="block w-full relative bg-backup animate-pulse shadow-md pb-[3.5rem]">
-            <div className="w-full flex-center min-h-[340px] overflow-x-auto rounded-md">
+            <div className="w-full flex-center min-h-[338px] overflow-x-auto rounded-md">
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           </div>

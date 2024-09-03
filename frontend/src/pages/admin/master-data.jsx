@@ -60,7 +60,9 @@ const MasterDataPage = () => {
       } catch (error) {
         responseError(error);
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
       }
     };
 
@@ -136,7 +138,7 @@ const MasterDataPage = () => {
         </div>
         <div className="relative bg-white w-full   border  overflow-hidden ">
           {loading ? (
-            <div className="block w-full relative bg-gray-200  min-h-[160px] animate-pulse shadow-md pb-[3.5rem]">
+            <div className="block w-full relative bg-backup  min-h-[160px] animate-pulse shadow-md pb-[3.5rem]">
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           ) : (
@@ -154,7 +156,7 @@ const MasterDataPage = () => {
         </div>
         <div className="relative bg-white w-full   border  overflow-hidden  ">
           {loading ? (
-            <div className="block w-full relative bg-gray-200  min-h-[154px] animate-pulse shadow-md pb-[3.5rem]">
+            <div className="block w-full relative bg-backup  min-h-[154px] animate-pulse shadow-md pb-[3.5rem]">
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           ) : (
@@ -220,7 +222,7 @@ const MasterDataPage = () => {
         </div>
         <div className="relative bg-white w-full   border  overflow-hidden  ">
           {loading ? (
-            <div className="block w-full relative bg-gray-200  min-h-[260px] animate-pulse shadow-md pb-[3.5rem]">
+            <div className="block w-full relative bg-backup  min-h-[285px] animate-pulse shadow-md pb-[3.5rem]">
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           ) : (
@@ -246,7 +248,7 @@ const MasterDataPage = () => {
         </div>
         <div className="relative bg-white w-full   border  overflow-hidden  rounded-md">
           {loading ? (
-            <div className="block w-full relative bg-gray-200  min-h-[231px] animate-pulse shadow-md pb-[3.5rem]">
+            <div className="block w-full relative bg-backup  min-h-[231px] animate-pulse shadow-md pb-[3.5rem]">
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           ) : (
@@ -267,7 +269,7 @@ const MasterDataPage = () => {
         </div>
         <div className="relative bg-white w-full   border  overflow-hidden  rounded-md">
           {loading ? (
-            <div className="block w-full relative bg-gray-200  min-h-[231px] animate-pulse shadow-md pb-[3.5rem]">
+            <div className="block w-full relative bg-backup  min-h-[231px] animate-pulse shadow-md pb-[3.5rem]">
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           ) : (

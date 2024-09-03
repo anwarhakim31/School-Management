@@ -83,7 +83,7 @@ const TableMingguan = ({ loading, libur }) => {
               >
                 <input
                   type="checkbox"
-                  name=""
+                  name="sabtu"
                   id="sabtu"
                   value={isSabtu}
                   className="w-full h-full opacity-0 cursor-pointer"
@@ -119,7 +119,7 @@ const TableMingguan = ({ loading, libur }) => {
               >
                 <input
                   type="checkbox"
-                  name=""
+                  name="minggu"
                   value={isMinggu}
                   id="minggu"
                   className="w-full h-full opacity-0 cursor-pointer"

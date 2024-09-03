@@ -1,21 +1,28 @@
 import { ChevronsLeft, X } from "lucide-react";
-import logo from "../../../assets/Schoolarcy (1).webp";
-import ListSidebar from "@/components/fragments/guru/ListSidebar";
+import logo from "../../assets/Schoolarcy (1).webp";
+import ListSidebarAdmin from "../fragments/admin/ListSidebarAdmin";
+import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectedUserData } from "@/store/slices/auth-slice";
+import ListSidebarGuru from "../fragments/guru/ListSidebarGuru";
 
 const AsideLayout = ({ setIsSidebar }) => {
+  const userData = useSelector(selectedUserData);
+
   return (
     <>
-      <div className="w-[150px] h-[50px]   mx-auto block">
+      <div className="w-[150px] h-[50px]  mb-2 mx-auto block">
         <img
           src={logo}
           alt="logo"
-          className="object-contain "
           height={150}
           width={140}
+          className="object-contain mt-1"
         />
       </div>
       <div className="">
-        <ListSidebar />
+        {userData && userData.role === "admin" && <ListSidebarAdmin />}
+        {userData && userData.role === "guru" && <ListSidebarGuru />}
       </div>
       <button
         aria-label="close sidebar"

@@ -8,7 +8,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const HeaderLayout = ({ handleOpenEdit, setIsEdit, handleToggleSidebar }) => {
+const HeaderAdminLayout = ({
+  handleOpenEdit,
+  setIsEdit,
+  handleToggleSidebar,
+}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const settingRef = useRef();
@@ -136,4 +140,4 @@ const HeaderLayout = ({ handleOpenEdit, setIsEdit, handleToggleSidebar }) => {
   );
 };
 
-export default HeaderLayout;
+export default HeaderAdminLayout;

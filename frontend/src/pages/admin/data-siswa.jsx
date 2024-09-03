@@ -204,7 +204,7 @@ const DataSiswaPage = () => {
         </div>
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
-            <div className="w-full min-h-[455px] flex-center bg-backup animate-pulse overflow-auto ">
+            <div className="w-full min-h-[453px] flex-center bg-backup animate-pulse overflow-auto ">
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           </div>
@@ -212,7 +212,7 @@ const DataSiswaPage = () => {
           <TableSiswa
             data={dataSiswa}
             page={page}
-            limit={pagination.perPage}
+            limit={limit}
             totalSiswa={pagination.total}
             totalPage={pagination.totalPages}
             handlePagination={handlePagination}

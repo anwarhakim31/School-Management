@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 import { selectedUserData } from "@/store/slices/auth-slice";
 // import KelasSVG from "@/components/base/svg/KelasSVG
 
-const ListSidebar = () => {
+const ListSidebarGuru = () => {
   const navigate = useNavigate();
   const [activeDropDown, setActiveDropDown] = useState(null);
   const userData = useSelector(selectedUserData);
@@ -145,7 +145,7 @@ const ListSidebar = () => {
   ].filter(Boolean);
 
   return (
-    <ul className="w-full pt-4 h-[80vh] overflow-auto">
+    <ul className="w-full  h-[80vh] overflow-auto">
       {Navlist.map((list) => (
         <li
           onClick={() => handleActiveDropDown(list.id)}
@@ -211,4 +211,4 @@ const ListSidebar = () => {
   );
 };
 
-export default ListSidebar;
+export default ListSidebarGuru;

@@ -162,7 +162,7 @@ const Navlist = [
   },
 ];
 
-const ListSidebar = () => {
+const ListSidebarAdmin = () => {
   const navigate = useNavigate();
   const [activeDropDown, setActiveDropDown] = useState(null);
 
@@ -243,4 +243,4 @@ const ListSidebar = () => {
   );
 };
 
-export default ListSidebar;
+export default ListSidebarAdmin;

@@ -38,7 +38,7 @@ const TableKelas = ({
 
   return (
     <div className="block w-full relative  shadow-md pb-[3.5rem]">
-      <div className="w-full  min-h-[340px] overflow-x-auto rounded-md">
+      <div className="w-full  min-h-[338px] overflow-x-auto rounded-md">
         <table className="text-center w-full text-gray-500 table-a">
           <thead className="text-xs uppercase text-white bg-neutral">
             <tr>
@@ -93,11 +93,11 @@ const TableKelas = ({
             )}
             {dataSlice &&
               !loading &&
-              [...dataSlice].map((kelas) => (
+              [...dataSlice].map((kelas, i) => (
                 <tr
                   key={kelas._id}
                   className={`${
-                    dataSlice.length === 7 && "last:border-none"
+                    lastIndexKelas === i + 1 && "border-none"
                   } hover:bg-gray-100 border-b  `}
                 >
                   <td

@@ -1,7 +1,6 @@
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 
 import LoginPage from "./pages/login";
-import AdminLayout from "./components/layouts/admin/AdminLayout";
 import PrivateRoute from "./routes/PrivateRoute";
 import { useEffect, useState } from "react";
 import { AuthRoute } from "./routes/AuthRoute";
@@ -20,7 +19,6 @@ import TambahSiswaPage from "./pages/admin/tambah-siswa";
 import EditSiswaPage from "./pages/admin/edit-siswa";
 import TambahGuruPage from "./pages/admin/tambah-guru";
 import EditGuruPage from "./pages/admin/edit-guru";
-import GuruLayout from "./components/layouts/guru/GuruLayout";
 import GuruDashboardPage from "./pages/guru/guru-dashboard";
 import AbsenHarianPage from "./pages/guru/absen-harian";
 import RekapDataPage from "./pages/guru/rekap-data";
@@ -32,6 +30,8 @@ import DataNilaiSiswaPage from "./pages/guru/data-nilai-siswa";
 import RaporSiswaPage from "./pages/guru/rapor-siswa";
 import RekapNilaiPageadmin from "./pages/admin/rekap-nilai";
 import DataStudiPage from "./pages/guru/data-studi";
+import SiswaDashboardPage from "./pages/siswa/siswa-dashboard";
+import MainLayout from "./components/layouts/MainLayout";
 
 function App() {
   const dispatch = useDispatch();
@@ -81,7 +81,7 @@ function App() {
           path="/admin"
           element={
             <PrivateRoute role={"admin"}>
-              <AdminLayout />
+              <MainLayout />
             </PrivateRoute>
           }
         >
@@ -210,7 +210,7 @@ function App() {
           path="/guru"
           element={
             <PrivateRoute role={"guru"}>
-              <GuruLayout />
+              <MainLayout />
             </PrivateRoute>
           }
         >
@@ -282,6 +282,18 @@ function App() {
         </Route>
 
         {/* <!-- guru --> */}
+
+        <Route path="/siswa">
+          <Route index element={<Navigate to={"/siswa/dashboard"} />} />
+          <Route
+            path="dashboard"
+            element={
+              <PrivateRoute role={"siswa"}>
+                <SiswaDashboardPage />
+              </PrivateRoute>
+            }
+          />
+        </Route>
 
         <Route path="*" element={<Navigate to={"/login"} />} />
       </Routes>

@@ -64,15 +64,15 @@ const TableSemester = ({ loading, semester }) => {
             </td>
             <td scope="row" className="py-4 w-12">
               <label
-                htmlFor="sabtu"
+                htmlFor="semester1"
                 className={`${
                   isGanjil ? "bg-blue-500" : "bg-backup"
                 } relative border w-10 h-5 flex center rounded-full  border-gray-500 duration-300 transition-all`}
               >
                 <input
                   type="checkbox"
-                  name=""
-                  id="sabtu"
+                  name="semester1"
+                  id="semester1"
                   value={isGanjil}
                   className="w-full h-full opacity-0 cursor-pointer"
                   checked={isGanjil}
@@ -100,16 +100,16 @@ const TableSemester = ({ loading, semester }) => {
             </td>
             <td scope="row" className="py-4 w-12">
               <label
-                htmlFor="minggu"
+                htmlFor="semester2"
                 className={`${
                   isGenap ? "bg-blue-500" : "bg-backup"
                 } relative border w-10 h-5 flex center rounded-full  border-gray-500 duration-300 transition-all`}
               >
                 <input
                   type="checkbox"
-                  name=""
+                  name="semester2"
                   value={isGenap}
-                  id="minggu"
+                  id="semester2"
                   className="w-full h-full opacity-0 cursor-pointer"
                   checked={isGenap}
                   onChange={() => handleToggleSwitch("semester 2")}

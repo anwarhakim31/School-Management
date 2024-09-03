@@ -70,6 +70,7 @@ const LoginPage = () => {
         dispatch(setUserData(res.data.data));
         res.data.data.role === "admin" && navigate("/admin/dasboard");
         res.data.data.role === "guru" && navigate("/guru/dashboard");
+        res.data.data.role === "siswa" && navigate("/siswa/dashboard");
       }
 
       // }, 500);

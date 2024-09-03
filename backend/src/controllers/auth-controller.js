@@ -46,7 +46,8 @@ export const loginUser = async (req, res, next) => {
 
     let user =
       (await Admin.findOne({ username: ni })) ||
-      (await Guru.findOne({ nip: ni }));
+      (await Guru.findOne({ nip: ni })) ||
+      (await Siswa.findOne({ nis: ni }));
 
     if (!user) {
       throw new ResponseError(404, "NIS/NIK dan Password salah");
@@ -67,7 +68,7 @@ export const loginUser = async (req, res, next) => {
         .select("-password")
         .populate({ path: "waliKelas", select: "kelas nama  " });
     } else if (user.role === "siswa") {
-      data = await Siswa.findOne({ username: ni }).select("-password");
+      data = await Siswa.findOne({ nis: ni }).select("-password");
     }
 
     const accessToken = createToken(ni, user.id, user.role);
@@ -120,7 +121,8 @@ export const getAuth = async (req, res, next) => {
       (await Admin.findOne({ _id: userId }).select("-password")) ||
       (await Guru.findById({ _id: userId })
         .select("-password")
-        .populate({ path: "waliKelas", select: "kelas nama" }));
+        .populate({ path: "waliKelas", select: "kelas nama" })) ||
+      (await Siswa.findById({ _id: userId }).select("-password"));
 
     if (!user) {
       throw new ResponseError(404, "User tidak ditemukan");

@@ -77,7 +77,7 @@ const TableSiswa = ({
   return (
     <>
       <div className="block w-full shadow-md pb-[3.5rem]">
-        <div className="w-full min-h-[455px]  overflow-auto ">
+        <div className="w-full min-h-[453px]  overflow-auto ">
           <table className="w-full    text-left  text-gray-500 ">
             <thead className="text-xs text-left  text-white uppercase bg-neutral">
               <tr>
@@ -144,7 +144,9 @@ const TableSiswa = ({
                 data.map((siswa, i) => (
                   <tr
                     key={siswa.nis}
-                    className={` hover:bg-gray-100 border-b  `}
+                    className={` hover:bg-gray-100 border-b  ${
+                      lastOfIndexSiswa === i + 1 && "border-none"
+                    }`}
                   >
                     <td scope="row" className="px-3 py-3 relative">
                       <Checkbox

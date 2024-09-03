@@ -113,8 +113,7 @@ export const addSiswa = async (req, res, next) => {
     }
 
     const salt = await genSalt();
-
-    const hashedPassword = await hash(password, salt);
+    req.body.password = await hash(password, salt);
 
     let newSiswa;
 
@@ -123,7 +122,6 @@ export const addSiswa = async (req, res, next) => {
       delete req.body.namaKelas;
 
       newSiswa = new Siswa({
-        password: hashedPassword,
         ...req.body,
       });
       await newSiswa.save();
@@ -138,7 +136,6 @@ export const addSiswa = async (req, res, next) => {
       }
 
       newSiswa = new Siswa({
-        password: hashedPassword,
         ...req.body,
         kelas: kelasSiswa._id,
       });

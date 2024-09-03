@@ -77,7 +77,7 @@ const TableGuru = ({
   return (
     <>
       <div className="block w-full shadow-md pb-[3.5rem]">
-        <div className="w-full min-h-[455px]  overflow-auto ">
+        <div className="w-full min-h-[453px]  overflow-auto ">
           <table className="w-full    text-left  text-gray-500 ">
             <thead className="text-xs text-left  text-white uppercase bg-neutral">
               <tr>
@@ -109,12 +109,7 @@ const TableGuru = ({
                 >
                   Bidang Studi
                 </th>
-                {/* <th
-                  scope="col"
-                  className="px-4 py-4 text-left whitespace-nowrap"
-                >
-                  Alamat
-                </th> */}
+
                 <th scope="col" className="py-4 text-center">
                   Kontak
                 </th>
@@ -153,7 +148,9 @@ const TableGuru = ({
                 data.map((guru, i) => (
                   <tr
                     key={guru.nip}
-                    className={` hover:bg-gray-100 border-b  `}
+                    className={` hover:bg-gray-100 border-b  ${
+                      lastOfIndexguru === i + 1 && "border-none"
+                    }`}
                   >
                     <td scope="row" className="px-3 py-3 relative">
                       <Checkbox
@@ -281,10 +278,8 @@ const TableGuru = ({
         <Pagination
           lastOfIndexguru={lastOfIndexguru}
           firstOfindexguru={firstOfindexguru}
-          limit={limit}
           page={page}
           totalPage={totalPage}
-          data={data}
           totalGuru={totalGuru}
           handlePagination={handlePagination}
         />
@@ -296,8 +291,7 @@ const TableGuru = ({
 const Pagination = ({
   lastOfIndexguru,
   firstOfindexguru,
-  limit,
-  data,
+
   page,
   totalGuru,
   handlePagination,

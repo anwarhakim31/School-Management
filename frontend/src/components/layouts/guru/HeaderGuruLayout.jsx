@@ -9,7 +9,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
-const HeaderLayout = ({ handleToggleSidebar }) => {
+const HeaderGuruLayout = ({ handleToggleSidebar }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -79,4 +79,4 @@ const HeaderLayout = ({ handleToggleSidebar }) => {
   );
 };
 
-export default HeaderLayout;
+export default HeaderGuruLayout;

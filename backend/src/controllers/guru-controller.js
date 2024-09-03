@@ -335,6 +335,7 @@ export const getDashboard = async (req, res, next) => {
       detail,
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

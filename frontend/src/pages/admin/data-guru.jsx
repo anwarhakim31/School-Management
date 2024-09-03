@@ -195,7 +195,7 @@ const DataGuruPage = () => {
         </div>
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
-            <div className="w-full min-h-[455px] flex-center bg-backup animate-pulse overflow-auto ">
+            <div className="w-full min-h-[453px] flex-center bg-backup animate-pulse overflow-auto ">
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           </div>
@@ -203,7 +203,7 @@ const DataGuruPage = () => {
           <TableGuru
             data={dataGuru}
             page={page}
-            limit={pagination.page}
+            limit={limit}
             totalGuru={pagination.totalGuru}
             totalPage={pagination.totalPage}
             handlePagination={handlePagination}

@@ -1,16 +1,19 @@
 import { Outlet, useLocation } from "react-router-dom";
 import AsideLayout from "./AsideLayout";
-import HeaderLayout from "./HeaderLayout";
 import { useEffect, useRef, useState } from "react";
 import SideProfile from "@/components/fragments/admin/SideProfile";
 import { setDataDeleteMany } from "@/store/slices/admin-slice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ButtonScrollTop from "@/components/elements/ButtonScrollTop";
+import HeaderAdminLayout from "./admin/HeaderAdminLayout";
+import { selectedUserData } from "@/store/slices/auth-slice";
+import HeaderGuruLayout from "./guru/HeaderGuruLayout";
 
-const AdminLayout = () => {
+const MainLayout = () => {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const scrollContainerRef = useRef(null);
+  const userData = useSelector(selectedUserData);
   const [isEdit, setIsEdit] = useState(false);
   const [isSidebar, setIsSidebar] = useState(false);
   const editProfileRef = useRef();
@@ -76,11 +79,16 @@ const AdminLayout = () => {
           ref={scrollContainerRef}
           className="flex flex-col flex-1 overflow-auto"
         >
-          <HeaderLayout
-            setIsEdit={setIsEdit}
-            handleToggleSidebar={handleToggleSidebar}
-          />
+          {userData && userData.role === "admin" && (
+            <HeaderAdminLayout
+              setIsEdit={setIsEdit}
+              handleToggleSidebar={handleToggleSidebar}
+            />
+          )}
 
+          {userData && userData.role === "guru" && (
+            <HeaderGuruLayout handleToggleSidebar={handleToggleSidebar} />
+          )}
           <Outlet />
           {isEdit && (
             <SideProfile ref={editProfileRef} handleClose={handleCloseEdit} />
@@ -92,4 +100,4 @@ const AdminLayout = () => {
   );
 };
 
-export default AdminLayout;
+export default MainLayout;

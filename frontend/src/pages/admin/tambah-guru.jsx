@@ -27,7 +27,6 @@ const TambahGuruPage = () => {
   const [isHover, setIsHover] = useState(false);
   const [loading, setLoading] = useState(false);
   const nip = watch("nip", "");
-  const bidangStudi = watch("bidangStudi", "");
   const phone = watch("phone", "");
   const kelass = watch("kelas", "");
   const selectedValue = watch("kelas");
@@ -374,7 +373,7 @@ const TambahGuruPage = () => {
               <Controller
                 control={control}
                 name="bidangStudi"
-                rules={"Bidang Studi tidak boleh kosong."}
+                rules={{ required: "Bidang Studi tidak boleh kosong." }}
                 render={({ field: { onChange, value } }) => (
                   <DropdownBidangStudi
                     onChange={changeBidangStudi}
