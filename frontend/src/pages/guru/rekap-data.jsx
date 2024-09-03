@@ -14,7 +14,7 @@ const RekapDataPage = () => {
 
   return (
     <section className="px-6 py-4 mb-4 ">
-      <div className="mb-10  bg-white rounded-md shadow-md flex  border-b-2 border-blue-800 py-4">
+      <div className="mb-10  bg-white  shadow-md flex  border-t-4 border-blue-800 py-4">
         {fragment.map((frag, i) => (
           <button
             key={i}

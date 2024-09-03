@@ -8,6 +8,8 @@ import { genSalt, hash } from "bcrypt";
 import Total from "../models/total-model.js";
 import TahunAjaran from "../models/tahunAjaran-model.js";
 import Absensi from "../models/Absensi-model.js";
+import NilaiPertemuan from "../models/nilaiPertemuan-model.js";
+import Nilai from "../models/Nilai-model.js";
 
 export const getAll = async (req, res, next) => {
   try {
@@ -291,6 +293,8 @@ export const deleteOneSiswa = async (req, res, next) => {
     await Siswa.deleteOne({ _id: id });
 
     await Absensi.deleteMany({ siswa: id });
+    await NilaiPertemuan.deleteMany({ siswa: id });
+    await Nilai.deleteMany({ siswa: id });
 
     const ajaran = await TahunAjaran.findOne({ status: true }).select("ajaran");
 
@@ -301,7 +305,7 @@ export const deleteOneSiswa = async (req, res, next) => {
         { new: true }
       );
 
-      if (data.totalSiswa === 0) {
+      if (data && data.totalSiswa === 0) {
         await Total.findByIdAndDelete(data._id);
       }
     }
@@ -327,15 +331,13 @@ export const deleteManySiswa = async (req, res, next) => {
         tahunMasuk: tahunAjaran.ajaran,
       }).countDocuments();
 
-      console.log(siswaBedasarkanAjaran);
-
       const data = await Total.findOneAndUpdate(
         { ajaran: tahunAjaran.ajaran },
         { $inc: { totalSiswa: -siswaBedasarkanAjaran } },
         { new: true }
       );
 
-      if (data.totalSiswa === 0) {
+      if (data && data.totalSiswa === 0) {
         await Total.findByIdAndDelete(data._id);
       }
     }
@@ -354,6 +356,8 @@ export const deleteManySiswa = async (req, res, next) => {
       );
 
       await Absensi.deleteMany({ siswa: siswa._id });
+      await Nilai.deleteMany({ siswa: siswa._id });
+      await NilaiPertemuan.deleteMany({ siswa: siswa._id });
 
       if (updatedKelas) {
         const jumlahSiswa = updatedKelas.siswa.length;

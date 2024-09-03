@@ -152,7 +152,7 @@ export const addJadwal = async (req, res, next) => {
 
       const mapel = await Mapel.findById(bidangStudi);
 
-      if (totalPertemuan + jumlahPertemuan >= 50) {
+      if (totalPertemuan + parseInt(totalPertemuan) >= 50) {
         throw new ResponseError(
           400,
           `Jumlah pertemuan bidang studi  ${mapel.nama.toLowerCase()} pada kelas ini tersisa ${
@@ -404,12 +404,19 @@ export const editJadwal = async (req, res, next) => {
 
       const mapel = await Mapel.findById(bidangStudi);
 
-      if (totalPertemuan + jumlahPertemuan >= 50) {
+      const nowPertemuan = pertemuan.find((per) => per.id === id);
+
+      console.log(nowPertemuan);
+
+      if (
+        totalPertemuan +
+          parseInt(jumlahPertemuan) -
+          nowPertemuan.jumlahPertemuan >
+        50
+      ) {
         throw new ResponseError(
           400,
-          `Jumlah pertemuan bidang studi ${mapel.nama.toLowerCase()} pada kelas ini tersisa ${
-            50 - totalPertemuan
-          } pertemuan`
+          `Jumlah pertemuan bidang studi ${mapel.nama.toLowerCase()} pada kelas ini sudah melewati 50  pertemuan`
         );
       }
     }

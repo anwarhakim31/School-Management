@@ -16,14 +16,14 @@ const TableNilai = ({ data, dataMapel }) => {
         const nilaiTugas = data.find(
           (nilai) =>
             nilai.siswa._id === siswa._id &&
-            nilai.mataPelajaran.kode === mapel &&
+            nilai.mataPelajaran?.kode === mapel &&
             nilai.kategori === "tugas"
         );
 
         const nilaiUjian = data.find(
           (nilai) =>
             nilai.siswa._id === siswa._id &&
-            nilai.mataPelajaran.kode === mapel &&
+            nilai.mataPelajaran?.kode === mapel &&
             nilai.kategori === "ujian"
         );
 
@@ -157,14 +157,14 @@ const TableNilai = ({ data, dataMapel }) => {
                     const nilaiTugas = data.find(
                       (nilai) =>
                         nilai.siswa._id === siswa._id &&
-                        nilai.mataPelajaran.kode === mapel &&
+                        nilai.mataPelajaran?.kode === mapel &&
                         nilai.kategori === "tugas"
                     );
 
                     const nilaiUjian = data.find(
                       (nilai) =>
                         nilai.siswa._id === siswa._id &&
-                        nilai.mataPelajaran.kode === mapel &&
+                        nilai.mataPelajaran?.kode === mapel &&
                         nilai.kategori === "ujian"
                     );
 

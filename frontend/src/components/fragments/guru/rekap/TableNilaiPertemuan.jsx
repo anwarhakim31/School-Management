@@ -45,7 +45,7 @@ const TableNilaiPertemuan = ({ data, totalPertemuan }) => {
             {data && data?.length === 0 && (
               <tr>
                 <td
-                  colSpan="9"
+                  colSpan={totalPertemuan + 2}
                   className="px-2 py-4  text-xs font-medium text-gray-900 h-[350px]  whitespace-nowrap"
                 >
                   <div className="flex justify-center w-full">

@@ -54,8 +54,15 @@ export const getNilai = async (req, res, next) => {
   try {
     const pertemuan = req.params.pertemuan;
     const kelas = req.params.kelasId;
+
+    const kelass = await Kelas.findById(kelas);
+
+    if (!kelass) {
+      throw new ResponseError(404, "Kelas tidak ditemukan.");
+    }
+
     const nilai = await NilaiPertemuan.find({
-      kelas: new mongoose.Types.ObjectId(kelas),
+      siswa: { $in: kelass.siswa },
       pertemuan,
     })
       .populate({ path: "kelas", select: "nama kelas" })

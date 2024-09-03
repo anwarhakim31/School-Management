@@ -22,11 +22,13 @@ const DropdownMapel = ({ onChange, value, url, disabled, readOnly }) => {
     setIsOpen(!isOpen);
   };
 
+  console.log(dataEdit);
+
   useEffect(() => {
     if (dataEdit) {
       setSelectedMapel({
-        kode: dataEdit.mataPelajaran.kode,
-        nama: dataEdit.mataPelajaran.nama,
+        kode: dataEdit?.mataPelajaran?.kode,
+        nama: dataEdit?.mataPelajaran?.nama,
       });
     }
 

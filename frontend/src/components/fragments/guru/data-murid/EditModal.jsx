@@ -8,11 +8,12 @@ import responseError from "@/util/services";
 import axios, { all } from "axios";
 import { HOST } from "@/util/constant";
 import { toast } from "sonner";
-import { useSelector } from "react-redux";
-import { selectedDataEdit } from "@/store/slices/admin-slice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectedDataEdit, setDataEdit } from "@/store/slices/admin-slice";
 import { formatDate } from "@/util/formatDate";
 
 const EditModal = ({ onClose, kelas }) => {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -126,6 +127,7 @@ const EditModal = ({ onClose, kelas }) => {
       if (res.status === 200) {
         toast.success(res.data.message);
         onClose();
+        dispatch(setDataEdit(undefined));
       }
     } catch (error) {
       responseError(error);
@@ -134,16 +136,21 @@ const EditModal = ({ onClose, kelas }) => {
     }
   };
 
+  const handleClose = () => {
+    onClose();
+    dispatch(setDataEdit(undefined));
+  };
+
   return (
-    <Modal onClose={onClose}>
+    <Modal onClose={handleClose}>
       <div
         onClick={(e) => e.stopPropagation()}
         className="w-full md:max-w-[700px] max-h-screen sm:max-h-none overflow-auto rounded-lg shadow-md bg-white"
       >
         <div className="p-4 sticky top-0 bg-white z-20 sm:static border-b">
           <HeaderModal
-            titile={"Tambah Siswa"}
-            onClose={onClose}
+            titile={"Edit Siswa"}
+            onClose={handleClose}
             className={"font-semibold"}
           />
         </div>

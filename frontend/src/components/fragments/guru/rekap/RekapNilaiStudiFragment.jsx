@@ -23,7 +23,6 @@ const RekapNilaiStudiFragment = () => {
   const [isMenu, setIsMenu] = useState(false);
   const [kelas, setKelas] = useState({ kelas: "", nama: "", id: "" });
   const [semester, setSemester] = useState("");
-  const userData = useSelector(selectedUserData);
 
   const [rekapNilai, setRekapNilai] = useState([]);
   const [totalPertemuan, setTotalPertemuan] = useState(0);
@@ -82,13 +81,11 @@ const RekapNilaiStudiFragment = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMenu]);
 
-  console.log(totalPertemuan);
-
   return (
     <Fragment>
       <div className="  bg-white p-4 rounded-tr-md rounded-tl-md border border-b-0">
-        <div className="hidden md:flex-between">
-          <div className="flex justify-start flex-wrap gap-4">
+        <div className="flex-between flex-row-reverse md:flex-row">
+          <div className=" hidden md:flex justify-start flex-wrap gap-4">
             <div className="flex items-center gap-4">
               <p className="text-xs font-semibold text-gray-700">Kelas</p>
               <KelasDropdown onChange={handleSelectKelas} />
@@ -123,65 +120,33 @@ const RekapNilaiStudiFragment = () => {
               content={() => componentRef.current}
             />
           </div>
-        </div>
+          <div className="relative block md:hidden w-fit" ref={menuRef}>
+            <button
+              onClick={handleToggleMenu}
+              className="flex-center  w-8 h-8 rounded-full border p-1 bg-gray-100 hover:bg-gray-200 border-neutral"
+            >
+              <EllipsisVerticalIcon
+                width={15}
+                height={15}
+                className="text-gray-800"
+              />
+            </button>
 
-        <div className="relative block md:hidden w-fit" ref={menuRef}>
-          <button
-            onClick={handleToggleMenu}
-            className="flex-center  w-8 h-8 rounded-full border p-1 bg-gray-100 hover:bg-gray-200 border-neutral"
-          >
-            <EllipsisVerticalIcon
-              width={15}
-              height={15}
-              className="text-gray-800"
-            />
-          </button>
-
-          {/* {isMenu && (
-            <div className="absolute left-0  w-max  mt-1 z-10 bg-white border shadow-md rounded-md p-4">
-              <div className="grid grid-cols-2 items-center">
-                <p className="text-sm font-semibold text-gray-700">
-                  Tahun Ajaran
-                </p>
-                <DropdownTahunAjaran onSelectAjaran={handleSelectAjaran} />
+            {isMenu && (
+              <div className="absolute left-0  w-72  mt-1 z-10 bg-white border shadow-md rounded-md p-4">
+                <div className="grid grid-cols-3 items-center">
+                  <p className="text-xs font-semibold text-gray-700">Kelas</p>
+                  <KelasDropdown onChange={handleSelectKelas} />
+                </div>
+                <div className="grid grid-cols-3 mt-4 items-center">
+                  <p className="text-sm font-semibold text-gray-700">
+                    Semester
+                  </p>
+                  <DropdownSemester onSelectedSemester={handleSelectSemester} />
+                </div>
               </div>
-              <div className="grid grid-cols-2 mt-4 items-center">
-                <p className="text-sm font-semibold text-gray-700">Semester</p>
-                <DropdownSemester onSelectedSemester={handleSelectSemester} />
-              </div>
-              <div className="flex gap-4 mt-8">
-                <button
-                  disabled={loading || rekapNilai.length === 0}
-                  onClick={() =>
-                    exportToExcel(
-                      rekapNilai,
-                      dataMapel,
-                      userData.waliKelas,
-                      tahunAjaran,
-                      semester
-                    )
-                  }
-                  className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
-                >
-                  <FileDownIcon height={15} width={15} />
-                  Excel
-                </button>
-
-                <ReactToPrint
-                  trigger={() => (
-                    <button
-                      disabled={loading || rekapNilai.length === 0}
-                      className="rounded-md py-2 border disabled:cursor-not-allowed text-xs px-4 shadow-sm hover:border-neutral bg-white font-medium flex-center gap-2 border-gray-400"
-                    >
-                      <Printer height={15} width={15} />
-                      Print
-                    </button>
-                  )}
-                  content={() => componentRef.current}
-                />
-              </div>
-            </div>
-          )} */}
+            )}
+          </div>
         </div>
       </div>
       <div className="relative border broder-gray-300 rounded-br-md rounded-bl-md bg-white  overflow-hidden">
@@ -193,6 +158,7 @@ const RekapNilaiStudiFragment = () => {
           <TableNilaiPertemuan
             data={rekapNilai}
             totalPertemuan={totalPertemuan}
+            kelas={kelas}
           />
         )}
       </div>

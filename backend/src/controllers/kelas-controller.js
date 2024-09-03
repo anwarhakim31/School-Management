@@ -4,6 +4,7 @@ import Guru from "../models/guru-model.js";
 import Jadwal from "../models/jadwal-model.js";
 import Kelas from "../models/kelas-model.js";
 import Siswa from "../models/siswa-model.js";
+import NilaiPertemuan from "../models/nilaiPertemuan-model.js";
 
 export const addKelas = async (req, res, next) => {
   try {
@@ -85,7 +86,9 @@ export const deleteKelas = async (req, res, next) => {
     }
 
     await Kelas.findByIdAndDelete(id);
-    await Jadwal.deleteOne({ kelas: id });
+    await Jadwal.deleteMany({ kelas: id });
+    await NilaiPertemuan.deleteMany({ kelas: id });
+    await Kelas.deleteMany({ kelas: id });
 
     res.status(200).json({
       success: true,

@@ -1,11 +1,13 @@
 import CustomDropdown from "@/components/elements/DropDown";
 import AddModal from "@/components/fragments/guru/data-nilai/AddModal";
-import DeleteManyModal from "@/components/fragments/guru/data-nilai/DeleteManyModal";
-import DeleteModal from "@/components/fragments/guru/data-nilai/DeleteModal";
+
 import EditModal from "@/components/fragments/guru/data-nilai/EditModal";
 import Nilai from "../../assets/svg/Score.svg?react";
 import TableNilai from "@/components/fragments/guru/data-nilai/Table-Nilai";
-import { selectedDataDeleteMany } from "@/store/slices/admin-slice";
+import {
+  selectedDataDelete,
+  selectedDataDeleteMany,
+} from "@/store/slices/admin-slice";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
@@ -26,6 +28,8 @@ import FilterCategory from "@/components/elements/data-nilai/FilterCategory";
 import PrintComponent from "@/components/fragments/guru/data-nilai/PrintModal";
 import ReactToPrint from "react-to-print";
 import { saveAs } from "file-saver";
+import DeleteManyModal from "@/components/fragments/ModalDeleteMany";
+import DeleteModal from "@/components/fragments/ModalDelete";
 
 const selectRow = [7, 14, 21, 28];
 
@@ -34,6 +38,7 @@ const DataNilainilaiPage = () => {
   const menuRef = useRef(null);
   const userData = useSelector(selectedUserData);
   const dataChecked = useSelector(selectedDataDeleteMany);
+  const dataDelete = useSelector(selectedDataDelete);
   const [loading, setLoading] = useState(true);
   const [allCheck, setAllCheck] = useState(false);
   const [isAddNilai, setIsAddNilai] = useState(false);
@@ -326,7 +331,7 @@ const DataNilainilaiPage = () => {
         </div>
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
-            <div className="w-full min-h-[450px] flex-center bg-backup animate-pulse overflow-auto ">
+            <div className="w-full min-h-[453px] flex-center bg-backup animate-pulse overflow-auto ">
               <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
             </div>
           </div>
@@ -347,15 +352,18 @@ const DataNilainilaiPage = () => {
       {isDeleteNilai && (
         <DeleteModal
           onClose={handleToggleDeleteOne}
-          title={"Apakah And yakin ingin menghapus nilai?"}
+          title={"Apakah Anda yakin ingin menghapus nilai?"}
+          url={"/api/nilai/delete-one-nilai/" + dataDelete._id}
         />
       )}
       {isEditNilai && <EditModal onClose={handleEditNilai} />}
       {isAddNilai && <AddModal onClose={handleToggleAdd} />}
       {isDeleteManynilai && (
         <DeleteManyModal
+          url={"/api/nilai/delete-many-nilai"}
           onClose={handleToggleDeleteMany}
           setAllCheck={setAllCheck}
+          title={"Apakah Anda yakin ingin menghapus nilai terpilih?"}
         />
       )}
       <div style={{ display: "none" }}>

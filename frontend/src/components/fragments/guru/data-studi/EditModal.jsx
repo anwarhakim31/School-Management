@@ -11,13 +11,14 @@ import DropdownGuru from "@/components/elements/DropdownGuru";
 import DayDropdown from "@/components/elements/DayDropdown";
 import KelasDropdown from "@/components/elements/KelasDropdown";
 import NamaKelasDropdown from "@/components/elements/NamaKelasDropdown";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import DropdownSiswa from "@/components/elements/DropdownSiswa";
 import DropdownCategoryNilai from "@/components/elements/DropdownCategoryNilai";
-import { selectedDataEdit } from "@/store/slices/admin-slice";
+import { selectedDataEdit, setDataEdit } from "@/store/slices/admin-slice";
 
 const EditModal = ({ onClose, pertemuan }) => {
+  const dispatch = useDispatch();
   const userData = useSelector(selectedUserData);
   const dataEdit = useSelector(selectedDataEdit);
   const {
@@ -59,6 +60,7 @@ const EditModal = ({ onClose, pertemuan }) => {
 
       if (res.status === 200) {
         toast.success(res.data.message);
+        dispatch(setDataEdit(undefined));
         onClose();
       }
     } catch (error) {
@@ -110,16 +112,21 @@ const EditModal = ({ onClose, pertemuan }) => {
     }
   }, [userData, pertemuan]);
 
+  const handleClose = () => {
+    dispatch(setDataEdit(undefined));
+    onClose();
+  };
+
   return (
-    <Modal onClose={onClose}>
+    <Modal onClose={handleClose}>
       <div
         onClick={(e) => e.stopPropagation()}
         className="w-full sm:max-w-[400px] max-h-screen sm:max-h-none overflow-auto rounded-lg shadow-md bg-white"
       >
         <div className="p-4 sticky top-0 bg-white z-20 sm:static border-b">
           <HeaderModal
-            titile={`Tambah Nilai Pertemuan Kelas ${dataEdit?.kelas?.kelas} ${dataEdit?.kelas?.nama}`}
-            onClose={onClose}
+            titile={`Edit Nilai Pertemuan Kelas ${dataEdit?.kelas?.kelas} ${dataEdit?.kelas?.nama}`}
+            onClose={handleClose}
             className={"font-semibold"}
           />
         </div>

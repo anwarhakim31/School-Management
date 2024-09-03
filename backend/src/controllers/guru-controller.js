@@ -170,7 +170,7 @@ export const deleteOneGuru = async (req, res, next) => {
 
     await Guru.findByIdAndDelete({ _id: id });
 
-    await Jadwal.deleteOne({ guru: id });
+    await Jadwal.deleteMany({ guru: guru._id });
 
     res.status(200).json({
       success: true,
@@ -196,7 +196,7 @@ export const deleteManyGuru = async (req, res, next) => {
           { $unset: { waliKelas: null } }
         );
       }
-      await Jadwal.deleteOne({ guru: guru._id });
+      await Jadwal.deleteMany({ guru: guru._id });
     }
 
     res.status(200).json({
@@ -288,9 +288,15 @@ export const getDashboard = async (req, res, next) => {
   try {
     const id = req.userId;
 
-    const guru = await Guru.findById(id)
-      .populate({ path: "waliKelas", select: "siswa kelas nama" })
-      .populate({ path: "bidangStudi", select: "nama" });
+    const guru = await Guru.findById(id);
+
+    if (guru.bidangStudi) {
+      guru.populate({ path: "bidangStudi", select: "nama" });
+    }
+
+    if (guru.waliKelas) {
+      guru.populate({ path: "waliKelas", select: "siswa kelas nama" });
+    }
 
     const jadwalList = await Jadwal.find({ guru: id });
 
@@ -300,16 +306,33 @@ export const getDashboard = async (req, res, next) => {
       jumlahPertemuan += jadwal.jumlahPertemuan;
     }
 
-    const totalMurid = guru.waliKelas ? guru.waliKelas.siswa.length : 0;
+    let totalMurid;
+    if (guru.waliKelas) {
+      const waliKelas = await Kelas.findOne({ waliKelas: id }).select("siswa");
+
+      totalMurid = waliKelas.siswa.length;
+    } else {
+      totalMurid = 0;
+    }
+
+    let detail;
+    if (guru.bidangStudi) {
+      detail = {
+        bidangStudi: guru?.bidangStudi?.nama,
+        totalMurid,
+        jumlahPertemuan,
+      };
+    } else {
+      detail = {
+        totalMurid,
+        jumlahPertemuan,
+      };
+    }
 
     res.status(200).json({
       success: true,
       message: "Berhasil mengambil detail guru.",
-      detail: {
-        bidangStudi: guru.bidangStudi.nama,
-        totalMurid,
-        jumlahPertemuan,
-      },
+      detail,
     });
   } catch (error) {
     next(error);

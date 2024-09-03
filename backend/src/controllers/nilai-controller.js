@@ -6,6 +6,8 @@ import Siswa from "../models/siswa-model.js";
 import Master from "../models/master-model.js";
 import TahunAjaran from "../models/tahunAjaran-model.js";
 import Absensi from "../models/Absensi-model.js";
+import Mapel from "../models/mapel-model.js";
+import Jadwal from "../models/jadwal-model.js";
 
 export const addNilai = async (req, res, next) => {
   try {
@@ -337,9 +339,14 @@ export const getRekapKelas = async (req, res, next) => {
       throw new ResponseError(404, "Kelas tidak memiliki siswa.");
     }
 
+    const mapel = await Jadwal.find({ kelas: kelass._id });
+
+    const mapelKelas = mapel.map((item) => item.bidangStudi);
+
     const nilai = await Nilai.find({
       siswa: { $in: kelass.siswa },
       semester,
+      mataPelajaran: { $in: mapelKelas },
       tahunAjaran,
     })
       .populate({
@@ -405,11 +412,13 @@ export const getRaport = async (req, res, next) => {
       waliKelas: siswa.kelas.waliKelas.nama,
       ajaran: ajaran[0].ajaran,
       semester: semesterActive.keterangan,
-      nilai: nilai.map((item) => ({
-        nilai: item.nilai,
-        mapel: item.mataPelajaran.nama,
-        kategori: item.kategori,
-      })),
+      nilai: nilai.some((item) => item.mataPelajaran)
+        ? nilai.map((item) => ({
+            nilai: item.nilai,
+            mapel: item.mataPelajaran.nama,
+            kategori: item.kategori,
+          }))
+        : [],
     };
 
     res.status(200).json({
@@ -419,6 +428,7 @@ export const getRaport = async (req, res, next) => {
       absen,
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

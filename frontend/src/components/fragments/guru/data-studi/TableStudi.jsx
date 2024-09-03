@@ -129,11 +129,11 @@ const TableStudi = ({
             )}
             {dataSlice &&
               !loading &&
-              dataSlice.map((Nilai) => (
+              dataSlice.map((Nilai, i) => (
                 <tr
                   key={Nilai._id}
                   className={`${
-                    dataSlice.length === 7 && "last:border-none"
+                    i === lastIndexNilai - 1 && "border-none"
                   } hover:bg-gray-100 border-b  `}
                 >
                   <td scope="row" className="px-3 py-3 relative">
@@ -154,7 +154,7 @@ const TableStudi = ({
                     scope="row"
                     className="px-10  text-left  border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
                   >
-                    {Nilai.siswa.nama}
+                    {Nilai?.siswa?.nama}
                   </td>
                   <td
                     scope="row"
