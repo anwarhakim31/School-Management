@@ -145,6 +145,8 @@ const AbsenHarianPage = () => {
     }
   };
 
+  console.log(absensiData);
+
   return (
     <section className="px-6 py-4 mb-4 ">
       <div className="w-full flex-between">
@@ -152,7 +154,7 @@ const AbsenHarianPage = () => {
           {formatIndonesiaDate(hariIni)}
         </h3>
 
-        {alreadyAbsensi && (
+        {absensiData > 0 && alreadyAbsensi && (
           <div className="flex gap-2">
             <button onClick={handleGetAlreadyAbsen} className="btn">
               Edit Absen
@@ -161,193 +163,201 @@ const AbsenHarianPage = () => {
         )}
       </div>
 
-      <div className="relative">
-        {loading ? (
-          <>
-            <h2 className="my-2 font-bold text-neutral">A</h2>
-            <div className="grid grid-cols-4 sm:grid-cols-12 xl:grid-cols-10 gap-4 md:gap-6">
-              {[...Array(15)].fill().map((_, i) => (
-                <div
-                  key={i}
-                  className="col-span-full xs:col-span-2 sm:col-span-4 min-h-52 p-4 bg-white/50 duration-700 animate-pulse border border-gray-300 rounded-md md:col-span-3 xl:col-span-2 flex flex-col items-center flex-between"
-                ></div>
-              ))}
-            </div>
-          </>
-        ) : (
-          Object.keys(groupData).map((letter) => (
-            <div key={letter}>
-              <h2 className="my-2 font-bold text-neutral">{letter}</h2>
+      {absensiData.length > 0 && (
+        <div className="relative">
+          {loading ? (
+            <>
+              <h2 className="my-2 font-bold text-neutral">A</h2>
               <div className="grid grid-cols-4 sm:grid-cols-12 xl:grid-cols-10 gap-4 md:gap-6">
-                {data &&
-                  groupData[letter].map((siswa, index) => (
-                    <div
-                      key={siswa._id}
-                      className="col-span-full xs:col-span-2 sm:col-span-4 min-h-52 p-4 bg-white border border-gray-300 rounded-md md:col-span-3 xl:col-span-2 flex flex-col items-center flex-between"
-                    >
-                      <figure className="w-20 h-20 overflow-hidden bg-background rounded-full border">
-                        <img
-                          src={siswa.photo ? siswa.photo : profile}
-                          alt="foto"
-                          className="object-cover w-full h-full block"
-                        />
-                      </figure>
+                {[...Array(15)].fill().map((_, i) => (
+                  <div
+                    key={i}
+                    className="col-span-full xs:col-span-2 sm:col-span-4 min-h-52 p-4 bg-white/50 duration-700 animate-pulse border border-gray-300 rounded-md md:col-span-3 xl:col-span-2 flex flex-col items-center flex-between"
+                  ></div>
+                ))}
+              </div>
+            </>
+          ) : (
+            Object.keys(groupData).map((letter) => (
+              <div key={letter}>
+                <h2 className="my-2 font-bold text-neutral">{letter}</h2>
+                <div className="grid grid-cols-4 sm:grid-cols-12 xl:grid-cols-10 gap-4 md:gap-6">
+                  {data &&
+                    groupData[letter].map((siswa, index) => (
+                      <div
+                        key={siswa._id}
+                        className="col-span-full xs:col-span-2 sm:col-span-4 min-h-52 p-4 bg-white border border-gray-300 rounded-md md:col-span-3 xl:col-span-2 flex flex-col items-center flex-between"
+                      >
+                        <figure className="w-20 h-20 overflow-hidden bg-background rounded-full border">
+                          <img
+                            src={siswa.photo ? siswa.photo : profile}
+                            alt="foto"
+                            className="object-cover w-full h-full block"
+                          />
+                        </figure>
 
-                      <div className="mt-2 text-center">
-                        <h3 className="line-clamp-1 text-xs capitalize mb-1 font-medium">
-                          {siswa.nis}
-                        </h3>
-                        <p className="line-clamp-1 text-xs capitalize font-medium">
-                          {siswa.nama}
-                        </p>
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <label
-                          htmlFor={`${siswa._id}-hadir`}
-                          className={`relative h-6 w-6 flex-center  cursor-pointer rounded-full bg-background border border-gray-300 ${
-                            absensiData.find((item) => item._id === siswa._id)
-                              ?.status === "hadir"
-                              ? `${
-                                  alreadyAbsensi || hariLibur
-                                    ? "bg-gray-100"
-                                    : "bg-green-500 text-white"
-                                }  `
-                              : "bg-gray-100"
-                          }`}
-                        >
-                          <input
-                            type="radio"
-                            id={`${siswa._id}-hadir`}
-                            name={`status-${siswa._id}`}
-                            value={"hadir"}
-                            checked={
+                        <div className="mt-2 text-center">
+                          <h3 className="line-clamp-1 text-xs capitalize mb-1 font-medium">
+                            {siswa.nis}
+                          </h3>
+                          <p className="line-clamp-1 text-xs capitalize font-medium">
+                            {siswa.nama}
+                          </p>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                          <label
+                            htmlFor={`${siswa._id}-hadir`}
+                            className={`relative h-6 w-6 flex-center  cursor-pointer rounded-full bg-background border border-gray-300 ${
                               absensiData.find((item) => item._id === siswa._id)
                                 ?.status === "hadir"
-                            }
-                            onChange={(e) => handleChangeAbsen(e, siswa._id)}
-                            className=" hidden "
-                          />
-                          <p className="text-xs font-medium  ">H</p>
-                        </label>
-                        <label
-                          htmlFor={`${siswa._id}-izin`}
-                          className={`relative h-6 w-6 flex-center  cursor-pointer rounded-full bg-background border border-gray-300 ${
-                            absensiData.find((item) => item._id === siswa._id)
-                              ?.status === "izin"
-                              ? "bg-blue-500 text-white"
-                              : "bg-gray-100"
-                          }`}
-                        >
-                          <input
-                            type="radio"
-                            id={`${siswa._id}-izin`}
-                            name={`status-${siswa._id}`}
-                            value={"izin"}
-                            checked={
+                                ? `${
+                                    alreadyAbsensi || hariLibur
+                                      ? "bg-gray-100"
+                                      : "bg-green-500 text-white"
+                                  }  `
+                                : "bg-gray-100"
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              id={`${siswa._id}-hadir`}
+                              name={`status-${siswa._id}`}
+                              value={"hadir"}
+                              checked={
+                                absensiData.find(
+                                  (item) => item._id === siswa._id
+                                )?.status === "hadir"
+                              }
+                              onChange={(e) => handleChangeAbsen(e, siswa._id)}
+                              className=" hidden "
+                            />
+                            <p className="text-xs font-medium  ">H</p>
+                          </label>
+                          <label
+                            htmlFor={`${siswa._id}-izin`}
+                            className={`relative h-6 w-6 flex-center  cursor-pointer rounded-full bg-background border border-gray-300 ${
                               absensiData.find((item) => item._id === siswa._id)
                                 ?.status === "izin"
-                            }
-                            onChange={(e) => handleChangeAbsen(e, siswa._id)}
-                            className=" hidden "
-                          />
-                          <p className="text-xs font-medium  ">I</p>
-                        </label>
-                        <label
-                          htmlFor={`${siswa._id}-sakit`}
-                          className={`relative h-6 w-6 flex-center  cursor-pointer rounded-full bg-background border border-gray-300 ${
-                            absensiData.find((item) => item._id === siswa._id)
-                              ?.status === "sakit"
-                              ? "bg-orange-500 text-white"
-                              : "bg-gray-100"
-                          }`}
-                        >
-                          <input
-                            type="radio"
-                            id={`${siswa._id}-sakit`}
-                            name={`status-${siswa._id}`}
-                            value={"sakit"}
-                            checked={
+                                ? "bg-blue-500 text-white"
+                                : "bg-gray-100"
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              id={`${siswa._id}-izin`}
+                              name={`status-${siswa._id}`}
+                              value={"izin"}
+                              checked={
+                                absensiData.find(
+                                  (item) => item._id === siswa._id
+                                )?.status === "izin"
+                              }
+                              onChange={(e) => handleChangeAbsen(e, siswa._id)}
+                              className=" hidden "
+                            />
+                            <p className="text-xs font-medium  ">I</p>
+                          </label>
+                          <label
+                            htmlFor={`${siswa._id}-sakit`}
+                            className={`relative h-6 w-6 flex-center  cursor-pointer rounded-full bg-background border border-gray-300 ${
                               absensiData.find((item) => item._id === siswa._id)
                                 ?.status === "sakit"
-                            }
-                            onChange={(e) => handleChangeAbsen(e, siswa._id)}
-                            className=" hidden "
-                          />
-                          <p className="text-xs font-medium  ">S</p>
-                        </label>
-                        <label
-                          htmlFor={`${siswa._id}-alpha`}
-                          className={`relative h-6 w-6 flex-center  cursor-pointer rounded-full bg-background border border-gray-300 ${
-                            absensiData.find((item) => item._id === siswa._id)
-                              ?.status === "alpha"
-                              ? "bg-red-500 text-white"
-                              : "bg-gray-100"
-                          }`}
-                        >
-                          <input
-                            type="radio"
-                            id={`${siswa._id}-alpha`}
-                            name={`status-${siswa._id}`}
-                            value={"alpha"}
-                            checked={
+                                ? "bg-orange-500 text-white"
+                                : "bg-gray-100"
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              id={`${siswa._id}-sakit`}
+                              name={`status-${siswa._id}`}
+                              value={"sakit"}
+                              checked={
+                                absensiData.find(
+                                  (item) => item._id === siswa._id
+                                )?.status === "sakit"
+                              }
+                              onChange={(e) => handleChangeAbsen(e, siswa._id)}
+                              className=" hidden "
+                            />
+                            <p className="text-xs font-medium  ">S</p>
+                          </label>
+                          <label
+                            htmlFor={`${siswa._id}-alpha`}
+                            className={`relative h-6 w-6 flex-center  cursor-pointer rounded-full bg-background border border-gray-300 ${
                               absensiData.find((item) => item._id === siswa._id)
                                 ?.status === "alpha"
-                            }
-                            onChange={(e) => handleChangeAbsen(e, siswa._id)}
-                            className=" hidden "
-                          />
-                          <p className="text-xs font-medium  ">A</p>
-                        </label>
+                                ? "bg-red-500 text-white"
+                                : "bg-gray-100"
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              id={`${siswa._id}-alpha`}
+                              name={`status-${siswa._id}`}
+                              value={"alpha"}
+                              checked={
+                                absensiData.find(
+                                  (item) => item._id === siswa._id
+                                )?.status === "alpha"
+                              }
+                              onChange={(e) => handleChangeAbsen(e, siswa._id)}
+                              className=" hidden "
+                            />
+                            <p className="text-xs font-medium  ">A</p>
+                          </label>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                </div>
+              </div>
+            ))
+          )}
+          {alreadyAbsensi && (
+            <div className="absolute w-full h-full transition-all  inset-0">
+              <div
+                className={`${
+                  delay ? "scale-100 opacity-100" : "scale-90 opacity-0"
+                } absolute bg-black/5 rounded-md inset-0 w-full h-full  overflow-hidden flex  justify-between flex-col items-center p-10 transition-all duration-300`}
+              >
+                {[...Array(3)].fill().map((_, i) => (
+                  <div
+                    key={i}
+                    className={`${i === 0 && "mr-auto"} ${
+                      i === 2 && "ml-auto"
+                    } border-t-4 rounded-lg -rotate-12 border-blue-700 border-b-4 p-4`}
+                  >
+                    <p className="font-bold text-blue-700">
+                      Sudah Absensi Hari Ini
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
-          ))
-        )}
-        {alreadyAbsensi && (
-          <div className="absolute w-full h-full transition-all  inset-0">
-            <div
-              className={`${
-                delay ? "scale-100 opacity-100" : "scale-90 opacity-0"
-              } absolute bg-black/5 rounded-md inset-0 w-full h-full  overflow-hidden flex  justify-between flex-col items-center p-10 transition-all duration-300`}
-            >
-              {[...Array(3)].fill().map((_, i) => (
-                <div
-                  key={i}
-                  className={`${i === 0 && "mr-auto"} ${
-                    i === 2 && "ml-auto"
-                  } border-t-4 rounded-lg -rotate-12 border-blue-700 border-b-4 p-4`}
-                >
-                  <p className="font-bold text-blue-700">
-                    Sudah Absensi Hari Ini
-                  </p>
-                </div>
-              ))}
+          )}
+          {hariLibur && (
+            <div className="absolute w-full h-full transition-all  inset-0">
+              <div
+                className={`${
+                  delay ? "scale-100 opacity-100" : "scale-90 opacity-0"
+                } absolute bg-black/5 rounded-md inset-0 w-full h-full  overflow-hidden flex  justify-between flex-col items-center p-10 transition-all duration-500`}
+              >
+                {[...Array(3)].fill().map((_, i) => (
+                  <div
+                    key={i}
+                    className={`${i === 0 && "mr-auto"} ${
+                      i === 2 && "ml-auto"
+                    } border-t-4 rounded-lg -rotate-12 border-blue-700 border-b-4 p-4`}
+                  >
+                    <p className="font-bold text-blue-700">
+                      Hari Libur Sekolah
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-        {hariLibur && (
-          <div className="absolute w-full h-full transition-all  inset-0">
-            <div
-              className={`${
-                delay ? "scale-100 opacity-100" : "scale-90 opacity-0"
-              } absolute bg-black/5 rounded-md inset-0 w-full h-full  overflow-hidden flex  justify-between flex-col items-center p-10 transition-all duration-500`}
-            >
-              {[...Array(3)].fill().map((_, i) => (
-                <div
-                  key={i}
-                  className={`${i === 0 && "mr-auto"} ${
-                    i === 2 && "ml-auto"
-                  } border-t-4 rounded-lg -rotate-12 border-blue-700 border-b-4 p-4`}
-                >
-                  <p className="font-bold text-blue-700">Hari Libur Sekolah</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
       <div className="w-full flex justify-end">
         <button
@@ -355,7 +365,11 @@ const AbsenHarianPage = () => {
           className="w-full sm:max-w-[200px] h-10 disabled:cursor-not-allowed disabled:bg-indigo-500 bg-neutral hover:bg-blue-700 text-white mt-8 text-sm rounded-md"
           disabled={loading2 || alreadyAbsensi || hariLibur}
         >
-          Simpan
+          {absensiData.length === 0
+            ? "Tidak ada siswa"
+            : loading
+            ? "Loading"
+            : "Simpan"}
         </button>
       </div>
     </section>

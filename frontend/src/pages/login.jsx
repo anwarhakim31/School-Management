@@ -92,7 +92,7 @@ const LoginPage = () => {
         <div className="w-full h-full my-10 sm:my-0  flex justify-center order-2 sm:order-1 items-center lg:px-24 ">
           <Slider />
         </div>
-        <div className="bg-background py-24 sm:py-0 w-full h-full sm:order-2 flex justify-center flex-col px-14 sm:px-8 md:px-14 lg:px-28 xl:px-32 bg items-center">
+        <div className="bg-background py-24 sm:py-0 w-full h-screen sm:order-2 flex justify-center flex-col px-14 sm:px-8 md:px-14 lg:px-28 xl:px-32 bg items-center">
           <figure>
             <img
               src={logo}
@@ -129,7 +129,7 @@ const LoginPage = () => {
               )}
             </div>
           </div> */}
-          <h1 className="text-center text-sm font-semibold text-md text-gray-800 mt-12 mb-7 leading-relaxed">
+          <h1 className="text-center text-sm font-medium text-md text-gray-800 mt-10 mb-8  leading-relaxed">
             Masukkan NIP / NIS & password <br />
             <span>pada form di bawah ini dengan benar.</span>
           </h1>
@@ -210,7 +210,7 @@ const LoginPage = () => {
             type="submit"
             aria-label="submit"
             onClick={handleLogin}
-            className="rounded-lg bg-neutral w-full  font-medium text-white text-sm h-12 mt-4"
+            className="rounded-lg bg-neutral w-full  font-medium text-white text-sm h-10 mt-4 hover:bg-indigo-800"
           >
             {loading ? <LoaderButton /> : "Masuk"}
           </button>

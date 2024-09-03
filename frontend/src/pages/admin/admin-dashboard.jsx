@@ -46,25 +46,25 @@ const AdminDashboard = () => {
   return (
     <section className="px-6 pt-4 pb-10   ">
       <div className="grid xs:grid-cols-2 md:grid-cols-4 gap-4">
-        <div
-          className="min-h-[125px] flex flex-col justify-center   rounded-md p-4 shadow-md"
-          style={{
-            background: "linear-gradient(to right top,#537ec0, #5bbbea)",
-          }}
-        >
-          <div className="flex gap-2 border-b pb-2 items-center border-gray-50/50">
-            <div className="bg-sky-600 p-1 rounded-md">
+        <div className="min-h-[125px] flex flex-col justify-center  bg-white rounded-md p-4 shadow-md">
+          <div className="flex gap-2 border-b pb-2 items-center border-neutral/50">
+            <div
+              style={{
+                background: "linear-gradient(to right top,#537ec0, #5bbbea)",
+              }}
+              className=" p-1 rounded-md"
+            >
               <SiswaIcon width={"20"} height={"20"} className={" stroke-[1]"} />
             </div>
-            <h3 className="text-sm font-semibold text-white line-clamp-1 ">
+            <h3 className="text-sm font-semibold text-neutral line-clamp-1 ">
               Total Siswa
             </h3>
           </div>
           <div className="h-8 flex-1 flex-center">
             {loading ? (
-              <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-white rounded-full border-t-neutral animate-spin"></div>
+              <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-neutral rounded-full border-t-white animate-spin"></div>
             ) : (
-              <h1 className=" flex-1 flex-center  text-white font-semibold text-3xl h-12 ">
+              <h1 className=" flex-1 flex-center  text-neutral font-semibold text-3xl h-12 ">
                 {dataUmum && (
                   <AnimasiCounter targetNumber={dataUmum.totalSiswa} />
                 )}
@@ -72,25 +72,25 @@ const AdminDashboard = () => {
             )}
           </div>
         </div>
-        <div
-          className="min-h-[125px] flex flex-col rounded-md p-4 shadow-md"
-          style={{
-            background: "linear-gradient(to right top, #ba75e3, #6f80dc)",
-          }}
-        >
-          <div className="flex gap-2 border-b pb-2 items-center border-gray-50/50">
-            <div className="bg-purple-600 p-1 rounded-md">
+        <div className="min-h-[125px] flex flex-col bg-white rounded-md p-4 shadow-md">
+          <div className="flex gap-2 border-b pb-2 items-center border-neutral/50">
+            <div
+              style={{
+                background: "linear-gradient(to right top, #ba75e3, #6f80dc)",
+              }}
+              className=" p-1 rounded-md"
+            >
               <GuruIcon width={"20"} height={"20"} className={" stroke-[1]"} />
             </div>
-            <h3 className="text-sm font-semibold text-white line-clamp-1 ">
+            <h3 className="text-sm font-semibold text-neutral line-clamp-1 ">
               Total Guru
             </h3>
           </div>
           <div className="h-8 flex-1 flex-center">
             {loading ? (
-              <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-white rounded-full border-t-neutral animate-spin"></div>
+              <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-neutral rounded-full border-t-white animate-spin"></div>
             ) : (
-              <h1 className=" flex-1 flex-center  text-white font-semibold text-3xl h-12 ">
+              <h1 className=" flex-1 flex-center  text-neutral font-semibold text-3xl h-12 ">
                 {dataUmum && (
                   <AnimasiCounter targetNumber={dataUmum.totalGuru} />
                 )}
@@ -98,29 +98,29 @@ const AdminDashboard = () => {
             )}
           </div>
         </div>
-        <div
-          className="min-h-[125px] flex flex-col rounded-md p-4 shadow-md"
-          style={{
-            background: "linear-gradient(to right top,#c94f60,#fe967d)",
-          }}
-        >
-          <div className="flex gap-2 border-b pb-2 items-center border-gray-50/50">
-            <div className="bg-rose-500 p-1 rounded-md">
+        <div className="min-h-[125px] flex flex-col bg-white rounded-md p-4 shadow-md">
+          <div className="flex gap-2 border-b pb-2 items-center border-neutral/50">
+            <div
+              style={{
+                background: "linear-gradient(to right top,#c94f60,#fe967d)",
+              }}
+              className=" p-1 rounded-md"
+            >
               <ClassIcon
                 width={"20"}
                 height={"20"}
                 className={" stroke-white stroke-[1] text-white"}
               />
             </div>
-            <h3 className="text-sm font-semibold text-white line-clamp-1 ">
+            <h3 className="text-sm font-semibold text-neutral line-clamp-1 ">
               Total Kelas
             </h3>
           </div>
           <div className="h-8 flex-1 flex-center">
             {loading ? (
-              <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-white rounded-full border-t-neutral animate-spin"></div>
+              <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-neutral rounded-full border-t-white animate-spin"></div>
             ) : (
-              <h1 className=" flex-1 flex-center  text-white font-semibold text-3xl h-12 ">
+              <h1 className=" flex-1 flex-center  text-neutral font-semibold text-3xl h-12 ">
                 {dataUmum && (
                   <AnimasiCounter targetNumber={dataUmum.totalKelas} />
                 )}
@@ -128,29 +128,29 @@ const AdminDashboard = () => {
             )}
           </div>
         </div>
-        <div
-          className="min-h-[125px] flex flex-col rounded-md p-4 shadow-md"
-          style={{
-            background: "linear-gradient(to right top, #4f46e5, #54aff7)",
-          }}
-        >
-          <div className="flex gap-2 border-b pb-2 items-center border-gray-50/50">
-            <div className="bg-indigo-600 p-1 rounded-md">
+        <div className="min-h-[125px] bg-white flex flex-col rounded-md p-4 shadow-md">
+          <div className="flex gap-2 border-b pb-2 items-center border-neutral/50">
+            <div
+              style={{
+                background: "linear-gradient(to right top, #4f46e5, #54aff7)",
+              }}
+              className=" p-1 rounded-md"
+            >
               <MapelIcon
                 width={"20"}
                 height={"20"}
                 className={" text-white stroke-[1]"}
               />
             </div>
-            <h3 className="text-sm font-semibold text-white line-clamp-1  ">
+            <h3 className="text-sm font-semibold text-neutral line-clamp-1  ">
               Total Mata Pelajaran
             </h3>
           </div>
           <div className="h-8 flex-1 flex-center">
             {loading ? (
-              <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-white rounded-full border-t-neutral animate-spin"></div>
+              <div className=" flex-center h-6 w-6 m-auto border-4 border-t-4 border-neutral rounded-full border-t-white animate-spin"></div>
             ) : (
-              <h1 className=" flex-1 flex-center  text-white font-semibold text-3xl h-12 ">
+              <h1 className=" flex-1 flex-center  text-neutral font-semibold text-3xl h-12 ">
                 {dataUmum && (
                   <AnimasiCounter targetNumber={dataUmum.totalMapel} />
                 )}

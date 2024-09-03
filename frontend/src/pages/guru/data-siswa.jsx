@@ -1,8 +1,8 @@
 import CustomDropdown from "@/components/elements/DropDown";
 import Student from "../../assets/svg/Teacher.svg";
 import TableSiswa from "@/components/fragments/guru/data-murid/TableSiswa";
-import DeleteModal from "@/components/fragments/guru/data-murid/DeleteModal";
 import {
+  selectedDataDelete,
   selectedDataDeleteMany,
   setDataDeleteMany,
   setDataEdit,
@@ -12,19 +12,16 @@ import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
 import {
-  Bolt,
   EllipsisVerticalIcon,
   FileDown,
   Filter,
   Printer,
   Search,
-  Settings,
   Trash2,
 } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddModal from "@/components/fragments/guru/data-murid/AddModal";
-import DeleteManyModal from "@/components/fragments/guru/data-murid/DeleteManyModal";
 import FilterSiswa from "@/components/elements/wali-kelas/FilterSiswa";
 import EditModal from "@/components/fragments/guru/data-murid/EditModal";
 
@@ -34,6 +31,8 @@ import { saveAs } from "file-saver";
 import ReactToPrint from "react-to-print";
 import PrintComponent from "@/components/fragments/guru/data-murid/PrintModal";
 import { formatDate } from "@/util/formatDate";
+import DeleteModal from "@/components/fragments/ModalDelete";
+import DeleteManyModal from "@/components/fragments/ModalDeleteMany";
 
 const selectRow = [7, 14, 21, 28];
 
@@ -44,6 +43,7 @@ const DataSiswaPageguru = () => {
   const menuRef = useRef(null);
   const FilterRef = useRef();
   const componentRef = useRef();
+  const dataDelete = useSelector(selectedDataDelete);
   const [loading, setLoading] = useState(true);
   const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
   const [isAddSiswa, setIsAddSiswa] = useState(false);
@@ -63,7 +63,6 @@ const DataSiswaPageguru = () => {
   const [limit, setLimit] = useState(7);
 
   useEffect(() => {
-    dispatch(setDataDeleteMany([]));
     const getKelas = async () => {
       try {
         const res = await axios.get(
@@ -164,6 +163,8 @@ const DataSiswaPageguru = () => {
   const handleToggleMenu = () => {
     setIsMenuMobile(!isMenuMobile);
   };
+
+  console.log(dataChecked.length);
 
   return (
     <section className="px-6 py-4 mb-4 ">
@@ -358,7 +359,8 @@ const DataSiswaPageguru = () => {
       {isDeleteSiswa && (
         <DeleteModal
           onClose={handleToggleDeleteOne}
-          title={"Apakah And yakin ingin menghapus siswa?"}
+          title={"Apakah anda yakin ingin menghapus siswa?"}
+          url={"/api/siswa/delete-one-siswa/" + dataDelete._id}
         />
       )}
       {isEditSiswa && <EditModal onClose={handleToggleEdit} kelas={data} />}
@@ -367,6 +369,8 @@ const DataSiswaPageguru = () => {
         <DeleteManyModal
           onClose={handleToggleDeleteMany}
           setAllCheck={setAllCheck}
+          title={"Apakah anda yakin ingin menghapus siswa terpilih?"}
+          url={"/api/siswa/delete-many-siswa"}
         />
       )}
       <div style={{ display: "none" }}>

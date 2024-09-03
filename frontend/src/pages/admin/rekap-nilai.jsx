@@ -71,7 +71,7 @@ const RekapNilaiPageadmin = () => {
       } finally {
         setTimeout(() => {
           setLoading(false);
-        }, 50);
+        }, 100);
       }
     };
 
@@ -220,10 +220,8 @@ const RekapNilaiPageadmin = () => {
       </div>
       <div className="relative border mt-10 broder-gray-300 rounded-md  shadow-md bg-white  overflow-hidden">
         {loading ? (
-          <div className="min-h-[calc(80vh-160px)] bg-backup  animate-pulse  flex-center">
-            <div>
-              <div className="border-4 border-gray-200 border-t-neutral rounded-full w-6 h-6 animate-spin"></div>
-            </div>
+          <div className="min-h-[calc(80vh-160px)] relative bg-backup  animate-pulse  flex-center">
+            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
           </div>
         ) : (
           <TableNilai data={rekapNilai} dataMapel={dataMapel} />

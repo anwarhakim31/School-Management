@@ -146,7 +146,7 @@ const DataJadwalPage = () => {
         {loading ? (
           <div className="block w-full relative bg-backup animate-pulse shadow-md pb-[3.5rem]">
             <div className="w-full flex-center min-h-[340px] overflow-x-auto rounded-md">
-              <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
+              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           </div>
         ) : (

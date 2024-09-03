@@ -37,10 +37,8 @@ const TableSemester = ({ loading, semester }) => {
     }
   }, [semester]);
 
-  console.log(semester);
-
   return (
-    <div className="w-full  min-h-[150px] overflow-x-auto rounded-md shadow-lg">
+    <div className="w-full  min-h-[150px] overflow-x-auto ">
       <table className="text-center w-full text-gray-500 table-a">
         <thead className="text-xs uppercase text-white bg-neutral">
           <tr>
@@ -52,19 +50,6 @@ const TableSemester = ({ loading, semester }) => {
           </tr>
         </thead>
         <tbody>
-          {loading && (
-            <tr className="w-full h-full">
-              <td
-                colSpan="7"
-                className="px-2 py-4  border-gray-300 text-xs text-gray800 whitespace-nowrap h-[220px]"
-              >
-                <div className="flex flex-col items-center justify-center">
-                  <span className="w-8 h-8 block mb-2 animate-spin rounded-full border-4 border-t-gray-800 border-gray-300"></span>
-                  <span>Loading</span>
-                </div>
-              </td>
-            </tr>
-          )}
           <tr className="border-b hover:bg-gray-200">
             <td scope="row" className="py-4 w-12 text-xs font-medium">
               Semester 1

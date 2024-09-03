@@ -26,7 +26,7 @@ const HeaderBox = ({ dataDetail, loading }) => {
           </div>
           <div className="flex-center w-8 h-8">
             {loading ? (
-              <div className="border-4  border-gray-200 rounded-full w-6 h-6 border-t-4 border-t-neutral  border-l-gray-100  animate-spin"></div>
+              <div className="border-4  border-neutral rounded-full w-6 h-6 border-t-4 border-t-white  border-l-gray-100  animate-spin"></div>
             ) : (
               <h3 className="text-lg font-semibold text-blue-500">
                 {dataDetail.jumlahGuru}
@@ -54,7 +54,7 @@ const HeaderBox = ({ dataDetail, loading }) => {
           </div>
           <div className="flex-center w-8 h-8">
             {loading ? (
-              <div className="border-4 border-gray-200 rounded-full w-6 h-6 border-t-4 border-t-neutral border-l-gray-100  animate-spin"></div>
+              <div className="border-4 border-neutral rounded-full w-6 h-6 border-t-4 border-t-white border-l-gray-100  animate-spin"></div>
             ) : (
               <h3 className="text-lg font-semibold  text-purple-600 ">
                 {dataDetail.lk}
@@ -82,7 +82,7 @@ const HeaderBox = ({ dataDetail, loading }) => {
           </div>
           <div className="flex-center w-8 h-8">
             {loading ? (
-              <div className="border-4 border-gray-200 rounded-full w-6 h-6 border-t-4 border-t-neutral  animate-spin"></div>
+              <div className="border-4 border-neutral rounded-full w-6 h-6 border-t-4 border-t-white  animate-spin"></div>
             ) : (
               <h3 className="text-lg font-semibold ">{dataDetail.pr}</h3>
             )}

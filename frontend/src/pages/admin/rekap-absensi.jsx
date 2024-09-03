@@ -217,7 +217,7 @@ const RekapAbsensiPage = () => {
         {loading ? (
           <div className="min-h-[calc(80vh-160px)] bg-backup border border-gray-400 rounded-md  animate-pulse flex-center">
             <div>
-              <div className="border-4 border-gray-200 border-t-neutral rounded-full w-6 h-6 animate-spin"></div>
+              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           </div>
         ) : (

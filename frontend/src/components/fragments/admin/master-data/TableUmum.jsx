@@ -27,7 +27,7 @@ const TableUmum = ({ data, handleToggleDelete, handleEditAjaran, loading }) => {
 
   return (
     <div className="block w-full relative  shadow-md pb-[3.5rem]">
-      <div className="w-full  min-h-[231px] overflow-x-auto rounded-md">
+      <div className="w-full  min-h-[231px] overflow-x-auto rounded-br-md rounded-bl-md">
         <table className="text-center w-full text-gray-500 table-a">
           <thead className="text-xs uppercase text-white bg-neutral">
             <tr>

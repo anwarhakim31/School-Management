@@ -45,7 +45,7 @@ const TableJam = ({ loading, startTime, endTime }) => {
   };
 
   return (
-    <div className="w-full  min-h-[140px] overflow-x-auto rounded-md shadow-lg">
+    <div className="w-full  min-h-[140px] overflow-x-auto shadow-lg">
       <table className="text-center w-full text-gray-500 table-a">
         <thead className="text-xs uppercase text-white bg-neutral">
           <tr>

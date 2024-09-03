@@ -36,6 +36,7 @@ const MasterDataPage = () => {
 
   useEffect(() => {
     const getData = async () => {
+      setLoading(true);
       try {
         const [ajaranRes, liburRes, akademikRes] = await Promise.all([
           axios.get(HOST + "/api/ajaran/get-ajaran", { withCredentials: true }),
@@ -134,12 +135,10 @@ const MasterDataPage = () => {
             Jam Pembelajaran
           </h1>
         </div>
-        <div className="relative bg-white w-full   border  overflow-hidden  rounded-md">
+        <div className="relative bg-white w-full   border  overflow-hidden ">
           {loading ? (
-            <div className="block w-full relative bg-gray-200 animate-pulse shadow-md pb-[3.5rem]">
-              <div className="w-full flex-center min-h-[231px] overflow-x-auto rounded-md">
-                <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
-              </div>
+            <div className="block w-full relative bg-gray-200  min-h-[160px] animate-pulse shadow-md pb-[3.5rem]">
+              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           ) : (
             <TableJam
@@ -154,12 +153,10 @@ const MasterDataPage = () => {
             Semester
           </h1>
         </div>
-        <div className="relative bg-white w-full   border  overflow-hidden  rounded-md">
+        <div className="relative bg-white w-full   border  overflow-hidden  ">
           {loading ? (
-            <div className="block w-full relative bg-gray-200 animate-pulse shadow-md pb-[3.5rem]">
-              <div className="w-full flex-center min-h-[231px] overflow-x-auto rounded-md">
-                <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
-              </div>
+            <div className="block w-full relative bg-gray-200  min-h-[154px] animate-pulse shadow-md pb-[3.5rem]">
+              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           ) : (
             <TableSemester
@@ -168,7 +165,7 @@ const MasterDataPage = () => {
             />
           )}
         </div>
-        <div className="w-full flex-between flex-wrap pt-8 pb-4 px-2 rounded-md    gap-6 border bg-white">
+        <div className="w-full flex-between flex-wrap pt-8 pb-4 px-2    gap-6 border bg-white">
           <h1 className=" font-semibold text-xs  text-neutral w-36 text-center py-1 rounded-full border bg-gray-100 border-gray-300">
             Tahun Ajaran
           </h1>
@@ -221,12 +218,10 @@ const MasterDataPage = () => {
             )}
           </div>
         </div>
-        <div className="relative bg-white w-full   border  overflow-hidden  rounded-md">
+        <div className="relative bg-white w-full   border  overflow-hidden  ">
           {loading ? (
-            <div className="block w-full relative bg-gray-200 animate-pulse shadow-md pb-[3.5rem]">
-              <div className="w-full flex-center min-h-[231px] overflow-x-auto rounded-md">
-                <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
-              </div>
+            <div className="block w-full relative bg-gray-200  min-h-[260px] animate-pulse shadow-md pb-[3.5rem]">
+              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           ) : (
             <TableUmum
@@ -251,10 +246,8 @@ const MasterDataPage = () => {
         </div>
         <div className="relative bg-white w-full   border  overflow-hidden  rounded-md">
           {loading ? (
-            <div className="block w-full relative bg-gray-200 animate-pulse shadow-md pb-[3.5rem]">
-              <div className="w-full flex-center min-h-[231px] overflow-x-auto rounded-md">
-                <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
-              </div>
+            <div className="block w-full relative bg-gray-200  min-h-[231px] animate-pulse shadow-md pb-[3.5rem]">
+              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           ) : (
             <TableMingguan libur={dataLibur?.perpekan} loading={loading} />
@@ -274,10 +267,8 @@ const MasterDataPage = () => {
         </div>
         <div className="relative bg-white w-full   border  overflow-hidden  rounded-md">
           {loading ? (
-            <div className="block w-full relative bg-gray-200 animate-pulse shadow-md pb-[3.5rem]">
-              <div className="w-full flex-center min-h-[231px] overflow-x-auto rounded-md">
-                <div className="border-4 border-gray-300 rounded-full w-6 h-6 border-t-neutral animate-spin"></div>
-              </div>
+            <div className="block w-full relative bg-gray-200  min-h-[231px] animate-pulse shadow-md pb-[3.5rem]">
+              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           ) : (
             <TabelNasionsal
