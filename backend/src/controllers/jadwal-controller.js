@@ -501,14 +501,32 @@ export const getPertemuan = async (req, res, next) => {
         return acc + schedule.jumlahPertemuan;
       }, 0);
 
-      console.log(pertemuan);
-
       res.status(200).json({
         success: true,
         message: "Berhasil mengambil total jadwal pertemuan",
         pertemuan,
       });
     }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+export const getJadwalSiswa = async (req, res, next) => {
+  try {
+    const kelasId = req.params.kelasId;
+    const jadwal = await Jadwal.find({
+      kelas: new mongoose.Types.ObjectId(kelasId),
+    })
+      .populate({ path: "guru", select: "nama" })
+      .populate("bidangStudi");
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengambil jadwal pertemuan",
+      jadwal,
+    });
   } catch (error) {
     console.log(error);
     next(error);

@@ -32,6 +32,7 @@ const AbsenHarianPage = () => {
 
         if (res.status === 200) {
           setData(res.data.kelas);
+
           const initialAbsensiData = res.data.kelas.siswa.map((siswa) => ({
             _id: siswa._id,
             status: "hadir",
