@@ -1,11 +1,7 @@
 import DashboardIcon from "../../../assets/svg/dashboard.svg?react";
-import SiswaIcon from "../../../assets/svg/siswa.svg?react";
+import Schedule from "../../../assets/svg/studi.svg?react";
 import GuruIcon from "../../../assets/svg/guru.svg?react";
-import KelasIcon from "../../../assets/svg/class.svg?react";
-import MapelIcon from "../../../assets/svg/pelajaran.svg?react";
-import JadwalIcon from "../../../assets/svg/jadwal.svg?react";
-// import DataIcon from "../../../assets/svg/data.svg?react";
-import AcaraIcon from "../../../assets/svg/acara.svg?react";
+
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   ChevronDown,
@@ -23,7 +19,7 @@ const Navlist = [
   {
     id: 1,
     nama: "Dashboard",
-    path: "/admin/dashboard",
+    path: "/siswa/dashboard",
     icon: (
       <DashboardIcon
         height={17}
@@ -36,10 +32,10 @@ const Navlist = [
   },
   {
     id: 2,
-    nama: "Master Data",
-    path: "/admin/master-data",
+    nama: "Jadwal",
+    path: "/siswa/jadwal-pelajaran",
     icon: (
-      <MonitorCog
+      <Schedule
         height={17}
         width={17}
         className={
@@ -48,121 +44,9 @@ const Navlist = [
       />
     ),
   },
-  {
-    id: 3,
-    nama: "Siswa",
-    path: "/admin/data-siswa",
-    icon: (
-      <SiswaIcon
-        height={19}
-        width={19}
-        className={
-          "text-white group-hover:stroke-neutral group-hover:fill-neutral stroke-[0.1] duration-300 transition-all"
-        }
-      />
-    ),
-  },
-  {
-    id: 4,
-    nama: "Guru",
-    path: "/admin/data-guru",
-    icon: (
-      <GuruIcon
-        height={20}
-        width={20}
-        className="text-white group-hover:text-neutral duration-300 transition-all"
-      />
-    ),
-  },
-  {
-    id: 5,
-    nama: "Kelas",
-    path: "/admin/data-kelas",
-    icon: (
-      <KelasIcon
-        height={20}
-        width={20}
-        className={
-          "text-white group-hover:text-neutral stroke-[0.1] duration-300 transition-all"
-        }
-      />
-    ),
-  },
-  {
-    id: 6,
-    nama: "Mata Pelajaran",
-    path: "/admin/data-pelajaran",
-    icon: (
-      <MapelIcon
-        height={20}
-        width={20}
-        className={
-          "text-white group-hover:text-neutral duration-300 transition-all"
-        }
-      />
-    ),
-  },
-  {
-    id: 7,
-    nama: "Jadwal",
-    path: "/admin/data-jadwal",
-    icon: (
-      <AcaraIcon
-        height={20}
-        width={20}
-        className={
-          "text-white group-hover:text-neutral duration-300 transition-all"
-        }
-      />
-    ),
-  },
-  {
-    id: 8,
-    nama: "Rekap Data",
-    icon: (
-      <NotebookTabs
-        height={20}
-        width={20}
-        className={
-          "text-white group-hover:text-neutral duration-300 transition-all"
-        }
-      />
-    ),
-
-    dropDown: [
-      {
-        id: 1,
-        nama: "Absensi",
-        path: "/admin/rekap-absensi-kelas",
-        icon: (
-          <NotebookPen
-            height={20}
-            width={20}
-            className={
-              "text-white group-hover:text-neutral duration-300 transition-all"
-            }
-          />
-        ),
-      },
-      {
-        id: 2,
-        nama: "Nilai",
-        path: "/admin/rekap-nilai-kelas",
-        icon: (
-          <NotebookText
-            height={20}
-            width={20}
-            className={
-              "text-white group-hover:text-neutral duration-300 transition-all"
-            }
-          />
-        ),
-      },
-    ],
-  },
 ];
 
-const ListSidebarAdmin = () => {
+const ListSidebarSiswa = () => {
   const navigate = useNavigate();
   const [activeDropDown, setActiveDropDown] = useState(null);
 
@@ -243,4 +127,4 @@ const ListSidebarAdmin = () => {
   );
 };
 
-export default ListSidebarAdmin;
+export default ListSidebarSiswa;

@@ -15,7 +15,7 @@ const AbsenHarianPage = () => {
   const [alreadyAbsensi, setAlreadyAbsensi] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [hariLibur, setHariLibur] = useState(false);
-  const [trigger, setTrigger] = useState(false);
+  const [trigger, setTrigger] = useState(1);
   const [delay, setDelay] = useState(false);
   const [data, setData] = useState([]);
   const [absensiData, setAbsensiData] = useState([]);
@@ -37,8 +37,10 @@ const AbsenHarianPage = () => {
             status: "hadir",
           }));
 
-          setAlreadyAbsensi(res.data.alreadyAbsensi);
-          setHariLibur(res.data.hariLibur);
+          if (res.data.kelas.siswa.length > 0) {
+            setAlreadyAbsensi(res.data.alreadyAbsensi);
+            setHariLibur(res.data.hariLibur);
+          }
 
           if (!alreadyAbsensi && !hariLibur) {
             setAbsensiData(initialAbsensiData);
@@ -107,7 +109,7 @@ const AbsenHarianPage = () => {
         toast.success(res.data.message);
 
         setAbsensiData([]);
-        setTrigger(true);
+        setTrigger(trigger + 1);
         if (isEdit) {
           setIsEdit(false);
           setAlreadyAbsensi(true);
@@ -124,28 +126,47 @@ const AbsenHarianPage = () => {
     setAlreadyAbsensi(false);
     setIsEdit(true);
 
-    try {
-      const res = await axios.get(
-        HOST + "/api/absen/data-already/" + userData.waliKelas._id,
-        { withCredentials: true }
-      );
+    const [resDataSiswa, resAlreadyAbsen] = await Promise.all([
+      axios.get(HOST + `/api/absen/${userData.waliKelas._id}/siswa`, {
+        withCredentials: true,
+        params: { guruId: userData._id },
+      }),
+      axios.get(HOST + "/api/absen/data-already/" + userData.waliKelas._id, {
+        withCredentials: true,
+      }),
+    ]);
 
-      if (res.status === 200) {
-        console.log(res.data.absenHariIni);
+    if (resDataSiswa.status === 200) {
+      const initialAbsensiData = resDataSiswa.data.kelas.siswa.map((siswa) => ({
+        _id: siswa._id,
+        status: null,
+      }));
 
-        const absenValue = res.data.absenHariIni.map((absen) => ({
-          _id: absen?.siswa?._id,
-          status: absen?.status,
-        }));
+      setAbsensiData(initialAbsensiData);
+    }
+    if (resAlreadyAbsen.status === 200) {
+      const absenValue = resAlreadyAbsen.data.absenHariIni.map((absen) => ({
+        _id: absen?.siswa?._id,
+        status: absen?.status,
+      }));
 
-        setAbsensiData(absenValue);
-      }
-    } catch (error) {
-      responseError(error);
+      setAbsensiData((prev) => {
+        const absenSiswa = [...prev];
+
+        absenValue.forEach((item) => {
+          const index = absenSiswa.findIndex((siswa) => siswa._id === item._id);
+
+          if (index !== -1) {
+            absenSiswa[index].status = item.status;
+          } else {
+            absenSiswa.push(item);
+          }
+        });
+
+        return absenSiswa;
+      });
     }
   };
-
-  console.log(absensiData);
 
   return (
     <section className="px-6 py-4 mb-4 ">
@@ -154,7 +175,7 @@ const AbsenHarianPage = () => {
           {formatIndonesiaDate(hariIni)}
         </h3>
 
-        {absensiData.length > 0 && alreadyAbsensi && (
+        {alreadyAbsensi && (
           <div className="flex gap-2">
             <button onClick={handleGetAlreadyAbsen} className="btn">
               Edit Absen
@@ -185,9 +206,9 @@ const AbsenHarianPage = () => {
                   groupData[letter].map((siswa, index) => (
                     <div
                       key={siswa._id}
-                      className="col-span-full xs:col-span-2 sm:col-span-4 min-h-52 p-4 bg-white border border-gray-300 rounded-md md:col-span-3 xl:col-span-2 flex flex-col items-center flex-between"
+                      className="hover:border-blue-600 group col-span-full xs:col-span-2 sm:col-span-4 min-h-52 p-4 bg-white border border-gray-300 rounded-md md:col-span-3 xl:col-span-2 flex flex-col items-center flex-between"
                     >
-                      <figure className="w-20 h-20 overflow-hidden bg-background rounded-full border">
+                      <figure className="w-20 h-20 overflow-hidden group-hover:border-blue-600 bg-background rounded-full border">
                         <img
                           src={siswa.photo ? siswa.photo : profile}
                           alt="foto"
@@ -307,7 +328,7 @@ const AbsenHarianPage = () => {
             </div>
           ))
         )}
-        {absensiData.length > 0 && alreadyAbsensi && (
+        {alreadyAbsensi && (
           <div className="absolute w-full h-full transition-all  inset-0">
             <div
               className={`${

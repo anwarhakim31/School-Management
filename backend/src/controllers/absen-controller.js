@@ -143,30 +143,28 @@ export const editAbsenKelas = async (req, res, next) => {
     const endOfDay = new Date();
     endOfDay.setHours(23, 59, 59, 999);
 
-    const absensi = await Absensi.find({
-      siswa: {
-        $in: absensiData.map((data) => new mongoose.Types.ObjectId(data._id)),
-      },
-      kelas: new mongoose.Types.ObjectId(kelasId),
-      tanggal: {
-        $gte: startOfDay,
-        $lte: endOfDay,
-      },
-    });
-
-    const bulkOps = absensi.map((absenList) => {
-      const data = absensiData.find((absen) =>
-        absen._id.includes(absenList.siswa)
-      );
-      return {
-        updateOne: {
-          filter: { _id: absenList._id },
-          update: { status: data.status },
+    for (const absenList of absensiData) {
+      await Absensi.findOneAndUpdate(
+        {
+          siswa: new mongoose.Types.ObjectId(absenList._id),
+          kelas: new mongoose.Types.ObjectId(kelasId),
+          tanggal: {
+            $gte: startOfDay,
+            $lte: endOfDay,
+          },
         },
-      };
-    });
-
-    await Absensi.bulkWrite(bulkOps);
+        {
+          siswa: new mongoose.Types.ObjectId(absenList._id),
+          kelas: new mongoose.Types.ObjectId(kelasId),
+          tanggal: today,
+          status: absenList.status,
+          guru: new mongoose.Types.ObjectId(guruId),
+        },
+        {
+          upsert: true,
+        }
+      );
+    }
 
     const formattedDate = formatTanggalIndonesia(today);
 
@@ -175,7 +173,6 @@ export const editAbsenKelas = async (req, res, next) => {
       message: `Berhasil mengubah absensi pada ${formattedDate}`,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

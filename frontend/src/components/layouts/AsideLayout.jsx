@@ -5,6 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import ListSidebarGuru from "../fragments/guru/ListSidebarGuru";
+import ListSidebarSiswa from "../fragments/siswa/ListSidebarSiswa";
 
 const AsideLayout = ({ setIsSidebar }) => {
   const userData = useSelector(selectedUserData);
@@ -16,13 +17,14 @@ const AsideLayout = ({ setIsSidebar }) => {
           src={logo}
           alt="logo"
           height={150}
-          width={140}
-          className="object-contain mt-1"
+          width={150}
+          className="object-cover mt-1"
         />
       </div>
-      <div className="">
+      <div className="pl-2">
         {userData && userData.role === "admin" && <ListSidebarAdmin />}
         {userData && userData.role === "guru" && <ListSidebarGuru />}
+        {userData && userData.role === "siswa" && <ListSidebarSiswa />}
       </div>
       <button
         aria-label="close sidebar"

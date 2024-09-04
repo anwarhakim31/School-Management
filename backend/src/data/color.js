@@ -6,9 +6,9 @@ export const color = [
   "#a855f7", // Ungu
   "#ff6600", // Oranye stabilo
   "#ff00ff", // Cyan stabilo
-  "#e53e3e", // Hijau limau
-  "#2eb88a", // Ungu stabiloe53e3e
-  "#af57db", // Biru medium
+  "#fb4651", // Hijau limau
+  "#9333ea", // Ungu stabiloe53e3e
+  "#1a57b3", // Biru medium
   "#00e5ff", // Hijau stabilo
   "#ec4899", // Pink terang
 ];

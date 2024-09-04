@@ -8,6 +8,7 @@ import ButtonScrollTop from "@/components/elements/ButtonScrollTop";
 import HeaderAdminLayout from "./admin/HeaderAdminLayout";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import HeaderGuruLayout from "./guru/HeaderGuruLayout";
+import HeaderSiswaLayout from "./siswa/HeaderSiswaLayout";
 
 const MainLayout = () => {
   const { pathname } = useLocation();
@@ -89,6 +90,9 @@ const MainLayout = () => {
 
           {userData && userData.role === "guru" && (
             <HeaderGuruLayout handleToggleSidebar={handleToggleSidebar} />
+          )}
+          {userData && userData.role === "siswa" && (
+            <HeaderSiswaLayout handleToggleSidebar={handleToggleSidebar} />
           )}
           <Outlet />
           {isEdit && (

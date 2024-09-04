@@ -5,7 +5,6 @@ import axios from "axios";
 import { HOST } from "@/util/constant";
 import GantChart from "@/components/elements/dashboard-guru/GantChart";
 import SiswaIcon from "../../assets/svg/Teacher.svg?react";
-import GuruIcon from "../../assets/svg/Student.svg?react";
 import ClassIcon from "../../assets/svg/class.svg?react";
 import MapelIcon from "../../assets/svg/pelajaran.svg?react";
 import { Presentation } from "lucide-react";
@@ -200,7 +199,7 @@ const GuruDashboardPage = () => {
                 <h1 className=" flex-1 flex-center  text-neutral font-semibold text-3xl h-12 ">
                   {dataGuru && (
                     <AnimasiCounter
-                      targetNumber={parseInt(dataGuru.totalMurid)}
+                      targetNumber={Number(dataGuru.totalMurid) || 0}
                     />
                   )}
                 </h1>

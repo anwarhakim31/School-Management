@@ -32,6 +32,7 @@ import RekapNilaiPageadmin from "./pages/admin/rekap-nilai";
 import DataStudiPage from "./pages/guru/data-studi";
 import SiswaDashboardPage from "./pages/siswa/siswa-dashboard";
 import MainLayout from "./components/layouts/MainLayout";
+import JadwalPelajaranPage from "./pages/siswa/jadwal-pelajaran";
 
 function App() {
   const dispatch = useDispatch();
@@ -283,13 +284,28 @@ function App() {
 
         {/* <!-- guru --> */}
 
-        <Route path="/siswa">
+        <Route
+          path="/siswa"
+          element={
+            <PrivateRoute role={"siswa"}>
+              <MainLayout />
+            </PrivateRoute>
+          }
+        >
           <Route index element={<Navigate to={"/siswa/dashboard"} />} />
           <Route
             path="dashboard"
             element={
               <PrivateRoute role={"siswa"}>
                 <SiswaDashboardPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="jadwal-pelajaran"
+            element={
+              <PrivateRoute role={"siswa"}>
+                <JadwalPelajaranPage />
               </PrivateRoute>
             }
           />
