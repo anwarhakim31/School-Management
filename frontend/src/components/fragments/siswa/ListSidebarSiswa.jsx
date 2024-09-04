@@ -1,19 +1,9 @@
 import DashboardIcon from "../../../assets/svg/dashboard.svg?react";
 import Schedule from "../../../assets/svg/studi.svg?react";
-import GuruIcon from "../../../assets/svg/guru.svg?react";
 
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import {
-  ChevronDown,
-  ChevronUp,
-  FileStack,
-  MonitorCog,
-  NotebookPen,
-  NotebookTabs,
-  NotebookText,
-} from "lucide-react";
+import { BookUser, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
-// import KelasSVG from "@/components/base/svg/KelasSVG
 
 const Navlist = [
   {
@@ -36,6 +26,20 @@ const Navlist = [
     path: "/siswa/jadwal-pelajaran",
     icon: (
       <Schedule
+        height={17}
+        width={17}
+        className={
+          "text-white group-hover:text-neutral stroke-[2] duration-300 transition-all"
+        }
+      />
+    ),
+  },
+  {
+    id: 3,
+    nama: "Rapor",
+    path: "/siswa/hasil-rapor",
+    icon: (
+      <BookUser
         height={17}
         width={17}
         className={

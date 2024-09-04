@@ -522,10 +522,13 @@ export const getJadwalSiswa = async (req, res, next) => {
       .populate({ path: "guru", select: "nama" })
       .populate("bidangStudi");
 
+    const libur = await Libur.findOne();
+
     res.status(200).json({
       success: true,
       message: "Berhasil mengambil jadwal pertemuan",
       jadwal,
+      libur: libur.perpekan,
     });
   } catch (error) {
     console.log(error);

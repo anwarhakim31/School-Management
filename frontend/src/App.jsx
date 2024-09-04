@@ -33,6 +33,7 @@ import DataStudiPage from "./pages/guru/data-studi";
 import SiswaDashboardPage from "./pages/siswa/siswa-dashboard";
 import MainLayout from "./components/layouts/MainLayout";
 import JadwalPelajaranPage from "./pages/siswa/jadwal-pelajaran";
+import HasilRaporPage from "./pages/siswa/hasil-rapor";
 
 function App() {
   const dispatch = useDispatch();
@@ -306,6 +307,14 @@ function App() {
             element={
               <PrivateRoute role={"siswa"}>
                 <JadwalPelajaranPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="hasil-rapor"
+            element={
+              <PrivateRoute role={"siswa"}>
+                <HasilRaporPage />
               </PrivateRoute>
             }
           />

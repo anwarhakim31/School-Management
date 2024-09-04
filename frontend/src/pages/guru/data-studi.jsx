@@ -225,7 +225,7 @@ const DataStudiPage = () => {
 
         {loading ? (
           <div className="block w-full shadow-md pb-[3.5rem]">
-            <div className="w-full min-h-[396px] flex-center bg-backup  overflow-auto ">
+            <div className="w-full min-h-[396px] flex-center bg-backup  overflow-auto transition-all duration-300 ease-in-out">
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
             </div>
           </div>
