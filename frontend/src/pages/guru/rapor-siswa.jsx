@@ -2,7 +2,7 @@ import DropdownSiswa from "@/components/elements/DropdownSiswa";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import logo from "../../assets/Schoolarcy (2).webp";
+
 import axios from "axios";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";

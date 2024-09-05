@@ -211,6 +211,12 @@ export const updateProfile = async (req, res, next) => {
       )
         .select("-password")
         .populate("waliKelas");
+    } else if (role === "siswa") {
+      updatedUser = await Siswa.findByIdAndUpdate(
+        id,
+        { $set: update },
+        { new: true, runValidators: true }
+      ).select("-password");
     }
 
     res.status(200).json({

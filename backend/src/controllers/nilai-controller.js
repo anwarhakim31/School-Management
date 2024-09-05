@@ -409,7 +409,6 @@ export const getRaport = async (req, res, next) => {
       nama: siswa.nama,
       nis: siswa.nis,
       kelas: `${siswa.kelas.kelas} ${siswa.kelas.nama}`,
-      waliKelas: siswa.kelas.waliKelas.nama,
       ajaran: ajaran[0].ajaran,
       semester: semesterActive.keterangan,
       nilai: nilai.some((item) => item.mataPelajaran)
@@ -421,6 +420,9 @@ export const getRaport = async (req, res, next) => {
         : [],
     };
 
+    if (siswa.kelas.waliKelas) {
+      siswaWithNiali.waliKelas = siswa.kelas.waliKelas.nama;
+    }
     res.status(200).json({
       success: true,
       message: "Berhasil mengambil semua nilai siswa",

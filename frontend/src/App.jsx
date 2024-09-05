@@ -34,6 +34,7 @@ import SiswaDashboardPage from "./pages/siswa/siswa-dashboard";
 import MainLayout from "./components/layouts/MainLayout";
 import JadwalPelajaranPage from "./pages/siswa/jadwal-pelajaran";
 import HasilRaporPage from "./pages/siswa/hasil-rapor";
+import ProfileSiswaPage from "./pages/siswa/Profile-Siswa";
 
 function App() {
   const dispatch = useDispatch();
@@ -315,6 +316,14 @@ function App() {
             element={
               <PrivateRoute role={"siswa"}>
                 <HasilRaporPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <PrivateRoute role={"siswa"}>
+                <ProfileSiswaPage />
               </PrivateRoute>
             }
           />

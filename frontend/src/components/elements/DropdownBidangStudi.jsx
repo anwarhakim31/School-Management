@@ -1,4 +1,5 @@
 import { selectedDataEdit } from "@/store/slices/admin-slice";
+import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
@@ -7,7 +8,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 
-const DropdownBidangStudi = ({ onChange, value }) => {
+const DropdownBidangStudi = ({ onChange, value, disabled }) => {
+  const userData = useSelector(selectedUserData);
   const { pathname } = useLocation();
   const dataEdit = useSelector(selectedDataEdit);
   const mapelRef = useRef(null);
@@ -40,6 +42,18 @@ const DropdownBidangStudi = ({ onChange, value }) => {
       });
     }
   }, [dataEdit, pathname]);
+
+  useEffect(() => {
+    if (pathname === "/guru/profile" && userData.bidangStudi && dataMapel) {
+      const mapel = dataMapel.find(
+        (mapel) => mapel._id === userData.bidangStudi
+      );
+      setSelectedMapel({
+        kode: mapel?.kode,
+        nama: mapel?.nama,
+      });
+    }
+  }, [dataEdit, pathname, dataMapel]);
 
   useEffect(() => {
     const getMapel = async () => {
@@ -97,6 +111,7 @@ const DropdownBidangStudi = ({ onChange, value }) => {
         type="text"
         id="bidangStudi"
         onKeyDown={(e) => e.key === "Enter" && setIsOpen(true)}
+        disabled={disabled}
         value={
           !selectedMapel
             ? "Pilih bidang studi"
@@ -104,15 +119,18 @@ const DropdownBidangStudi = ({ onChange, value }) => {
         }
         readOnly
         onClick={handleInputClick}
-        className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
+        className="block w-full text-xs bg-white border disabled:border-none disabled:pointer-events-none disabled:shadow-none disabled:outline-none  border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline cursor-pointer"
       />
-      <div className="absolute pointer-events-none right-2 top-2.5">
-        {isOpen ? (
-          <ChevronUp width={15} height={15} />
-        ) : (
-          <ChevronDown width={15} height={15} />
-        )}
-      </div>
+
+      {!disabled && (
+        <div className="absolute pointer-events-none right-2 top-2.5">
+          {isOpen ? (
+            <ChevronUp width={15} height={15} />
+          ) : (
+            <ChevronDown width={15} height={15} />
+          )}
+        </div>
+      )}
 
       {isOpen && (
         <div className="absolute mt-1  w-full bg-white border z-50 border-gray-400 rounded shadow">

@@ -11,9 +11,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Edit, Edit2, Plus, Trash, X } from "lucide-react";
 import { selectedUserData, setUserData } from "@/store/slices/auth-slice";
-import DropdownBidangStudi from "@/components/elements/DropdownBidangStudi";
 
-const ProfileGuruPage = () => {
+const ProfileSiswaPage = () => {
   const userData = useSelector(selectedUserData);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,53 +31,40 @@ const ProfileGuruPage = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      nip: "",
+      nis: "",
       nama: "",
       tempatLahir: "",
       jenisKelamin: "",
       tanggalLahir: "",
       bidangStudi: "",
-      status: "",
       phone: "",
-      waliKelas: "",
       alamat: "",
     },
   });
-  const nip = watch("nip");
+  const nis = watch("nis");
   const tanggalLahir = watch("tanggalLahir");
-  const bidangStudi = watch("bidangStudi");
-  const status = watch("status");
-  const waliKelas = watch("waliKelas");
+
   const phone = watch("phone");
 
   useEffect(() => {
     if (userData) {
-      setValue("nip", userData.nip);
+      setValue("nis", userData.nis);
       setValue("nama", userData.nama);
       setValue("tempatLahir", userData.tempatLahir);
       setValue("tanggalLahir", formatDate(userData.tanggalLahir));
-      setValue("status", userData.status);
       setValue("phone", userData.phone);
       setValue("jenisKelamin", userData.jenisKelamin);
       setValue("bidangStudi", userData.bidangStudi);
+      setValue("agama", userData.agama);
       setValue("alamat", userData.alamat);
-      setValue("waliKelas", {
-        kelas: userData?.waliKelas?.kelas,
-        nama: userData?.waliKelas?.nama,
-      });
+      setValue("kelas", userData.kelas);
       setPhoto(userData.photo);
     } else {
-      navigate("guru/dashboard");
+      navigate("siswa/dashboard");
     }
   }, [userData]);
 
-  const handleNumberChange = (e, name) => {
-    const value = e.target.value;
-
-    const cleanedValue = value.replace(/\D/g, "");
-
-    setValue(name, cleanedValue);
-  };
+  console.log(userData);
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -132,14 +118,6 @@ const ProfileGuruPage = () => {
       } finally {
         setLoading(false);
       }
-    }
-  };
-
-  const handleChangeStatus = (e) => {
-    if (e.target.checked) {
-      setValue("status", false);
-    } else {
-      setValue("status", true);
     }
   };
 
@@ -241,38 +219,32 @@ const ProfileGuruPage = () => {
           <p className="text-[0.625rem] text-center mt-2 text-neutral">
             Ekstensi file: jpeg/jpg, png
           </p>
-
-          <div className="flex flex-col justify-center  mt-8">
-            <p className="text-xs mb-2">Status</p>
-            <div className="relative inline-block w-10 h-5">
-              <input
-                type="checkbox"
-                id="toggle"
-                disabled={isNoEdit}
-                checked={status}
-                onChange={handleChangeStatus}
-                className="opacity-0 w-0 h-0 peer"
-                {...register("status")}
-              />
-              <label
-                htmlFor="toggle"
-                className={`absolute cursor-pointer inset-0 bg-backup   rounded-full transition-colors duration-300 ${
-                  status ? "bg-gray-700" : ""
-                }`}
-              ></label>
-              <span
-                className={`absolute top-1/2 -translate-y-1/2 left-0 w-4 h-4 bg-white rounded-full transition-transform duration-300 transform ${
-                  status ? "translate-x-6" : ""
-                }`}
-              ></span>
-            </div>
-          </div>
         </div>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="grid mobile:grid-cols-2 md:grid-cols-2 lg:grid-cols-2  md:gap-4 lg:gap-8 lg:col-span-3"
         >
           <div className="">
+            <div className="mb-2">
+              <label htmlFor="nis" className="text-xs mb-2 block font-semibold">
+                NIS
+              </label>
+              <input
+                readOnly
+                type={"number"}
+                id="nis"
+                name="nis"
+                value={nis}
+                {...register("nis")}
+                className={`${
+                  isNoEdit ? " border-white border-b-0 " : "border-b-0 "
+                } py-1.5 h-8  bg-white border-gray-300 text-gray-500 text-xs  w-full  focus-within:outline-none`}
+              />
+
+              <span className="text-xs h-4 block mt-1 text-neutral2">
+                {errors.nis && errors.nis.message}
+              </span>
+            </div>
             <div className="mb-2">
               <label
                 htmlFor="nama"
@@ -295,36 +267,11 @@ const ProfileGuruPage = () => {
                 className={`${
                   isNoEdit
                     ? "focus-within:border-white border-white border-b-2"
-                    : "border-b-2 focus-within:border-blue-600"
-                } py-1.5 h-8 bg-white border-gray-300   text-gray-500 text-xs  w-full  focus-within:outline-none`}
+                    : "border-b-2"
+                } py-1.5 h-8 bg-white border-gray-300 focus-within:border-neutral  text-gray-500 text-xs  w-full  focus-within:outline-none`}
               />
               <span className="text-xs h-4 block mt-1 text-neutral2">
                 {errors.nama && errors.nama.message}
-              </span>
-            </div>
-            <div className="mb-2">
-              <label htmlFor="nis" className="text-xs mb-2 block font-semibold">
-                NIP
-              </label>
-              <input
-                readOnly={isNoEdit}
-                type={"text"}
-                id="nip"
-                name="nip"
-                value={nip}
-                {...register("nip", {
-                  required: "NIP tidak boleh kosong.",
-                })}
-                onChange={(e) => handleNumberChange(e, "nip")}
-                className={`${
-                  isNoEdit
-                    ? "focus-within:border-white border-white border-b-2"
-                    : "border-b-2 focus-within:border-blue-600"
-                } py-1.5 h-8  bg-white border-gray-300    text-gray-500 text-xs  w-full  focus-within:outline-none`}
-              />
-
-              <span className="text-xs h-4 block mt-1 text-neutral2">
-                {errors.nip && errors.nip.message}
               </span>
             </div>
             <div className="mb-2">
@@ -352,8 +299,8 @@ const ProfileGuruPage = () => {
                 className={`${
                   isNoEdit
                     ? "focus-within:border-white border-white border-b-2"
-                    : "border-b-2 focus-within:border-blue-600"
-                } py-1.5 h-8  bg-white border-gray-300    text-gray-500 text-xs  w-full  focus-within:outline-none`}
+                    : "border-b-2"
+                } py-1.5 h-8  bg-white border-gray-300 focus-within:border-neutral   text-gray-500 text-xs  w-full  focus-within:outline-none`}
               />
               <span className="text-xs h-4 block mt-1 text-neutral2">
                 {errors.password && errors.password.message}
@@ -380,8 +327,8 @@ const ProfileGuruPage = () => {
                 className={`${
                   isNoEdit
                     ? "focus-within:border-white border-white border-b-2"
-                    : "border-b-2 focus-within:border-blue-600"
-                } py-1.5 h-8  bg-white border-gray-300    text-gray-500 text-xs  w-full  focus-within:outline-none`}
+                    : "border-b-2"
+                } py-1.5 h-8  bg-white border-gray-300 focus-within:border-neutral   text-gray-500 text-xs  w-full  focus-within:outline-none`}
               />
               <span className="text-xs h-4 block mt-1 text-neutral2">
                 {errors.tempatLahir && errors.tempatLahir.message}
@@ -406,8 +353,8 @@ const ProfileGuruPage = () => {
                 className={`${
                   isNoEdit
                     ? "focus-within:border-white border-white border-b-2"
-                    : "border-b-2 focus-within:border-blue-600"
-                } py-1.5 h-8  bg-white border-gray-300    text-gray-500 text-xs  w-full  focus-within:outline-none`}
+                    : "border-b-2"
+                } py-1.5 h-8  bg-white border-gray-300 focus-within:border-neutral   text-gray-500 text-xs  w-full  focus-within:outline-none`}
               />
               <span className="text-xs h-4 block mt-1 text-neutral2">
                 {errors.tanggalLahir && errors.tanggalLahir.message}
@@ -425,19 +372,18 @@ const ProfileGuruPage = () => {
               </label>
               <input
                 readOnly={isNoEdit}
-                type={"tel"}
+                type="number"
                 id="No. Telepon"
                 name="phone"
                 value={phone}
                 {...register("phone", {
                   required: "No. Telepon tidak boleh kosong.",
                 })}
-                onChange={(e) => handleNumberChange(e, "phone")}
                 className={`${
                   isNoEdit
                     ? "focus-within:border-white border-white border-b-2"
-                    : "border-b-2 focus-within:border-blue-600"
-                } py-1.5 h-8  bg-white border-gray-300    text-gray-500 text-xs  w-full  focus-within:outline-none`}
+                    : "border-b-2"
+                } py-1.5 h-8  bg-white border-gray-300 focus-within:border-neutral   text-gray-500 text-xs  w-full  focus-within:outline-none`}
               />
               <span className="text-xs h-4 block mt-1 text-neutral2">
                 {errors.phone && errors.phone.message}
@@ -468,8 +414,8 @@ const ProfileGuruPage = () => {
                   className={`${
                     isNoEdit
                       ? "focus-within:border-white border-white border-b-2"
-                      : "border-b-2 focus-within:border-blue-600"
-                  } py-1.5 h-8  bg-white border-gray-300    text-gray-500 text-xs  w-full  focus-within:outline-none`}
+                      : "border-b-2"
+                  } py-1.5 h-8  bg-white border-gray-300 focus-within:border-neutral   text-gray-500 text-xs  w-full  focus-within:outline-none`}
                 >
                   <option value="">Pilih jenis kelamin</option>
                   <option value="Laki-Laki">Laki-Laki</option>
@@ -496,42 +442,42 @@ const ProfileGuruPage = () => {
                 className={`${
                   isNoEdit
                     ? "focus-within:border-white border-white border-b-2"
-                    : "border-b-2 focus-within:border-blue-600 "
-                } py-1.5 h-[12]  bg-white border-gray-300    text-gray-500 text-xs  w-full  focus-within:outline-none`}
+                    : "border-b-2 "
+                } py-1.5 h-[12]  bg-white border-gray-300 focus-within:border-neutral   text-gray-500 text-xs  w-full  focus-within:outline-none`}
               />
             </div>
             <div className="mb-2">
               <label
-                htmlFor="bidangStudi"
+                htmlFor="Agama"
                 className="text-xs mb-2 block font-semibold"
               >
-                Bidang Studi
+                Agama <span className="text-red-500">*</span>
               </label>
-              <DropdownBidangStudi disabled={true} />
-              <span className="text-xs h-4 block mt-1 text-neutral2">
-                {errors.bidangStudi && errors.bidangStudi.message}
-              </span>
-            </div>
-            <div className="">
-              <label
-                htmlFor="waliKelas"
-                className="text-xs mb-2 block font-semibold"
+              <select
+                id="Agama"
+                {...register("agama", {
+                  required: "Agama tidak boleh kosong..",
+                })}
+                disabled={isNoEdit}
+                className={`${
+                  isNoEdit
+                    ? "focus-within:border-white border-white border-b-2"
+                    : "border-b-2 "
+                } py-1.5 h-[12]  bg-white border-gray-300 focus-within:border-neutral   text-gray-500 text-xs  w-full  focus-within:outline-none`}
               >
-                Wali Kelas
-              </label>
-              <input
-                type={"text"}
-                id="waliKelas"
-                name="waliKelas"
-                value={
-                  `${waliKelas?.kelas} ${waliKelas?.nama}` ||
-                  "Tidak sebagai wali kelas."
-                }
-                readOnly
-                className="py-1.5 h-8  bg-white  text-gray-500 text-xs  w-full rounded-md focus-within:outline-none "
-              />
+                <option value="" className="">
+                  Pilih agama
+                </option>
+                <option value="Islam">Islam</option>
+                <option value="Kristen Protestan">Kristen Protestan</option>
+                <option value="Kristen Katolik">Kristen Katolik</option>
+                <option value="Hindu">Hindu</option>
+                <option value="Budha">Budha</option>
+                <option value="Kong Hu Chu">Kong Hu Chu</option>
+                <option value="Aliran Kepercayaan">Aliran Kepercayaan</option>
+              </select>
               <span className="text-xs h-4 block mt-1 text-neutral2">
-                {errors.waliKelas && errors.waliKelas.message}
+                {errors.agama && errors.agama.message}
               </span>
             </div>
           </div>
@@ -541,4 +487,4 @@ const ProfileGuruPage = () => {
   );
 };
 
-export default ProfileGuruPage;
+export default ProfileSiswaPage;

@@ -54,7 +54,7 @@ const HeaderSiswaLayout = ({ handleToggleSidebar }) => {
             </span>
           </div>
           <Link
-            to={"/guru/profile"}
+            to={"/siswa/profile"}
             className="w-9 h-9 bg-backup flex items-center justify-center rounded-full overflow-hidden"
           >
             <img

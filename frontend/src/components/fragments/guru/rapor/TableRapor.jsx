@@ -1,4 +1,4 @@
-import React from "react";
+import logo from "../../../../assets/Schoolarcy (2).webp";
 
 const TableRapor = ({ dataMapel, dataRapor, average, totalAbsen }) => {
   return (

@@ -75,7 +75,7 @@ const SiswaDashboardPage = () => {
                 <img
                   src={userData.photo ? userData.photo : profile}
                   alt=""
-                  className="object-cover border"
+                  className="w-full h-full object-cover block"
                 />
               )}
             </div>
@@ -141,10 +141,11 @@ const SiswaDashboardPage = () => {
                     ) : (
                       <div className="flex flex-col ">
                         <h5 className="text-xs font-medium mt-1 text-gray-700">
-                          {kelas.waliKelas.nama} {kelas.nama}
+                          {kelas?.waliKelas?.nama ||
+                            "Tidak memiliki wali kelas."}
                         </h5>
                         <h5 className="text-xs  mt-1 text-gray-700">
-                          + {kelas.waliKelas.phone}
+                          + {kelas?.waliKelas?.phone}
                         </h5>
                       </div>
                     )}
