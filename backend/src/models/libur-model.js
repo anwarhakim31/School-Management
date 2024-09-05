@@ -12,6 +12,10 @@ const liburSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
       },
+      keterangan: {
+        type: String,
+        default: "Libur Pekan",
+      },
     },
   ],
   nasional: [

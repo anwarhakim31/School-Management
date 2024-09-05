@@ -544,6 +544,7 @@ export const getJadwalSiswa = async (req, res, next) => {
       message: "Berhasil mengambil jadwal pertemuan",
       jadwal,
       libur: libur.perpekan,
+      nasional: libur.nasional,
     });
   } catch (error) {
     console.log(error);

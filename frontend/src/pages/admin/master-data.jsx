@@ -36,7 +36,6 @@ const MasterDataPage = () => {
 
   useEffect(() => {
     const getData = async () => {
-      setLoading(true);
       try {
         const [ajaranRes, liburRes, akademikRes] = await Promise.all([
           axios.get(HOST + "/api/ajaran/get-ajaran", { withCredentials: true }),
