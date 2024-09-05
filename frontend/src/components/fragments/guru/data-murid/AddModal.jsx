@@ -397,15 +397,6 @@ const AddModal = ({ onClose, kelas }) => {
         </div>
         <div className="text-end border-t  p-4 space-x-4">
           <button
-            aria-label="batal"
-            type="button"
-            disabled={loading}
-            className="btn w-24 h-8.5 bg-gray-100 disabled:bg-gray-200  text-gray-800 border-gray-200 border hover:text-white"
-            onClick={() => onClose()}
-          >
-            {loading ? "Loading" : "Batal"}
-          </button>
-          <button
             aria-label="ya"
             type="submit"
             ref={submitRef}

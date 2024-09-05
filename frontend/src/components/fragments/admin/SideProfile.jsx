@@ -43,7 +43,7 @@ const SideProfile = forwardRef(({ handleClose }, ref) => {
     const file = e.target.files[0];
 
     if (!file.type.includes(ALLOWED_FILE_TYPES)) {
-      return toast.error("Ektensi file tidak di dukung");
+      return toast.error("Format file tidak di dukung");
     } else if (file.size > MAX_FILE_SIZE) {
       return toast.error("Ukuran File Maksimal 1 MB.");
     } else {

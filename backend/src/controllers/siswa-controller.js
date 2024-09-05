@@ -10,6 +10,7 @@ import TahunAjaran from "../models/tahunAjaran-model.js";
 import Absensi from "../models/Absensi-model.js";
 import NilaiPertemuan from "../models/nilaiPertemuan-model.js";
 import Nilai from "../models/Nilai-model.js";
+import XLSX from "xlsx";
 
 export const getAll = async (req, res, next) => {
   try {
@@ -84,6 +85,11 @@ export const uploadPhotoSiswa = async (req, res, next) => {
 
     const fileName = `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${uploadParams.Key}`;
 
+    fs.unlink(req.file.path, (err) => {
+      if (err) {
+        console.error("Error deleting file:", err);
+      }
+    });
     await res.status(200).json({
       success: true,
       message: "Berhasil unggah gambar",
@@ -411,4 +417,100 @@ export const getSiswaKelas = async (req, res, next) => {
     console.log(error);
     next(error);
   }
+};
+
+export const addWithExcel = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ success: false, message: "File tidak ditemukan" });
+    }
+
+    // Baca file Excel
+    const workbook = XLSX.readFile(req.file.path);
+    const sheet_name_list = workbook.SheetNames;
+    const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+
+    // Hapus file setelah membacanya
+    fs.unlink(req.file.path, (err) => {
+      if (err) {
+        console.error("Error deleting file:", err);
+      }
+    });
+
+    // Proses data dari file Excel
+    for (const row of data) {
+      const { kelas, namaKelas, nis, password, tahunMasuk, tanggalLahir } = row;
+
+      const siswaExist = await Siswa.findOne({ nis });
+
+      if (siswaExist) {
+        console.log(`NIS ${nis} sudah digunakan.`);
+        continue; // Lewati baris ini jika NIS sudah ada
+      }
+
+      if (!tahunMasuk) {
+        console.log(`Tahun Masuk Ajaran tidak diatur untuk NIS ${nis}.`);
+        continue; // Lewati baris ini jika tahun masuk tidak ada
+      }
+
+      let hashedPassword;
+
+      if (!password) {
+        // Generate password based on tanggalLahir if password is not provided
+        hashedPassword = await hash(
+          createPasswordFromDateOfBirth(tanggalLahir),
+          await genSalt()
+        );
+      } else {
+        const salt = await genSalt();
+        hashedPassword = await hash(password, salt);
+      }
+
+      let newSiswa;
+
+      if (!kelas && !namaKelas) {
+        newSiswa = new Siswa({ ...row, password: hashedPassword });
+        await newSiswa.save();
+      } else {
+        const kelasSiswa = await Kelas.findOne({ kelas, nama: namaKelas });
+
+        if (!kelasSiswa) {
+          console.log(`Kelas ${kelas} tidak ditemukan.`);
+          continue; // Lewati baris ini jika kelas tidak ditemukan
+        }
+
+        newSiswa = new Siswa({
+          ...row,
+          kelas: kelasSiswa._id,
+          password: hashedPassword,
+        });
+        const siswaSaved = await newSiswa.save();
+        kelasSiswa.siswa.push(siswaSaved._id);
+        kelasSiswa.jumlahSiswa = kelasSiswa.siswa.length;
+        await kelasSiswa.save();
+      }
+
+      await Total.findOneAndUpdate(
+        { ajaran: tahunMasuk },
+        { $inc: { totalSiswa: 1 } },
+        { upsert: true, new: true }
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengunggah dan memproses data siswa",
+    });
+  } catch (error) {
+    console.error("Error processing file:", error);
+    next(error);
+  }
+};
+
+// Fungsi untuk membuat password dari tanggal lahir
+const createPasswordFromDateOfBirth = (dateOfBirth) => {
+  const date = new Date(dateOfBirth);
+  return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
 };

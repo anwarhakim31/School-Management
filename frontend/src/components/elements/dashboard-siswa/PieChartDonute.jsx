@@ -95,7 +95,7 @@ const PieChartDonute = ({ dataJadwal, loading }) => {
       </div>
     );
   }
-  if (totalMapel === 0) {
+  if (!totalMapel) {
     return (
       <div className="w-full h-full flex-center">
         <p className="text-xs">Data tidak ada.</p>

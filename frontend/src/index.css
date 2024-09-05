@@ -104,6 +104,9 @@
   display: none;
 }
 
+ol {
+  list-style-type: decimal; /* atau "decimal" untuk angka 1, 2, 3,... */
+}
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;

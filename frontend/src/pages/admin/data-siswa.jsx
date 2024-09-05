@@ -12,13 +12,14 @@ import { formatDate } from "@/util/formatDate";
 import responseError from "@/util/services";
 import ExcelJs from "exceljs";
 import axios from "axios";
-import { FileDown, Plus, Search, Trash2 } from "lucide-react";
+import { FileDown, Plus, Search, Trash2, Upload } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { saveAs } from "file-saver";
 import DeleteModal from "@/components/fragments/ModalDelete";
 import DeleteManyModal from "@/components/fragments/ModalDeleteMany";
+import ModalUploadExcel from "@/components/fragments/admin/data-siswa/ModalUploadExcel";
 
 const selectRow = [7, 14, 21, 28];
 
@@ -34,6 +35,7 @@ const DataSiswaPage = () => {
   const [limit, setLimit] = useState(7);
   const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
   const [isDeleteManySiswa, setIsDeletManySiswa] = useState(false);
+  const [isUpload, setIsUpload] = useState(false);
   const [allCheck, setAllCheck] = useState(false);
   const [filters, setFilters] = useState({
     kelas: "",
@@ -105,6 +107,10 @@ const DataSiswaPage = () => {
     setIsDeletManySiswa(!isDeleteManySiswa);
   };
 
+  const handleToggleUpload = () => {
+    setIsUpload(!isUpload);
+  };
+
   const handleSearch = (e) => {
     const { value } = e.target;
     setSearch(value);
@@ -137,8 +143,8 @@ const DataSiswaPage = () => {
   return (
     <section className="px-6 py-4 mb-4 ">
       <HeaderBox dataDetail={dataDetail} loading={loading} />
-      <div className="w-full flex-between gap-6">
-        <div className="relative flex w-full  md:max-w-[300px]">
+      <div className="w-full flex-between flex-wrap gap-6">
+        <div className="relative flex w-full   sm:max-w-[300px]">
           <input
             type="search"
             placeholder="Cari nama dan nis dari siswa."
@@ -153,13 +159,22 @@ const DataSiswaPage = () => {
           </div>
         </div>
 
-        <Link
-          to={"/admin/tambah-siswa"}
-          className="flex-between gap-3 min-w-fit bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
-        >
-          <img src={Student} alt="student" width={15} height={15} />
-          Tambah Siswa
-        </Link>
+        <div className="ml-auto flex-center gap-2 ">
+          <button
+            onClick={handleToggleUpload}
+            className="w-9 h-9 bg-neutral rounded-md flex-center "
+            title="upload siswa with excel"
+          >
+            <Upload width={18} height={18} className="text-white" />
+          </button>
+          <Link
+            to={"/admin/tambah-siswa"}
+            className="flex-between gap-3 min-w-fit bg-neutral hover:bg-indigo-800 transition-all duration-300 text-white py-2.5 text-xs px-4 rounded-md "
+          >
+            <img src={Student} alt="student" width={15} height={15} />
+            Tambah Siswa
+          </Link>
+        </div>
       </div>
 
       <div className="relative bg-white w-full  mt-6 border  overflow-hidden  rounded-lg">
@@ -200,6 +215,8 @@ const DataSiswaPage = () => {
                 className="group-hover:text-white"
               />
             </button>
+
+            <button></button>
           </div>
         </div>
         {loading ? (
@@ -238,6 +255,7 @@ const DataSiswaPage = () => {
           title={"Apakah anda yakin ingin menghapus siswa terpilih?"}
         />
       )}
+      {isUpload && <ModalUploadExcel onClose={handleToggleUpload} />}
     </section>
   );
 };

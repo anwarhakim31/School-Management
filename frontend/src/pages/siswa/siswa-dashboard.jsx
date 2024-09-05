@@ -54,7 +54,9 @@ const SiswaDashboardPage = () => {
       } catch (error) {
         responseError(error);
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
       }
     };
     const getNilai = async () => {
@@ -118,7 +120,7 @@ const SiswaDashboardPage = () => {
                   </h3>
                 )}
                 {loading ? (
-                  <div className="relative h-4  mt-1 w-32 bg-backup transition-all duration-300 ease-in-out">
+                  <div className="relative h-4   w-32 bg-backup transition-all duration-300 ease-in-out">
                     <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>{" "}
                   </div>
                 ) : (
@@ -128,28 +130,28 @@ const SiswaDashboardPage = () => {
                 )}
               </div>
               <div className="flex h-max gap-14 items-center flex-wrap">
-                <div className="w-48 mb-1">
-                  <h3 className="mb-3 text-sm text-neutral font-medium">
+                <div className="w-48 ">
+                  <h3 className=" text-sm mb-1 text-neutral font-medium">
                     Kelas
                   </h3>
                   <div className="flex gap-2 items-center">
                     <div className="bg-[#fb7d5b] w-8 h-8 p-2 rounded-md flex-center">
-                      <ClassIcon className="text-white text-xl" />
+                      <ClassIcon className="text-white " />
                     </div>
                     {loading ? (
                       <div className="relative h-4 w-full overflow-hidden mt-1 bg-backup transition-all duration-300 ease-in-out">
                         <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
                       </div>
                     ) : (
-                      <h5 className="text-xs  mt-1 text-gray-700">
+                      <h5 className="text-xs   text-gray-700">
                         {userData.kelas ? kelas?.kelas : "Tidak ada kelas."}{" "}
                         {kelas?.nama}
                       </h5>
                     )}
                   </div>
                 </div>
-                <div className="w-48">
-                  <h3 className="mb-2 text-sm text-neutral font-medium">
+                <div className="w-48 ">
+                  <h3 className=" text-sm text-neutral font-medium">
                     Wali Kelas
                   </h3>
                   <div className="flex gap-2 items-center">
@@ -158,21 +160,21 @@ const SiswaDashboardPage = () => {
                     </div>
                     {loading ? (
                       <div className="flex flex-col w-full">
-                        <div className="relative h-4 w-full mt-1 block bg-backup transition-all duration-300 ease-in-out overflow-hidden">
+                        <div className="relative h-3 w-full   block bg-backup transition-all duration-300 ease-in-out overflow-hidden">
                           <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
                         </div>
-                        <div className="relative h-4 w-full mt-1 block bg-backup transition-all duration-300 ease-in-out overflow-hidden">
+                        <div className="relative h-3 w-full mt-2  block bg-backup transition-all duration-300 ease-in-out overflow-hidden">
                           <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
                         </div>
                       </div>
                     ) : (
                       <div className="flex flex-col ">
-                        <h5 className="text-xs font-medium mt-1 text-gray-700">
+                        <h5 className="text-xs font-medium  text-gray-700">
                           {userData.kelas
                             ? kelas?.waliKelas?.nama
                             : "Tidak memiliki wali kelas."}
                         </h5>
-                        <h5 className="text-xs  mt-1 text-gray-700">
+                        <h5 className="text-[0.625rem]   text-gray-700">
                           + {userData.kelas ? kelas?.waliKelas?.phone : ""}
                         </h5>
                       </div>

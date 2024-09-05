@@ -1,6 +1,7 @@
 import express from "express";
 import {
   addSiswa,
+  addWithExcel,
   deleteManySiswa,
   deleteOneSiswa,
   editSiswa,
@@ -28,5 +29,6 @@ siswaRouter.post(
   verifyToken,
   uploadPhotoSiswa
 );
+siswaRouter.post("/upload-excel", upload.single("file"), addWithExcel);
 
 export default siswaRouter;

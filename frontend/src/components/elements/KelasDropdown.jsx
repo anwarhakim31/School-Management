@@ -97,7 +97,7 @@ const KelasDropdown = ({ onChange, value }) => {
         )}
       </div>
       {isOpen && dataKelas.length > 0 && (
-        <div className="absolute mt-1   w-full bg-white border z-50 border-gray-400 rounded shadow">
+        <div className="absolute mt-1   w-full bg-white border z-[999] border-gray-400 rounded shadow">
           <ul className="max-h-40 overflow-y-auto">
             {kelas &&
               kelas

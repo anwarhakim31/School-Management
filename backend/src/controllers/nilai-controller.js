@@ -404,6 +404,10 @@ export const getRaport = async (req, res, next) => {
       siswa: new mongoose.Types.ObjectId(id),
     });
 
+    const totalMapel = Array.from(
+      new Set(nilai.map((score) => score.mataPelajaran.nama))
+    ).length;
+
     const siswaWithNiali = {
       _id: siswa._id,
       nama: siswa.nama,
@@ -429,7 +433,7 @@ export const getRaport = async (req, res, next) => {
       message: "Berhasil mengambil semua nilai siswa",
       rapor: siswaWithNiali,
       absen,
-      publish: nilai.length <= 5,
+      publish: totalMapel <= 5,
     });
   } catch (error) {
     next(error);
