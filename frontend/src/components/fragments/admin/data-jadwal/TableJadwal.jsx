@@ -100,13 +100,13 @@ const TableJadwal = ({
               <th scope="col" className="px-4 text-left py-4">
                 kelas
               </th>
-              <th scope="col" className="px-2 py-4 whitespace-nowrap">
+              <th scope="col" className="px-1 py-4 whitespace-nowrap">
                 Jumlah pertemuan
               </th>
-              <th scope="col" className="px-10  py-4">
+              <th scope="col" className="px-1  py-4">
                 Hari
               </th>
-              <th scope="col" className="px-10 py-4">
+              <th scope="col" className="px-5 py-4">
                 waktu
               </th>
 
@@ -139,11 +139,11 @@ const TableJadwal = ({
             )}
             {dataSlice &&
               !loading &&
-              dataSlice.map((jadwal) => (
+              dataSlice.map((jadwal, i) => (
                 <tr
                   key={jadwal._id}
                   className={`${
-                    dataSlice.length === 7 && "last:border-none"
+                    lastIndexjadwal === i + 1 && "border-none"
                   } hover:bg-gray-100 border-b  `}
                 >
                   <td scope="row" className="px-3 py-3 relative">

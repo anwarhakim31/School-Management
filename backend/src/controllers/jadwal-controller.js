@@ -5,6 +5,7 @@ import Libur from "../models/libur-model.js";
 import Master from "../models/master-model.js";
 import Mapel from "../models/mapel-model.js";
 import Kelas from "../models/kelas-model.js";
+import TahunAjaran from "../models/tahunAjaran-model.js";
 
 const waktuKeTanggal = (waktu) => {
   const [jam, menit] = waktu.split(":").map(Number);
@@ -546,7 +547,7 @@ export const getJadwalSiswa = async (req, res, next) => {
       await kelas.populate({ path: "waliKelas", select: "nama phone" });
     }
 
-    console.log(kelas);
+    const ajaran = await TahunAjaran.find({ status: true });
 
     res.status(200).json({
       success: true,
@@ -555,6 +556,7 @@ export const getJadwalSiswa = async (req, res, next) => {
       libur: libur.perpekan,
       nasional: libur.nasional,
       kelas,
+      ajaran: ajaran[0].ajaran,
     });
   } catch (error) {
     console.log(error);

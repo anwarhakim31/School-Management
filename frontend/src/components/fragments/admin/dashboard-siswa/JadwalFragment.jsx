@@ -9,8 +9,6 @@ const JadwalFragment = ({ libur, liburNasional, dataJadwal, loading }) => {
     return tanggal.split("T")[0];
   }
 
-  console.log(dataJadwal.filter((jadwal) => jadwal.hari === today));
-
   return (
     <Fragment>
       <h1 className="text-sm font-medium text-neutral  border-b border-neutral text-center py-2">
@@ -31,7 +29,7 @@ const JadwalFragment = ({ libur, liburNasional, dataJadwal, loading }) => {
           </div>
         </div>
       ) : (
-        <div className="relative min-h-24 grid grid-cols-1  xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-1 py-2  gap-2">
+        <div className=" relative min-h-24 grid grid-cols-1  xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-1 py-2  gap-2">
           {!liburNasional.some(
             (holiday) =>
               matchingTanggal(holiday.tanggal) ===

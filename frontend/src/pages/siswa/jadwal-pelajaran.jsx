@@ -5,14 +5,31 @@ import axios from "axios";
 import { ArrowDownToDot } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const JadwalPelajaranPage = () => {
+  const navigate = useNavigate();
   const userData = useSelector(selectedUserData);
   const hari = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
   const [dataJadwal, setDataJadwal] = useState([]);
   const [loading, setLoading] = useState(true);
   const [libur, setLibur] = useState([]);
   const [hover, setHover] = useState(false);
+
+  useEffect(() => {
+    if (!userData.kelas) {
+      if (!window.sessionStorage.getItem("toast")) {
+        window.sessionStorage.setItem("toast", "true");
+        toast.info("Tidak memiliki akses. dikarena anda tidak memiliki kelas.");
+
+        setTimeout(() => {
+          window.sessionStorage.removeItem("toast");
+          navigate("/siswa/dashboard");
+        }, 50);
+      }
+    }
+  }, [userData]);
 
   useEffect(() => {
     const getJadwal = async () => {
@@ -35,15 +52,28 @@ const JadwalPelajaranPage = () => {
 
     if (userData.kelas) {
       getJadwal();
+    } else {
+      setLoading(false);
     }
   }, [userData]);
+
+  if (!userData.kelas) {
+    return <div className="fixed inset-0 bg-white"></div>;
+  }
+
+  const detail = JSON.parse(localStorage.getItem("detail"));
 
   return (
     <section className="px-6 pt-4 pb-10">
       <div className="flex-center bg-white shadow-md border rounded-md w-full p-4">
         <h3 className="font-semibold text-neutral text-sm text-center uppercase">
-          Jadwal Pelajaran Kelas <span>7 Alfa</span>
-          Tahun Ajaran 2024/2025
+          Jadwal Pelajaran Kelas{" "}
+          <span>
+            {detail && detail.userId === userData._id
+              ? `${detail.kelas} ${detail.namaKelas}`
+              : ""}{" "}
+          </span>
+          Tahun Ajaran {detail && detail.ajaran}
         </h3>
       </div>
 

@@ -267,8 +267,8 @@ const ProfileSiswaPage = () => {
                 className={`${
                   isNoEdit
                     ? "focus-within:border-white border-white border-b-2"
-                    : "border-b-2"
-                } py-1.5 h-8 bg-white border-gray-300 focus-within:border-neutral  text-gray-500 text-xs  w-full  focus-within:outline-none`}
+                    : "border-b-2 focus-within:border-blue-700 "
+                } py-1.5 h-8 bg-white border-gray-300   text-gray-500 text-xs  w-full  focus-within:outline-none`}
               />
               <span className="text-xs h-4 block mt-1 text-neutral2">
                 {errors.nama && errors.nama.message}
@@ -299,8 +299,8 @@ const ProfileSiswaPage = () => {
                 className={`${
                   isNoEdit
                     ? "focus-within:border-white border-white border-b-2"
-                    : "border-b-2"
-                } py-1.5 h-8  bg-white border-gray-300 focus-within:border-neutral   text-gray-500 text-xs  w-full  focus-within:outline-none`}
+                    : "border-b-2 focus-within:border-blue-700 "
+                } py-1.5 h-8  bg-white border-gray-300    text-gray-500 text-xs  w-full  focus-within:outline-none`}
               />
               <span className="text-xs h-4 block mt-1 text-neutral2">
                 {errors.password && errors.password.message}
@@ -327,8 +327,8 @@ const ProfileSiswaPage = () => {
                 className={`${
                   isNoEdit
                     ? "focus-within:border-white border-white border-b-2"
-                    : "border-b-2"
-                } py-1.5 h-8  bg-white border-gray-300 focus-within:border-neutral   text-gray-500 text-xs  w-full  focus-within:outline-none`}
+                    : "border-b-2 focus-within:border-blue-700 "
+                } py-1.5 h-8  bg-white border-gray-300    text-gray-500 text-xs  w-full  focus-within:outline-none`}
               />
               <span className="text-xs h-4 block mt-1 text-neutral2">
                 {errors.tempatLahir && errors.tempatLahir.message}
@@ -353,8 +353,8 @@ const ProfileSiswaPage = () => {
                 className={`${
                   isNoEdit
                     ? "focus-within:border-white border-white border-b-2"
-                    : "border-b-2"
-                } py-1.5 h-8  bg-white border-gray-300 focus-within:border-neutral   text-gray-500 text-xs  w-full  focus-within:outline-none`}
+                    : "border-b-2 focus-within:border-blue-700 "
+                } py-1.5 h-8  bg-white border-gray-300    text-gray-500 text-xs  w-full  focus-within:outline-none`}
               />
               <span className="text-xs h-4 block mt-1 text-neutral2">
                 {errors.tanggalLahir && errors.tanggalLahir.message}
@@ -382,8 +382,8 @@ const ProfileSiswaPage = () => {
                 className={`${
                   isNoEdit
                     ? "focus-within:border-white border-white border-b-2"
-                    : "border-b-2"
-                } py-1.5 h-8  bg-white border-gray-300 focus-within:border-neutral   text-gray-500 text-xs  w-full  focus-within:outline-none`}
+                    : "border-b-2 focus-within:border-blue-700 "
+                } py-1.5 h-8  bg-white border-gray-300    text-gray-500 text-xs  w-full  focus-within:outline-none`}
               />
               <span className="text-xs h-4 block mt-1 text-neutral2">
                 {errors.phone && errors.phone.message}
@@ -414,8 +414,8 @@ const ProfileSiswaPage = () => {
                   className={`${
                     isNoEdit
                       ? "focus-within:border-white border-white border-b-2"
-                      : "border-b-2"
-                  } py-1.5 h-8  bg-white border-gray-300 focus-within:border-neutral   text-gray-500 text-xs  w-full  focus-within:outline-none`}
+                      : "border-b-2 focus-within:border-blue-700 "
+                  } py-1.5 h-8  bg-white border-gray-300    text-gray-500 text-xs  w-full  focus-within:outline-none`}
                 >
                   <option value="">Pilih jenis kelamin</option>
                   <option value="Laki-Laki">Laki-Laki</option>
@@ -442,8 +442,8 @@ const ProfileSiswaPage = () => {
                 className={`${
                   isNoEdit
                     ? "focus-within:border-white border-white border-b-2"
-                    : "border-b-2 "
-                } py-1.5 h-[12]  bg-white border-gray-300 focus-within:border-neutral   text-gray-500 text-xs  w-full  focus-within:outline-none`}
+                    : "border-b-2 focus-within:border-blue-700 "
+                } py-1.5 h-[12]  bg-white border-gray-300    text-gray-500 text-xs  w-full  focus-within:outline-none`}
               />
             </div>
             <div className="mb-2">
@@ -462,8 +462,8 @@ const ProfileSiswaPage = () => {
                 className={`${
                   isNoEdit
                     ? "focus-within:border-white border-white border-b-2"
-                    : "border-b-2 "
-                } py-1.5 h-[12]  bg-white border-gray-300 focus-within:border-neutral   text-gray-500 text-xs  w-full  focus-within:outline-none`}
+                    : "border-b-2 focus-within:border-blue-700 "
+                } py-1.5 h-[12]  bg-white border-gray-300    text-gray-500 text-xs  w-full  focus-within:outline-none`}
               >
                 <option value="" className="">
                   Pilih agama

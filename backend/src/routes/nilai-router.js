@@ -5,6 +5,7 @@ import {
   addNilai,
   deleteManyNilai,
   deleteOneNilai,
+  getNilaiAverage,
   getNilaiKelas,
   getRaport,
   getRekapKelas,
@@ -20,5 +21,6 @@ nilaiRouter.delete("/delete-one-nilai/:id", verifyToken, deleteOneNilai);
 nilaiRouter.delete("/delete-many-nilai", verifyToken, deleteManyNilai);
 nilaiRouter.put("/update-nilai/:id", verifyToken, updateNilai);
 nilaiRouter.get("/get-raport/:siswaId", verifyToken, getRaport);
+nilaiRouter.get("/get-average", verifyToken, getNilaiAverage);
 
 export default nilaiRouter;

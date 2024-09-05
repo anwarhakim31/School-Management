@@ -423,14 +423,75 @@ export const getRaport = async (req, res, next) => {
     if (siswa.kelas.waliKelas) {
       siswaWithNiali.waliKelas = siswa.kelas.waliKelas.nama;
     }
+
     res.status(200).json({
       success: true,
       message: "Berhasil mengambil semua nilai siswa",
       rapor: siswaWithNiali,
       absen,
+      publish: nilai.length <= 5,
     });
   } catch (error) {
-    console.log(error);
+    next(error);
+  }
+};
+
+export const getNilaiAverage = async (req, res, next) => {
+  try {
+    const id = req.userId;
+
+    const nilai = await Nilai.find({ siswa: new mongoose.Types.ObjectId(id) });
+
+    const keys = Array.from(
+      new Set(
+        nilai.map((jadwal) =>
+          JSON.stringify({
+            ajaran: jadwal.tahunAjaran,
+            semester: jadwal.semester,
+          })
+        )
+      )
+    ).map((str) => JSON.parse(str));
+
+    const averages = keys.map((key) => {
+      const filteredNilai = nilai.filter(
+        (jadwal) =>
+          jadwal.tahunAjaran === key.ajaran && jadwal.semester === key.semester
+      );
+
+      const uniqueSubjects = Array.from(
+        new Set(filteredNilai.map((mapel) => mapel.mataPelajaran.toString()))
+      );
+
+      const tugasNilai = filteredNilai
+        .filter((item) => item.kategori === "tugas")
+        .reduce((acc, item) => acc + item.nilai, 0);
+
+      const ujianNilai = filteredNilai
+        .filter((item) => item.kategori === "ujian")
+        .reduce((acc, item) => acc + item.nilai, 0);
+
+      const totalMapel = uniqueSubjects.length;
+
+      const rataRataTugas = tugasNilai / totalMapel;
+      const rataRataUjian = ujianNilai / totalMapel;
+
+      return {
+        totalMapel,
+        ajaran: key.ajaran,
+        semester: key.semester,
+        rataRataTugas,
+        rataRataUjian,
+        rataRata: (rataRataTugas + rataRataUjian) / 2,
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Berhasil mengambil semua nilai siswa",
+      averages,
+    });
+  } catch (error) {
     next(error);
   }
 };
