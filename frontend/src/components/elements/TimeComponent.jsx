@@ -24,9 +24,9 @@ const TimeComponent = () => {
 
   const formattedTime = `${time.hours
     .toString()
-    .padStart(2, "0")}:${time.minutes
+    .padStart(2, "0")} : ${time.minutes
     .toString()
-    .padStart(2, "0")}:${time.seconds.toString().padStart(2, "0")}`;
+    .padStart(2, "0")} : ${time.seconds.toString().padStart(2, "0")} WIB`;
   return (
     <div className="bg-neutral rounded-md py-2">
       <h3 className="text-sm text-white text-center">

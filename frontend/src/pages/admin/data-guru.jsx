@@ -15,7 +15,7 @@ import { FileDown, Plus, Search, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import TableGuru from "@/components/fragments/admin/data-guru.jsx/TableGuru";
+import TableGuru from "@/components/fragments/admin/data-guru/TableGuru";
 import DeleteModal from "@/components/fragments/ModalDelete";
 import DeleteManyModal from "@/components/fragments/ModalDeleteMany";
 

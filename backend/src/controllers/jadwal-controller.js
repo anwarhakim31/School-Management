@@ -4,6 +4,7 @@ import Jadwal from "../models/jadwal-model.js";
 import Libur from "../models/libur-model.js";
 import Master from "../models/master-model.js";
 import Mapel from "../models/mapel-model.js";
+import Kelas from "../models/kelas-model.js";
 
 const waktuKeTanggal = (waktu) => {
   const [jam, menit] = waktu.split(":").map(Number);
@@ -539,12 +540,21 @@ export const getJadwalSiswa = async (req, res, next) => {
 
     const libur = await Libur.findOne();
 
+    const kelas = await Kelas.findById(kelasId).select("-siswa");
+
+    if (kelas && kelas.waliKelas) {
+      await kelas.populate({ path: "waliKelas", select: "nama phone" });
+    }
+
+    console.log(kelas);
+
     res.status(200).json({
       success: true,
       message: "Berhasil mengambil jadwal pertemuan",
       jadwal,
       libur: libur.perpekan,
       nasional: libur.nasional,
+      kelas,
     });
   } catch (error) {
     console.log(error);

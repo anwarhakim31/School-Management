@@ -3,10 +3,10 @@ import responseError from "@/util/services";
 import axios from "axios";
 import { Search, Trash2 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
-import AddModal from "@/components/fragments/admin/data-jadwal.jsx/AddModal";
+import AddModal from "@/components/fragments/admin/data-jadwal/AddModal";
 import AcaraIcon from "../../assets/svg/acara.svg?react";
-import TableJadwal from "@/components/fragments/admin/data-jadwal.jsx/TableJadwal";
-import EditModal from "@/components/fragments/admin/data-jadwal.jsx/EditModal";
+import TableJadwal from "@/components/fragments/admin/data-jadwal/TableJadwal";
+import EditModal from "@/components/fragments/admin/data-jadwal/EditModal";
 import DropDownFilter2 from "@/components/elements/DropDownFilter2";
 import { useSelector } from "react-redux";
 import {

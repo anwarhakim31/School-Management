@@ -1,24 +1,26 @@
 import TimeComponent from "@/components/elements/TimeComponent";
 import CoverDefault from "../../assets/cover.png";
 import ClassIcon from "../../assets/svg/class.svg?react";
+import profile from "../../assets/profile.png";
+import Wali from "../../assets/svg/siswa.svg?react";
 import { useEffect, useState } from "react";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import { useSelector } from "react-redux";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import axios from "axios";
+import JadwalFragment from "@/components/fragments/admin/dashboard-siswa/JadwalFragment";
 const SiswaDashboardPage = () => {
   const userData = useSelector(selectedUserData);
   const [dataJadwal, setDataJadwal] = useState([]);
-  const today = new Intl.DateTimeFormat("id-ID", { weekday: "long" }).format(
-    new Date()
-  );
+
   const [loading, setLoading] = useState(true);
   const [libur, setLibur] = useState([]);
   const [liburNasional, setLiburNasional] = useState([]);
+  const [kelas, setKelas] = useState(null);
 
   useEffect(() => {
-    const getJadwal = async () => {
+    const getData = async () => {
       try {
         const res = await axios.get(
           HOST + "/api/jadwal/get-jadwal-siswa/" + userData.kelas,
@@ -29,6 +31,18 @@ const SiswaDashboardPage = () => {
           setDataJadwal(res.data.jadwal);
           setLibur(res.data.libur);
           setLiburNasional(res.data.nasional);
+          if (res.data.kelas) {
+            setKelas(res.data.kelas);
+
+            localStorage.setItem(
+              "Kelas",
+              JSON.stringify({
+                userId: userData._id,
+                kelas: res.data.kelas.kelas,
+                namaKelas: res.data.kelas.nama,
+              })
+            );
+          }
         }
       } catch (error) {
         responseError(error);
@@ -38,56 +52,102 @@ const SiswaDashboardPage = () => {
     };
 
     if (userData.kelas) {
-      getJadwal();
+      getData();
     }
   }, [userData]);
 
-  function matchingTanggal(tanggal) {
-    return tanggal.split("T")[0];
-  }
-
-  console.log(new Date().toISOString());
-  console.log(liburNasional.some((holiday) => holiday));
+  console.log(kelas);
 
   return (
     <section className="px-6 pt-4 pb-10">
       <div className="grid  md:grid-cols-10 gap-8">
-        <div className="h-fit  md:col-span-7 ">
-          <div className="relative bg-white w-full h-full   rounded-md shadow-md overflow-hidden">
+        <div className=" md:col-span-7 ">
+          <div className="relative bg-white w-full    rounded-md shadow-md overflow-hidden">
             <div
               style={{ backgroundImage: `url(${CoverDefault})` }}
               className={`bg-cover bg-center h-32 bg-yellow-bg-`}
             ></div>
-            <div className="absolute w-32 h-32 top-[60px] lg:top-[68px] left-[5%] bg-backup rounded-full border-8 border-white"></div>
-            <div className="mt-10 mx-[6%] py-10 flex justify-between flex-wrap gap-20 sm:gap-24 lg:gap-32">
-              <div className="">
-                <h3 className="text-base font-semibold text-neutral">
-                  Anwar Hakim
-                </h3>
-                <h5 className="text-xs font-medium mt-1 text-gray-700">
-                  202043501579
-                </h5>
+
+            <div className="absolute w-32 h-32 top-[60px]  left-[5%] bg-backup rounded-full border-8 border-white overflow-hidden">
+              {loading ? (
+                <div className="absolute inset-0  bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
+              ) : (
+                <img
+                  src={userData.photo ? userData.photo : profile}
+                  alt=""
+                  className="object-cover border"
+                />
+              )}
+            </div>
+
+            <div className="mt-10 mx-4 py-10  flex flex-wrap sm:flex-nowrap  gap-14  ">
+              <div className="w-48 ">
+                {loading ? (
+                  <div className="relative h-6  bg-backup transition-all duration-300 ease-in-out">
+                    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
+                  </div>
+                ) : (
+                  <h3 className="text-base font-semibold text-neutral">
+                    {userData.nama}
+                  </h3>
+                )}
+                {loading ? (
+                  <div className="relative h-4  mt-1 w-32 bg-backup transition-all duration-300 ease-in-out">
+                    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>{" "}
+                  </div>
+                ) : (
+                  <h5 className="text-xs font-medium mt-1 text-gray-700">
+                    {userData.nis}
+                  </h5>
+                )}
               </div>
-              <div className="flex-1 flex justify-between gap-8 flex-col xl:flex-row flex-wrap">
-                <div className="relative flex items-center gap-2">
-                  <h3 className="text-sm font-medium text-neutral absolute -top-5  flex-center gap-4">
+              <div className="flex h-max gap-14 items-center flex-wrap">
+                <div className="w-32 mb-1">
+                  <h3 className="mb-3 text-sm text-neutral font-medium">
                     Kelas
                   </h3>
-                  <div className="bg-[#fb7d5b] rounded-full p-2 mt-2 ">
-                    <ClassIcon className={"text-white"} />
+                  <div className="flex gap-2 items-center">
+                    <div className="bg-[#fb7d5b] w-8 h-8 p-2 rounded-md flex-center">
+                      <ClassIcon className="text-white text-xl" />
+                    </div>
+                    {loading ? (
+                      <div className="relative h-4 w-full overflow-hidden mt-1 bg-backup transition-all duration-300 ease-in-out">
+                        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
+                      </div>
+                    ) : (
+                      <h5 className="text-xs  mt-1 text-gray-700">
+                        {kelas.kelas} {kelas.nama}
+                      </h5>
+                    )}
                   </div>
-                  <p className="mt-2 text-xs font-medium">7 A</p>
                 </div>
-                <div className="relative md:w-40 flex items-center gap-2">
-                  <h3 className="text-sm font-medium text-neutral absolute -top-5  flex-center gap-4">
+                <div className="w-48">
+                  <h3 className="mb-2 text-sm text-neutral font-medium">
                     Wali Kelas
                   </h3>
-                  <div className="bg-[#fcc43e] rounded-full p-2 mt-2 ">
-                    <ClassIcon className={"text-white"} />
-                  </div>
-                  <div className="flex flex-wrap">
-                    <p className="mt-2 text-xs font-medium">Ucup</p>
-                    <p className="mt-2 text-xs font-medium">+08131063253</p>
+                  <div className="flex gap-2 items-center">
+                    <div className="bg-[#fcc43e] w-8 h-8 p-2 rounded-md flex-center">
+                      <Wali className="text-white text-xl" />
+                    </div>
+                    {loading ? (
+                      <div className="flex flex-col w-full">
+                        <div className="relative h-4 w-full mt-1 block bg-backup transition-all duration-300 ease-in-out overflow-hidden">
+                          <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
+                        </div>
+                        <div className="relative h-4 w-full mt-1 block bg-backup transition-all duration-300 ease-in-out overflow-hidden">
+                          <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col ">
+                        <h5 className="text-xs font-medium mt-1 text-gray-700">
+                          {kelas.waliKelas.nama} {kelas.nama}
+                        </h5>
+                        <h5 className="text-xs  mt-1 text-gray-700">
+                          + {kelas.waliKelas.phone}
+                        </h5>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -97,63 +157,12 @@ const SiswaDashboardPage = () => {
         </div>
         <div className=" h-fit  md:col-span-3 bg-white rounded-md shadow-md p-2">
           <TimeComponent />
-          <h1 className="text-sm font-medium text-neutral  border-b border-neutral text-center py-2">
-            Jadwal Sekarang
-          </h1>
-          <div className="relative min-h-14 grid grid-cols-1  xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-1 py-2  gap-2">
-            {!liburNasional.some(
-              (holiday) =>
-                matchingTanggal(holiday.tanggal) ===
-                  matchingTanggal(new Date().toISOString()) ||
-                !libur.some((holiday) => holiday.hari === today)
-            ) &&
-              dataJadwal
-                .filter((jadwal) => jadwal.hari === today)
-                .map((jadwal) => (
-                  <div key={jadwal?._id} className=" py-2 ">
-                    <div className="flex text-xs justify-center items-center gap-1 ">
-                      <h5>⫷ {jadwal?.mulai}</h5>
-                      <span> : </span>
-                      <h5>{jadwal?.selesai} ⫸</h5>
-                    </div>
-                    <div className="mt-2">
-                      <p className="text-xs font-medium">
-                        {jadwal?.bidangStudi?.nama}
-                      </p>
-                      <p className="text-xs mt-1">{jadwal.guru.nama}</p>
-                    </div>
-                  </div>
-                )).length === 0 && (
-                <div className="py-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex text-xs justify-center items-center gap-1 ">
-                  <p className="font-medium capitalize text-center text-[#fb7d5b]">
-                    {loading ? "" : "Tidak ada jadwal"}
-                  </p>
-                </div>
-              )}
-            {liburNasional.length > 0 &&
-              liburNasional
-                .filter(
-                  (holiday) =>
-                    matchingTanggal(holiday.tanggal) ===
-                    matchingTanggal(new Date().toISOString())
-                )
-                .map((holiday) => (
-                  <div
-                    key={holiday._id}
-                    className="py-4 absolute w-full h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex text-xs justify-center items-center gap-1 "
-                  >
-                    <p className="font-medium capitalize text-center text-[#fb7d5b]">
-                      {loading
-                        ? ""
-                        : `Tidak ada jadwal. Hari ${
-                            holiday.keterangan.toLowerCase().includes("libur")
-                              ? holiday.keterangan
-                              : `Libur ${holiday.keterangan}`
-                          }`}
-                    </p>
-                  </div>
-                ))}
-          </div>
+          <JadwalFragment
+            libur={libur}
+            liburNasional={liburNasional}
+            dataJadwal={dataJadwal}
+            loading={loading}
+          />
         </div>
       </div>
     </section>
