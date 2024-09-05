@@ -5,13 +5,16 @@ import { useEffect, useState } from "react";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import { useSelector } from "react-redux";
+import { selectedUserData } from "@/store/slices/auth-slice";
+import axios from "axios";
 const SiswaDashboardPage = () => {
   const userData = useSelector(selectedUserData);
-  const hari = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
   const [dataJadwal, setDataJadwal] = useState([]);
+  const today = new Intl.DateTimeFormat("id-ID", { weekday: "long" }).format(
+    new Date()
+  );
   const [loading, setLoading] = useState(true);
   const [libur, setLibur] = useState([]);
-  const [hover, setHover] = useState(false);
 
   useEffect(() => {
     const getJadwal = async () => {
@@ -37,17 +40,19 @@ const SiswaDashboardPage = () => {
     }
   }, [userData]);
 
+  console.log(dataJadwal);
+
   return (
     <section className="px-6 pt-4 pb-10">
       <div className="grid  md:grid-cols-10 gap-8">
         <div className=" md:col-span-7 ">
-          <div className="relative bg-white w-full h-[400px] lg:h-72 rounded-md shadow-md overflow-hidden">
+          <div className="relative bg-white w-full h-[400px] xl:h-72 rounded-md shadow-md overflow-hidden">
             <div
               style={{ backgroundImage: `url(${CoverDefault})` }}
               className={`bg-cover bg-center w-full h-1/2 bg-yellow-bg-`}
             ></div>
             <div className="absolute w-32 h-32 top-[124px] lg:top-[68px] left-[5%] bg-backup rounded-full border-8 border-white"></div>
-            <div className="mt-16 mx-[6%] flex justify-between gap-12 sm:gap-24 lg:gap-32">
+            <div className="mt-16 mx-[6%] flex justify-between gap-20 sm:gap-24 lg:gap-32">
               <div className="">
                 <h3 className="text-base font-semibold text-neutral">
                   Anwar Hakim
@@ -56,7 +61,7 @@ const SiswaDashboardPage = () => {
                   202043501579
                 </h5>
               </div>
-              <div className="flex-1 flex justify-between gap-8 flex-col lg:flex-row">
+              <div className="flex-1 flex justify-between gap-8 flex-col xl:flex-row flex-wrap">
                 <div className="relative flex items-center gap-2">
                   <h3 className="text-sm font-medium text-neutral absolute -top-5  flex-center gap-4">
                     Kelas
@@ -81,24 +86,29 @@ const SiswaDashboardPage = () => {
           </div>
           <div className="bg-white h-32 mt-8"></div>
         </div>
-        <div className="h-56 md:col-span-3 bg-white rounded-md shadow-md p-2">
+        <div className=" h-fit  md:col-span-3 bg-white rounded-md shadow-md p-2">
           <TimeComponent />
           <h1 className="text-sm font-medium text-neutral  border-b border-neutral text-center py-2">
             Jadwal Sekarang
           </h1>
-          <div className="grid grid-cols-3 lg:grid-cols-1 py-2  gap-2">
-            <div className=" py-2 ">
-              <div className="flex text-xs justify-center gap-1 ">
-                <h5>13:00</h5>
-                <span> : </span>
-                <h5>14:00</h5>
-              </div>
-              <div className="mt-2">
-                <p className="text-xs font-medium">Matematika</p>
-                <p className="text-xs ">Matematika</p>
-              </div>
-            </div>
-            <div></div>
+          <div className="grid grid-cols-3 md:grid-cols-1 py-2  gap-2">
+            {dataJadwal
+              .filter((jadwal) => jadwal.hari === today)
+              .map((jadwal) => (
+                <div key={jadwal._id} className=" py-2 ">
+                  <div className="flex text-xs justify-center items-center gap-1 ">
+                    <h5>⫷ {jadwal.mulai}</h5>
+                    <span> : </span>
+                    <h5>{jadwal.selesai} ⫸</h5>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-xs font-medium">
+                      {jadwal.bidangStudi.nama}
+                    </p>
+                    <p className="text-xs mt-1">{jadwal.guru.nama}</p>
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </div>

@@ -64,8 +64,6 @@ const AddModal = ({ onClose }) => {
     }
   };
 
-  console.log(bidangStudi);
-
   return (
     <Modal onClose={onClose}>
       <div

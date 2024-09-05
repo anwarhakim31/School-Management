@@ -118,7 +118,7 @@ const TableJadwal = ({
               <tr className="w-full h-full">
                 <td
                   colSpan="7"
-                  className="px-2 py-4  border-gray-300 text-xs text-gray800 whitespace-nowrap h-[280px]"
+                  className="px-2 py-4  border-gray-300 text-xs text-gray800 whitespace-nowrap h-[300px]"
                 >
                   <div className="flex flex-col items-center justify-center">
                     <span className="w-8 h-8 block mb-2 animate-spin rounded-full border-4 border-t-gray-800 border-gray-300"></span>
@@ -139,7 +139,7 @@ const TableJadwal = ({
             )}
             {dataSlice &&
               !loading &&
-              [...dataSlice].reverse().map((jadwal) => (
+              dataSlice.map((jadwal) => (
                 <tr
                   key={jadwal._id}
                   className={`${
@@ -164,7 +164,7 @@ const TableJadwal = ({
                   </td>
                   <td
                     scope="row"
-                    className="px-10   border-gray-300  py-4 text-xs text-gray-900 whitespace-nowrap "
+                    className="px-10   border-gray-300  py-4 text-xs text-gray-900 truncate "
                   >
                     {jadwal.bidangStudi.kode} {jadwal.bidangStudi.nama}
                   </td>

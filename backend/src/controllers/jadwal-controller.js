@@ -152,7 +152,14 @@ export const addJadwal = async (req, res, next) => {
 
       const mapel = await Mapel.findById(bidangStudi);
 
-      if (totalPertemuan + parseInt(totalPertemuan) >= 50) {
+      if (totalPertemuan >= 50) {
+        throw new ResponseError(
+          400,
+          `Jumlah pertemuan bidang studi ${mapel.nama.toLowerCase()} pada kelas ini sudah melewati 50  pertemuan`
+        );
+      }
+
+      if (totalPertemuan + parseInt(jumlahPertemuan) > 50) {
         throw new ResponseError(
           400,
           `Jumlah pertemuan bidang studi  ${mapel.nama.toLowerCase()} pada kelas ini tersisa ${
@@ -198,7 +205,8 @@ export const getJadwal = async (req, res, next) => {
       .populate({
         path: "kelas",
         select: "nama kelas",
-      });
+      })
+      .sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
@@ -390,6 +398,7 @@ export const editJadwal = async (req, res, next) => {
         "Hari yang yang di atur merupakan libur  pekan"
       );
     }
+    const updateData = await Jadwal.findById(id);
 
     const pertemuan = await Jadwal.find({
       kelas: new mongoose.Types.ObjectId(kelas),
@@ -397,23 +406,27 @@ export const editJadwal = async (req, res, next) => {
       bidangStudi: new mongoose.Types.ObjectId(bidangStudi),
     });
 
-    if (pertemuan && pertemuan.some((schedule) => schedule.jumlahPertemuan)) {
-      const totalPertemuan = pertemuan.reduce((acc, schedule) => {
-        return acc + schedule.jumlahPertemuan;
-      }, 0);
+    const totalPertemuan = pertemuan.reduce((acc, schedule) => {
+      return acc + schedule.jumlahPertemuan;
+    }, 0);
 
-      const mapel = await Mapel.findById(bidangStudi);
+    const mapel = await Mapel.findById(bidangStudi);
+    console.log(updateData.bidangStudi.toString(), bidangStudi);
 
-      const nowPertemuan = pertemuan.find((per) => per.id === id);
-
-      console.log(nowPertemuan);
-
+    if (updateData.bidangStudi.toString() === bidangStudi) {
       if (
         totalPertemuan +
           parseInt(jumlahPertemuan) -
-          nowPertemuan.jumlahPertemuan >
+          updateData.jumlahPertemuan >
         50
       ) {
+        throw new ResponseError(
+          400,
+          `Jumlah pertemuan bidang studi ${mapel.nama.toLowerCase()} pada kelas ini sudah melewati 50  pertemuan`
+        );
+      }
+    } else {
+      if (totalPertemuan + parseInt(jumlahPertemuan) > 50) {
         throw new ResponseError(
           400,
           `Jumlah pertemuan bidang studi ${mapel.nama.toLowerCase()} pada kelas ini sudah melewati 50  pertemuan`
@@ -431,6 +444,7 @@ export const editJadwal = async (req, res, next) => {
       .status(200)
       .json({ success: true, message: "Berhasil mengubah jadwal." });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
@@ -520,7 +534,8 @@ export const getJadwalSiswa = async (req, res, next) => {
       kelas: new mongoose.Types.ObjectId(kelasId),
     })
       .populate({ path: "guru", select: "nama" })
-      .populate("bidangStudi");
+      .populate("bidangStudi")
+      .sort({ mulai: 1 });
 
     const libur = await Libur.findOne();
 
