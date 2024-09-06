@@ -2,9 +2,11 @@ import HeaderModal from "@/components/elements/HeaderModal";
 import KelasDropdown from "@/components/elements/KelasDropdown";
 
 import Modal from "@/components/elements/Modal";
-import { MAX_FILE_SIZE } from "@/util/constant";
+import { HOST, MAX_FILE_SIZE } from "@/util/constant";
+import responseError from "@/util/services";
+import axios from "axios";
 import { Upload, X } from "lucide-react";
-import React, { useRef, useState } from "react";
+import React, { createElement, useRef, useState } from "react";
 
 const ModalUploadExcel = ({ onClose }) => {
   const inputRef = useRef(null);
@@ -67,6 +69,28 @@ const ModalUploadExcel = ({ onClose }) => {
     }
   };
 
+  const handleDownloadTemplate = async () => {
+    try {
+      const res = await axios.get(HOST + "/api/siswa/download-template", {
+        withCredentials: true,
+        responseType: "blob",
+      });
+
+      if (res.status === 200) {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "TemplateTambahSiswa.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }
+    } catch (error) {
+      responseError(error);
+    }
+  };
+
   return (
     <Modal onClose={onClose}>
       <div
@@ -118,7 +142,10 @@ const ModalUploadExcel = ({ onClose }) => {
             </ol>
           </div>
           <div className="flex-center mb-4">
-            <button className=" py-2 px-4 text-xs   bg-neutral text-white rounded-md">
+            <button
+              onClick={handleDownloadTemplate}
+              className=" py-2 px-4 text-xs   bg-neutral text-white rounded-md"
+            >
               Unduh Template Excel
             </button>
           </div>

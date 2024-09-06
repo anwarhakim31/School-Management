@@ -11,6 +11,7 @@ import Absensi from "../models/Absensi-model.js";
 import NilaiPertemuan from "../models/nilaiPertemuan-model.js";
 import Nilai from "../models/Nilai-model.js";
 import XLSX from "xlsx";
+import path from "path";
 
 export const getAll = async (req, res, next) => {
   try {
@@ -419,6 +420,12 @@ export const getSiswaKelas = async (req, res, next) => {
   }
 };
 
+// Fungsi untuk membuat password dari tanggal lahir
+const createPasswordFromDateOfBirth = (dateOfBirth) => {
+  const date = new Date(dateOfBirth);
+  return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+};
+
 export const addWithExcel = async (req, res, next) => {
   try {
     if (!req.file) {
@@ -427,7 +434,6 @@ export const addWithExcel = async (req, res, next) => {
         .json({ success: false, message: "File tidak ditemukan" });
     }
 
-    // Baca file Excel
     const workbook = XLSX.readFile(req.file.path);
     const sheet_name_list = workbook.SheetNames;
     const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
@@ -509,8 +515,37 @@ export const addWithExcel = async (req, res, next) => {
   }
 };
 
-// Fungsi untuk membuat password dari tanggal lahir
-const createPasswordFromDateOfBirth = (dateOfBirth) => {
-  const date = new Date(dateOfBirth);
-  return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export const downloadTemplate = (req, res, next) => {
+  try {
+    const filePath = path.join(
+      __dirname,
+      "../uploads/file",
+      "TemplateTambahSiswa.xlsx" // Pastikan nama file dan ekstensi sudah benar
+    );
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      'attachment; filename="TemplateTambahSiswa.xlsx"'
+    );
+
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        console.error("Terjadi kesalahan saat mengunduh template:", err);
+        res
+          .status(500)
+          .json({ message: "Terjadi kesalahan saat mengunduh template." });
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
 };

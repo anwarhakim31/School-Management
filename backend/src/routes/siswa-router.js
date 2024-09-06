@@ -4,6 +4,7 @@ import {
   addWithExcel,
   deleteManySiswa,
   deleteOneSiswa,
+  downloadTemplate,
   editSiswa,
   getAll,
   getAllDetail,
@@ -29,6 +30,12 @@ siswaRouter.post(
   verifyToken,
   uploadPhotoSiswa
 );
-siswaRouter.post("/upload-excel", upload.single("file"), addWithExcel);
+siswaRouter.post(
+  "/upload-excel",
+  upload.single("file"),
+  verifyToken,
+  addWithExcel
+);
+siswaRouter.get("/download-template", verifyToken, downloadTemplate);
 
 export default siswaRouter;
