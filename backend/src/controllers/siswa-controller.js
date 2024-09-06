@@ -10,6 +10,8 @@ import TahunAjaran from "../models/tahunAjaran-model.js";
 import Absensi from "../models/Absensi-model.js";
 import NilaiPertemuan from "../models/nilaiPertemuan-model.js";
 import Nilai from "../models/Nilai-model.js";
+
+import { fileURLToPath } from "url";
 import XLSX from "xlsx";
 import path from "path";
 
@@ -445,26 +447,26 @@ export const addWithExcel = async (req, res, next) => {
       }
     });
 
-    // Proses data dari file Excel
     for (const row of data) {
       const { kelas, namaKelas, nis, password, tahunMasuk, tanggalLahir } = row;
 
       const siswaExist = await Siswa.findOne({ nis });
 
       if (siswaExist) {
-        console.log(`NIS ${nis} sudah digunakan.`);
-        continue; // Lewati baris ini jika NIS sudah ada
+        throw new ResponseError(400, `NIS ${nis} sudah digunakan.`);
       }
 
       if (!tahunMasuk) {
-        console.log(`Tahun Masuk Ajaran tidak diatur untuk NIS ${nis}.`);
-        continue; // Lewati baris ini jika tahun masuk tidak ada
+        throw new ResponseError(
+          400,
+          `Tahun Masuk Ajaran tidak diatur untuk NIS ${nis}.`
+        );
       }
 
       let hashedPassword;
 
+      console.log(password);
       if (!password) {
-        // Generate password based on tanggalLahir if password is not provided
         hashedPassword = await hash(
           createPasswordFromDateOfBirth(tanggalLahir),
           await genSalt()
@@ -483,8 +485,10 @@ export const addWithExcel = async (req, res, next) => {
         const kelasSiswa = await Kelas.findOne({ kelas, nama: namaKelas });
 
         if (!kelasSiswa) {
-          console.log(`Kelas ${kelas} tidak ditemukan.`);
-          continue; // Lewati baris ini jika kelas tidak ditemukan
+          throw new ResponseError(
+            404,
+            `Kelas ${kelas} ${namaKelas} tidak ditemukan.`
+          );
         }
 
         newSiswa = new Siswa({
@@ -515,8 +519,6 @@ export const addWithExcel = async (req, res, next) => {
   }
 };
 
-import { fileURLToPath } from "url";
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -528,18 +530,8 @@ export const downloadTemplate = (req, res, next) => {
       "TemplateTambahSiswa.xlsx" // Pastikan nama file dan ekstensi sudah benar
     );
 
-    res.setHeader(
-      "Content-Type",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    );
-    res.setHeader(
-      "Content-Disposition",
-      'attachment; filename="TemplateTambahSiswa.xlsx"'
-    );
-
     res.sendFile(filePath, (err) => {
       if (err) {
-        console.error("Terjadi kesalahan saat mengunduh template:", err);
         res
           .status(500)
           .json({ message: "Terjadi kesalahan saat mengunduh template." });

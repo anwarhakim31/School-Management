@@ -7,6 +7,7 @@ import responseError from "@/util/services";
 import axios from "axios";
 import { Upload, X } from "lucide-react";
 import React, { createElement, useRef, useState } from "react";
+import { toast } from "sonner";
 
 const ModalUploadExcel = ({ onClose }) => {
   const inputRef = useRef(null);
@@ -69,7 +70,14 @@ const ModalUploadExcel = ({ onClose }) => {
     }
   };
 
+  const handleClose = () => {
+    onClose();
+    inputRef.current.value = null;
+    setFile(null);
+  };
+
   const handleDownloadTemplate = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(HOST + "/api/siswa/download-template", {
         withCredentials: true,
@@ -88,11 +96,41 @@ const ModalUploadExcel = ({ onClose }) => {
       }
     } catch (error) {
       responseError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUploadExcel = async () => {
+    if (!file) {
+      toast.warning("File tidak ditemukan.");
+    }
+    const formData = new FormData();
+    formData.append("file", file);
+    setLoading(true);
+    try {
+      const res = await axios.post(HOST + "/api/siswa/upload-excel", formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (res.status === 200) {
+        toast.success(res.data.message);
+        onClose();
+      }
+    } catch (error) {
+      responseError(error);
+    } finally {
+      setFile(null);
+      inputRef.current.value = null;
+      setLoading(false);
     }
   };
 
   return (
-    <Modal onClose={onClose}>
+    <Modal onClose={handleClose}>
       <div
         className="w-full  sm:max-w-[400px] bg-white overflow-auto  rounded-md"
         onClick={(e) => e.stopPropagation()}
@@ -100,13 +138,13 @@ const ModalUploadExcel = ({ onClose }) => {
         <div className="p-4 sticky top-0 bg-white z-20 sm:static border-b">
           <HeaderModal
             titile={"Tambah Siswa"}
-            onClose={onClose}
+            onClose={handleClose}
             className={"font-bold"}
           />
         </div>
         <div className="my-4 px-4  ">
           <div>
-            <h3 className="text-xs text-neutral text-center select-none mb-2 font-bold">
+            <h3 className="text-xs text-gray-700 text-center select-none mb-2 font-bold">
               Unggah File Untuk Menambahkan Siswa
             </h3>
             <p className="text-xs">Petunjuk :</p>
@@ -205,8 +243,8 @@ const ModalUploadExcel = ({ onClose }) => {
         <div className="text-end border-t  p-4 space-x-4">
           <button
             aria-label="ya"
-            // ref={submitRef}
-            disabled={loading}
+            onClick={handleUploadExcel}
+            disabled={loading || !file}
             className="btn w-24 h-8.5 disabled:bg-gray-800"
           >
             {loading ? "Loading" : "Unggah"}

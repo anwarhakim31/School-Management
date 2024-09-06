@@ -44,55 +44,59 @@ const DataSiswaPage = () => {
     tahunMasuk: "",
   });
 
-  useEffect(() => {
-    const getSiswa = async () => {
-      try {
-        const res = await axios.get(`${HOST}/api/siswa/get-all-siswa`, {
-          params: {
-            page,
-            limit,
-            search,
-            tahunMasuk: filters.tahunMasuk,
-            jenisKelamin: filters.jenisKelamin,
-            kelas: filters.jenisKelamin,
-            kelasNama: filters.kelasNama,
-          },
-          withCredentials: true,
-        });
+  useEffect(
+    () => {
+      const getSiswa = async () => {
+        try {
+          const res = await axios.get(`${HOST}/api/siswa/get-all-siswa`, {
+            params: {
+              page,
+              limit,
+              search,
+              tahunMasuk: filters.tahunMasuk,
+              jenisKelamin: filters.jenisKelamin,
+              kelas: filters.jenisKelamin,
+              kelasNama: filters.kelasNama,
+            },
+            withCredentials: true,
+          });
 
-        if (res.status == 200) {
-          setDataSiswa(res.data.data);
-          setPagination(res.data.pagination);
+          if (res.status == 200) {
+            setDataSiswa(res.data.data);
+            setPagination(res.data.pagination);
+          }
+        } catch (error) {
+          responseError(error);
+        } finally {
+          setTimeout(() => {
+            setLoading(false);
+          }, 50);
         }
-      } catch (error) {
-        responseError(error);
-      } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 50);
-      }
-    };
-    const getDetail = async () => {
-      try {
-        const res = await axios.get(`${HOST}/api/siswa/get-detail-siswa`, {
-          withCredentials: true,
-        });
+      };
+      const getDetail = async () => {
+        try {
+          const res = await axios.get(`${HOST}/api/siswa/get-detail-siswa`, {
+            withCredentials: true,
+          });
 
-        if (res.status === 200) {
-          setDataDetail(res.data.data);
+          if (res.status === 200) {
+            setDataDetail(res.data.data);
+          }
+        } catch (error) {
+          responseError(error);
+        } finally {
+          setTimeout(() => {
+            setLoading(false);
+          }, 50);
         }
-      } catch (error) {
-        responseError(error);
-      } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 50);
-      }
-    };
+      };
 
-    getSiswa();
-    getDetail();
-  }, [limit, page, search, isDeleteSiswa, isDeleteManySiswa, filters]);
+      getSiswa();
+      getDetail();
+    },
+    [limit, page, search, isDeleteSiswa, isDeleteManySiswa, filters],
+    isUpload
+  );
 
   useEffect(() => {
     if (limit) {
@@ -162,10 +166,10 @@ const DataSiswaPage = () => {
         <div className="ml-auto flex-center gap-2 ">
           <button
             onClick={handleToggleUpload}
-            className="w-9 h-9 bg-neutral rounded-md flex-center "
+            className="btn bg-neutral rounded-md flex-center "
             title="upload siswa with excel"
           >
-            <Upload width={18} height={18} className="text-white" />
+            <Upload width={15} height={15} className="text-white" />
           </button>
           <Link
             to={"/admin/tambah-siswa"}
