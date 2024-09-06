@@ -270,7 +270,7 @@ const SiswaDashboardPage = () => {
                                     "font-semibold text-orange-600"
                                   }`}
                                 >
-                                  {average.rataRata}
+                                  {Math.round(average.rataRata * 10) / 10}
                                 </span>
                               </p>
                             </div>

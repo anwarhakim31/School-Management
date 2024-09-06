@@ -46,7 +46,17 @@ const DropdownMapel = ({ onChange, value, url, disabled, readOnly }) => {
         });
 
         if (res.status === 200) {
-          setDataMapel(res.data.mapel);
+          const mapel = res.data.mapel.reduce((acc, value) => {
+            const seen = acc.find((item) => item._id === value._id);
+
+            if (!seen) {
+              acc.push(value);
+            }
+
+            return acc.sort((a, b) => a.kode.localeCompare(b.kode));
+          }, []);
+
+          setDataMapel(mapel);
         }
       } catch (error) {
         responseError(error);

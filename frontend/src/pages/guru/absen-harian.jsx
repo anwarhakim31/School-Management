@@ -18,7 +18,7 @@ const AbsenHarianPage = () => {
   const [trigger, setTrigger] = useState(1);
   const [delay, setDelay] = useState(false);
   const [data, setData] = useState([]);
-  const [absensiData, setAbsensiData] = useState([]);
+  const [absensiData, setAbsensiData] = useState(null);
 
   const hariIni = new Date();
 
@@ -176,12 +176,23 @@ const AbsenHarianPage = () => {
           {formatIndonesiaDate(hariIni)}
         </h3>
 
+        {!alreadyAbsensi && !loading && (
+          <button
+            onClick={handleSubmit}
+            className="w-full max-w-[120px] sm:max-w-[200px] h-10 disabled:cursor-not-allowed disabled:bg-indigo-500 bg-neutral hover:bg-blue-700 text-white  text-xs rounded-md"
+            disabled={loading2 || alreadyAbsensi || hariLibur}
+          >
+            {!absensiData ? "Tidak ada siswa" : loading ? "Loading" : "Simpan"}
+          </button>
+        )}
+
         {alreadyAbsensi && (
-          <div className="flex gap-2">
-            <button onClick={handleGetAlreadyAbsen} className="btn">
-              Edit Absen
-            </button>
-          </div>
+          <button
+            onClick={handleGetAlreadyAbsen}
+            className="btn w-full max-w-[120px] sm:max-w-[200px] hover:bg-blue-700  h-10 text-xs rounded-md"
+          >
+            Edit Absen
+          </button>
         )}
       </div>
 
@@ -229,6 +240,7 @@ const AbsenHarianPage = () => {
                         <label
                           htmlFor={`${siswa._id}-hadir`}
                           className={`relative h-6 w-6 flex-center  cursor-pointer rounded-full bg-background border border-gray-300 ${
+                            absensiData &&
                             absensiData.find((item) => item._id === siswa._id)
                               ?.status === "hadir"
                               ? `${
@@ -245,6 +257,7 @@ const AbsenHarianPage = () => {
                             name={`status-${siswa._id}`}
                             value={"hadir"}
                             checked={
+                              absensiData &&
                               absensiData.find((item) => item._id === siswa._id)
                                 ?.status === "hadir"
                             }
@@ -256,6 +269,7 @@ const AbsenHarianPage = () => {
                         <label
                           htmlFor={`${siswa._id}-izin`}
                           className={`relative h-6 w-6 flex-center  cursor-pointer rounded-full bg-background border border-gray-300 ${
+                            absensiData &&
                             absensiData.find((item) => item._id === siswa._id)
                               ?.status === "izin"
                               ? "bg-blue-500 text-white"
@@ -268,6 +282,7 @@ const AbsenHarianPage = () => {
                             name={`status-${siswa._id}`}
                             value={"izin"}
                             checked={
+                              absensiData &&
                               absensiData.find((item) => item._id === siswa._id)
                                 ?.status === "izin"
                             }
@@ -279,6 +294,7 @@ const AbsenHarianPage = () => {
                         <label
                           htmlFor={`${siswa._id}-sakit`}
                           className={`relative h-6 w-6 flex-center  cursor-pointer rounded-full bg-background border border-gray-300 ${
+                            absensiData &&
                             absensiData.find((item) => item._id === siswa._id)
                               ?.status === "sakit"
                               ? "bg-orange-500 text-white"
@@ -291,6 +307,7 @@ const AbsenHarianPage = () => {
                             name={`status-${siswa._id}`}
                             value={"sakit"}
                             checked={
+                              absensiData &&
                               absensiData.find((item) => item._id === siswa._id)
                                 ?.status === "sakit"
                             }
@@ -302,6 +319,7 @@ const AbsenHarianPage = () => {
                         <label
                           htmlFor={`${siswa._id}-alpha`}
                           className={`relative h-6 w-6 flex-center  cursor-pointer rounded-full bg-background border border-gray-300 ${
+                            absensiData &&
                             absensiData.find((item) => item._id === siswa._id)
                               ?.status === "alpha"
                               ? "bg-red-500 text-white"
@@ -314,6 +332,7 @@ const AbsenHarianPage = () => {
                             name={`status-${siswa._id}`}
                             value={"alpha"}
                             checked={
+                              absensiData &&
                               absensiData.find((item) => item._id === siswa._id)
                                 ?.status === "alpha"
                             }
@@ -351,7 +370,7 @@ const AbsenHarianPage = () => {
             </div>
           </div>
         )}
-        {absensiData.length > 0 && hariLibur && (
+        {absensiData && absensiData.length > 0 && hariLibur && (
           <div className="absolute w-full h-full transition-all  inset-0">
             <div
               className={`${
@@ -370,22 +389,6 @@ const AbsenHarianPage = () => {
               ))}
             </div>
           </div>
-        )}
-      </div>
-
-      <div className="w-full flex justify-end">
-        {!loading && (
-          <button
-            onClick={handleSubmit}
-            className="w-full sm:max-w-[200px] h-10 disabled:cursor-not-allowed disabled:bg-indigo-500 bg-neutral hover:bg-blue-700 text-white mt-8 text-sm rounded-md"
-            disabled={loading2 || alreadyAbsensi || hariLibur}
-          >
-            {absensiData.length === 0
-              ? "Tidak ada siswa"
-              : loading
-              ? "Loading"
-              : "Simpan"}
-          </button>
         )}
       </div>
     </section>

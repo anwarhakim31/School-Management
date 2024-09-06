@@ -385,7 +385,7 @@ const HasilRaporPage = () => {
                       colSpan={2}
                       className="px-4 py-1 w-[25%] text-center font-medium border border-gray-600"
                     >
-                      {average.overallAverage}
+                      {Math.round(average.overallAverage * 10) / 10}
                     </td>
                   </tr>
                   <tr className="border-none">
