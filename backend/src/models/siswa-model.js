@@ -51,10 +51,6 @@ const siswaSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  email: {
-    type: String,
-    required: false,
-  },
   kelas: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Kelas",

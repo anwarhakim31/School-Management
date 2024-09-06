@@ -172,6 +172,7 @@ const DataSiswaPageguru = () => {
             type="search"
             placeholder="Cari Nama Dan NIS Siswa"
             value={search}
+            id="search"
             disabled={loading}
             onChange={handleSearch}
             className="w-full rounded-full disabled:cursor-not-allowed py-2 pr-2 pl-10 text-xs border border-gray-400 outline-offset-0 outline-1 outline-neutral"

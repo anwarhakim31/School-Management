@@ -153,6 +153,7 @@ const DataNilainilaiPage = () => {
         <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
+            id="search"
             placeholder="Cari Nama Nilai, Kode Dan Nama Mapel"
             value={search}
             disabled={loading}

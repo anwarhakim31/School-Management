@@ -381,6 +381,7 @@ const EditModal = ({ onClose, kelas }) => {
                   type={"number"}
                   id="No. Telepon"
                   name="phone"
+                  autoComplete="off"
                   value={phone}
                   {...register("phone", {
                     required: "No. Telepon diperlukan.",
@@ -401,6 +402,7 @@ const EditModal = ({ onClose, kelas }) => {
               </label>
               <textarea
                 type={"text"}
+                id="alamaat"
                 name="alamat"
                 {...register("alamat")}
                 className="py-1.5 h-14 bg-white border  text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"

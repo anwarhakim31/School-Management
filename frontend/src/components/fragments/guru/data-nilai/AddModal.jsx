@@ -111,8 +111,8 @@ const AddModal = ({ onClose }) => {
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4 ">
           <div className="px-4 mb-2 ">
             <label
-              htmlFor="mataPelajaran"
-              className="text-xs mb-2 block font-semibold text-gray-700"
+              htmlFor="mapel"
+              className="text-xs mb-2 w-fit block font-semibold text-gray-700"
             >
               Mata Pelajaran
             </label>
@@ -186,7 +186,7 @@ const AddModal = ({ onClose }) => {
               </label>
               <input
                 type="number"
-                name=""
+                name="nilai"
                 placeholder="0-100"
                 className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "
                 id="nilai"
@@ -245,7 +245,7 @@ const AddModal = ({ onClose }) => {
                 disabled
                 {...register("semester")}
                 className="block w-full text-xs bg-white border disabled:pointer-events-none disabled:bg-gray-100 border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "
-                id="nilai"
+                id="semester"
               />
               <span className="text-xs h-4 text-neutral2 block">
                 {errors.semester && errors.semester.message}

@@ -62,8 +62,6 @@ const GuruDashboardPage = () => {
     getDetail();
   }, []);
 
-  console.log(dataGuru);
-
   return (
     <section className="px-6 py-4">
       <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -91,7 +89,7 @@ const GuruDashboardPage = () => {
                 <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white to-transparent flex-center opacity-50 animate-shimmer"></div>
               </div>
             ) : (
-              <h1 className=" flex-1 flex-center  text-neutral font-semibold text-2xl h-12 truncate">
+              <h1 className=" flex-1 flex-center  text-neutral font-semibold  h-12 truncate">
                 {(dataGuru && dataGuru.bidangStudi) || "Kosong"}
               </h1>
             )}

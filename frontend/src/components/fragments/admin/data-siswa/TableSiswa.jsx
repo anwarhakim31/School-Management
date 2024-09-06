@@ -211,15 +211,6 @@ const TableSiswa = ({
                         >
                           <Phone strokeWidth={1} width={15} height={15} />
                         </div>
-                        {siswa.email && (
-                          <div
-                            className="cursor-pointer flex-center border shadow-md  text-indigo-700 w-[24px] h-[24px] rounded-full"
-                            title={siswa.email}
-                            onClick={() => HandleCopyText(siswa.email)}
-                          >
-                            <Mail strokeWidth={1} width={15} height={15} />
-                          </div>
-                        )}
                       </div>
                     </td>
                     <td

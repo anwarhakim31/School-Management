@@ -44,59 +44,63 @@ const DataSiswaPage = () => {
     tahunMasuk: "",
   });
 
-  useEffect(
-    () => {
-      const getSiswa = async () => {
-        try {
-          const res = await axios.get(`${HOST}/api/siswa/get-all-siswa`, {
-            params: {
-              page,
-              limit,
-              search,
-              tahunMasuk: filters.tahunMasuk,
-              jenisKelamin: filters.jenisKelamin,
-              kelas: filters.jenisKelamin,
-              kelasNama: filters.kelasNama,
-            },
-            withCredentials: true,
-          });
+  useEffect(() => {
+    const getSiswa = async () => {
+      try {
+        const res = await axios.get(`${HOST}/api/siswa/get-all-siswa`, {
+          params: {
+            page,
+            limit,
+            search,
+            tahunMasuk: filters.tahunMasuk,
+            jenisKelamin: filters.jenisKelamin,
+            kelas: filters.jenisKelamin,
+            kelasNama: filters.kelasNama,
+          },
+          withCredentials: true,
+        });
 
-          if (res.status == 200) {
-            setDataSiswa(res.data.data);
-            setPagination(res.data.pagination);
-          }
-        } catch (error) {
-          responseError(error);
-        } finally {
-          setTimeout(() => {
-            setLoading(false);
-          }, 50);
+        if (res.status == 200) {
+          setDataSiswa(res.data.data);
+          setPagination(res.data.pagination);
         }
-      };
-      const getDetail = async () => {
-        try {
-          const res = await axios.get(`${HOST}/api/siswa/get-detail-siswa`, {
-            withCredentials: true,
-          });
+      } catch (error) {
+        responseError(error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
+      }
+    };
+    const getDetail = async () => {
+      try {
+        const res = await axios.get(`${HOST}/api/siswa/get-detail-siswa`, {
+          withCredentials: true,
+        });
 
-          if (res.status === 200) {
-            setDataDetail(res.data.data);
-          }
-        } catch (error) {
-          responseError(error);
-        } finally {
-          setTimeout(() => {
-            setLoading(false);
-          }, 50);
+        if (res.status === 200) {
+          setDataDetail(res.data.data);
         }
-      };
+      } catch (error) {
+        responseError(error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
+      }
+    };
 
-      getSiswa();
-      getDetail();
-    },
-    [limit, page, search, isDeleteSiswa, isDeleteManySiswa, filters],
-    isUpload
-  );
+    getSiswa();
+    getDetail();
+  }, [
+    limit,
+    page,
+    search,
+    isDeleteSiswa,
+    isDeleteManySiswa,
+    filters,
+    isUpload,
+  ]);
 
   useEffect(() => {
     if (limit) {

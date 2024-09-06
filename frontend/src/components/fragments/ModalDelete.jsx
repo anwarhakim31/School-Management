@@ -1,20 +1,32 @@
 import HeaderModal from "@/components/elements/HeaderModal";
 import Modal from "@/components/elements/Modal";
-import { selectedDataDelete } from "@/store/slices/admin-slice";
+import {
+  selectedDataDelete,
+  selectedDataDeleteMany,
+  setDataDeleteMany,
+} from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
 import { TriangleAlert } from "lucide-react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 
 const DeleteModal = ({ onClose, title, url }) => {
+  const dispath = useDispatch();
+  const deleteOne = useSelector(selectedDataDelete);
+  const deleteMany = useSelector(selectedDataDeleteMany);
   const [loading, setLoading] = useState(false);
-
   const handleDelete = async () => {
     setLoading(true);
 
     if (url) {
+      if (deleteMany.some((item) => item === deleteOne._id)) {
+        dispath(
+          setDataDeleteMany(deleteMany.filter((item) => item !== deleteOne._id))
+        );
+      }
       try {
         const res = await axios.delete(HOST + url, {
           withCredentials: true,

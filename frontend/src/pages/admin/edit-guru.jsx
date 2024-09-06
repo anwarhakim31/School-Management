@@ -519,7 +519,9 @@ const EditGuruPage = () => {
                   </label>
                   <select
                     id="namaKelas"
-                    {...register("namaKelas")}
+                    {...register("namaKelas", {
+                      required: "Nama kelas tidak boleh kosong.",
+                    })}
                     className="py-1.5 h-8  bg-white border text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"
                   >
                     <option value="">Pilih Nama Kelas</option>

@@ -132,7 +132,7 @@ const ModalUploadExcel = ({ onClose }) => {
   return (
     <Modal onClose={handleClose}>
       <div
-        className="w-full  sm:max-w-[400px] bg-white overflow-auto  rounded-md"
+        className="w-full  sm:max-w-[450px] bg-white overflow-auto  rounded-md"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-4 sticky top-0 bg-white z-20 sm:static border-b">

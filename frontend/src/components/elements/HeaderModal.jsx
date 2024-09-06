@@ -17,7 +17,7 @@ const HeaderModal = ({ titile, onClose, className }) => {
         onClick={onClose}
         ref={focusRef}
         aria-label="close modal"
-        className={` py-1.5 px-1.5 rounded-md bg-gray-100 hover:bg-gray-200 font-bold text-gray-800 focus:outline-neutral focus:outline outline-1`}
+        className={` py-1.5 px-1.5 rounded-md bg-gray-100 hover:bg-gray-200 font-bold text-gray-800 focus:outline-neutral focus:outline outline-1 outline-offset-1`}
       >
         <X width={15} height={15} />
       </button>

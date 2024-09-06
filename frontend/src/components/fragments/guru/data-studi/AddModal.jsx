@@ -7,14 +7,10 @@ import axios, { all } from "axios";
 import { HOST } from "@/util/constant";
 import { toast } from "sonner";
 import DropdownMapel from "@/components/elements/DropdownMapel";
-import DropdownGuru from "@/components/elements/DropdownGuru";
-import DayDropdown from "@/components/elements/DayDropdown";
-import KelasDropdown from "@/components/elements/KelasDropdown";
-import NamaKelasDropdown from "@/components/elements/NamaKelasDropdown";
+
 import { useSelector } from "react-redux";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import DropdownSiswa from "@/components/elements/DropdownSiswa";
-import DropdownCategoryNilai from "@/components/elements/DropdownCategoryNilai";
 
 const AddModal = ({ onClose, kelas, pertemuan }) => {
   const userData = useSelector(selectedUserData);
@@ -106,8 +102,6 @@ const AddModal = ({ onClose, kelas, pertemuan }) => {
       setValue("kelas", kelas.id);
     }
 
-    console.log(kelas);
-
     if (pertemuan) {
       setValue("pertemuan", pertemuan);
     }
@@ -129,7 +123,7 @@ const AddModal = ({ onClose, kelas, pertemuan }) => {
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4 ">
           <div className="px-4 mb-2 ">
             <label
-              htmlFor="mataPelajaran"
+              htmlFor="mapel"
               className="text-xs mb-2 block font-semibold text-gray-700"
             >
               Mata Pelajaran
@@ -167,7 +161,7 @@ const AddModal = ({ onClose, kelas, pertemuan }) => {
                 <DropdownSiswa
                   onChange={onChange}
                   value={value}
-                  url={`/api/siswa/get-siswa/kelas/${userData.waliKelas._id}`}
+                  url={`/api/siswa/get-siswa/kelas/${kelas.id}`}
                 />
               )}
             />
@@ -179,13 +173,14 @@ const AddModal = ({ onClose, kelas, pertemuan }) => {
           <div className="flex w-full ">
             <div className="px-4 mb-2 w-full">
               <label
-                htmlFor="kategori"
+                htmlFor="pertemuan"
                 className="text-xs w-fit mb-2 block font-semibold text-gray-700"
               >
                 Pertemuan
               </label>
               <input
                 type="text"
+                id="pertemuan"
                 {...register("pertemuan")}
                 className="block w-full disabled:pointer-events-none disabled:bg-gray-100 text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "
                 readOnly
@@ -205,7 +200,7 @@ const AddModal = ({ onClose, kelas, pertemuan }) => {
               </label>
               <input
                 type="number"
-                name=""
+                name="nilai"
                 className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "
                 id="nilai"
                 {...register("nilai", {
@@ -263,7 +258,7 @@ const AddModal = ({ onClose, kelas, pertemuan }) => {
                 disabled
                 {...register("semester")}
                 className="block w-full text-xs bg-white border disabled:pointer-events-none disabled:bg-gray-100 border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "
-                id="nilai"
+                id="semester"
               />
               <span className="text-xs h-4 text-neutral2 block">
                 {errors.semester && errors.semester.message}

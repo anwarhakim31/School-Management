@@ -223,6 +223,11 @@ const SiswaDashboardPage = () => {
                   </span>
                 </div>
                 <div className="h-[200px] overflow-y-auto scroll-none">
+                  {dataNilai.length === 0 && (
+                    <div className=" font-medium text-[0.625rem] my-2 flex-center rounded-md py-5 bg-gray-100 border">
+                      <div>Data tidak ada.</div>
+                    </div>
+                  )}
                   {dataNilai.length > 0 &&
                     dataNilai.map((average, i) => {
                       const render =

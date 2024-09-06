@@ -131,9 +131,12 @@ export const updateKelas = async (req, res, next) => {
         { runValidators: true, new: true }
       );
     } else {
-      const alreadyWali = await Guru.findById({ _id: waliKelas });
+      const alreadyWali = await Kelas.findOne({
+        _id: { $ne: id },
+        waliKelas: waliKelas,
+      });
 
-      if (alreadyWali.waliKelas) {
+      if (alreadyWali) {
         throw new ResponseError(404, "Guru sudah sebagai Wali Kelas.");
       }
 

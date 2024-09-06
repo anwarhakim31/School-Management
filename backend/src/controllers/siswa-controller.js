@@ -116,7 +116,7 @@ export const addSiswa = async (req, res, next) => {
 
     if (!tahunMasuk) {
       throw new ResponseError(
-        401,
+        400,
         "Silakan mengatur Tahun Masuk Ajaran pada data umum terlebih dulu"
       );
     }
@@ -286,6 +286,7 @@ export const deleteOneSiswa = async (req, res, next) => {
 
     const kelas = await Kelas.findById(siswa.kelas);
 
+    console.log(kelas);
     if (siswa.kelas) {
       const updateKelas = kelas.siswa.filter((data) => data.toString() !== id);
       const jumlahSiswa = updateKelas.length;
@@ -405,6 +406,8 @@ export const getSiswaKelas = async (req, res, next) => {
   try {
     const id = req.params.id;
 
+    console.log(id);
+
     const siswa = await Siswa.find({ kelas: id });
 
     if (!siswa) {
@@ -460,6 +463,21 @@ export const addWithExcel = async (req, res, next) => {
         throw new ResponseError(
           400,
           `Tahun Masuk Ajaran tidak diatur untuk NIS ${nis}.`
+        );
+      }
+
+      if (!tahunMasuk.toString().includes("/")) {
+        throw new ResponseError(400, "Format Tahun Masuk tidak sesuai");
+      }
+
+      const [first, last] = tahunMasuk.split("/");
+      const firstYear = parseInt(first);
+      const lastYear = parseInt(last);
+
+      if (lastYear - firstYear !== 1) {
+        throw new ResponseError(
+          404,
+          "Format Tahun Masuk. Pastikan perbedaan hanya 1 tahun."
         );
       }
 

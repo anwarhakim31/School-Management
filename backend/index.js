@@ -4,72 +4,135 @@ import dotenv from "dotenv";
 import path from "path";
 import fs from "fs";
 import { app } from "./src/app/app.js";
-// import { siswa } from "./src/data/siswa.js";
 import Siswa from "./src/models/siswa-model.js";
 import Kelas from "./src/models/kelas-model.js";
-import { siswas } from "./src/data/siswa.js";
-
+import Total from "./src/models/total-model.js";
+import { fileURLToPath } from "url";
 dotenv.config();
-
-const bulkInsertStudents = async () => {
-  try {
-    // Adjusted file path to src/data/siswa.json
-    const filePath = path.resolve("src", "data", "siswa.json");
-
-    // Read and parse the JSON file
-    const data = fs.readFileSync(filePath, "utf-8");
-    const students = JSON.parse(data);
-
-    if (!Array.isArray(students) || students.length === 0) {
-      console.error("Invalid or empty student data.");
-      return;
-    }
-
-    const studentsToInsert = [];
-    const errors = [];
-
-    for (const student of students) {
-      const { kelas, namaKelas, nis, password, ...otherFields } = student;
-
-      const siswaExist = await Siswa.findOne({ nis });
-      if (siswaExist) {
-        errors.push({ nis, message: "NIS sudah digunakan" });
-        continue;
-      }
-
-      const salt = await genSalt();
-      const hashedPassword = await hash(password, salt);
-
-      studentsToInsert.push(newStudentData);
-    }
-
-    if (studentsToInsert.length > 0) {
-      await Siswa.insertMany(studentsToInsert);
-      console.log("Siswa berhasil ditambahkan");
-    }
-
-    if (errors.length > 0) {
-      console.error("Errors occurred during insertion:", errors);
-    }
-  } catch (error) {
-    console.error("Error during bulk insertion:", error);
-  }
-};
 
 const port = process.env.PORT || 2001;
 const databaseURL = process.env.DATABASE_URL;
 
-async function hashPassord(Users) {
-  for (const user of Users) {
+// Function to hash passwords
+async function hashPassword(users) {
+  for (const user of users) {
     if (user.password) {
       const salt = await genSalt();
-      user.password = await bcrypt.hash(user.password, salt);
+      user.password = await hash(user.password, salt);
     }
   }
-
-  return Users;
+  return users;
 }
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+// Read JSON data from file
+const readJsonData = () => {
+  const filePath = path.join(__dirname, "src/data", "siswa.json");
+  const data = fs.readFileSync(filePath, "utf8");
+  return JSON.parse(data);
+};
+
+// Bulk add siswa function
+// Bulk add siswa function
+const bulkAddSiswa = async () => {
+  try {
+    // Read and hash the data
+    const siswas = readJsonData();
+    const hashedSiswas = await hashPassword(siswas);
+
+    // Group siswa by kelas and namaKelas
+    const kelasUpdates = {};
+    const siswaToInsert = [];
+    const tahunMasukCounts = {};
+
+    for (const siswa of hashedSiswas) {
+      // Find the Kelas based on kelas and namaKelas
+      const kelasSiswa = await Kelas.findOne({
+        kelas: siswa.kelas,
+        nama: siswa.namaKelas,
+      });
+
+      if (!kelasSiswa) {
+        console.log(
+          `Kelas with kelas: ${siswa.kelas} and namaKelas: ${siswa.namaKelas} not found`
+        );
+        continue;
+      }
+
+      // Add siswa to the insert list
+      siswaToInsert.push({ ...siswa, kelas: kelasSiswa._id });
+
+      // Update kelasUpdates with the Kelas ID
+      if (!kelasUpdates[kelasSiswa._id]) {
+        kelasUpdates[kelasSiswa._id] = [];
+      }
+      kelasUpdates[kelasSiswa._id].push(null); // Placeholder for siswa _id
+
+      // Count students by tahunMasuk
+      if (!tahunMasukCounts[siswa.tahunMasuk]) {
+        tahunMasukCounts[siswa.tahunMasuk] = 0;
+      }
+      tahunMasukCounts[siswa.tahunMasuk]++;
+    }
+
+    // Insert siswa data in bulk
+    let insertedSiswas;
+    if (siswaToInsert.length > 0) {
+      insertedSiswas = await Siswa.insertMany(siswaToInsert);
+    }
+
+    // Map the inserted siswa to their _id
+    const siswaIdMap = insertedSiswas.reduce((map, siswa) => {
+      map[siswa.kelas] = map[siswa.kelas] || [];
+      map[siswa.kelas].push(siswa._id);
+      return map;
+    }, {});
+
+    // Update Kelas documents
+    for (const [kelasId, siswaIds] of Object.entries(kelasUpdates)) {
+      const siswaList = siswaIdMap[kelasId] || [];
+
+      await Kelas.findByIdAndUpdate(kelasId, {
+        $push: { siswa: { $each: siswaList } },
+        $set: {
+          jumlahSiswa:
+            siswaList.length + (await Kelas.findById(kelasId)).siswa.length,
+        },
+      });
+    }
+
+    // Update Total collection
+    for (const [tahunMasuk, count] of Object.entries(tahunMasukCounts)) {
+      await Total.findOneAndUpdate(
+        { ajaran: tahunMasuk },
+        {
+          $inc: { totalSiswa: count },
+        },
+        { upsert: true, new: true }
+      );
+    }
+
+    console.log("Bulk data added successfully");
+  } catch (error) {
+    console.error("Failed to bulk add siswa:", error);
+  }
+};
+
+// Connect to MongoDB
+const connectDB = async () => {
+  try {
+    await mongoose.connect(databaseURL);
+    console.log("Connected to DB");
+
+    // Perform bulk insertion after DB connection is established
+    // await bulkAddSiswa();
+  } catch (error) {
+    console.log("Failed to connect to DB:", error);
+  }
+};
+
+// Endpoint to check API status
 app.get("/", (req, res) => {
   res.send(`
     <html">
@@ -97,52 +160,7 @@ app.get("/", (req, res) => {
   `);
 });
 
-const connectDB = async () => {
-  try {
-    await mongoose.connect(databaseURL);
-
-    console.log("conncect to DB");
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 app.listen(port, async () => {
-  connectDB();
-  // try {
-  //   // Masukkan data ke koleksi Siswa
-  //   const insertedSiswa = await Siswa.insertMany(siswas);
-  //   console.log("Data siswa berhasil dimasukkan");
-
-  //   // Kelompokkan siswa berdasarkan kelas dan perbarui dokumen Kelas
-  //   const kelasUpdates = insertedSiswa.reduce((acc, siswa) => {
-  //     const kelasId = siswa.kelas.toString();
-  //     if (!acc[kelasId]) {
-  //       acc[kelasId] = [];
-  //     }
-  //     acc[kelasId].push(siswa._id);
-  //     return acc;
-  //   }, {});
-
-  //   for (const [kelasId, siswaIds] of Object.entries(kelasUpdates)) {
-  //     await Kelas.findByIdAndUpdate(kelasId, {
-  //       $push: { siswa: { $each: siswaIds } },
-  //     });
-
-  //     // const updatedKelas = await Kelas.findById(kelasId);
-
-  //     // const jumlahSiswaBaru = updatedKelas.siswa.length;
-
-  //     // Update the jumlahSiswa field with the new total
-  //     await Kelas.findByIdAndUpdate(kelasId, {
-  //       jumlahSiswa: jumlahSiswaBaru,
-  //     });
-  //   }
-
-  //   console.log("Data kelas berhasil diperbarui");
-  // } catch (error) {
-  //   console.error("Gagal memasukkan data siswa:", error);
-  // }
-
-  console.log("Server is running in port " + process.env.PORT);
+  await connectDB();
+  console.log("Server is running on port " + port);
 });

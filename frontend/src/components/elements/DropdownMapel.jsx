@@ -22,8 +22,6 @@ const DropdownMapel = ({ onChange, value, url, disabled, readOnly }) => {
     setIsOpen(!isOpen);
   };
 
-  console.log(dataEdit);
-
   useEffect(() => {
     if (dataEdit) {
       setSelectedMapel({
@@ -119,6 +117,7 @@ const DropdownMapel = ({ onChange, value, url, disabled, readOnly }) => {
           <div className="sticky top-0   text-xs hover:bg-gray-200 cursor-pointer">
             <input
               type="search"
+              id="search"
               placeholder="Cari nama Mata Pelajaran..."
               value={search}
               className="block mb-2 w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-8 py-2 pr-8 rounded shadow leading-tight focus:outline-none  "

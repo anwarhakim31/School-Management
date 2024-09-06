@@ -18,7 +18,7 @@ import { AreaChart } from "lucide-react";
 const AdminDashboard = () => {
   const [dataUmum, setdataUmum] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [siswaPertingkat, setSiswaPertingkat] = useState([]);
+  const [siswaPertingkat, setSiswaPertingkat] = useState(null);
 
   useEffect(() => {
     const getAjaran = async () => {

@@ -12,8 +12,16 @@ import {
 
 const LineChartComponent = ({ data }) => {
   const dataSort = useMemo(() => {
-    return data.sort((a, b) => a.year.localeCompare(b.year));
+    return data && data.sort((a, b) => a.year.localeCompare(b.year));
   }, [data]);
+
+  if (dataSort && dataSort.length === 0) {
+    return (
+      <div className="flex-center w-full h-full">
+        <p className="text-xs text-neutral">Tidak ada data.</p>
+      </div>
+    );
+  }
 
   return (
     <ResponsiveContainer

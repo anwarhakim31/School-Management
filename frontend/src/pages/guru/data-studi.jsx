@@ -53,8 +53,6 @@ const DataStudiPage = () => {
 
         if (res.status === 200) {
           setDataNilai(res.data.nilai);
-
-          console.log(res.data);
         }
       } catch (error) {
         responseError(error);
@@ -126,6 +124,7 @@ const DataStudiPage = () => {
         <div className="relative flex w-full  md:max-w-[300px]">
           <input
             type="search"
+            id="search"
             placeholder="Cari Nama Siswa"
             value={search}
             disabled={loading}
@@ -166,14 +165,22 @@ const DataStudiPage = () => {
             </div>
             <div className="hidden sm:flex-center gap-4">
               <div className="flex items-center gap-4">
-                <p className="text-xs font-semibold text-gray-700">Kelas</p>
+                <label
+                  htmlFor="kelas"
+                  className="text-xs font-semibold text-gray-700"
+                >
+                  Kelas
+                </label>
                 <KelasDropdown onChange={handleChangeKelas} />
               </div>
               {kelas.id && (
                 <div className="flex items-center gap-4">
-                  <p className="text-xs font-semibold text-gray-700">
+                  <label
+                    htmlFor="pertemuan"
+                    className="text-xs font-semibold text-gray-700"
+                  >
                     Pertemuan
-                  </p>
+                  </label>
                   <PertemuanDropdown
                     kelas={kelas.id}
                     onChange={handleChangePertemuan}

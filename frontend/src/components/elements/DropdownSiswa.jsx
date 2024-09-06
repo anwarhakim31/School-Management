@@ -86,6 +86,7 @@ const DropdownSiswa = ({ onChange, value, url }) => {
     <div ref={siswaRef} className="relative w-full">
       <input
         type="text"
+        id="siswa"
         value={!selectedSiswa ? "Pilih siswa" : selectedSiswa?.nama}
         readOnly
         onClick={handleInputClick}
@@ -104,7 +105,7 @@ const DropdownSiswa = ({ onChange, value, url }) => {
           <div className=" sticky top-0   text-xs hover:bg-gray-200 cursor-pointer">
             <input
               type="search"
-              id="siswa"
+              id="search"
               onKeyDown={(e) => e.key === "Enter" && setIsOpen(true)}
               placeholder="Cari nama siswa..."
               value={search}

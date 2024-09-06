@@ -397,7 +397,7 @@ const TambahSiswaPage = () => {
                   Pilih agama
                 </option>
                 <option value="Islam">Islam</option>
-                <option value="Kristen Protestan">Kristen Protestan</option>
+                <option value="Kristen">Kristen</option>
                 <option value="Kristen Katolik">Kristen Katolik</option>
                 <option value="Hindu">Hindu</option>
                 <option value="Budha">Budha</option>

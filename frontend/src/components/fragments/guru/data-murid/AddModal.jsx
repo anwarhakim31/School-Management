@@ -367,6 +367,7 @@ const AddModal = ({ onClose, kelas }) => {
                 <input
                   type={"number"}
                   id="No. Telepon"
+                  autoComplete="off"
                   name="phone"
                   value={phone}
                   {...register("phone", {
@@ -381,13 +382,14 @@ const AddModal = ({ onClose, kelas }) => {
             </div>
             <div className="mb-2 col-span-2">
               <label
-                htmlFor="alamaat"
+                htmlFor="alamat"
                 className="text-xs mb-2 block font-semibold"
               >
                 Alamat
               </label>
               <textarea
                 type={"text"}
+                id="alamat"
                 name="alamat"
                 {...register("alamat")}
                 className="py-1.5 h-14 bg-white border  text-gray-500 text-xs border-gray-400 w-full rounded-md outline-neutral  px-2"

@@ -2,7 +2,7 @@ import { selectedDataEdit } from "@/store/slices/admin-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -11,6 +11,8 @@ const CustomSelectOption = ({ onChange }) => {
   const dropRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
   const [guru, setGuru] = useState([]);
+  const [search, setSearch] = useState("");
+  const [dataSearch, setDataSearch] = useState([]);
   const [waliKelas, setWaliKelas] = useState({
     nama: "Tidak memiliki Wali Kelas",
   });
@@ -53,6 +55,22 @@ const CustomSelectOption = ({ onChange }) => {
   }, []);
 
   useEffect(() => {
+    let clone = [...guru];
+
+    if (search) {
+      const splitKey = search.trim().toLocaleLowerCase().split(" ");
+
+      clone = clone.filter((teacher) => {
+        return splitKey.every((key) =>
+          teacher.nama.toLocaleLowerCase().includes(key)
+        );
+      });
+    }
+
+    setDataSearch(clone);
+  }, [search, guru]);
+
+  useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropRef.current && !dropRef.current.contains(e.target)) {
         setIsOpen(false);
@@ -86,25 +104,43 @@ const CustomSelectOption = ({ onChange }) => {
       </div>
 
       {isOpen && (
-        <div
+        <ul
           role="dropdown"
           className="absolute left-0 top-8 w-full  overflow-y-scroll max-h-[125px] bg-white border  border-gray-500 rounded-md"
         >
+          <li>
+            <div className="sticky top-0   text-xs hover:bg-gray-200 cursor-pointer">
+              <input
+                type="search"
+                placeholder="Cari nama guru..."
+                value={search}
+                className=" block mb-2 w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-8 py-2 pr-8 rounded shadow leading-tight focus:outline-none  "
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <Search
+                className="absolute top-1/2 -translate-y-1/2 left-2"
+                width={15}
+                height={15}
+              />
+            </div>
+          </li>
           {
-            <button
+            <li
+              tabIndex={0}
               type="button"
               onClick={() => handleWaliKelasSelection("", "")}
               className="cursor-pointer block w-full my-1 py-1 text-left hover:bg-background px-2"
             >
               {"Kosongkan"}
-            </button>
+            </li>
           }
           {guru &&
-            guru.map((gu) => (
-              <button
+            dataSearch.map((gu) => (
+              <li
                 key={gu._id}
                 value={gu.nama}
                 type="button"
+                tabIndex={0}
                 onClick={() => handleWaliKelasSelection(gu.nama, gu._id)}
                 className={`${
                   waliKelas.id &&
@@ -113,9 +149,9 @@ const CustomSelectOption = ({ onChange }) => {
                 } cursor-pointer block w-full my-1 py-1 text-left hover:bg-gray-300 hover:text-neutral px-2`}
               >
                 {gu.nama}
-              </button>
+              </li>
             ))}
-        </div>
+        </ul>
       )}
     </div>
   );

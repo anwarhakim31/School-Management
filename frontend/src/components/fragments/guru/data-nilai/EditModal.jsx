@@ -7,10 +7,7 @@ import axios, { all } from "axios";
 import { HOST } from "@/util/constant";
 import { toast } from "sonner";
 import DropdownMapel from "@/components/elements/DropdownMapel";
-import DropdownGuru from "@/components/elements/DropdownGuru";
-import DayDropdown from "@/components/elements/DayDropdown";
-import KelasDropdown from "@/components/elements/KelasDropdown";
-import NamaKelasDropdown from "@/components/elements/NamaKelasDropdown";
+
 import { useDispatch, useSelector } from "react-redux";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import DropdownSiswa from "@/components/elements/DropdownSiswa";
@@ -100,7 +97,7 @@ const EditModal = ({ onClose }) => {
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4 ">
           <div className="px-4 mb-2 ">
             <label
-              htmlFor="mataPelajaran"
+              htmlFor="mapel"
               className="text-xs mb-2 block font-semibold text-gray-700"
             >
               Mata Pelajaran
@@ -175,7 +172,7 @@ const EditModal = ({ onClose }) => {
               </label>
               <input
                 type="number"
-                name=""
+                name="name"
                 className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "
                 id="nilai"
                 {...register("nilai", {
@@ -233,7 +230,7 @@ const EditModal = ({ onClose }) => {
                 disabled
                 {...register("semester")}
                 className="block w-full text-xs bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded-md shadow leading-tight focus:outline-neutral focus:shadow-outline "
-                id="nilai"
+                id="semester"
               />
               <span className="text-xs h-4 text-neutral2 block">
                 {errors.semester && errors.semester.message}

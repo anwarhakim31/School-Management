@@ -5,7 +5,7 @@ const AnimasiCounter = ({ targetNumber }) => {
 
   useEffect(() => {
     let start = 0;
-    const duration = 2000;
+    const duration = 200;
     const increment = Math.ceil(targetNumber / (duration / 16.7));
 
     const animate = (timestamp) => {

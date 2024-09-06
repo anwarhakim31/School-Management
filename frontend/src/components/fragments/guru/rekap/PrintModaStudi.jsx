@@ -3,9 +3,8 @@ import logo from "../../../../assets/Schoolarcy (2).webp";
 
 const PrintComponent = React.forwardRef(
   ({ data, totalPertemuan, kelas, semester }, ref) => {
-    console.log(totalPertemuan);
     return (
-      <div ref={ref} className="p-4 page-landscape">
+      <div ref={ref} className="p-4 page-landscape left-0 ">
         <div className="w-full flex-center">
           <img src={logo} alt="logo" width={200} height={200} />
         </div>
@@ -46,12 +45,12 @@ const PrintComponent = React.forwardRef(
                       <th
                         key={i + 1}
                         scope="col"
-                        className="px-4 text-center border"
+                        className="px-2 text-center border"
                       >
                         {i + 1}
                       </th>
                     ))}
-                  <th scope="col" className="px-4 text-center border">
+                  <th scope="col" className="px-2 text-center border">
                     U
                   </th>
                 </tr>

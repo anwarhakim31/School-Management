@@ -247,21 +247,22 @@ export const updateGuru = async (req, res, next) => {
         { new: true }
       );
     } else {
+      const newKelas = await Kelas.findOne({ kelas, nama: namaKelas });
+
+      console.log(newKelas);
+
+      if (newKelas.waliKelas) {
+        throw new ResponseError(404, "Kelas sudah memiliki wali kelas");
+      }
+
+      if (!newKelas) {
+        throw new ResponseError(404, "kelas tidak ditemukan.");
+      }
       if (guru.waliKelas) {
         await Kelas.findByIdAndUpdate(
           { _id: guru.waliKelas },
           { $unset: { waliKelas: null } }
         );
-      }
-
-      const newKelas = await Kelas.findOne({ kelas, nama: namaKelas });
-
-      if (!newKelas) {
-        throw new ResponseError(404, "kelas tidak ditemukan.");
-      }
-
-      if (newKelas.waliKelas) {
-        throw new ResponseError(404, "Kelas sudah memiliki wali kelas");
       }
 
       delete req.body.namaKelas;
