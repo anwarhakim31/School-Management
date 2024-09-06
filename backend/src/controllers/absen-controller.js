@@ -125,7 +125,6 @@ export const postAbsenKelas = async (req, res, next) => {
       message: `Absensi berhasil disimpan pada ${formattedDate}`,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -204,7 +203,6 @@ export const getDataAlreadyAbsen = async (req, res, next) => {
       absenHariIni,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -300,7 +298,6 @@ export const getRekapAbsensi = async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import ResponseError from "../error/response-error.js";
 import Guru from "../models/guru-model.js";
 import Jadwal from "../models/jadwal-model.js";
@@ -56,7 +57,6 @@ export const addGuru = async (req, res, next) => {
       message: "Berhasil menambah guru.",
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -225,8 +225,6 @@ export const updateGuru = async (req, res, next) => {
       req.body.password = await hash(req.body.password, salt);
     }
 
-    let updated;
-
     if (!kelas && !namaKelas) {
       delete req.body.namaKelas;
       delete req.body.kelas;
@@ -241,23 +239,18 @@ export const updateGuru = async (req, res, next) => {
         );
       }
 
-      updated = await Guru.findByIdAndUpdate(
-        id,
-        { ...req.body },
-        { new: true }
-      );
+      await Guru.findByIdAndUpdate(id, { ...req.body }, { new: true });
     } else {
       const newKelas = await Kelas.findOne({ kelas, nama: namaKelas });
-
-      console.log(newKelas);
-
-      if (newKelas.waliKelas) {
-        throw new ResponseError(404, "Kelas sudah memiliki wali kelas");
-      }
 
       if (!newKelas) {
         throw new ResponseError(404, "kelas tidak ditemukan.");
       }
+
+      if (newKelas.waliKelas && newKelas.waliKelas.toString() !== id) {
+        throw new ResponseError(404, "Kelas sudah memiliki wali kelas");
+      }
+
       if (guru.waliKelas) {
         await Kelas.findByIdAndUpdate(
           { _id: guru.waliKelas },
@@ -285,7 +278,6 @@ export const updateGuru = async (req, res, next) => {
       message: "Berhasil mengubah data guru.",
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -341,7 +333,6 @@ export const getDashboard = async (req, res, next) => {
       detail,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

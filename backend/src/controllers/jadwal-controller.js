@@ -189,7 +189,6 @@ export const addJadwal = async (req, res, next) => {
       jadwal,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -216,7 +215,6 @@ export const getJadwal = async (req, res, next) => {
       jadwal,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -244,7 +242,6 @@ export const getJadwalMengajar = async (req, res, next) => {
       jadwal,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -259,7 +256,6 @@ export const deleteJadwal = async (req, res, next) => {
       .status(200)
       .json({ success: true, message: "Berhasil menghapus jadwal." });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -274,7 +270,6 @@ export const deleteManyJadwal = async (req, res, next) => {
       .status(200)
       .json({ success: true, message: "Berhasil menghapus jadwal terpilih." });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -413,7 +408,6 @@ export const editJadwal = async (req, res, next) => {
     }, 0);
 
     const mapel = await Mapel.findById(bidangStudi);
-    console.log(updateData.bidangStudi.toString(), bidangStudi);
 
     if (updateData.bidangStudi.toString() === bidangStudi) {
       if (
@@ -446,7 +440,6 @@ export const editJadwal = async (req, res, next) => {
       .status(200)
       .json({ success: true, message: "Berhasil mengubah jadwal." });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -524,7 +517,6 @@ export const getPertemuan = async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -559,7 +551,6 @@ export const getJadwalSiswa = async (req, res, next) => {
       ajaran: ajaran[0].ajaran,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

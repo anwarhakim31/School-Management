@@ -89,9 +89,6 @@ export const loginUser = async (req, res, next) => {
 // export const refreshToken = async (req, res) => {
 //   const { Schoolarcy } = req.cookies;
 
-//   console.log(Schoolarcy);
-
-//   console.log(req.body);
 //   if (!Schoolarcy)
 //     throw new ResponseError(
 //       401,
@@ -108,7 +105,6 @@ export const loginUser = async (req, res, next) => {
 //       refreshToken: newAccessToken,
 //     });
 //   } catch (error) {
-//     console.log(error);
 //   }
 // };
 
@@ -144,7 +140,6 @@ export const uploadProfileImage = async (req, res, next) => {
       throw new ResponseError(400, "Foto di butuhkan");
     }
 
-    console.log(req.file);
     const fileStream = fs.createReadStream(req.file.path);
 
     const uploadParams = {
@@ -174,7 +169,6 @@ export const uploadProfileImage = async (req, res, next) => {
       foto: userUpdate.foto,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -225,7 +219,6 @@ export const updateProfile = async (req, res, next) => {
       user: updatedUser,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

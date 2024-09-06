@@ -94,7 +94,6 @@ export const deleteKelas = async (req, res, next) => {
       message: "Kelas berhasil di hapus.",
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -154,8 +153,6 @@ export const updateKelas = async (req, res, next) => {
         waliKelas: id,
       });
 
-      console.log(res.body);
-
       await Kelas.findByIdAndUpdate(
         id,
         { $set: { ...req.body } },
@@ -168,7 +165,6 @@ export const updateKelas = async (req, res, next) => {
       message: "Berhasil mengubah data kelas.",
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

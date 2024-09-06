@@ -90,7 +90,6 @@ export const uploadPhotoSiswa = async (req, res, next) => {
 
     fs.unlink(req.file.path, (err) => {
       if (err) {
-        console.error("Error deleting file:", err);
       }
     });
     await res.status(200).json({
@@ -99,7 +98,6 @@ export const uploadPhotoSiswa = async (req, res, next) => {
       foto: fileName,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -166,7 +164,6 @@ export const addSiswa = async (req, res, next) => {
       .status(200)
       .json({ success: true, message: "Berhasil menambahkan siswa" });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -269,7 +266,6 @@ export const editSiswa = async (req, res, next) => {
       .status(200)
       .json({ success: true, message: "Berhasil mengubah data siswa" });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -286,7 +282,6 @@ export const deleteOneSiswa = async (req, res, next) => {
 
     const kelas = await Kelas.findById(siswa.kelas);
 
-    console.log(kelas);
     if (siswa.kelas) {
       const updateKelas = kelas.siswa.filter((data) => data.toString() !== id);
       const jumlahSiswa = updateKelas.length;
@@ -322,7 +317,6 @@ export const deleteOneSiswa = async (req, res, next) => {
       message: `Berhasil menghapus siswa`,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -380,7 +374,6 @@ export const deleteManySiswa = async (req, res, next) => {
       message: `Berhasil menghapus siswa terpilih`,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -397,7 +390,6 @@ export const getAllDetail = async (req, res, next) => {
       data: { jumlahSiswa, pr, lk },
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -405,8 +397,6 @@ export const getAllDetail = async (req, res, next) => {
 export const getSiswaKelas = async (req, res, next) => {
   try {
     const id = req.params.id;
-
-    console.log(id);
 
     const siswa = await Siswa.find({ kelas: id });
 
@@ -420,7 +410,6 @@ export const getSiswaKelas = async (req, res, next) => {
       siswa,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -446,7 +435,6 @@ export const addWithExcel = async (req, res, next) => {
     // Hapus file setelah membacanya
     fs.unlink(req.file.path, (err) => {
       if (err) {
-        console.error("Error deleting file:", err);
       }
     });
 
@@ -483,7 +471,6 @@ export const addWithExcel = async (req, res, next) => {
 
       let hashedPassword;
 
-      console.log(password);
       if (!password) {
         hashedPassword = await hash(
           createPasswordFromDateOfBirth(tanggalLahir),
@@ -532,7 +519,6 @@ export const addWithExcel = async (req, res, next) => {
       message: "Berhasil mengunggah dan memproses data siswa",
     });
   } catch (error) {
-    console.error("Error processing file:", error);
     next(error);
   }
 };

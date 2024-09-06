@@ -151,10 +151,10 @@ const SiswaDashboardPage = () => {
                   </div>
                 </div>
                 <div className="w-48 ">
-                  <h3 className=" text-sm text-neutral font-medium">
+                  <h3 className=" text-sm  text-neutral font-medium">
                     Wali Kelas
                   </h3>
-                  <div className="flex gap-2 items-center">
+                  <div className="flex gap-2 mt-1 items-center">
                     <div className="bg-[#fcc43e] w-8 h-8 p-2 rounded-md flex-center">
                       <Wali className="text-white text-xl" />
                     </div>

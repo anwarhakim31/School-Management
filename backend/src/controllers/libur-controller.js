@@ -34,7 +34,6 @@ export const togglePerpekan = async (req, res, next) => {
       libur,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -49,7 +48,6 @@ export const getLibur = async (req, res, next) => {
       libur,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -92,7 +90,6 @@ export const liburNasional = async (req, res, next) => {
       libur,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -121,7 +118,6 @@ export const deleteLiburNasional = async (req, res, next) => {
       message: "Berhasil menghapus hari libur nasional.",
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

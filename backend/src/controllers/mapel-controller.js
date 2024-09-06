@@ -113,7 +113,6 @@ export const deleteMapel = async (req, res, next) => {
       message: "Berhasil menghapus mata pelajaran.",
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

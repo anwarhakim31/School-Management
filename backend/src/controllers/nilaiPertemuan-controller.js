@@ -28,8 +28,6 @@ export const addNilai = async (req, res, next) => {
       kelas,
     });
 
-    console.log(semester, tahunjaran);
-
     if (isExist) {
       throw new ResponseError(
         400,
