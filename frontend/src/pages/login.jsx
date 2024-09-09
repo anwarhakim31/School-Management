@@ -94,14 +94,8 @@ const LoginPage = () => {
           <Slider />
         </div>
         <div className="bg-background py-24 sm:py-0 w-full h-screen sm:order-2 flex justify-center flex-col px-14 sm:px-8 md:px-14 lg:px-28 xl:px-32 bg items-center">
-          <figure>
-            <img
-              src={logo}
-              alt="logo"
-              className="mx-auto"
-              height={200}
-              width={200}
-            />
+          <figure className="w-[150px] h-[35px]">
+            <img src={logo} alt="logo" className="mx-auto w-full h-full" />
           </figure>
           {/* <div className="h-2 w-full mt-14  mb-4 relative">
             <div
