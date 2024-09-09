@@ -8,9 +8,10 @@ import Siswa from "./src/models/siswa-model.js";
 import Kelas from "./src/models/kelas-model.js";
 import Total from "./src/models/total-model.js";
 import { fileURLToPath } from "url";
+
 dotenv.config();
 
-const port = process.env.PORT || 2001;
+const port = process.env.PORT || 8000;
 const databaseURL = process.env.DATABASE_URL;
 
 // Function to hash passwords
