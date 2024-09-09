@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 import ResponseError from "../error/response-error.js";
 import Kelas from "../models/kelas-model.js";
-import Nilai from "../models/Nilai-model.js";
+
 import Siswa from "../models/siswa-model.js";
 import Master from "../models/master-model.js";
 import TahunAjaran from "../models/tahunAjaran-model.js";
 import Absensi from "../models/Absensi-model.js";
-import Mapel from "../models/mapel-model.js";
+
 import Jadwal from "../models/jadwal-model.js";
 
 export const addNilai = async (req, res, next) => {

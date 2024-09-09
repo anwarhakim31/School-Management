@@ -9,7 +9,7 @@ import Total from "../models/total-model.js";
 import TahunAjaran from "../models/tahunAjaran-model.js";
 import Absensi from "../models/Absensi-model.js";
 import NilaiPertemuan from "../models/nilaiPertemuan-model.js";
-import Nilai from "../models/Nilai-model.js";
+import Nilai from "../models/nilai-model.js";
 
 import { fileURLToPath } from "url";
 import XLSX from "xlsx";
