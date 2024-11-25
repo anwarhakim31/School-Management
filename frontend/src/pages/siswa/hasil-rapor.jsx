@@ -8,7 +8,7 @@ import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import { Printer } from "lucide-react";
 import ReactToPrint from "react-to-print";
-import PrintComponent from "@/components/fragments/guru/rapor/PrintModal";
+import PrintComponent from "@/components/views/guru/rapor/PrintModal";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { SyncLoader } from "react-spinners";

@@ -1,4 +1,4 @@
-import TableAbsen from "@/components/fragments/guru/rekap/TableAbsen";
+import TableAbsen from "@/components/views/guru/rekap/TableAbsen";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
@@ -11,9 +11,9 @@ import ExcelJS from "exceljs";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
 import DropdownTahunAjaran from "@/components/elements/DropdownTahunAjaran";
 import DropdownSemester from "@/components/elements/DropdownSemester";
-import TableNilai from "../../TableNilai";
+import TableNilai from "../../../fragments/TableNilai";
 import { data } from "autoprefixer";
-import PrintComponentNilai from "../../PrintModalNilai";
+import PrintComponentNilai from "../../../fragments/PrintModalNilai";
 
 const RekapNilaiFragment = () => {
   const menuRef = useRef(null);

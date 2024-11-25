@@ -27,6 +27,8 @@ const RekapNilaiStudiFragment = () => {
   const [rekapNilai, setRekapNilai] = useState([]);
   const [totalPertemuan, setTotalPertemuan] = useState(0);
 
+  console.log(kelas);
+
   useEffect(() => {
     const getData = async () => {
       setLoading(true);

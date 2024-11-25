@@ -11,26 +11,32 @@ import { HOST } from "@/util/constant";
 import { formatDate } from "@/util/formatDate";
 import responseError from "@/util/services";
 import axios from "axios";
-import { FileDown, Plus, Search, Trash2 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { FileDown, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import TableGuru from "@/components/fragments/admin/data-guru/TableGuru";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import TableGuru from "@/components/views/admin/data-guru/TableGuru";
 import DeleteModal from "@/components/fragments/ModalDelete";
 import DeleteManyModal from "@/components/fragments/ModalDeleteMany";
+import InputSearch from "@/components/elements/InputSearch";
 
 const selectRow = [7, 14, 21, 28];
 
 const DataGuruPage = () => {
+  const [searchParams] = useSearchParams();
   const dataChecked = useSelector(selectedDataDeleteMany);
   const dataDelete = useSelector(selectedDataDelete);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
   const [dataGuru, setDataGuru] = useState([]);
-  const [pagination, setPagination] = useState({});
+
   const [dataDetail, setDataDetail] = useState([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(7);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 7,
+    totalPages: 0,
+    totalGuru: 0,
+  });
   const [isDeleteGuru, setIsDeleteGuru] = useState(false);
   const [isDeleteManyGuru, setIsDeletManyGuru] = useState(false);
   const [allCheck, setAllCheck] = useState(false);
@@ -40,6 +46,10 @@ const DataGuruPage = () => {
     jenisKelamin: "",
     bidangStudi: "",
   });
+
+  const page = parseInt(searchParams.get("page")) || pagination.page;
+  const limit = parseInt(searchParams.get("limit")) || pagination.limit;
+  const search = searchParams.get("search") || "";
 
   useEffect(() => {
     const getGuru = async () => {
@@ -87,12 +97,6 @@ const DataGuruPage = () => {
     getDetail();
   }, [limit, page, search, isDeleteGuru, isDeleteManyGuru, filters]);
 
-  useEffect(() => {
-    if (limit) {
-      setPage(1);
-    }
-  }, [limit]);
-
   const handleToggleDeleteOne = () => {
     setIsDeleteGuru(!isDeleteGuru);
   };
@@ -100,17 +104,25 @@ const DataGuruPage = () => {
     setIsDeletManyGuru(!isDeleteManyGuru);
   };
 
-  const handleSearch = (e) => {
-    const { value } = e.target;
-    setSearch(value);
-  };
-
-  const handlePagination = (page) => {
-    setPage(page);
-  };
-
   const handleSelectBaris = (option) => {
-    setLimit(option);
+    if (option === 7) {
+      searchParams.delete("limit");
+      setPagination((prev) => ({ ...prev, limit: 7 }));
+      navigate("/admin/data-guru?" + searchParams.toString(), {
+        replace: true,
+      });
+      if (searchParams.size === 1 && searchParams.get("page") === "1") {
+        searchParams.delete("page");
+        navigate("/admin/data-guru?" + searchParams.toString(), {
+          replace: true,
+        });
+      }
+    } else {
+      searchParams.set("page", "1");
+      searchParams.set("limit", option.toString());
+
+      navigate(`/admin/data-guru?${searchParams.toString()}`);
+    }
   };
 
   const handleFilterChange = (filterName, filterValue) => {
@@ -128,21 +140,7 @@ const DataGuruPage = () => {
     <section className="px-6 py-4 mb-4 ">
       <HeaderBox dataDetail={dataDetail} loading={loading} />
       <div className="w-full flex-between gap-6">
-        <div className="relative flex w-full  md:max-w-[300px]">
-          <input
-            type="search"
-            placeholder="Cari nama dan nip dari guru."
-            value={search}
-            id="search"
-            disabled={loading}
-            onChange={handleSearch}
-            className="w-full rounded-full e disabled:cursor-not-allowed py-2 pr-2 pl-10 text-xs border border-gray-400 outline-offset-0 outline-1 outline-neutral"
-          />
-          <div className="absolute left-4 top-1/2 -translate-y-1/2">
-            <Search height={20} width={20} className="text-gray-400" />
-          </div>
-        </div>
-
+        <InputSearch loading={loading} />
         <Link
           to={"/admin/tambah-guru"}
           disabled={loading}
@@ -206,11 +204,11 @@ const DataGuruPage = () => {
             limit={limit}
             totalGuru={pagination.totalGuru}
             totalPage={pagination.totalPage}
-            handlePagination={handlePagination}
             handleToggleDeleteOne={handleToggleDeleteOne}
             setAllCheck={setAllCheck}
             allCheck={allCheck}
             loading={loading}
+            setPagination={setPagination}
           />
         )}
       </div>

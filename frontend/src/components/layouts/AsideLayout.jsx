@@ -1,11 +1,11 @@
 import { ChevronsLeft, X } from "lucide-react";
 import logo from "../../assets/Schoolarcy (1).webp";
-import ListSidebarAdmin from "../fragments/admin/ListSidebarAdmin";
-import { Link, useLocation } from "react-router-dom";
+import ListSidebarAdmin from "../views/admin/ListSidebarAdmin";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectedUserData } from "@/store/slices/auth-slice";
-import ListSidebarGuru from "../fragments/guru/ListSidebarGuru";
-import ListSidebarSiswa from "../fragments/siswa/ListSidebarSiswa";
+import ListSidebarGuru from "../views/guru/ListSidebarGuru";
+import ListSidebarSiswa from "../views/siswa/ListSidebarSiswa";
 
 const AsideLayout = ({ setIsSidebar }) => {
   const userData = useSelector(selectedUserData);
