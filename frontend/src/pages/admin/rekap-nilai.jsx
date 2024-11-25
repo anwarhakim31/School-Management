@@ -16,7 +16,7 @@ import ReactToPrint from "react-to-print";
 
 import TableNilai from "@/components/fragments/TableNilai";
 import PrintComponentNilai from "@/components/fragments/PrintModalNilai";
-import { DropdownGropNiali } from "@/components/views/admin/RekapData/DropdownGropNiali";
+import { DropdownGropNiali } from "@/components/fragments/admin/RekapData/DropdownGropNiali";
 
 const RekapNilaiPageadmin = () => {
   const menuRef = useRef(null);

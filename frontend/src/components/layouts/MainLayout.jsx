@@ -1,8 +1,8 @@
 import { Outlet, useLocation } from "react-router-dom";
 import AsideLayout from "./AsideLayout";
-import { Fragment, useEffect, useRef, useState } from "react";
-import SideProfile from "@/components/views/admin/SideProfile";
-import { setDataDeleteMany } from "@/store/slices/admin-slice";
+import { useEffect, useRef, useState } from "react";
+import SideProfile from "@/components/fragments/admin/SideProfile";
+import { setDataDeleteMany, setDataEdit } from "@/store/slices/admin-slice";
 import { useDispatch, useSelector } from "react-redux";
 import ButtonScrollTop from "@/components/elements/ButtonScrollTop";
 import HeaderAdminLayout from "./admin/HeaderAdminLayout";
@@ -66,41 +66,42 @@ const MainLayout = () => {
   }, [pathname, dispatch]);
 
   return (
-    <Fragment>
+    <main className="w-screen overflow-hidden h-screen flex ">
       <aside
         ref={sidebarRef}
         className={`${
           isSidebar ? "left-0 " : "-left-[300px] lg:left-0"
-        }  bg-neutral z-50 fixed  py-5 shadow-sm boder-r border-gray-500 -hidden w-[230px] lg:w-[220px] min-h-screen transition-all duration-300`}
+        } lg:block bg-neutral z-50 fixed lg:static py-5 shadow-sm boder-r border-gray-500 -hidden w-[230px] lg:w-[220px] min-h-screen transition-all duration-300`}
       >
         <AsideLayout setIsSidebar={setIsSidebar} />
       </aside>
 
-      <main
-        ref={scrollContainerRef}
-        className="flex flex-col flex-1 lg:pl-[220px]"
-      >
-        {userData && userData.role === "admin" && (
-          <HeaderAdminLayout
-            setIsEdit={setIsEdit}
-            handleToggleSidebar={handleToggleSidebar}
-          />
-        )}
+      <div className="flex  flex-1 overflow-hidden">
+        <div
+          ref={scrollContainerRef}
+          className="flex flex-col flex-1 overflow-auto"
+        >
+          {userData && userData.role === "admin" && (
+            <HeaderAdminLayout
+              setIsEdit={setIsEdit}
+              handleToggleSidebar={handleToggleSidebar}
+            />
+          )}
 
-        {userData && userData.role === "guru" && (
-          <HeaderGuruLayout handleToggleSidebar={handleToggleSidebar} />
-        )}
-        {userData && userData.role === "siswa" && (
-          <HeaderSiswaLayout handleToggleSidebar={handleToggleSidebar} />
-        )}
-        <Outlet />
-        {isEdit && (
-          <SideProfile ref={editProfileRef} handleClose={handleCloseEdit} />
-        )}
-      </main>
-
+          {userData && userData.role === "guru" && (
+            <HeaderGuruLayout handleToggleSidebar={handleToggleSidebar} />
+          )}
+          {userData && userData.role === "siswa" && (
+            <HeaderSiswaLayout handleToggleSidebar={handleToggleSidebar} />
+          )}
+          <Outlet />
+          {isEdit && (
+            <SideProfile ref={editProfileRef} handleClose={handleCloseEdit} />
+          )}
+        </div>
+      </div>
       <ButtonScrollTop scrollContainerRef={scrollContainerRef} />
-    </Fragment>
+    </main>
   );
 };
 

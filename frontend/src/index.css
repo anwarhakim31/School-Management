@@ -104,17 +104,6 @@
   display: none;
 }
 
-@media (max-width: 768px) {
-  *::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Optional: If you want to disable scrolling entirely on mobile */
-  body {
-    overflow: hidden;
-  }
-}
-
 ol {
   list-style-type: decimal; /* atau "decimal" untuk angka 1, 2, 3,... */
 }

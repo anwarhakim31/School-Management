@@ -1,6 +1,6 @@
-import EditModal from "@/components/views/admin/data-pelajaran/EditModal";
-import AddModal from "@/components/views/admin/data-pelajaran/AddModal";
-import TablePelajaran from "@/components/views/admin/data-pelajaran/TablePelajaran";
+import EditModal from "@/components/fragments/admin/data-pelajaran/EditModal";
+import AddModal from "@/components/fragments/admin/data-pelajaran/AddModal";
+import TablePelajaran from "@/components/fragments/admin/data-pelajaran/TablePelajaran";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";

@@ -1,6 +1,6 @@
 import CustomDropdown from "@/components/elements/DropDown";
 import Student from "../../assets/svg/Teacher.svg";
-import TableSiswa from "@/components/views/guru/data-murid/TableSiswa";
+import TableSiswa from "@/components/fragments/guru/data-murid/TableSiswa";
 import {
   selectedDataDelete,
   selectedDataDeleteMany,
@@ -21,15 +21,15 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import AddModal from "@/components/views/guru/data-murid/AddModal";
+import AddModal from "@/components/fragments/guru/data-murid/AddModal";
 import FilterSiswa from "@/components/elements/wali-kelas/FilterSiswa";
-import EditModal from "@/components/views/guru/data-murid/EditModal";
+import EditModal from "@/components/fragments/guru/data-murid/EditModal";
 
 import { useNavigate } from "react-router-dom";
 import ExelJs from "exceljs";
 import { saveAs } from "file-saver";
 import ReactToPrint from "react-to-print";
-import PrintComponent from "@/components/views/guru/data-murid/PrintModal";
+import PrintComponent from "@/components/fragments/guru/data-murid/PrintModal";
 import { formatDate } from "@/util/formatDate";
 import DeleteModal from "@/components/fragments/ModalDelete";
 import DeleteManyModal from "@/components/fragments/ModalDeleteMany";

@@ -1,7 +1,7 @@
 import FilterKelas from "@/components/elements/data-kelas/FilterKelas";
-import AddModal from "@/components/views/admin/data-kelas/AddModal";
-import EditModal from "@/components/views/admin/data-kelas/EditModal";
-import TableKelas from "@/components/views/admin/data-kelas/TableKelas";
+import AddModal from "@/components/fragments/admin/data-kelas/AddModal";
+import EditModal from "@/components/fragments/admin/data-kelas/EditModal";
+import TableKelas from "@/components/fragments/admin/data-kelas/TableKelas";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import axios from "axios";

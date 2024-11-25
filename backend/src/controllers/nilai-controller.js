@@ -8,7 +8,6 @@ import TahunAjaran from "../models/tahunAjaran-model.js";
 import Absensi from "../models/Absensi-model.js";
 
 import Jadwal from "../models/jadwal-model.js";
-import Nilai from "../models/nilai-model.js";
 
 export const addNilai = async (req, res, next) => {
   try {

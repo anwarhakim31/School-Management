@@ -1,15 +1,21 @@
-/* eslint-disable react/prop-types */
-import TablePagination from "@/components/fragments/TablePagination";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  selectedDataDeleteMany,
   setDataDelete,
   setDataDeleteMany,
   setDataEdit,
 } from "@/store/slices/admin-slice";
-import { ChevronLeft, ChevronRight, Edit, Phone, Trash } from "lucide-react";
-import { useState } from "react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Edit,
+  Mail,
+  Phone,
+  Trash,
+} from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const TableSiswa = ({
@@ -23,7 +29,6 @@ const TableSiswa = ({
   setAllCheck,
   allCheck,
   loading,
-  setPagination,
 }) => {
   const lastOfIndexSiswa = page * limit;
   const firstOfindexSiswa = lastOfIndexSiswa - limit;
@@ -122,7 +127,7 @@ const TableSiswa = ({
               </tr>
             </thead>
             <tbody>
-              {!loading && data.length === 0 && (
+              {data && !loading && data.length === 0 && (
                 <tr>
                   <td
                     colSpan="9"
@@ -140,7 +145,7 @@ const TableSiswa = ({
                   <tr
                     key={siswa.nis}
                     className={` hover:bg-gray-100 border-b  ${
-                      limit === i + 1 && "border-none"
+                      lastOfIndexSiswa === i + 1 && "border-none"
                     }`}
                   >
                     <td scope="row" className="px-3 py-3 relative">
@@ -258,19 +263,95 @@ const TableSiswa = ({
             </tbody>
           </table>
         </div>
-        <TablePagination
-          lastOfIndex={lastOfIndexSiswa}
-          firstOfindex={firstOfindexSiswa}
+        <Pagination
+          lastOfIndexSiswa={lastOfIndexSiswa}
+          firstOfindexSiswa={firstOfindexSiswa}
           limit={limit}
           page={page}
           totalPage={totalPage}
           data={data}
-          totalData={totalSiswa}
+          totalSiswa={totalSiswa}
           handlePagination={handlePagination}
-          setPagination={setPagination}
         />
       </div>
     </>
+  );
+};
+
+const Pagination = ({
+  lastOfIndexSiswa,
+  firstOfindexSiswa,
+  limit,
+  data,
+  page,
+  totalSiswa,
+  handlePagination,
+  totalPage,
+}) => {
+  const pageNumber = [];
+
+  for (let i = 1; i <= totalPage; i++) {
+    pageNumber.push(i);
+  }
+
+  const startPage =
+    page === totalPage ? Math.max(1, page - 2) : Math.max(1, page - 1);
+
+  const endPage =
+    page === 1 ? Math.min(totalPage, page + 2) : Math.min(totalPage, page + 1);
+
+  const visiblePage = pageNumber.slice(startPage - 1, endPage);
+
+  return (
+    <div className=" absolute h-9 left-0 bottom-5 border-t pt-4 w-full flex-between px-3">
+      <div className="flex">
+        <p className="text-[10px] sm:text-xs">{`Menampilkan ${
+          totalSiswa === 0 ? 0 : firstOfindexSiswa + 1
+        } - ${
+          page === totalPage
+            ? totalSiswa
+            : totalSiswa === 0
+            ? 0
+            : lastOfIndexSiswa
+        } dari ${totalSiswa} data`}</p>
+      </div>
+      <div className="flex-center space-x-4">
+        <div className="flex gap-2 ">
+          <button
+            onClick={() => handlePagination(page - 1)}
+            className="disabled:cursor-auto bg-neutral text-white rounded-sm disabled:bg-backup"
+            disabled={page === 1}
+          >
+            <ChevronLeft width={20} height={20} />
+          </button>
+
+          {visiblePage.map((number) => (
+            <div
+              key={number}
+              className={`page-item ${page === number ? "" : ""}`}
+            >
+              <button
+                onClick={() => handlePagination(number)}
+                className={`${
+                  number === page &&
+                  "rounded-full border-b shadow border-gray-500"
+                } w-5 text-sm h-5`}
+              >
+                {number}
+              </button>
+            </div>
+          ))}
+
+          <button
+            onClick={() => handlePagination(page + 1)}
+            className="disabled:cursor-auto bg-neutral text-white rounded-sm disabled:bg-backup"
+            disabled={page === pageNumber.length}
+          >
+            <ChevronRight width={20} height={20} />
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

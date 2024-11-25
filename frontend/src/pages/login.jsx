@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import logo from "../assets/Schoolarcy (2).webp";
-import { Eye, EyeOff, KeyRound, User } from "lucide-react";
+import { Badge, BadgeCheck, Eye, EyeOff, KeyRound, User } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import Slider from "@/components/views/Login/Slider";
+import Slider from "@/components/fragments/Login/Slider";
 import axios from "axios";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
@@ -14,10 +14,10 @@ import LoaderButton from "@/components/elements/LoaderButton";
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const timeoutRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ ni: "", password: "" });
-
+  const [success, setSuccess] = useState(false);
   const [isText, setIsText] = useState(false);
   const [remember, setIsRemember] = useState(false);
 

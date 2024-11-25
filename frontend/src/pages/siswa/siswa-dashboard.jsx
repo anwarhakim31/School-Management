@@ -9,7 +9,7 @@ import responseError from "@/util/services";
 import { useSelector } from "react-redux";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import axios from "axios";
-import JadwalFragment from "@/components/views/admin/dashboard-siswa/JadwalFragment";
+import JadwalFragment from "@/components/fragments/admin/dashboard-siswa/JadwalFragment";
 import { ArrowDownToDotIcon, ChartBar, ChartPie, Route } from "lucide-react";
 import PieChartDonute from "@/components/elements/dashboard-siswa/PieChartDonute";
 

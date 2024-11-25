@@ -2,7 +2,7 @@ import CustomDropdown from "@/components/elements/DropDown";
 import Student from "../../assets/svg/Teacher.svg";
 import DropdownFilter from "@/components/elements/DropDownFilter";
 import HeaderBox from "@/components/elements/data-siswa/HeaderBox";
-import TableSiswa from "@/components/views/admin/data-siswa/TableSiswa";
+import TableSiswa from "@/components/fragments/admin/data-siswa/TableSiswa";
 import {
   selectedDataDelete,
   selectedDataDeleteMany,
@@ -15,35 +15,28 @@ import axios from "axios";
 import { FileDown, Plus, Search, Trash2, Upload } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { saveAs } from "file-saver";
 import DeleteModal from "@/components/fragments/ModalDelete";
 import DeleteManyModal from "@/components/fragments/ModalDeleteMany";
-import ModalUploadExcel from "@/components/views/admin/data-siswa/ModalUploadExcel";
-import InputSearch from "@/components/elements/InputSearch";
+import ModalUploadExcel from "@/components/fragments/admin/data-siswa/ModalUploadExcel";
 
 const selectRow = [7, 14, 21, 28];
 
 const DataSiswaPage = () => {
   const dataChecked = useSelector(selectedDataDeleteMany);
   const dataDelete = useSelector(selectedDataDelete);
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-
+  const [search, setSearch] = useState("");
   const [dataSiswa, setDataSiswa] = useState([]);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 7,
-    totalPages: 0,
-    totalSiswa: 0,
-  });
+  const [pagination, setPagination] = useState({});
   const [dataDetail, setDataDetail] = useState([]);
-
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(7);
   const [isDeleteSiswa, setIsDeleteSiswa] = useState(false);
   const [isDeleteManySiswa, setIsDeletManySiswa] = useState(false);
   const [isUpload, setIsUpload] = useState(false);
   const [allCheck, setAllCheck] = useState(false);
-  const [searchParams] = useSearchParams();
   const [filters, setFilters] = useState({
     kelas: "",
     kelasNama: "",
@@ -51,50 +44,57 @@ const DataSiswaPage = () => {
     tahunMasuk: "",
   });
 
-  const page = parseInt(searchParams.get("page")) || pagination.page;
-  const limit = parseInt(searchParams.get("limit")) || pagination.limit;
-  const search = searchParams.get("search") || "";
-
   useEffect(() => {
-    const getData = async () => {
+    const getSiswa = async () => {
       try {
-        const [siswa, detail] = await Promise.all([
-          axios.get(`${HOST}/api/siswa/get-all-siswa`, {
-            params: {
-              page: page,
-              limit: limit,
-              search,
-              tahunMasuk: filters.tahunMasuk,
-              jenisKelamin: filters.jenisKelamin,
-              kelas: filters.jenisKelamin,
-              kelasNama: filters.kelasNama,
-            },
-            withCredentials: true,
-          }),
-          axios.get(`${HOST}/api/siswa/get-detail-siswa`, {
-            withCredentials: true,
-          }),
-        ]);
+        const res = await axios.get(`${HOST}/api/siswa/get-all-siswa`, {
+          params: {
+            page,
+            limit,
+            search,
+            tahunMasuk: filters.tahunMasuk,
+            jenisKelamin: filters.jenisKelamin,
+            kelas: filters.jenisKelamin,
+            kelasNama: filters.kelasNama,
+          },
+          withCredentials: true,
+        });
 
-        if (siswa.status == 200) {
-          setDataSiswa(siswa.data.data);
-          setPagination(siswa.data.pagination);
-        }
-
-        if (detail.status === 200) {
-          setDataDetail(detail.data.data);
+        if (res.status == 200) {
+          setDataSiswa(res.data.data);
+          setPagination(res.data.pagination);
         }
       } catch (error) {
         responseError(error);
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
+      }
+    };
+    const getDetail = async () => {
+      try {
+        const res = await axios.get(`${HOST}/api/siswa/get-detail-siswa`, {
+          withCredentials: true,
+        });
+
+        if (res.status === 200) {
+          setDataDetail(res.data.data);
+        }
+      } catch (error) {
+        responseError(error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 50);
       }
     };
 
-    getData();
+    getSiswa();
+    getDetail();
   }, [
-    page,
     limit,
+    page,
     search,
     isDeleteSiswa,
     isDeleteManySiswa,
@@ -102,29 +102,34 @@ const DataSiswaPage = () => {
     isUpload,
   ]);
 
+  useEffect(() => {
+    if (limit) {
+      setPage(1);
+    }
+  }, [limit]);
+
+  const handleToggleDeleteOne = () => {
+    setIsDeleteSiswa(!isDeleteSiswa);
+  };
+  const handleToggleDeleteMany = () => {
+    setIsDeletManySiswa(!isDeleteManySiswa);
+  };
+
   const handleToggleUpload = () => {
     setIsUpload(!isUpload);
   };
 
-  const handleSelectBaris = (option) => {
-    if (option === 7) {
-      searchParams.delete("limit");
-      setPagination((prev) => ({ ...prev, limit: 7 }));
-      navigate("/admin/data-siswa?" + searchParams.toString(), {
-        replace: true,
-      });
-      if (searchParams.size === 1 && searchParams.get("page") === "1") {
-        searchParams.delete("page");
-        navigate("/admin/data-siswa?" + searchParams.toString(), {
-          replace: true,
-        });
-      }
-    } else {
-      searchParams.set("page", "1");
-      searchParams.set("limit", option.toString());
+  const handleSearch = (e) => {
+    const { value } = e.target;
+    setSearch(value);
+  };
 
-      navigate(`/admin/data-siswa?${searchParams.toString()}`);
-    }
+  const handlePagination = (page) => {
+    setPage(page);
+  };
+
+  const handleSelectBaris = (option) => {
+    setLimit(option);
   };
 
   const handleFilterChange = (filterName, filterValue) => {
@@ -137,11 +142,30 @@ const DataSiswaPage = () => {
     }));
   };
 
+  useEffect(() => {
+    if (dataSiswa.length === 0) {
+      setPage(1);
+    }
+  }, [dataSiswa]);
+
   return (
     <section className="px-6 py-4 mb-4 ">
       <HeaderBox dataDetail={dataDetail} loading={loading} />
       <div className="w-full flex-between flex-wrap gap-6">
-        <InputSearch loading={loading} />
+        <div className="relative flex w-full   sm:max-w-[300px]">
+          <input
+            type="search"
+            placeholder="Cari nama dan nis dari siswa."
+            value={search}
+            id="search"
+            disabled={loading}
+            onChange={handleSearch}
+            className="w-full rounded-full disabled:cursor-not-allowed py-2 pr-2 pl-10 text-xs border border-gray-400 outline-offset-0 outline-1 outline-neutral"
+          />
+          <div className="absolute left-4 top-1/2 -translate-y-1/2">
+            <Search height={20} width={20} className="text-gray-400" />
+          </div>
+        </div>
 
         <div className="ml-auto flex-center gap-2 ">
           <button
@@ -167,7 +191,7 @@ const DataSiswaPage = () => {
             <button
               title="Hapus siswa terpilih"
               disabled={loading}
-              onClick={() => setIsDeletManySiswa(!isDeleteManySiswa)}
+              onClick={handleToggleDeleteMany}
               className={`${
                 dataChecked.length > 0 ? "opacity-100" : "opacity-0"
               } border block border-gray-300 bg-white text-gray-500 group rounded-md disabled:cursor-not-allowed  hover:border-gray-400    py-1.5 px-2 transition-all duration-300 font-medium hover:text-white  text-xs   flex-between gap-3`}
@@ -178,7 +202,7 @@ const DataSiswaPage = () => {
             <CustomDropdown
               options={selectRow}
               onSelect={handleSelectBaris}
-              selected={pagination.limit}
+              selected={limit}
             />
             <DropdownFilter
               handleFilterChange={handleFilterChange}
@@ -212,28 +236,28 @@ const DataSiswaPage = () => {
         ) : (
           <TableSiswa
             data={dataSiswa}
-            page={pagination.page}
-            limit={pagination.limit}
+            page={page}
+            limit={limit}
             totalSiswa={pagination.total}
             totalPage={pagination.totalPages}
-            handleToggleDeleteOne={() => setIsDeleteSiswa(!isDeleteSiswa)}
+            handlePagination={handlePagination}
+            handleToggleDeleteOne={handleToggleDeleteOne}
             setAllCheck={setAllCheck}
             allCheck={allCheck}
             loading={loading}
-            setPagination={setPagination}
           />
         )}
       </div>
       {isDeleteSiswa && (
         <DeleteModal
-          onClose={() => setIsDeleteSiswa(!isDeleteSiswa)}
+          onClose={handleToggleDeleteOne}
           url={"/api/siswa/delete-one-siswa/" + dataDelete._id}
           title={"Apakah anda yakin ingin menghapus siswa?"}
         />
       )}
       {isDeleteManySiswa && (
         <DeleteManyModal
-          onClose={() => setIsDeletManySiswa(!isDeleteManySiswa)}
+          onClose={handleToggleDeleteMany}
           setAllCheck={setAllCheck}
           url={"/api/siswa/delete-many-siswa"}
           title={"Apakah anda yakin ingin menghapus siswa terpilih?"}

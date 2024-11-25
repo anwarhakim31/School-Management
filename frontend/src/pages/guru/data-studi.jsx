@@ -10,10 +10,10 @@ import {
 } from "lucide-react";
 import Studi from "../../assets/svg/studi.svg?react";
 import { useEffect, useRef, useState } from "react";
-import TableStudi from "@/components/views/guru/data-studi/TableStudi";
+import TableStudi from "@/components/fragments/guru/data-studi/TableStudi";
 import KelasDropdown from "@/components/elements/data-studi/kelasDropdown";
 import PertemuanDropdown from "@/components/elements/data-studi/PertemuanDropdown";
-import AddModal from "@/components/views/guru/data-studi/AddModal";
+import AddModal from "@/components/fragments/guru/data-studi/AddModal";
 import responseError from "@/util/services";
 import axios from "axios";
 import { HOST } from "@/util/constant";
@@ -24,7 +24,7 @@ import {
   selectedDataDeleteMany,
 } from "@/store/slices/admin-slice";
 import DeleteManyModal from "@/components/fragments/ModalDeleteMany";
-import EditModal from "@/components/views/guru/data-studi/EditModal";
+import EditModal from "@/components/fragments/guru/data-studi/EditModal";
 
 const DataStudiPage = () => {
   const menuRef = useRef(null);

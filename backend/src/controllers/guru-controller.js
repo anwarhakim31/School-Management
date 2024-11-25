@@ -91,7 +91,7 @@ export const getAllGuru = async (req, res, next) => {
     }
 
     const guru = await Guru.find(filterQuery)
-      .sort({ createdAt: -1, _id: -1 })
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .populate({ path: "waliKelas", select: "nama kelas" })
