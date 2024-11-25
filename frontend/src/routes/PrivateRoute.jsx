@@ -8,7 +8,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 
-const limit = [7, 14, 21];
+const limit = [7, 14, 21, 28];
 
 const PrivateRoute = ({ role, children }) => {
   const userData = useSelector(selectedUserData);

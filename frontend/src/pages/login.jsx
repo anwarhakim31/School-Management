@@ -61,10 +61,6 @@ const LoginPage = () => {
         withCredentials: true,
       });
 
-      if (res.status === 200) {
-        setSuccess(true);
-      }
-
       // timeoutRef.current = setTimeout(() => {
       if (res.status === 200) {
         dispatch(setUserData(res.data.data));
