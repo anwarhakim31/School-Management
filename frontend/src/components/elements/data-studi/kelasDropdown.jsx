@@ -49,9 +49,9 @@ const KelasDropdown = ({ onChange, value }) => {
     setIsOpen(!isOpen);
   };
 
-  const handleSelectKelas = (grade, nama) => {
+  const handleSelectKelas = (id, grade, nama) => {
     setSelectedKelas({ grade, nama });
-    onChange({ id: dataKelas[0]._id, grade, nama });
+    onChange({ id, grade, nama });
     setIsOpen(false);
   };
 
@@ -99,7 +99,9 @@ const KelasDropdown = ({ onChange, value }) => {
               dataKelas.map((kel) => (
                 <li
                   key={kel._id}
-                  onClick={() => handleSelectKelas(kel.kelas, kel.nama)}
+                  onClick={() =>
+                    handleSelectKelas(kel._id, kel.kelas, kel.nama)
+                  }
                   className="px-4 py-2 text-left text-xs hover:bg-gray-200 cursor-pointer truncate"
                 >
                   {kel.kelas} {kel.nama}

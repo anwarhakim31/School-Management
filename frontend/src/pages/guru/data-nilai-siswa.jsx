@@ -1,9 +1,9 @@
 import CustomDropdown from "@/components/elements/DropDown";
-import AddModal from "@/components/fragments/guru/data-nilai/AddModal";
+import AddModal from "@/components/views/guru/data-nilai/AddModal";
 
-import EditModal from "@/components/fragments/guru/data-nilai/EditModal";
+import EditModal from "@/components/views/guru/data-nilai/EditModal";
 import Nilai from "../../assets/svg/Score.svg?react";
-import TableNilai from "@/components/fragments/guru/data-nilai/Table-Nilai";
+import TableNilai from "@/components/views/guru/data-nilai/Table-Nilai";
 import {
   selectedDataDelete,
   selectedDataDeleteMany,
@@ -25,7 +25,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import FilterSort from "@/components/elements/data-nilai/FilterSort";
 import FilterCategory from "@/components/elements/data-nilai/FilterCategory";
-import PrintComponent from "@/components/fragments/guru/data-nilai/PrintModal";
+import PrintComponent from "@/components/views/guru/data-nilai/PrintModal";
 import ReactToPrint from "react-to-print";
 import { saveAs } from "file-saver";
 import DeleteManyModal from "@/components/fragments/ModalDeleteMany";

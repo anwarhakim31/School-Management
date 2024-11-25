@@ -1,6 +1,6 @@
-import RekapAbsenFragment from "@/components/fragments/guru/rekap/RekapAbsenFragment";
-import RekapNilaiFragment from "@/components/fragments/guru/rekap/RekapNilaiFragement";
-import RekapNilaiStudiFragment from "@/components/fragments/guru/rekap/RekapNilaiStudiFragment";
+import RekapAbsenFragment from "@/components/views/guru/rekap/RekapAbsenFragment";
+import RekapNilaiFragment from "@/components/views/guru/rekap/RekapNilaiFragement";
+import RekapNilaiStudiFragment from "@/components/views/guru/rekap/RekapNilaiStudiFragment";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import { useState } from "react";
 import { useSelector } from "react-redux";

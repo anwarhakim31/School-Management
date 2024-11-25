@@ -23,7 +23,7 @@ export const getAll = async (req, res, next) => {
     const search = req.query.search || "";
     const { tahunMasuk, jenisKelamin, kelas, kelasNama } = req.query;
 
-    const searchRegex = new RegExp(search.trim(), "i");
+    const searchRegex = new RegExp(search.trim(), "i") || "";
 
     const filterQuery = {
       $or: [
@@ -45,10 +45,10 @@ export const getAll = async (req, res, next) => {
     }
 
     let siswa = await Siswa.find(filterQuery)
-      .sort({ createdAt: -1 })
+      .populate({ path: "kelas", select: "-siswa" })
       .skip(skip)
       .limit(limit)
-      .populate({ path: "kelas", select: "-siswa" })
+      .sort({ createdAt: -1, id: -1 })
       .exec();
 
     const totalSiswa = await Siswa.countDocuments(filterQuery);
@@ -58,8 +58,8 @@ export const getAll = async (req, res, next) => {
       message: "Berhasil mengambil data siswa",
       data: siswa,
       pagination: {
-        currentPage: page,
-        perPage: limit,
+        page,
+        limit,
         total: totalSiswa,
         totalPages: Math.ceil(totalSiswa / limit),
       },

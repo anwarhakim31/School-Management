@@ -8,8 +8,8 @@ import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
 import { Printer } from "lucide-react";
 import ReactToPrint from "react-to-print";
-import PrintComponent from "@/components/fragments/guru/rapor/PrintModal";
-import TableRapor from "@/components/fragments/guru/rapor/TableRapor";
+import PrintComponent from "@/components/views/guru/rapor/PrintModal";
+import TableRapor from "@/components/views/guru/rapor/TableRapor";
 
 const RaporSiswaPage = () => {
   const userData = useSelector(selectedUserData);

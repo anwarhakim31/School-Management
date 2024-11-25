@@ -12,15 +12,15 @@ import {
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import ClassIcon from "../../assets/svg/class.svg?react";
-import TableUmum from "@/components/fragments/admin/master-data/TableUmum";
+import TableUmum from "@/components/views/admin/master-data/TableUmum";
 import { toast } from "sonner";
-import DeleteModal from "@/components/fragments/admin/master-data/DeleteModal";
-import TableMingguan from "@/components/fragments/admin/master-data/TableMingguan";
-import TabelNasionsal from "@/components/fragments/admin/master-data/TabelNasionsal";
-import AddModalNasional from "@/components/fragments/admin/master-data/AddModalNasional";
-import DeleteModalNasional from "@/components/fragments/admin/master-data/DeleteModalNasional";
-import TableSemester from "@/components/fragments/admin/master-data/TableSemester";
-import TableJam from "@/components/fragments/admin/master-data/TableJam";
+import DeleteModal from "@/components/views/admin/master-data/DeleteModal";
+import TableMingguan from "@/components/views/admin/master-data/TableMingguan";
+import TabelNasionsal from "@/components/views/admin/master-data/TabelNasionsal";
+import AddModalNasional from "@/components/views/admin/master-data/AddModalNasional";
+import DeleteModalNasional from "@/components/views/admin/master-data/DeleteModalNasional";
+import TableSemester from "@/components/views/admin/master-data/TableSemester";
+import TableJam from "@/components/views/admin/master-data/TableJam";
 
 const MasterDataPage = () => {
   const [dataAjaran, setDataAjaran] = useState([]);

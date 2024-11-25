@@ -1,4 +1,4 @@
-import TableAbsen from "@/components/fragments/guru/rekap/TableAbsen";
+import TableAbsen from "@/components/views/guru/rekap/TableAbsen";
 import { selectedUserData } from "@/store/slices/auth-slice";
 import { HOST } from "@/util/constant";
 import responseError from "@/util/services";
@@ -9,8 +9,8 @@ import { useSelector } from "react-redux";
 import { saveAs } from "file-saver";
 import ExcelJS from "exceljs";
 import ReactToPrint, { useReactToPrint } from "react-to-print";
-import PrintComponent from "@/components/fragments/guru/rekap/PrintModal";
-import DropdownGroup from "@/components/fragments/admin/RekapData/DropdownGrup";
+import PrintComponent from "@/components/views/guru/rekap/PrintModal";
+import DropdownGroup from "@/components/views/admin/RekapData/DropdownGrup";
 
 const RekapAbsensiPage = () => {
   const menuRef = useRef();
