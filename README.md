@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>Web Dev</h1>
+  <h1>Scholarchy</h1>
   <p>School Management System!</p>
 </div>
 
