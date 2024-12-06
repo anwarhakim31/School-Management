@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "../assets/Schoolarcy (2).webp";
 import { Eye, EyeOff, KeyRound, User } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -45,14 +45,6 @@ const LoginPage = () => {
     }
   }, [remember, formData]);
 
-  // useEffect(() => {
-  //   return () => {
-  //     if (timeoutRef.current) {
-  //       clearTimeout(timeoutRef.current);
-  //     }
-  //   };
-  // }, []);
-
   const handleLogin = async () => {
     setLoading(true);
 
@@ -61,15 +53,12 @@ const LoginPage = () => {
         withCredentials: true,
       });
 
-      // timeoutRef.current = setTimeout(() => {
       if (res.status === 200) {
         dispatch(setUserData(res.data.data));
         res.data.data.role === "admin" && navigate("/admin/dasboard");
         res.data.data.role === "guru" && navigate("/guru/dashboard");
         res.data.data.role === "siswa" && navigate("/siswa/dashboard");
       }
-
-      // }, 500);
     } catch (error) {
       responseError(error);
     } finally {
@@ -93,33 +82,7 @@ const LoginPage = () => {
           <figure className="w-[150px] h-[35px]">
             <img src={logo} alt="logo" className="mx-auto w-full h-full" />
           </figure>
-          {/* <div className="h-2 w-full mt-14  mb-4 relative">
-            <div
-              className={`before:absolute before:-right-2 before:animate-pulse before:duration-800 before:bottom-1/2 before:translate-y-1/2 before:w-2 before:h-2 before:rounded-full before:bg-neutral bg-purple-400 absolute left-0 w-1/2 h-0.5 bottom-1/2 duration-300 ease-in translate-y-1/2 ${
-                success ? "w-1/2" : "w-[8%]"
-              }`}
-            ></div>
-            <div
-              className={`before:absolute before:-left-0 before:animate-pulse before:duration-800 before:bottom-1/2 before:translate-y-1/2 before:w-2 before:h-2 before:rounded-full before:bg-neutral bg-purple-400 absolute right-0 h-0.5 bottom-1/2 duration-300 ease-in translate-y-1/2 ${
-                success ? "w-1/2" : "w-[8%]"
-              }`}
-            ></div>
-            <div className="w-full text-neutral -translate-y-1/4 flex justify-center text-base font-bold duration-1000 ease-linear">
-              {success ? (
-                <BadgeCheck
-                  width={25}
-                  height={25}
-                  className={`${success ? "bg-background z-10" : ""}`}
-                />
-              ) : (
-                <Badge
-                  width={25}
-                  height={25}
-                  className={`${success ? "bg-background z-10" : ""}`}
-                />
-              )}
-            </div>
-          </div> */}
+
           <h1 className="text-center text-sm font-medium text-md text-gray-800 mt-10 mb-8  leading-relaxed">
             Masukkan NIP / NIS & password <br />
             <span>pada form di bawah ini dengan benar.</span>
